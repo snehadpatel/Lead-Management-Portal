@@ -1,0 +1,19 @@
+# Virtual Environment
+venv/
+.env
+
+# Data and Notebooks
+datasets/
+__pycache__/
+*.pyc
+.DS_Store
+
+# IDE and System Files
+.vscode/
+.idea/
+.claude/
+.gemini/
+
+# Large artifacts or temporary data (already accounted for datasets/)
+# Keep smaller metadata/configs but ignore large binary dumps if any
+# *.pkl  # Uncomment if you want to exclude all pickle files (models)

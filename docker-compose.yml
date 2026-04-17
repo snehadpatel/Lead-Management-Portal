@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # FastAPI Backend
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: lume-api
+    ports:
+      - "8000:8000"
+    environment:
+      - LUME_PROJECT_ROOT=/app
+      - LUME_DATA_ROOT=/app/datasets
+      - LUME_ARTIFACTS=/app/artifacts
+      - PYTHONPATH=/app/src
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./src:/app/src
+      - ./api:/app/api
+      - ./datasets:/app/datasets
+      - ./artifacts:/app/artifacts
+      - ./model_evaluations:/app/model_evaluations
+      - ./output_production_final:/app/output_production_final
+    command: uvicorn api.main_enhanced:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - lume-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Streamlit Dashboard
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    container_name: lume-dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - LUME_PROJECT_ROOT=/app
+      - LUME_DATA_ROOT=/app/datasets
+      - LUME_ARTIFACTS=/app/artifacts
+      - PYTHONPATH=/app/src
+      - LUME_API_URL=http://api:8000
+    volumes:
+      - ./src:/app/src
+      - ./datasets:/app/datasets
+      - ./artifacts:/app/artifacts
+      - ./model_evaluations:/app/model_evaluations
+      - ./output_production_final:/app/output_production_final
+      - ./tableau_exports:/app/tableau_exports
+      - ./dataset_visualisations:/app/dataset_visualisations
+    command: streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+    networks:
+      - lume-network
+    depends_on:
+      api:
+        condition: service_healthy
+
+  # Optional: Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: lume-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - lume-network
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
+  # Optional: MLflow for experiment tracking
+  mlflow:
+    image: python:3.10-slim
+    container_name: lume-mlflow
+    ports:
+      - "5001:5001"
+    environment:
+      - MLFLOW_TRACKING_URI=http://localhost:5001
+    volumes:
+      - ./mlruns:/mlruns
+    command: >
+      bash -c "
+        pip install mlflow &&
+        mlflow server --host 0.0.0.0 --port 5001 --default-artifact-root /mlruns
+      "
+    networks:
+      - lume-network
+
+networks:
+  lume-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+    driver: local

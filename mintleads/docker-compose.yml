@@ -1,0 +1,86 @@
+# MintLeads - Docker Compose Configuration
+# Full stack deployment with Redis and MLflow
+
+version: '3.8'
+
+services:
+  streamlit:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://flask-api:5000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - flask-api
+      - redis
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    networks:
+      - mintleads-network
+
+  flask-api:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_HOST=0.0.0.0
+      - FLASK_PORT=5000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MLFLOW_TRACKING_URI=http://mlflow:5001
+    depends_on:
+      - redis
+      - mlflow
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    networks:
+      - mintleads-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - mintleads-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  mlflow:
+    build: .
+    ports:
+      - "5001:5001"
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5001
+      --backend-store-uri sqlite:///mlflow.db
+      --default-artifact-root /app/mlruns
+    volumes:
+      - mlflow-data:/app/mlruns
+      - ./mlflow.db:/app/mlflow.db
+    networks:
+      - mintleads-network
+
+volumes:
+  redis-data:
+  mlflow-data:
+
+networks:
+  mintleads-network:
+    driver: bridge

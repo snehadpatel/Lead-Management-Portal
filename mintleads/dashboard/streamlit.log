@@ -1,0 +1,885 @@
+
+  You can now view your Streamlit app in your browser.
+
+  URL: http://0.0.0.0:8501
+
+  For better performance, install the Watchdog module:
+
+  $ xcode-select --install
+  $ pip install watchdog
+            
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/[0m[1mapp.py[0m:27 in <module>                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m24 [0m                                                                                [31m [0m
+[31m [0m   [2m25 [0m[94mif[0m page == [33m"[0m[33mHot Leads[0m[33m"[0m:                                                         [31m [0m
+[31m [0m   [2m26 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m hot_leads                                                 [31m [0m
+[31m [0m [31m❱ [0m27 [2m│   [0m[1;4mhot_leads.render()[0m                                                          [31m [0m
+[31m [0m   [2m28 [0m[94melif[0m page == [33m"[0m[33mNAV Predictor[0m[33m"[0m:                                                   [31m [0m
+[31m [0m   [2m29 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m nav_predictor                                             [31m [0m
+[31m [0m   [2m30 [0m[2m│   [0mnav_predictor.render()                                                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:39 in render                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 36 [0m[2m│   │   │   [0m[33m"[0m[33mconversion_probability[0m[33m"[0m: [[94m0.95[0m - (i * [94m0.01[0m) [94mfor[0m i [95min[0m [96mrange[0m([94m50[0m)],  [31m [0m
+[31m [0m   [2m 37 [0m[2m│   │   [0m})                                                                     [31m [0m
+[31m [0m   [2m 38 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m [31m❱ [0m 39 [2m│   [0mdf = [1;4mload_leads()[0m                                                          [31m [0m
+[31m [0m   [2m 40 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m 41 [0m[2m│   [0m[2m# Add conversion probability if not present[0m                                [31m [0m
+[31m [0m   [2m 42 [0m[2m│   [0m[94mif[0m [33m"[0m[33mconversion_probability[0m[33m"[0m [95mnot[0m [95min[0m df.columns:                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:227 in __call__                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:269 in _get_or_create_cached_value              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:328 in _handle_cache_miss                       [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:29 in load_leads                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m[2m│   │   │   [0m[94mreturn[0m pd.read_csv(data_path)                                      [31m [0m
+[31m [0m   [2m 27 [0m[2m│   │   [0m                                                                       [31m [0m
+[31m [0m   [2m 28 [0m[2m│   │   [0m[2m# Generate sample data for demonstration[0m                               [31m [0m
+[31m [0m [31m❱ [0m 29 [2m│   │   [0m[94mreturn[0m [1;4mpd.DataFrame({[0m                                                  [31m [0m
+[31m [0m   [2m 30 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mProspect ID[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33mf[0m[1;4;33m"[0m[1;4;33mLEAD_[0m[1;4;33m{[0m[1;4mi[0m[1;4;33m:[0m[1;4;33m05d[0m[1;4;33m}[0m[1;4;33m"[0m[1;4m [0m[1;4;94mfor[0m[1;4m i [0m[1;4;95min[0m[1;4m [0m[1;4;96mrange[0m[1;4m([0m[1;4;94m50[0m[1;4m)],[0m               [31m [0m
+[31m [0m   [2m 31 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Origin[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mAPI[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mLanding Page[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mOrganic Search[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m17[0m[1;4m,[0m     [31m [0m
+[31m [0m   [2m 32 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Source[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mGoogle[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mDirect[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mReferral[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mSocial[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m13[0m[1;4m,[0m    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/[0m[1mframe.py[0m:782 in __init__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  779 [0m[2m│   │   [0m                                                                     [31m [0m
+[31m [0m   [2m  780 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, [96mdict[0m):                                         [31m [0m
+[31m [0m   [2m  781 [0m[2m│   │   │   [0m[2m# GH#38939 de facto copy defaults to False only in non-dict case[0m [31m [0m
+[31m [0m [31m❱ [0m  782 [2m│   │   │   [0mmgr = [1;4mdict_to_mgr(data, index, columns, dtype=dtype, copy=copy, [0m [31m [0m
+[31m [0m   [2m  783 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, ma.MaskedArray):                               [31m [0m
+[31m [0m   [2m  784 [0m[2m│   │   │   [0m[94mfrom[0m[90m [0m[4;96mnumpy[0m[4;96m.[0m[4;96mma[0m[90m [0m[94mimport[0m mrecords                                    [31m [0m
+[31m [0m   [2m  785 [0m                                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:503 in dict_to_mgr                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 500 [0m[2m│   │   │   [0m[2m# dtype check to exclude e.g. range objects, scalars[0m              [31m [0m
+[31m [0m   [2m 501 [0m[2m│   │   │   [0marrays = [x.copy() [94mif[0m [96mhasattr[0m(x, [33m"[0m[33mdtype[0m[33m"[0m) [94melse[0m x [94mfor[0m x [95min[0m arrays] [31m [0m
+[31m [0m   [2m 502 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m [31m❱ [0m 503 [2m│   [0m[94mreturn[0m [1;4marrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consol[0m [31m [0m
+[31m [0m   [2m 504 [0m                                                                              [31m [0m
+[31m [0m   [2m 505 [0m                                                                              [31m [0m
+[31m [0m   [2m 506 [0m[94mdef[0m[90m [0m[92mnested_data_to_arrays[0m(                                                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:114 in arrays_to_mgr                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 111 [0m[2m│   [0m[94mif[0m verify_integrity:                                                      [31m [0m
+[31m [0m   [2m 112 [0m[2m│   │   [0m[2m# figure out the index, if necessary[0m                                  [31m [0m
+[31m [0m   [2m 113 [0m[2m│   │   [0m[94mif[0m index [95mis[0m [94mNone[0m:                                                     [31m [0m
+[31m [0m [31m❱ [0m 114 [2m│   │   │   [0mindex = [1;4m_extract_index(arrays)[0m                                    [31m [0m
+[31m [0m   [2m 115 [0m[2m│   │   [0m[94melse[0m:                                                                 [31m [0m
+[31m [0m   [2m 116 [0m[2m│   │   │   [0mindex = ensure_index(index)                                       [31m [0m
+[31m [0m   [2m 117 [0m                                                                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:677 in _extract_index                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 674 [0m[2m│   [0m[94mif[0m have_raw_arrays:                                                       [31m [0m
+[31m [0m   [2m 675 [0m[2m│   │   [0mlengths = [96mlist[0m([96mset[0m(raw_lengths))                                      [31m [0m
+[31m [0m   [2m 676 [0m[2m│   │   [0m[94mif[0m [96mlen[0m(lengths) > [94m1[0m:                                                  [31m [0m
+[31m [0m [31m❱ [0m 677 [2m│   │   │   [0m[1;4;94mraise[0m[1;4m [0m[1;4;96mValueError[0m[1;4m([0m[1;4;33m"[0m[1;4;33mAll arrays must be of the same length[0m[1;4;33m"[0m[1;4m)[0m         [31m [0m
+[31m [0m   [2m 678 [0m[2m│   │   [0m                                                                      [31m [0m
+[31m [0m   [2m 679 [0m[2m│   │   [0m[94mif[0m have_dicts:                                                        [31m [0m
+[31m [0m   [2m 680 [0m[2m│   │   │   [0m[94mraise[0m [96mValueError[0m(                                                 [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mValueError: [0mAll arrays must be of the same length
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/[0m[1mapp.py[0m:27 in <module>                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m24 [0m                                                                                [31m [0m
+[31m [0m   [2m25 [0m[94mif[0m page == [33m"[0m[33mHot Leads[0m[33m"[0m:                                                         [31m [0m
+[31m [0m   [2m26 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m hot_leads                                                 [31m [0m
+[31m [0m [31m❱ [0m27 [2m│   [0m[1;4mhot_leads.render()[0m                                                          [31m [0m
+[31m [0m   [2m28 [0m[94melif[0m page == [33m"[0m[33mNAV Predictor[0m[33m"[0m:                                                   [31m [0m
+[31m [0m   [2m29 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m nav_predictor                                             [31m [0m
+[31m [0m   [2m30 [0m[2m│   [0mnav_predictor.render()                                                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:39 in render                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 36 [0m[2m│   │   │   [0m[33m"[0m[33mconversion_probability[0m[33m"[0m: [[94m0.95[0m - (i * [94m0.01[0m) [94mfor[0m i [95min[0m [96mrange[0m([94m50[0m)],  [31m [0m
+[31m [0m   [2m 37 [0m[2m│   │   [0m})                                                                     [31m [0m
+[31m [0m   [2m 38 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m [31m❱ [0m 39 [2m│   [0mdf = [1;4mload_leads()[0m                                                          [31m [0m
+[31m [0m   [2m 40 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m 41 [0m[2m│   [0m[2m# Add conversion probability if not present[0m                                [31m [0m
+[31m [0m   [2m 42 [0m[2m│   [0m[94mif[0m [33m"[0m[33mconversion_probability[0m[33m"[0m [95mnot[0m [95min[0m df.columns:                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:227 in __call__                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:269 in _get_or_create_cached_value              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:328 in _handle_cache_miss                       [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:29 in load_leads                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m[2m│   │   │   [0m[94mreturn[0m pd.read_csv(data_path)                                      [31m [0m
+[31m [0m   [2m 27 [0m[2m│   │   [0m                                                                       [31m [0m
+[31m [0m   [2m 28 [0m[2m│   │   [0m[2m# Generate sample data for demonstration[0m                               [31m [0m
+[31m [0m [31m❱ [0m 29 [2m│   │   [0m[94mreturn[0m [1;4mpd.DataFrame({[0m                                                  [31m [0m
+[31m [0m   [2m 30 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mProspect ID[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33mf[0m[1;4;33m"[0m[1;4;33mLEAD_[0m[1;4;33m{[0m[1;4mi[0m[1;4;33m:[0m[1;4;33m05d[0m[1;4;33m}[0m[1;4;33m"[0m[1;4m [0m[1;4;94mfor[0m[1;4m i [0m[1;4;95min[0m[1;4m [0m[1;4;96mrange[0m[1;4m([0m[1;4;94m50[0m[1;4m)],[0m               [31m [0m
+[31m [0m   [2m 31 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Origin[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mAPI[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mLanding Page[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mOrganic Search[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m17[0m[1;4m,[0m     [31m [0m
+[31m [0m   [2m 32 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Source[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mGoogle[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mDirect[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mReferral[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mSocial[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m13[0m[1;4m,[0m    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/[0m[1mframe.py[0m:782 in __init__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  779 [0m[2m│   │   [0m                                                                     [31m [0m
+[31m [0m   [2m  780 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, [96mdict[0m):                                         [31m [0m
+[31m [0m   [2m  781 [0m[2m│   │   │   [0m[2m# GH#38939 de facto copy defaults to False only in non-dict case[0m [31m [0m
+[31m [0m [31m❱ [0m  782 [2m│   │   │   [0mmgr = [1;4mdict_to_mgr(data, index, columns, dtype=dtype, copy=copy, [0m [31m [0m
+[31m [0m   [2m  783 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, ma.MaskedArray):                               [31m [0m
+[31m [0m   [2m  784 [0m[2m│   │   │   [0m[94mfrom[0m[90m [0m[4;96mnumpy[0m[4;96m.[0m[4;96mma[0m[90m [0m[94mimport[0m mrecords                                    [31m [0m
+[31m [0m   [2m  785 [0m                                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:503 in dict_to_mgr                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 500 [0m[2m│   │   │   [0m[2m# dtype check to exclude e.g. range objects, scalars[0m              [31m [0m
+[31m [0m   [2m 501 [0m[2m│   │   │   [0marrays = [x.copy() [94mif[0m [96mhasattr[0m(x, [33m"[0m[33mdtype[0m[33m"[0m) [94melse[0m x [94mfor[0m x [95min[0m arrays] [31m [0m
+[31m [0m   [2m 502 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m [31m❱ [0m 503 [2m│   [0m[94mreturn[0m [1;4marrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consol[0m [31m [0m
+[31m [0m   [2m 504 [0m                                                                              [31m [0m
+[31m [0m   [2m 505 [0m                                                                              [31m [0m
+[31m [0m   [2m 506 [0m[94mdef[0m[90m [0m[92mnested_data_to_arrays[0m(                                                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:114 in arrays_to_mgr                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 111 [0m[2m│   [0m[94mif[0m verify_integrity:                                                      [31m [0m
+[31m [0m   [2m 112 [0m[2m│   │   [0m[2m# figure out the index, if necessary[0m                                  [31m [0m
+[31m [0m   [2m 113 [0m[2m│   │   [0m[94mif[0m index [95mis[0m [94mNone[0m:                                                     [31m [0m
+[31m [0m [31m❱ [0m 114 [2m│   │   │   [0mindex = [1;4m_extract_index(arrays)[0m                                    [31m [0m
+[31m [0m   [2m 115 [0m[2m│   │   [0m[94melse[0m:                                                                 [31m [0m
+[31m [0m   [2m 116 [0m[2m│   │   │   [0mindex = ensure_index(index)                                       [31m [0m
+[31m [0m   [2m 117 [0m                                                                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:677 in _extract_index                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 674 [0m[2m│   [0m[94mif[0m have_raw_arrays:                                                       [31m [0m
+[31m [0m   [2m 675 [0m[2m│   │   [0mlengths = [96mlist[0m([96mset[0m(raw_lengths))                                      [31m [0m
+[31m [0m   [2m 676 [0m[2m│   │   [0m[94mif[0m [96mlen[0m(lengths) > [94m1[0m:                                                  [31m [0m
+[31m [0m [31m❱ [0m 677 [2m│   │   │   [0m[1;4;94mraise[0m[1;4m [0m[1;4;96mValueError[0m[1;4m([0m[1;4;33m"[0m[1;4;33mAll arrays must be of the same length[0m[1;4;33m"[0m[1;4m)[0m         [31m [0m
+[31m [0m   [2m 678 [0m[2m│   │   [0m                                                                      [31m [0m
+[31m [0m   [2m 679 [0m[2m│   │   [0m[94mif[0m have_dicts:                                                        [31m [0m
+[31m [0m   [2m 680 [0m[2m│   │   │   [0m[94mraise[0m [96mValueError[0m(                                                 [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mValueError: [0mAll arrays must be of the same length
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/[0m[1mapp.py[0m:27 in <module>                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m24 [0m                                                                                [31m [0m
+[31m [0m   [2m25 [0m[94mif[0m page == [33m"[0m[33mHot Leads[0m[33m"[0m:                                                         [31m [0m
+[31m [0m   [2m26 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m hot_leads                                                 [31m [0m
+[31m [0m [31m❱ [0m27 [2m│   [0m[1;4mhot_leads.render()[0m                                                          [31m [0m
+[31m [0m   [2m28 [0m[94melif[0m page == [33m"[0m[33mNAV Predictor[0m[33m"[0m:                                                   [31m [0m
+[31m [0m   [2m29 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m nav_predictor                                             [31m [0m
+[31m [0m   [2m30 [0m[2m│   [0mnav_predictor.render()                                                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:39 in render                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 36 [0m[2m│   │   │   [0m[33m"[0m[33mconversion_probability[0m[33m"[0m: [[94m0.95[0m - (i * [94m0.01[0m) [94mfor[0m i [95min[0m [96mrange[0m([94m50[0m)],  [31m [0m
+[31m [0m   [2m 37 [0m[2m│   │   [0m})                                                                     [31m [0m
+[31m [0m   [2m 38 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m [31m❱ [0m 39 [2m│   [0mdf = [1;4mload_leads()[0m                                                          [31m [0m
+[31m [0m   [2m 40 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m 41 [0m[2m│   [0m[2m# Add conversion probability if not present[0m                                [31m [0m
+[31m [0m   [2m 42 [0m[2m│   [0m[94mif[0m [33m"[0m[33mconversion_probability[0m[33m"[0m [95mnot[0m [95min[0m df.columns:                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:227 in __call__                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:269 in _get_or_create_cached_value              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:328 in _handle_cache_miss                       [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:29 in load_leads                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m[2m│   │   │   [0m[94mreturn[0m pd.read_csv(data_path)                                      [31m [0m
+[31m [0m   [2m 27 [0m[2m│   │   [0m                                                                       [31m [0m
+[31m [0m   [2m 28 [0m[2m│   │   [0m[2m# Generate sample data for demonstration[0m                               [31m [0m
+[31m [0m [31m❱ [0m 29 [2m│   │   [0m[94mreturn[0m [1;4mpd.DataFrame({[0m                                                  [31m [0m
+[31m [0m   [2m 30 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mProspect ID[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33mf[0m[1;4;33m"[0m[1;4;33mLEAD_[0m[1;4;33m{[0m[1;4mi[0m[1;4;33m:[0m[1;4;33m05d[0m[1;4;33m}[0m[1;4;33m"[0m[1;4m [0m[1;4;94mfor[0m[1;4m i [0m[1;4;95min[0m[1;4m [0m[1;4;96mrange[0m[1;4m([0m[1;4;94m50[0m[1;4m)],[0m               [31m [0m
+[31m [0m   [2m 31 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Origin[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mAPI[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mLanding Page[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mOrganic Search[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m17[0m[1;4m,[0m     [31m [0m
+[31m [0m   [2m 32 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Source[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mGoogle[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mDirect[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mReferral[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mSocial[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m13[0m[1;4m,[0m    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/[0m[1mframe.py[0m:782 in __init__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  779 [0m[2m│   │   [0m                                                                     [31m [0m
+[31m [0m   [2m  780 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, [96mdict[0m):                                         [31m [0m
+[31m [0m   [2m  781 [0m[2m│   │   │   [0m[2m# GH#38939 de facto copy defaults to False only in non-dict case[0m [31m [0m
+[31m [0m [31m❱ [0m  782 [2m│   │   │   [0mmgr = [1;4mdict_to_mgr(data, index, columns, dtype=dtype, copy=copy, [0m [31m [0m
+[31m [0m   [2m  783 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, ma.MaskedArray):                               [31m [0m
+[31m [0m   [2m  784 [0m[2m│   │   │   [0m[94mfrom[0m[90m [0m[4;96mnumpy[0m[4;96m.[0m[4;96mma[0m[90m [0m[94mimport[0m mrecords                                    [31m [0m
+[31m [0m   [2m  785 [0m                                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:503 in dict_to_mgr                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 500 [0m[2m│   │   │   [0m[2m# dtype check to exclude e.g. range objects, scalars[0m              [31m [0m
+[31m [0m   [2m 501 [0m[2m│   │   │   [0marrays = [x.copy() [94mif[0m [96mhasattr[0m(x, [33m"[0m[33mdtype[0m[33m"[0m) [94melse[0m x [94mfor[0m x [95min[0m arrays] [31m [0m
+[31m [0m   [2m 502 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m [31m❱ [0m 503 [2m│   [0m[94mreturn[0m [1;4marrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consol[0m [31m [0m
+[31m [0m   [2m 504 [0m                                                                              [31m [0m
+[31m [0m   [2m 505 [0m                                                                              [31m [0m
+[31m [0m   [2m 506 [0m[94mdef[0m[90m [0m[92mnested_data_to_arrays[0m(                                                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:114 in arrays_to_mgr                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 111 [0m[2m│   [0m[94mif[0m verify_integrity:                                                      [31m [0m
+[31m [0m   [2m 112 [0m[2m│   │   [0m[2m# figure out the index, if necessary[0m                                  [31m [0m
+[31m [0m   [2m 113 [0m[2m│   │   [0m[94mif[0m index [95mis[0m [94mNone[0m:                                                     [31m [0m
+[31m [0m [31m❱ [0m 114 [2m│   │   │   [0mindex = [1;4m_extract_index(arrays)[0m                                    [31m [0m
+[31m [0m   [2m 115 [0m[2m│   │   [0m[94melse[0m:                                                                 [31m [0m
+[31m [0m   [2m 116 [0m[2m│   │   │   [0mindex = ensure_index(index)                                       [31m [0m
+[31m [0m   [2m 117 [0m                                                                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:677 in _extract_index                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 674 [0m[2m│   [0m[94mif[0m have_raw_arrays:                                                       [31m [0m
+[31m [0m   [2m 675 [0m[2m│   │   [0mlengths = [96mlist[0m([96mset[0m(raw_lengths))                                      [31m [0m
+[31m [0m   [2m 676 [0m[2m│   │   [0m[94mif[0m [96mlen[0m(lengths) > [94m1[0m:                                                  [31m [0m
+[31m [0m [31m❱ [0m 677 [2m│   │   │   [0m[1;4;94mraise[0m[1;4m [0m[1;4;96mValueError[0m[1;4m([0m[1;4;33m"[0m[1;4;33mAll arrays must be of the same length[0m[1;4;33m"[0m[1;4m)[0m         [31m [0m
+[31m [0m   [2m 678 [0m[2m│   │   [0m                                                                      [31m [0m
+[31m [0m   [2m 679 [0m[2m│   │   [0m[94mif[0m have_dicts:                                                        [31m [0m
+[31m [0m   [2m 680 [0m[2m│   │   │   [0m[94mraise[0m [96mValueError[0m(                                                 [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mValueError: [0mAll arrays must be of the same length
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/[0m[1mapp.py[0m:27 in <module>                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m24 [0m                                                                                [31m [0m
+[31m [0m   [2m25 [0m[94mif[0m page == [33m"[0m[33mHot Leads[0m[33m"[0m:                                                         [31m [0m
+[31m [0m   [2m26 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m hot_leads                                                 [31m [0m
+[31m [0m [31m❱ [0m27 [2m│   [0m[1;4mhot_leads.render()[0m                                                          [31m [0m
+[31m [0m   [2m28 [0m[94melif[0m page == [33m"[0m[33mNAV Predictor[0m[33m"[0m:                                                   [31m [0m
+[31m [0m   [2m29 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m nav_predictor                                             [31m [0m
+[31m [0m   [2m30 [0m[2m│   [0mnav_predictor.render()                                                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:39 in render                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 36 [0m[2m│   │   │   [0m[33m"[0m[33mconversion_probability[0m[33m"[0m: [[94m0.95[0m - (i * [94m0.01[0m) [94mfor[0m i [95min[0m [96mrange[0m([94m50[0m)],  [31m [0m
+[31m [0m   [2m 37 [0m[2m│   │   [0m})                                                                     [31m [0m
+[31m [0m   [2m 38 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m [31m❱ [0m 39 [2m│   [0mdf = [1;4mload_leads()[0m                                                          [31m [0m
+[31m [0m   [2m 40 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m 41 [0m[2m│   [0m[2m# Add conversion probability if not present[0m                                [31m [0m
+[31m [0m   [2m 42 [0m[2m│   [0m[94mif[0m [33m"[0m[33mconversion_probability[0m[33m"[0m [95mnot[0m [95min[0m df.columns:                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:227 in __call__                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:269 in _get_or_create_cached_value              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:328 in _handle_cache_miss                       [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:29 in load_leads                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m[2m│   │   │   [0m[94mreturn[0m pd.read_csv(data_path)                                      [31m [0m
+[31m [0m   [2m 27 [0m[2m│   │   [0m                                                                       [31m [0m
+[31m [0m   [2m 28 [0m[2m│   │   [0m[2m# Generate sample data for demonstration[0m                               [31m [0m
+[31m [0m [31m❱ [0m 29 [2m│   │   [0m[94mreturn[0m [1;4mpd.DataFrame({[0m                                                  [31m [0m
+[31m [0m   [2m 30 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mProspect ID[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33mf[0m[1;4;33m"[0m[1;4;33mLEAD_[0m[1;4;33m{[0m[1;4mi[0m[1;4;33m:[0m[1;4;33m05d[0m[1;4;33m}[0m[1;4;33m"[0m[1;4m [0m[1;4;94mfor[0m[1;4m i [0m[1;4;95min[0m[1;4m [0m[1;4;96mrange[0m[1;4m([0m[1;4;94m50[0m[1;4m)],[0m               [31m [0m
+[31m [0m   [2m 31 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Origin[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mAPI[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mLanding Page[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mOrganic Search[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m17[0m[1;4m,[0m     [31m [0m
+[31m [0m   [2m 32 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Source[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mGoogle[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mDirect[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mReferral[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mSocial[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m13[0m[1;4m,[0m    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/[0m[1mframe.py[0m:782 in __init__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  779 [0m[2m│   │   [0m                                                                     [31m [0m
+[31m [0m   [2m  780 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, [96mdict[0m):                                         [31m [0m
+[31m [0m   [2m  781 [0m[2m│   │   │   [0m[2m# GH#38939 de facto copy defaults to False only in non-dict case[0m [31m [0m
+[31m [0m [31m❱ [0m  782 [2m│   │   │   [0mmgr = [1;4mdict_to_mgr(data, index, columns, dtype=dtype, copy=copy, [0m [31m [0m
+[31m [0m   [2m  783 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, ma.MaskedArray):                               [31m [0m
+[31m [0m   [2m  784 [0m[2m│   │   │   [0m[94mfrom[0m[90m [0m[4;96mnumpy[0m[4;96m.[0m[4;96mma[0m[90m [0m[94mimport[0m mrecords                                    [31m [0m
+[31m [0m   [2m  785 [0m                                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:503 in dict_to_mgr                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 500 [0m[2m│   │   │   [0m[2m# dtype check to exclude e.g. range objects, scalars[0m              [31m [0m
+[31m [0m   [2m 501 [0m[2m│   │   │   [0marrays = [x.copy() [94mif[0m [96mhasattr[0m(x, [33m"[0m[33mdtype[0m[33m"[0m) [94melse[0m x [94mfor[0m x [95min[0m arrays] [31m [0m
+[31m [0m   [2m 502 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m [31m❱ [0m 503 [2m│   [0m[94mreturn[0m [1;4marrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consol[0m [31m [0m
+[31m [0m   [2m 504 [0m                                                                              [31m [0m
+[31m [0m   [2m 505 [0m                                                                              [31m [0m
+[31m [0m   [2m 506 [0m[94mdef[0m[90m [0m[92mnested_data_to_arrays[0m(                                                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:114 in arrays_to_mgr                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 111 [0m[2m│   [0m[94mif[0m verify_integrity:                                                      [31m [0m
+[31m [0m   [2m 112 [0m[2m│   │   [0m[2m# figure out the index, if necessary[0m                                  [31m [0m
+[31m [0m   [2m 113 [0m[2m│   │   [0m[94mif[0m index [95mis[0m [94mNone[0m:                                                     [31m [0m
+[31m [0m [31m❱ [0m 114 [2m│   │   │   [0mindex = [1;4m_extract_index(arrays)[0m                                    [31m [0m
+[31m [0m   [2m 115 [0m[2m│   │   [0m[94melse[0m:                                                                 [31m [0m
+[31m [0m   [2m 116 [0m[2m│   │   │   [0mindex = ensure_index(index)                                       [31m [0m
+[31m [0m   [2m 117 [0m                                                                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:677 in _extract_index                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 674 [0m[2m│   [0m[94mif[0m have_raw_arrays:                                                       [31m [0m
+[31m [0m   [2m 675 [0m[2m│   │   [0mlengths = [96mlist[0m([96mset[0m(raw_lengths))                                      [31m [0m
+[31m [0m   [2m 676 [0m[2m│   │   [0m[94mif[0m [96mlen[0m(lengths) > [94m1[0m:                                                  [31m [0m
+[31m [0m [31m❱ [0m 677 [2m│   │   │   [0m[1;4;94mraise[0m[1;4m [0m[1;4;96mValueError[0m[1;4m([0m[1;4;33m"[0m[1;4;33mAll arrays must be of the same length[0m[1;4;33m"[0m[1;4m)[0m         [31m [0m
+[31m [0m   [2m 678 [0m[2m│   │   [0m                                                                      [31m [0m
+[31m [0m   [2m 679 [0m[2m│   │   [0m[94mif[0m have_dicts:                                                        [31m [0m
+[31m [0m   [2m 680 [0m[2m│   │   │   [0m[94mraise[0m [96mValueError[0m(                                                 [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mValueError: [0mAll arrays must be of the same length
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/[0m[1mapp.py[0m:27 in <module>                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m24 [0m                                                                                [31m [0m
+[31m [0m   [2m25 [0m[94mif[0m page == [33m"[0m[33mHot Leads[0m[33m"[0m:                                                         [31m [0m
+[31m [0m   [2m26 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m hot_leads                                                 [31m [0m
+[31m [0m [31m❱ [0m27 [2m│   [0m[1;4mhot_leads.render()[0m                                                          [31m [0m
+[31m [0m   [2m28 [0m[94melif[0m page == [33m"[0m[33mNAV Predictor[0m[33m"[0m:                                                   [31m [0m
+[31m [0m   [2m29 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m nav_predictor                                             [31m [0m
+[31m [0m   [2m30 [0m[2m│   [0mnav_predictor.render()                                                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:39 in render                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 36 [0m[2m│   │   │   [0m[33m"[0m[33mconversion_probability[0m[33m"[0m: [[94m0.95[0m - (i * [94m0.01[0m) [94mfor[0m i [95min[0m [96mrange[0m([94m50[0m)],  [31m [0m
+[31m [0m   [2m 37 [0m[2m│   │   [0m})                                                                     [31m [0m
+[31m [0m   [2m 38 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m [31m❱ [0m 39 [2m│   [0mdf = [1;4mload_leads()[0m                                                          [31m [0m
+[31m [0m   [2m 40 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m 41 [0m[2m│   [0m[2m# Add conversion probability if not present[0m                                [31m [0m
+[31m [0m   [2m 42 [0m[2m│   [0m[94mif[0m [33m"[0m[33mconversion_probability[0m[33m"[0m [95mnot[0m [95min[0m df.columns:                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:227 in __call__                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:269 in _get_or_create_cached_value              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:328 in _handle_cache_miss                       [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:29 in load_leads                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m[2m│   │   │   [0m[94mreturn[0m pd.read_csv(data_path)                                      [31m [0m
+[31m [0m   [2m 27 [0m[2m│   │   [0m                                                                       [31m [0m
+[31m [0m   [2m 28 [0m[2m│   │   [0m[2m# Generate sample data for demonstration[0m                               [31m [0m
+[31m [0m [31m❱ [0m 29 [2m│   │   [0m[94mreturn[0m [1;4mpd.DataFrame({[0m                                                  [31m [0m
+[31m [0m   [2m 30 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mProspect ID[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33mf[0m[1;4;33m"[0m[1;4;33mLEAD_[0m[1;4;33m{[0m[1;4mi[0m[1;4;33m:[0m[1;4;33m05d[0m[1;4;33m}[0m[1;4;33m"[0m[1;4m [0m[1;4;94mfor[0m[1;4m i [0m[1;4;95min[0m[1;4m [0m[1;4;96mrange[0m[1;4m([0m[1;4;94m50[0m[1;4m)],[0m               [31m [0m
+[31m [0m   [2m 31 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Origin[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mAPI[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mLanding Page[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mOrganic Search[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m17[0m[1;4m,[0m     [31m [0m
+[31m [0m   [2m 32 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Source[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mGoogle[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mDirect[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mReferral[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mSocial[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m13[0m[1;4m,[0m    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/[0m[1mframe.py[0m:782 in __init__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  779 [0m[2m│   │   [0m                                                                     [31m [0m
+[31m [0m   [2m  780 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, [96mdict[0m):                                         [31m [0m
+[31m [0m   [2m  781 [0m[2m│   │   │   [0m[2m# GH#38939 de facto copy defaults to False only in non-dict case[0m [31m [0m
+[31m [0m [31m❱ [0m  782 [2m│   │   │   [0mmgr = [1;4mdict_to_mgr(data, index, columns, dtype=dtype, copy=copy, [0m [31m [0m
+[31m [0m   [2m  783 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, ma.MaskedArray):                               [31m [0m
+[31m [0m   [2m  784 [0m[2m│   │   │   [0m[94mfrom[0m[90m [0m[4;96mnumpy[0m[4;96m.[0m[4;96mma[0m[90m [0m[94mimport[0m mrecords                                    [31m [0m
+[31m [0m   [2m  785 [0m                                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:503 in dict_to_mgr                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 500 [0m[2m│   │   │   [0m[2m# dtype check to exclude e.g. range objects, scalars[0m              [31m [0m
+[31m [0m   [2m 501 [0m[2m│   │   │   [0marrays = [x.copy() [94mif[0m [96mhasattr[0m(x, [33m"[0m[33mdtype[0m[33m"[0m) [94melse[0m x [94mfor[0m x [95min[0m arrays] [31m [0m
+[31m [0m   [2m 502 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m [31m❱ [0m 503 [2m│   [0m[94mreturn[0m [1;4marrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consol[0m [31m [0m
+[31m [0m   [2m 504 [0m                                                                              [31m [0m
+[31m [0m   [2m 505 [0m                                                                              [31m [0m
+[31m [0m   [2m 506 [0m[94mdef[0m[90m [0m[92mnested_data_to_arrays[0m(                                                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:114 in arrays_to_mgr                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 111 [0m[2m│   [0m[94mif[0m verify_integrity:                                                      [31m [0m
+[31m [0m   [2m 112 [0m[2m│   │   [0m[2m# figure out the index, if necessary[0m                                  [31m [0m
+[31m [0m   [2m 113 [0m[2m│   │   [0m[94mif[0m index [95mis[0m [94mNone[0m:                                                     [31m [0m
+[31m [0m [31m❱ [0m 114 [2m│   │   │   [0mindex = [1;4m_extract_index(arrays)[0m                                    [31m [0m
+[31m [0m   [2m 115 [0m[2m│   │   [0m[94melse[0m:                                                                 [31m [0m
+[31m [0m   [2m 116 [0m[2m│   │   │   [0mindex = ensure_index(index)                                       [31m [0m
+[31m [0m   [2m 117 [0m                                                                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:677 in _extract_index                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 674 [0m[2m│   [0m[94mif[0m have_raw_arrays:                                                       [31m [0m
+[31m [0m   [2m 675 [0m[2m│   │   [0mlengths = [96mlist[0m([96mset[0m(raw_lengths))                                      [31m [0m
+[31m [0m   [2m 676 [0m[2m│   │   [0m[94mif[0m [96mlen[0m(lengths) > [94m1[0m:                                                  [31m [0m
+[31m [0m [31m❱ [0m 677 [2m│   │   │   [0m[1;4;94mraise[0m[1;4m [0m[1;4;96mValueError[0m[1;4m([0m[1;4;33m"[0m[1;4;33mAll arrays must be of the same length[0m[1;4;33m"[0m[1;4m)[0m         [31m [0m
+[31m [0m   [2m 678 [0m[2m│   │   [0m                                                                      [31m [0m
+[31m [0m   [2m 679 [0m[2m│   │   [0m[94mif[0m have_dicts:                                                        [31m [0m
+[31m [0m   [2m 680 [0m[2m│   │   │   [0m[94mraise[0m [96mValueError[0m(                                                 [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mValueError: [0mAll arrays must be of the same length
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/[0m[1mapp.py[0m:27 in <module>                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m24 [0m                                                                                [31m [0m
+[31m [0m   [2m25 [0m[94mif[0m page == [33m"[0m[33mHot Leads[0m[33m"[0m:                                                         [31m [0m
+[31m [0m   [2m26 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m hot_leads                                                 [31m [0m
+[31m [0m [31m❱ [0m27 [2m│   [0m[1;4mhot_leads.render()[0m                                                          [31m [0m
+[31m [0m   [2m28 [0m[94melif[0m page == [33m"[0m[33mNAV Predictor[0m[33m"[0m:                                                   [31m [0m
+[31m [0m   [2m29 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m nav_predictor                                             [31m [0m
+[31m [0m   [2m30 [0m[2m│   [0mnav_predictor.render()                                                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:39 in render                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 36 [0m[2m│   │   │   [0m[33m"[0m[33mconversion_probability[0m[33m"[0m: [[94m0.95[0m - (i * [94m0.01[0m) [94mfor[0m i [95min[0m [96mrange[0m([94m50[0m)],  [31m [0m
+[31m [0m   [2m 37 [0m[2m│   │   [0m})                                                                     [31m [0m
+[31m [0m   [2m 38 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m [31m❱ [0m 39 [2m│   [0mdf = [1;4mload_leads()[0m                                                          [31m [0m
+[31m [0m   [2m 40 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m 41 [0m[2m│   [0m[2m# Add conversion probability if not present[0m                                [31m [0m
+[31m [0m   [2m 42 [0m[2m│   [0m[94mif[0m [33m"[0m[33mconversion_probability[0m[33m"[0m [95mnot[0m [95min[0m df.columns:                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:227 in __call__                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:269 in _get_or_create_cached_value              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:328 in _handle_cache_miss                       [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:29 in load_leads                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m[2m│   │   │   [0m[94mreturn[0m pd.read_csv(data_path)                                      [31m [0m
+[31m [0m   [2m 27 [0m[2m│   │   [0m                                                                       [31m [0m
+[31m [0m   [2m 28 [0m[2m│   │   [0m[2m# Generate sample data for demonstration[0m                               [31m [0m
+[31m [0m [31m❱ [0m 29 [2m│   │   [0m[94mreturn[0m [1;4mpd.DataFrame({[0m                                                  [31m [0m
+[31m [0m   [2m 30 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mProspect ID[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33mf[0m[1;4;33m"[0m[1;4;33mLEAD_[0m[1;4;33m{[0m[1;4mi[0m[1;4;33m:[0m[1;4;33m05d[0m[1;4;33m}[0m[1;4;33m"[0m[1;4m [0m[1;4;94mfor[0m[1;4m i [0m[1;4;95min[0m[1;4m [0m[1;4;96mrange[0m[1;4m([0m[1;4;94m50[0m[1;4m)],[0m               [31m [0m
+[31m [0m   [2m 31 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Origin[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mAPI[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mLanding Page[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mOrganic Search[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m17[0m[1;4m,[0m     [31m [0m
+[31m [0m   [2m 32 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Source[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mGoogle[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mDirect[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mReferral[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mSocial[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m13[0m[1;4m,[0m    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/[0m[1mframe.py[0m:782 in __init__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  779 [0m[2m│   │   [0m                                                                     [31m [0m
+[31m [0m   [2m  780 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, [96mdict[0m):                                         [31m [0m
+[31m [0m   [2m  781 [0m[2m│   │   │   [0m[2m# GH#38939 de facto copy defaults to False only in non-dict case[0m [31m [0m
+[31m [0m [31m❱ [0m  782 [2m│   │   │   [0mmgr = [1;4mdict_to_mgr(data, index, columns, dtype=dtype, copy=copy, [0m [31m [0m
+[31m [0m   [2m  783 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, ma.MaskedArray):                               [31m [0m
+[31m [0m   [2m  784 [0m[2m│   │   │   [0m[94mfrom[0m[90m [0m[4;96mnumpy[0m[4;96m.[0m[4;96mma[0m[90m [0m[94mimport[0m mrecords                                    [31m [0m
+[31m [0m   [2m  785 [0m                                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:503 in dict_to_mgr                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 500 [0m[2m│   │   │   [0m[2m# dtype check to exclude e.g. range objects, scalars[0m              [31m [0m
+[31m [0m   [2m 501 [0m[2m│   │   │   [0marrays = [x.copy() [94mif[0m [96mhasattr[0m(x, [33m"[0m[33mdtype[0m[33m"[0m) [94melse[0m x [94mfor[0m x [95min[0m arrays] [31m [0m
+[31m [0m   [2m 502 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m [31m❱ [0m 503 [2m│   [0m[94mreturn[0m [1;4marrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consol[0m [31m [0m
+[31m [0m   [2m 504 [0m                                                                              [31m [0m
+[31m [0m   [2m 505 [0m                                                                              [31m [0m
+[31m [0m   [2m 506 [0m[94mdef[0m[90m [0m[92mnested_data_to_arrays[0m(                                                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:114 in arrays_to_mgr                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 111 [0m[2m│   [0m[94mif[0m verify_integrity:                                                      [31m [0m
+[31m [0m   [2m 112 [0m[2m│   │   [0m[2m# figure out the index, if necessary[0m                                  [31m [0m
+[31m [0m   [2m 113 [0m[2m│   │   [0m[94mif[0m index [95mis[0m [94mNone[0m:                                                     [31m [0m
+[31m [0m [31m❱ [0m 114 [2m│   │   │   [0mindex = [1;4m_extract_index(arrays)[0m                                    [31m [0m
+[31m [0m   [2m 115 [0m[2m│   │   [0m[94melse[0m:                                                                 [31m [0m
+[31m [0m   [2m 116 [0m[2m│   │   │   [0mindex = ensure_index(index)                                       [31m [0m
+[31m [0m   [2m 117 [0m                                                                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:677 in _extract_index                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 674 [0m[2m│   [0m[94mif[0m have_raw_arrays:                                                       [31m [0m
+[31m [0m   [2m 675 [0m[2m│   │   [0mlengths = [96mlist[0m([96mset[0m(raw_lengths))                                      [31m [0m
+[31m [0m   [2m 676 [0m[2m│   │   [0m[94mif[0m [96mlen[0m(lengths) > [94m1[0m:                                                  [31m [0m
+[31m [0m [31m❱ [0m 677 [2m│   │   │   [0m[1;4;94mraise[0m[1;4m [0m[1;4;96mValueError[0m[1;4m([0m[1;4;33m"[0m[1;4;33mAll arrays must be of the same length[0m[1;4;33m"[0m[1;4m)[0m         [31m [0m
+[31m [0m   [2m 678 [0m[2m│   │   [0m                                                                      [31m [0m
+[31m [0m   [2m 679 [0m[2m│   │   [0m[94mif[0m have_dicts:                                                        [31m [0m
+[31m [0m   [2m 680 [0m[2m│   │   │   [0m[94mraise[0m [96mValueError[0m(                                                 [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mValueError: [0mAll arrays must be of the same length
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/[0m[1mapp.py[0m:27 in <module>                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m24 [0m                                                                                [31m [0m
+[31m [0m   [2m25 [0m[94mif[0m page == [33m"[0m[33mHot Leads[0m[33m"[0m:                                                         [31m [0m
+[31m [0m   [2m26 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m hot_leads                                                 [31m [0m
+[31m [0m [31m❱ [0m27 [2m│   [0m[1;4mhot_leads.render()[0m                                                          [31m [0m
+[31m [0m   [2m28 [0m[94melif[0m page == [33m"[0m[33mNAV Predictor[0m[33m"[0m:                                                   [31m [0m
+[31m [0m   [2m29 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m nav_predictor                                             [31m [0m
+[31m [0m   [2m30 [0m[2m│   [0mnav_predictor.render()                                                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:39 in render                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 36 [0m[2m│   │   │   [0m[33m"[0m[33mconversion_probability[0m[33m"[0m: [[94m0.95[0m - (i * [94m0.01[0m) [94mfor[0m i [95min[0m [96mrange[0m([94m50[0m)],  [31m [0m
+[31m [0m   [2m 37 [0m[2m│   │   [0m})                                                                     [31m [0m
+[31m [0m   [2m 38 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m [31m❱ [0m 39 [2m│   [0mdf = [1;4mload_leads()[0m                                                          [31m [0m
+[31m [0m   [2m 40 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m 41 [0m[2m│   [0m[2m# Add conversion probability if not present[0m                                [31m [0m
+[31m [0m   [2m 42 [0m[2m│   [0m[94mif[0m [33m"[0m[33mconversion_probability[0m[33m"[0m [95mnot[0m [95min[0m df.columns:                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:227 in __call__                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:269 in _get_or_create_cached_value              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:328 in _handle_cache_miss                       [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:29 in load_leads                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m[2m│   │   │   [0m[94mreturn[0m pd.read_csv(data_path)                                      [31m [0m
+[31m [0m   [2m 27 [0m[2m│   │   [0m                                                                       [31m [0m
+[31m [0m   [2m 28 [0m[2m│   │   [0m[2m# Generate sample data for demonstration[0m                               [31m [0m
+[31m [0m [31m❱ [0m 29 [2m│   │   [0m[94mreturn[0m [1;4mpd.DataFrame({[0m                                                  [31m [0m
+[31m [0m   [2m 30 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mProspect ID[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33mf[0m[1;4;33m"[0m[1;4;33mLEAD_[0m[1;4;33m{[0m[1;4mi[0m[1;4;33m:[0m[1;4;33m05d[0m[1;4;33m}[0m[1;4;33m"[0m[1;4m [0m[1;4;94mfor[0m[1;4m i [0m[1;4;95min[0m[1;4m [0m[1;4;96mrange[0m[1;4m([0m[1;4;94m50[0m[1;4m)],[0m               [31m [0m
+[31m [0m   [2m 31 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Origin[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mAPI[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mLanding Page[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mOrganic Search[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m17[0m[1;4m,[0m     [31m [0m
+[31m [0m   [2m 32 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Source[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mGoogle[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mDirect[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mReferral[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mSocial[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m13[0m[1;4m,[0m    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/[0m[1mframe.py[0m:782 in __init__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  779 [0m[2m│   │   [0m                                                                     [31m [0m
+[31m [0m   [2m  780 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, [96mdict[0m):                                         [31m [0m
+[31m [0m   [2m  781 [0m[2m│   │   │   [0m[2m# GH#38939 de facto copy defaults to False only in non-dict case[0m [31m [0m
+[31m [0m [31m❱ [0m  782 [2m│   │   │   [0mmgr = [1;4mdict_to_mgr(data, index, columns, dtype=dtype, copy=copy, [0m [31m [0m
+[31m [0m   [2m  783 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, ma.MaskedArray):                               [31m [0m
+[31m [0m   [2m  784 [0m[2m│   │   │   [0m[94mfrom[0m[90m [0m[4;96mnumpy[0m[4;96m.[0m[4;96mma[0m[90m [0m[94mimport[0m mrecords                                    [31m [0m
+[31m [0m   [2m  785 [0m                                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:503 in dict_to_mgr                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 500 [0m[2m│   │   │   [0m[2m# dtype check to exclude e.g. range objects, scalars[0m              [31m [0m
+[31m [0m   [2m 501 [0m[2m│   │   │   [0marrays = [x.copy() [94mif[0m [96mhasattr[0m(x, [33m"[0m[33mdtype[0m[33m"[0m) [94melse[0m x [94mfor[0m x [95min[0m arrays] [31m [0m
+[31m [0m   [2m 502 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m [31m❱ [0m 503 [2m│   [0m[94mreturn[0m [1;4marrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consol[0m [31m [0m
+[31m [0m   [2m 504 [0m                                                                              [31m [0m
+[31m [0m   [2m 505 [0m                                                                              [31m [0m
+[31m [0m   [2m 506 [0m[94mdef[0m[90m [0m[92mnested_data_to_arrays[0m(                                                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:114 in arrays_to_mgr                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 111 [0m[2m│   [0m[94mif[0m verify_integrity:                                                      [31m [0m
+[31m [0m   [2m 112 [0m[2m│   │   [0m[2m# figure out the index, if necessary[0m                                  [31m [0m
+[31m [0m   [2m 113 [0m[2m│   │   [0m[94mif[0m index [95mis[0m [94mNone[0m:                                                     [31m [0m
+[31m [0m [31m❱ [0m 114 [2m│   │   │   [0mindex = [1;4m_extract_index(arrays)[0m                                    [31m [0m
+[31m [0m   [2m 115 [0m[2m│   │   [0m[94melse[0m:                                                                 [31m [0m
+[31m [0m   [2m 116 [0m[2m│   │   │   [0mindex = ensure_index(index)                                       [31m [0m
+[31m [0m   [2m 117 [0m                                                                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:677 in _extract_index                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 674 [0m[2m│   [0m[94mif[0m have_raw_arrays:                                                       [31m [0m
+[31m [0m   [2m 675 [0m[2m│   │   [0mlengths = [96mlist[0m([96mset[0m(raw_lengths))                                      [31m [0m
+[31m [0m   [2m 676 [0m[2m│   │   [0m[94mif[0m [96mlen[0m(lengths) > [94m1[0m:                                                  [31m [0m
+[31m [0m [31m❱ [0m 677 [2m│   │   │   [0m[1;4;94mraise[0m[1;4m [0m[1;4;96mValueError[0m[1;4m([0m[1;4;33m"[0m[1;4;33mAll arrays must be of the same length[0m[1;4;33m"[0m[1;4m)[0m         [31m [0m
+[31m [0m   [2m 678 [0m[2m│   │   [0m                                                                      [31m [0m
+[31m [0m   [2m 679 [0m[2m│   │   [0m[94mif[0m have_dicts:                                                        [31m [0m
+[31m [0m   [2m 680 [0m[2m│   │   │   [0m[94mraise[0m [96mValueError[0m(                                                 [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mValueError: [0mAll arrays must be of the same length
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1minvestor_profiles.py[0m:10 in <module>          [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  7 [0m                                                                               [31m [0m
+[31m [0m   [2m  8 [0m[94mimport[0m[90m [0m[4;96mnumpy[0m[90m [0m[94mas[0m[90m [0m[4;96mnp[0m                                                             [31m [0m
+[31m [0m   [2m  9 [0m[94mimport[0m[90m [0m[4;96mpandas[0m[90m [0m[94mas[0m[90m [0m[4;96mpd[0m                                                            [31m [0m
+[31m [0m [31m❱ [0m 10 [1;4;94mimport[0m[1;4;90m [0m[1;4;96mplotly[0m[1;4;96m.[0m[1;4;96mexpress[0m[1;4;90m [0m[1;4;94mas[0m[1;4;90m [0m[1;4;96mpx[0m                                                    [31m [0m
+[31m [0m   [2m 11 [0m[94mimport[0m[90m [0m[4;96mplotly[0m[4;96m.[0m[4;96mgraph_objects[0m[90m [0m[94mas[0m[90m [0m[4;96mgo[0m                                              [31m [0m
+[31m [0m   [2m 12 [0m[94mimport[0m[90m [0m[4;96mstreamlit[0m[90m [0m[94mas[0m[90m [0m[4;96mst[0m                                                         [31m [0m
+[31m [0m   [2m 13 [0m                                                                               [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mModuleNotFoundError: [0mNo module named [32m'plotly'[0m
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mnav_predictor.py[0m:10 in <module>              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  7 [0m                                                                               [31m [0m
+[31m [0m   [2m  8 [0m[94mimport[0m[90m [0m[4;96mnumpy[0m[90m [0m[94mas[0m[90m [0m[4;96mnp[0m                                                             [31m [0m
+[31m [0m   [2m  9 [0m[94mimport[0m[90m [0m[4;96mpandas[0m[90m [0m[94mas[0m[90m [0m[4;96mpd[0m                                                            [31m [0m
+[31m [0m [31m❱ [0m 10 [1;4;94mimport[0m[1;4;90m [0m[1;4;96mplotly[0m[1;4;96m.[0m[1;4;96mgraph_objects[0m[1;4;90m [0m[1;4;94mas[0m[1;4;90m [0m[1;4;96mgo[0m                                              [31m [0m
+[31m [0m   [2m 11 [0m[94mimport[0m[90m [0m[4;96mstreamlit[0m[90m [0m[94mas[0m[90m [0m[4;96mst[0m                                                         [31m [0m
+[31m [0m   [2m 12 [0m                                                                               [31m [0m
+[31m [0m   [2m 13 [0mAPI_BASE_URL = os.getenv([33m"[0m[33mAPI_BASE_URL[0m[33m"[0m, [33m"[0m[33mhttp://localhost:5000[0m[33m"[0m)              [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mModuleNotFoundError: [0mNo module named [32m'plotly'[0m
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1msentiment_gauge.py[0m:10 in <module>            [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  7 [0m                                                                               [31m [0m
+[31m [0m   [2m  8 [0m[94mimport[0m[90m [0m[4;96mnumpy[0m[90m [0m[94mas[0m[90m [0m[4;96mnp[0m                                                             [31m [0m
+[31m [0m   [2m  9 [0m[94mimport[0m[90m [0m[4;96mpandas[0m[90m [0m[94mas[0m[90m [0m[4;96mpd[0m                                                            [31m [0m
+[31m [0m [31m❱ [0m 10 [1;4;94mimport[0m[1;4;90m [0m[1;4;96mplotly[0m[1;4;96m.[0m[1;4;96mgraph_objects[0m[1;4;90m [0m[1;4;94mas[0m[1;4;90m [0m[1;4;96mgo[0m                                              [31m [0m
+[31m [0m   [2m 11 [0m[94mimport[0m[90m [0m[4;96mstreamlit[0m[90m [0m[94mas[0m[90m [0m[4;96mst[0m                                                         [31m [0m
+[31m [0m   [2m 12 [0m                                                                               [31m [0m
+[31m [0m   [2m 13 [0m                                                                               [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mModuleNotFoundError: [0mNo module named [32m'plotly'[0m
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:667 in code_to_exec                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/scriptrunner/[0m[1mscript_runner.py[0m:165 in _mpa_v1                           [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/navigation/[0m[1mpage.py[0m:300 in run                                                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/[0m[1mapp.py[0m:27 in <module>                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m24 [0m                                                                                [31m [0m
+[31m [0m   [2m25 [0m[94mif[0m page == [33m"[0m[33mHot Leads[0m[33m"[0m:                                                         [31m [0m
+[31m [0m   [2m26 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m hot_leads                                                 [31m [0m
+[31m [0m [31m❱ [0m27 [2m│   [0m[1;4mhot_leads.render()[0m                                                          [31m [0m
+[31m [0m   [2m28 [0m[94melif[0m page == [33m"[0m[33mNAV Predictor[0m[33m"[0m:                                                   [31m [0m
+[31m [0m   [2m29 [0m[2m│   [0m[94mfrom[0m[90m [0m[4;96mpages[0m[90m [0m[94mimport[0m nav_predictor                                             [31m [0m
+[31m [0m   [2m30 [0m[2m│   [0mnav_predictor.render()                                                      [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:39 in render                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 36 [0m[2m│   │   │   [0m[33m"[0m[33mconversion_probability[0m[33m"[0m: [[94m0.95[0m - (i * [94m0.01[0m) [94mfor[0m i [95min[0m [96mrange[0m([94m50[0m)],  [31m [0m
+[31m [0m   [2m 37 [0m[2m│   │   [0m})                                                                     [31m [0m
+[31m [0m   [2m 38 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m [31m❱ [0m 39 [2m│   [0mdf = [1;4mload_leads()[0m                                                          [31m [0m
+[31m [0m   [2m 40 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m 41 [0m[2m│   [0m[2m# Add conversion probability if not present[0m                                [31m [0m
+[31m [0m   [2m 42 [0m[2m│   [0m[94mif[0m [33m"[0m[33mconversion_probability[0m[33m"[0m [95mnot[0m [95min[0m df.columns:                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:227 in __call__                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:269 in _get_or_create_cached_value              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/stre[0m [31m [0m
+[31m [0m [2mamlit/runtime/caching/[0m[1mcache_utils.py[0m:328 in _handle_cache_miss                       [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My [0m [31m [0m
+[31m [0m [2mDrive/BigData/mintleads/dashboard/pages/[0m[1mhot_leads.py[0m:29 in load_leads                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m[2m│   │   │   [0m[94mreturn[0m pd.read_csv(data_path)                                      [31m [0m
+[31m [0m   [2m 27 [0m[2m│   │   [0m                                                                       [31m [0m
+[31m [0m   [2m 28 [0m[2m│   │   [0m[2m# Generate sample data for demonstration[0m                               [31m [0m
+[31m [0m [31m❱ [0m 29 [2m│   │   [0m[94mreturn[0m [1;4mpd.DataFrame({[0m                                                  [31m [0m
+[31m [0m   [2m 30 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mProspect ID[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33mf[0m[1;4;33m"[0m[1;4;33mLEAD_[0m[1;4;33m{[0m[1;4mi[0m[1;4;33m:[0m[1;4;33m05d[0m[1;4;33m}[0m[1;4;33m"[0m[1;4m [0m[1;4;94mfor[0m[1;4m i [0m[1;4;95min[0m[1;4m [0m[1;4;96mrange[0m[1;4m([0m[1;4;94m50[0m[1;4m)],[0m               [31m [0m
+[31m [0m   [2m 31 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Origin[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mAPI[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mLanding Page[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mOrganic Search[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m17[0m[1;4m,[0m     [31m [0m
+[31m [0m   [2m 32 [0m[2m│   │   │   [0m[1;4;33m"[0m[1;4;33mLead Source[0m[1;4;33m"[0m[1;4m: [[0m[1;4;33m"[0m[1;4;33mGoogle[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mDirect[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mReferral[0m[1;4;33m"[0m[1;4m, [0m[1;4;33m"[0m[1;4;33mSocial[0m[1;4;33m"[0m[1;4m] * [0m[1;4;94m13[0m[1;4m,[0m    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/[0m[1mframe.py[0m:782 in __init__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m  779 [0m[2m│   │   [0m                                                                     [31m [0m
+[31m [0m   [2m  780 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, [96mdict[0m):                                         [31m [0m
+[31m [0m   [2m  781 [0m[2m│   │   │   [0m[2m# GH#38939 de facto copy defaults to False only in non-dict case[0m [31m [0m
+[31m [0m [31m❱ [0m  782 [2m│   │   │   [0mmgr = [1;4mdict_to_mgr(data, index, columns, dtype=dtype, copy=copy, [0m [31m [0m
+[31m [0m   [2m  783 [0m[2m│   │   [0m[94melif[0m [96misinstance[0m(data, ma.MaskedArray):                               [31m [0m
+[31m [0m   [2m  784 [0m[2m│   │   │   [0m[94mfrom[0m[90m [0m[4;96mnumpy[0m[4;96m.[0m[4;96mma[0m[90m [0m[94mimport[0m mrecords                                    [31m [0m
+[31m [0m   [2m  785 [0m                                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:503 in dict_to_mgr                                 [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 500 [0m[2m│   │   │   [0m[2m# dtype check to exclude e.g. range objects, scalars[0m              [31m [0m
+[31m [0m   [2m 501 [0m[2m│   │   │   [0marrays = [x.copy() [94mif[0m [96mhasattr[0m(x, [33m"[0m[33mdtype[0m[33m"[0m) [94melse[0m x [94mfor[0m x [95min[0m arrays] [31m [0m
+[31m [0m   [2m 502 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m [31m❱ [0m 503 [2m│   [0m[94mreturn[0m [1;4marrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consol[0m [31m [0m
+[31m [0m   [2m 504 [0m                                                                              [31m [0m
+[31m [0m   [2m 505 [0m                                                                              [31m [0m
+[31m [0m   [2m 506 [0m[94mdef[0m[90m [0m[92mnested_data_to_arrays[0m(                                                    [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:114 in arrays_to_mgr                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 111 [0m[2m│   [0m[94mif[0m verify_integrity:                                                      [31m [0m
+[31m [0m   [2m 112 [0m[2m│   │   [0m[2m# figure out the index, if necessary[0m                                  [31m [0m
+[31m [0m   [2m 113 [0m[2m│   │   [0m[94mif[0m index [95mis[0m [94mNone[0m:                                                     [31m [0m
+[31m [0m [31m❱ [0m 114 [2m│   │   │   [0mindex = [1;4m_extract_index(arrays)[0m                                    [31m [0m
+[31m [0m   [2m 115 [0m[2m│   │   [0m[94melse[0m:                                                                 [31m [0m
+[31m [0m   [2m 116 [0m[2m│   │   │   [0mindex = ensure_index(index)                                       [31m [0m
+[31m [0m   [2m 117 [0m                                                                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/pand[0m [31m [0m
+[31m [0m [2mas/core/internals/[0m[1mconstruction.py[0m:677 in _extract_index                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 674 [0m[2m│   [0m[94mif[0m have_raw_arrays:                                                       [31m [0m
+[31m [0m   [2m 675 [0m[2m│   │   [0mlengths = [96mlist[0m([96mset[0m(raw_lengths))                                      [31m [0m
+[31m [0m   [2m 676 [0m[2m│   │   [0m[94mif[0m [96mlen[0m(lengths) > [94m1[0m:                                                  [31m [0m
+[31m [0m [31m❱ [0m 677 [2m│   │   │   [0m[1;4;94mraise[0m[1;4m [0m[1;4;96mValueError[0m[1;4m([0m[1;4;33m"[0m[1;4;33mAll arrays must be of the same length[0m[1;4;33m"[0m[1;4m)[0m         [31m [0m
+[31m [0m   [2m 678 [0m[2m│   │   [0m                                                                      [31m [0m
+[31m [0m   [2m 679 [0m[2m│   │   [0m[94mif[0m have_dicts:                                                        [31m [0m
+[31m [0m   [2m 680 [0m[2m│   │   │   [0m[94mraise[0m [96mValueError[0m(                                                 [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mValueError: [0mAll arrays must be of the same length

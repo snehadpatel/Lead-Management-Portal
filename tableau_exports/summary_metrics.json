@@ -1,0 +1,15 @@
+{
+  "export_timestamp": "2026-04-17T16:21:52.445627",
+  "dataset_size_gb": 31.25,
+  "data_sources": {
+    "structured": "~25 GB",
+    "semi_structured": "~3 GB",
+    "unstructured": "~3 GB"
+  },
+  "models": {
+    "lead_classification": "XGBoost/RandomForest",
+    "investor_clustering": "K-Means (4 clusters)",
+    "sentiment_analysis": "TF-IDF + LogisticRegression"
+  },
+  "total_leads": 9240
+}
