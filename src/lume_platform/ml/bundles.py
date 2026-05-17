@@ -73,3 +73,22 @@ class SentimentBundle:
         else:
             proba = 1.0
         return label, proba
+
+
+@dataclass
+class SBERTSentimentBundle:
+    """Uses SBERT embeddings + Classifier for sentiment."""
+    model: Any
+    label_classes: np.ndarray
+    sbert_model_name: str = 'all-MiniLM-L6-v2'
+
+    def predict_text(self, text: str, sbert_model: Any) -> tuple[str, float]:
+        """sbert_model should be an instance of SentenceTransformer passed from registry."""
+        embedding = sbert_model.encode([text], convert_to_numpy=True)
+        pred_idx = int(self.model.predict(embedding)[0])
+        label = str(self.label_classes[pred_idx])
+        if hasattr(self.model, "predict_proba"):
+            proba = float(np.max(self.model.predict_proba(embedding)))
+        else:
+            proba = 1.0
+        return label, proba

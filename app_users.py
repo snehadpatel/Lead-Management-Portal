@@ -29,6 +29,9 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from lume_platform.config import DATA_ROOT, EXPORT_DIR
 from lume_platform.inference.registry import ModelRegistry
+from lume_platform.ui.macro_dashboard import render_macro_dashboard
+from lume_platform.data.loaders import load_all_schemes, Fund
+from lume_platform.audit.document_auditor import DocumentAuditor
 
 # Page config
 st.set_page_config(
@@ -271,36 +274,21 @@ PERSONAS = {
     }
 }
 
-# Sample funds database with history mapping
-FUNDS_DB = [
-    Fund("F001", "Nippon India Small Cap Fund", "equity", "high", 45.2, 28.5, 22.1, 28500, 0.67, 5, ["growth"]),
-    Fund("F002", "SBI Magnum MidCap Fund", "equity", "high", 38.5, 24.2, 19.8, 12800, 0.84, 4, ["growth"]),
-    Fund("F003", "ICICI Pru Technology Fund", "equity", "high", 52.1, 32.8, 25.4, 8900, 0.92, 4, ["growth"]),
-    Fund("F004", "HDFC Liquid Fund", "debt", "low", 6.8, 6.5, 6.9, 45000, 0.20, 5, ["conservative"]),
-    Fund("F005", "SBI Savings Fund", "debt", "low", 7.2, 6.8, 7.1, 22000, 0.35, 4, ["conservative"]),
-    Fund("F006", "Axis Short Term Fund", "debt", "low", 7.8, 7.2, 7.5, 15600, 0.42, 4, ["conservative"]),
-    Fund("F007", "Edelweiss Balanced Advantage", "hybrid", "medium", 18.5, 14.2, 12.8, 18500, 0.78, 5, ["balanced"]),
-    Fund("F008", "HDFC Hybrid Equity", "hybrid", "medium", 22.3, 16.8, 14.5, 15600, 0.92, 4, ["balanced"]),
-    Fund("F009", "Kotak Balanced Advantage", "hybrid", "medium", 17.8, 13.5, 12.1, 12400, 0.72, 4, ["balanced"]),
-    Fund("F010", "UTI Nifty 50 Index Fund", "index", "medium", 18.2, 15.1, 13.8, 8500, 0.18, 4, ["passive"]),
-    Fund("F011", "HDFC Index Nifty 50", "index", "medium", 18.5, 15.3, 14.1, 6200, 0.20, 4, ["passive"]),
-    Fund("F012", "SBI Nifty Next 50 Index", "index", "medium", 25.8, 19.2, 16.5, 4500, 0.33, 4, ["passive", "growth"]),
-]
+# Initialize Advanced Data Hubs
+AMFI_DATA_PATH = ROOT / "datasets/structured/mutual_funds/amfi_scheme_list.csv"
+MACRO_DATA_PATH = ROOT / "datasets/structured/macroeconomic/world_bank_indicators.csv"
+PROSPECTUS_DIR = ROOT / "datasets/unstructured/prospectus_texts"
 
-# Mapping to real history CSV files found in datasets
+# Production Scale Fund Database (AMFI)
+FUNDS_DB = load_all_schemes(AMFI_DATA_PATH)
+
+# AI Document Auditor Instance
+DOC_AUDITOR = DocumentAuditor(PROSPECTUS_DIR)
+
+# Mapping to real history CSV files (for top results)
 HISTORY_MAP = {
-    "F001": "153703_history.csv",
-    "F002": "152111_history.csv",
-    "F003": "147441_history.csv",
-    "F004": "111753_history.csv",
-    "F005": "120437_history.csv",
-    "F006": "150369_history.csv",
-    "F007": "131054_history.csv",
-    "F008": "131382_history.csv",
-    "F009": "105658_history.csv",
-    "F010": "147608_history.csv",
-    "F011": "104485_history.csv",
-    "F012": "139201_history.csv",
+    "119551": "153703_history.csv", # Mapping real codes to available history
+    "108272": "152111_history.csv"
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -575,10 +563,26 @@ def render_ai_buddy(profile: UserProfile):
                           unsafe_allow_html=True)
     
     # Quick question input
-    user_question = st.text_input("❓ Ask me anything about distribution...", 
+    st.markdown("---")
+    st.markdown("#### 🔍 AI Document Auditor (Real-World Search)")
+    user_search = st.text_input("❓ Ask about AMFI rules or specific Fund Prospectuses:", 
+                                   placeholder="e.g., SEBI circular June 2024, AMFI Factbook")
+    
+    if user_search:
+        results = DOC_AUDITOR.search(user_search)
+        if results:
+            st.success(f"Found {len(results)} matches in real datasets:")
+            for res in results:
+                with st.expander(f"📄 {res['filename']}"):
+                    st.markdown(f"*{res['snippet']}*")
+        else:
+            st.warning("No matches in current prospectus texts. Try keywords like 'SEBI', 'AMFI', or 'Annual'.")
+
+    st.markdown("---")
+    user_question = st.text_input("❓ General Distribution Q&A:", 
                                    placeholder="e.g., How do I handle objections?")
     if user_question:
-        # Simple response logic (can be enhanced with LLM)
+        # Simple response logic
         response = f"""
         **🤖 AI Buddy Response:**
         
@@ -588,11 +592,8 @@ def render_ai_buddy(profile: UserProfile):
         
         **Quick Tips:**
         - Always listen first, understand the investor's concern
-        - Use data to support your recommendations  
-        - Follow up consistently without being pushy
-        - Keep learning about new fund offerings
-        
-        *For detailed guidance, select a topic above or refer to your training materials.*
+        - Use data from the **Market Intelligence** tab to support your recommendations  
+        - Refer to the **Document Auditor** results for compliance-heavy questions.
         """
         st.markdown(f"<div class='ai-buddy-message'>{response}</div>", 
                   unsafe_allow_html=True)
@@ -954,10 +955,11 @@ def render_investor_dashboard(profile: UserProfile, registry: ModelRegistry):
     st.divider()
     
     # Main tabs
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "💰 My Investments", 
         "👨‍💼 Find Distributors", 
         "📊 Fund Explorer",
+        "📈 Market Intelligence",
         "🔔 Alerts & News"
     ])
     
@@ -969,8 +971,11 @@ def render_investor_dashboard(profile: UserProfile, registry: ModelRegistry):
     
     with tab3:
         render_fund_explorer(profile, registry)
-    
+        
     with tab4:
+        render_macro_dashboard(MACRO_DATA_PATH)
+    
+    with tab5:
         render_investor_alerts(profile)
 
 def calculate_portfolio_value() -> float:

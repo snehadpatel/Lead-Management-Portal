@@ -1,1001 +1,1001 @@
 Investor_ID,Longevity,Female,Age,Income,ProfManage,Diversification,Affordability,Liquidity,Growth,Trustworthiness,Technology,Integrity,BrandValue,AUM,Persona_Cluster,Recommended_Fund_Type,Recommended_Distributor_To_Contact
-1,1,0,1,1,1,2,6,4,3,3,5,2,2,98062,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-2,2,0,1,1,2,1,6,3,4,2,6,2,1,99187,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-3,8,0,2,1,0,1,7,5,3,3,3,4,3,180043,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-4,8,0,2,1,1,2,6,5,4,4,2,4,2,159982,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-5,18,0,3,1,2,0,7,7,3,6,0,6,6,459815,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-6,2,0,1,2,2,1,4,4,5,2,7,2,1,273750,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-7,9,0,2,2,4,3,5,6,5,3,5,3,4,2282344,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-8,9,0,2,2,3,4,5,6,6,3,6,3,4,2452252,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-9,10,0,2,2,4,4,4,5,5,2,6,2,4,2704762,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-10,11,0,2,2,4,3,6,5,4,2,5,1,4,2820556,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-11,19,0,3,2,6,6,3,6,6,6,2,6,7,4746277,3.0,Index Trackers (Passive),Index Advisory Group
-12,19,0,3,2,7,7,3,7,7,5,2,7,6,4490534,3.0,Index Trackers (Passive),Index Advisory Group
-13,4,0,1,3,2,3,2,4,5,4,6,3,3,1358420,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-14,4,0,1,3,2,4,1,3,5,4,7,3,3,1608154,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-15,12,0,2,3,4,4,2,3,6,4,3,4,3,4830633,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-16,13,0,2,3,3,4,3,3,5,5,2,3,4,4380080,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-17,12,0,2,3,3,4,1,3,7,4,2,4,4,4182314,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-18,23,0,3,3,6,5,1,2,6,6,1,7,6,7979653,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-19,22,0,3,3,7,5,0,0,5,7,2,6,7,7206858,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-20,24,0,3,3,6,4,1,0,7,7,1,7,6,7442456,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-21,5,0,1,4,2,6,1,1,5,3,7,2,3,3378709,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-22,16,0,2,4,3,6,0,1,5,4,5,2,2,6568116,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-23,24,0,3,4,6,7,2,1,6,6,1,7,6,16744595,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-24,25,0,3,4,7,6,1,0,6,6,2,6,7,18911813,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-25,1,1,1,1,1,2,6,4,3,3,5,2,2,99782,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-26,1,1,1,1,2,1,6,3,4,2,6,2,1,99542,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-27,8,1,2,1,1,2,6,5,4,4,2,4,2,132244,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-28,1,1,1,2,2,1,4,4,5,2,7,2,1,253138,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-29,9,1,2,2,4,3,5,6,5,3,5,3,4,2145364,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-30,10,1,2,2,3,4,5,6,6,3,6,3,4,2331221,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-31,12,1,2,2,4,4,4,5,5,2,6,2,4,2657126,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-32,18,1,3,2,7,7,3,7,7,5,2,7,6,4470404,3.0,Index Trackers (Passive),Index Advisory Group
-33,4,1,1,3,2,3,2,4,5,4,6,3,3,1545421,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-34,12,1,2,3,4,4,2,3,6,4,3,4,3,4264422,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-35,13,1,2,3,3,4,3,3,5,5,2,3,4,4418525,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-36,14,1,2,3,3,4,1,3,7,4,2,4,4,4127408,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-37,16,1,2,3,4,4,2,3,5,5,1,3,3,4838072,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-38,23,1,3,3,6,4,1,0,7,7,1,7,6,7692268,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-39,7,1,1,4,2,6,1,1,5,3,7,2,3,4027729,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-40,25,1,3,4,7,6,1,0,6,6,2,6,7,12469566,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-41,1,0,1,1,1,2,6,4,3,3,5,2,2,98029,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-42,2,0,1,1,2,1,6,3,4,2,6,2,1,99776,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-43,8,0,2,1,0,1,7,5,3,3,3,4,3,180406,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-44,8,0,2,1,1,2,6,5,4,4,2,4,2,160071,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-45,18,0,3,1,2,0,7,7,3,6,0,6,6,459904,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-46,2,0,1,2,2,1,4,4,5,2,7,2,1,273367,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-47,9,0,2,2,4,3,5,6,5,3,5,3,4,2341588,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-48,9,0,2,2,3,4,5,6,6,3,6,3,4,2379956,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-49,10,0,2,2,4,4,4,5,5,2,6,2,4,2724531,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-50,11,0,2,2,4,3,6,5,4,2,5,1,4,2862220,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-51,19,0,3,2,6,6,3,6,6,6,2,6,7,4685919,3.0,Index Trackers (Passive),Index Advisory Group
-52,19,0,3,2,7,7,3,7,7,5,2,7,6,4441102,3.0,Index Trackers (Passive),Index Advisory Group
-53,4,0,1,3,2,3,2,4,5,4,6,3,3,1355749,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-54,4,0,1,3,2,4,1,3,5,4,7,3,3,1666574,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-55,12,0,2,3,4,4,2,3,6,4,3,4,3,4910999,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-56,13,0,2,3,3,4,3,3,5,5,2,3,4,4392327,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-57,12,0,2,3,3,4,1,3,7,4,2,4,4,4157269,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-58,23,0,3,3,6,5,1,2,6,6,1,7,6,7911320,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-59,22,0,3,3,7,5,0,0,5,7,2,6,7,7136074,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-60,24,0,3,3,6,4,1,0,7,7,1,7,6,7424625,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-61,5,0,1,4,2,6,1,1,5,3,7,2,3,3357427,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-62,16,0,2,4,3,6,0,1,5,4,5,2,2,6568703,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-63,24,0,3,4,6,7,2,1,6,6,1,7,6,17148906,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-64,25,0,3,4,7,6,1,0,6,6,2,6,7,18829337,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-65,1,1,1,1,1,2,6,4,3,3,5,2,2,99925,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-66,1,1,1,1,2,1,6,3,4,2,6,2,1,100059,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-67,8,1,2,1,1,2,6,5,4,4,2,4,2,131901,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-68,1,1,1,2,2,1,4,4,5,2,7,2,1,245820,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-69,9,1,2,2,4,3,5,6,5,3,5,3,4,2159419,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-70,10,1,2,2,3,4,5,6,6,3,6,3,4,2368195,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-71,12,1,2,2,4,4,4,5,5,2,6,2,4,2662068,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-72,18,1,3,2,7,7,3,7,7,5,2,7,6,4468700,3.0,Index Trackers (Passive),Index Advisory Group
-73,4,1,1,3,2,3,2,4,5,4,6,3,3,1548431,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-74,12,1,2,3,4,4,2,3,6,4,3,4,3,4257507,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-75,13,1,2,3,3,4,3,3,5,5,2,3,4,4344026,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-76,14,1,2,3,3,4,1,3,7,4,2,4,4,4134314,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-77,16,1,2,3,4,4,2,3,5,5,1,3,3,4885544,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-78,23,1,3,3,6,4,1,0,7,7,1,7,6,7674243,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-79,7,1,1,4,2,6,1,1,5,3,7,2,3,4051187,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-80,25,1,3,4,7,6,1,0,6,6,2,6,7,13192860,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-81,2,0,1,2,2,1,4,4,5,2,7,2,1,273423,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-82,4,0,1,3,2,3,2,4,5,4,6,3,3,1311080,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-83,5,0,1,4,2,6,1,1,5,3,7,2,3,3358355,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-84,10,0,2,2,4,4,4,5,5,2,6,2,4,2719604,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-85,12,0,2,3,4,4,2,3,6,4,3,4,3,4897052,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-86,12,0,2,3,3,4,1,3,7,4,2,4,4,4187312,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-87,16,0,2,4,3,6,0,1,5,4,5,2,2,6568150,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-88,19,0,3,2,6,6,3,6,6,6,2,6,7,4730690,3.0,Index Trackers (Passive),Index Advisory Group
-89,22,0,3,3,7,5,0,0,5,7,2,6,7,7223822,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-90,25,0,3,4,7,6,1,0,6,6,2,6,7,18989323,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-91,1,1,1,2,2,1,4,4,5,2,7,2,1,253314,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-92,4,1,1,3,2,3,2,4,5,4,6,3,3,1561308,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-93,7,1,1,4,2,6,1,1,5,3,7,2,3,4053894,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-94,10,1,2,2,3,4,5,6,6,3,6,3,4,2317957,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-95,16,1,2,3,4,4,2,3,5,5,1,3,3,4848656,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-96,13,1,2,3,3,4,3,3,5,5,2,3,4,4339334,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-97,18,1,3,2,7,7,3,7,7,5,2,7,6,4481290,3.0,Index Trackers (Passive),Index Advisory Group
-98,23,1,3,3,6,4,1,0,7,7,1,7,6,7496328,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-99,12,1,2,2,4,4,4,5,5,2,6,2,4,2676675,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-100,25,1,3,4,7,6,1,0,6,6,2,6,7,12589420,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-101,1,0,1,1,1,2,6,4,3,3,5,2,2,98066,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-102,2,0,1,1,2,1,6,3,4,2,6,2,1,99982,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-103,8,0,2,1,0,1,7,5,3,3,3,4,3,180003,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-104,8,0,2,1,1,2,6,5,4,4,2,4,2,159847,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-105,18,0,3,1,2,0,7,7,3,6,0,6,6,459716,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-106,2,0,1,2,2,1,4,4,5,2,7,2,1,273744,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-107,9,0,2,2,4,3,5,6,5,3,5,3,4,2253640,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-108,9,0,2,2,3,4,5,6,6,3,6,3,4,2366143,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-109,10,0,2,2,4,4,4,5,5,2,6,2,4,2666990,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-110,11,0,2,2,4,3,6,5,4,2,5,1,4,2830244,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-111,19,0,3,2,6,6,3,6,6,6,2,6,7,4711712,3.0,Index Trackers (Passive),Index Advisory Group
-112,19,0,3,2,7,7,3,7,7,5,2,7,6,4498405,3.0,Index Trackers (Passive),Index Advisory Group
-113,4,0,1,3,2,3,2,4,5,4,6,3,3,1350190,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-114,4,0,1,3,2,4,1,3,5,4,7,3,3,1650520,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-115,12,0,2,3,4,4,2,3,6,4,3,4,3,4903220,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-116,13,0,2,3,3,4,3,3,5,5,2,3,4,4425574,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-117,12,0,2,3,3,4,1,3,7,4,2,4,4,4204598,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-118,23,0,3,3,6,5,1,2,6,6,1,7,6,7906324,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-119,22,0,3,3,7,5,0,0,5,7,2,6,7,7128283,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-120,24,0,3,3,6,4,1,0,7,7,1,7,6,7434080,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-121,5,0,1,4,2,6,1,1,5,3,7,2,3,3381440,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-122,16,0,2,4,3,6,0,1,5,4,5,2,2,6568765,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-123,24,0,3,4,6,7,2,1,6,6,1,7,6,16954590,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-124,25,0,3,4,7,6,1,0,6,6,2,6,7,18713008,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-125,1,1,1,1,1,2,6,4,3,3,5,2,2,99265,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-126,1,1,1,1,2,1,6,3,4,2,6,2,1,99104,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-127,8,1,2,1,1,2,6,5,4,4,2,4,2,134444,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-128,1,1,1,2,2,1,4,4,5,2,7,2,1,244301,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-129,9,1,2,2,4,3,5,6,5,3,5,3,4,2170941,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-130,10,1,2,2,3,4,5,6,6,3,6,3,4,2319018,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-131,12,1,2,2,4,4,4,5,5,2,6,2,4,2677758,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-132,18,1,3,2,7,7,3,7,7,5,2,7,6,4462715,3.0,Index Trackers (Passive),Index Advisory Group
-133,4,1,1,3,2,3,2,4,5,4,6,3,3,1559278,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-134,12,1,2,3,4,4,2,3,6,4,3,4,3,4320129,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-135,13,1,2,3,3,4,3,3,5,5,2,3,4,4355445,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-136,14,1,2,3,3,4,1,3,7,4,2,4,4,4193470,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-137,16,1,2,3,4,4,2,3,5,5,1,3,3,4851698,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-138,23,1,3,3,6,4,1,0,7,7,1,7,6,7499439,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-139,7,1,1,4,2,6,1,1,5,3,7,2,3,4016462,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-140,25,1,3,4,7,6,1,0,6,6,2,6,7,12860421,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-141,1,0,1,1,1,2,6,4,3,3,5,2,2,98089,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-142,2,0,1,1,2,1,6,3,4,2,6,2,1,99447,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-143,8,0,2,1,0,1,7,5,3,3,3,4,3,180228,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-144,8,0,2,1,1,2,6,5,4,4,2,4,2,160091,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-145,18,0,3,1,2,0,7,7,3,6,0,6,6,459691,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-146,2,0,1,2,2,1,4,4,5,2,7,2,1,273584,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-147,9,0,2,2,4,3,5,6,5,3,5,3,4,2315683,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-148,9,0,2,2,3,4,5,6,6,3,6,3,4,2453502,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-149,10,0,2,2,4,4,4,5,5,2,6,2,4,2788940,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-150,11,0,2,2,4,3,6,5,4,2,5,1,4,2879129,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-151,19,0,3,2,6,6,3,6,6,6,2,6,7,4763675,3.0,Index Trackers (Passive),Index Advisory Group
-152,19,0,3,2,7,7,3,7,7,5,2,7,6,4503629,3.0,Index Trackers (Passive),Index Advisory Group
-153,4,0,1,3,2,3,2,4,5,4,6,3,3,1301663,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-154,4,0,1,3,2,4,1,3,5,4,7,3,3,1649093,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-155,12,0,2,3,4,4,2,3,6,4,3,4,3,4871760,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-156,13,0,2,3,3,4,3,3,5,5,2,3,4,4396348,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-157,12,0,2,3,3,4,1,3,7,4,2,4,4,4202856,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-158,23,0,3,3,6,5,1,2,6,6,1,7,6,7882123,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-159,22,0,3,3,7,5,0,0,5,7,2,6,7,7160018,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-160,24,0,3,3,6,4,1,0,7,7,1,7,6,7447379,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-161,5,0,1,4,2,6,1,1,5,3,7,2,3,3336903,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-162,16,0,2,4,3,6,0,1,5,4,5,2,2,6568241,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-163,24,0,3,4,6,7,2,1,6,6,1,7,6,16678567,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-164,25,0,3,4,7,6,1,0,6,6,2,6,7,18620329,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-165,1,1,1,1,1,2,6,4,3,3,5,2,2,99996,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-166,1,1,1,1,2,1,6,3,4,2,6,2,1,99100,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-167,8,1,2,1,1,2,6,5,4,4,2,4,2,137806,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-168,1,1,1,2,2,1,4,4,5,2,7,2,1,251205,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-169,9,1,2,2,4,3,5,6,5,3,5,3,4,2184134,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-170,10,1,2,2,3,4,5,6,6,3,6,3,4,2373698,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-171,12,1,2,2,4,4,4,5,5,2,6,2,4,2678589,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-172,18,1,3,2,7,7,3,7,7,5,2,7,6,4502199,3.0,Index Trackers (Passive),Index Advisory Group
-173,4,1,1,3,2,3,2,4,5,4,6,3,3,1540049,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-174,12,1,2,3,4,4,2,3,6,4,3,4,3,4237862,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-175,13,1,2,3,3,4,3,3,5,5,2,3,4,4351395,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-176,14,1,2,3,3,4,1,3,7,4,2,4,4,4155894,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-177,16,1,2,3,4,4,2,3,5,5,1,3,3,4858045,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-178,23,1,3,3,6,4,1,0,7,7,1,7,6,7625112,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-179,7,1,1,4,2,6,1,1,5,3,7,2,3,4011989,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-180,25,1,3,4,7,6,1,0,6,6,2,6,7,12773244,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-181,2,0,1,2,2,1,4,4,5,2,7,2,1,273744,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-182,4,0,1,3,2,3,2,4,5,4,6,3,3,1339050,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-183,5,0,1,4,2,6,1,1,5,3,7,2,3,3352363,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-184,10,0,2,2,4,4,4,5,5,2,6,2,4,2762276,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-185,12,0,2,3,4,4,2,3,6,4,3,4,3,4831368,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-186,12,0,2,3,3,4,1,3,7,4,2,4,4,4244482,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-187,16,0,2,4,3,6,0,1,5,4,5,2,2,6568154,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-188,19,0,3,2,6,6,3,6,6,6,2,6,7,4757276,3.0,Index Trackers (Passive),Index Advisory Group
-189,22,0,3,3,7,5,0,0,5,7,2,6,7,7156716,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-190,25,0,3,4,7,6,1,0,6,6,2,6,7,19189009,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-191,1,1,1,2,2,1,4,4,5,2,7,2,1,247780,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-192,4,1,1,3,2,3,2,4,5,4,6,3,3,1588396,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-193,7,1,1,4,2,6,1,1,5,3,7,2,3,4064394,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-194,10,1,2,2,3,4,5,6,6,3,6,3,4,2390857,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-195,16,1,2,3,4,4,2,3,5,5,1,3,3,4863115,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-196,13,1,2,3,3,4,3,3,5,5,2,3,4,4421552,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-197,18,1,3,2,7,7,3,7,7,5,2,7,6,4443827,3.0,Index Trackers (Passive),Index Advisory Group
-198,23,1,3,3,6,4,1,0,7,7,1,7,6,7436730,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-199,12,1,2,2,4,4,4,5,5,2,6,2,4,2661689,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-200,25,1,3,4,7,6,1,0,6,6,2,6,7,12623162,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-201,1,0,1,1,1,2,6,4,3,3,5,2,2,98032,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-202,2,0,1,1,2,1,6,3,4,2,6,2,1,99091,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-203,8,0,2,1,0,1,7,5,3,3,3,4,3,180077,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-204,8,0,2,1,1,2,6,5,4,4,2,4,2,160025,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-205,18,0,3,1,2,0,7,7,3,6,0,6,6,459632,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-206,2,0,1,2,2,1,4,4,5,2,7,2,1,273582,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-207,9,0,2,2,4,3,5,6,5,3,5,3,4,2331541,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-208,9,0,2,2,3,4,5,6,6,3,6,3,4,2467392,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-209,10,0,2,2,4,4,4,5,5,2,6,2,4,2757924,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-210,11,0,2,2,4,3,6,5,4,2,5,1,4,2875059,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-211,19,0,3,2,6,6,3,6,6,6,2,6,7,4666844,3.0,Index Trackers (Passive),Index Advisory Group
-212,19,0,3,2,7,7,3,7,7,5,2,7,6,4467521,3.0,Index Trackers (Passive),Index Advisory Group
-213,4,0,1,3,2,3,2,4,5,4,6,3,3,1300116,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-214,4,0,1,3,2,4,1,3,5,4,7,3,3,1623524,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-215,12,0,2,3,4,4,2,3,6,4,3,4,3,4842770,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-216,13,0,2,3,3,4,3,3,5,5,2,3,4,4398070,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-217,12,0,2,3,3,4,1,3,7,4,2,4,4,4189257,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-218,23,0,3,3,6,5,1,2,6,6,1,7,6,7867484,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-219,22,0,3,3,7,5,0,0,5,7,2,6,7,7153722,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-220,24,0,3,3,6,4,1,0,7,7,1,7,6,7384373,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-221,5,0,1,4,2,6,1,1,5,3,7,2,3,3407258,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-222,16,0,2,4,3,6,0,1,5,4,5,2,2,6569445,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-223,24,0,3,4,6,7,2,1,6,6,1,7,6,16479034,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-224,25,0,3,4,7,6,1,0,6,6,2,6,7,18958998,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-225,1,1,1,1,1,2,6,4,3,3,5,2,2,100004,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-226,1,1,1,1,2,1,6,3,4,2,6,2,1,99653,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-227,8,1,2,1,1,2,6,5,4,4,2,4,2,131427,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-228,1,1,1,2,2,1,4,4,5,2,7,2,1,258632,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-229,9,1,2,2,4,3,5,6,5,3,5,3,4,2191810,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-230,10,1,2,2,3,4,5,6,6,3,6,3,4,2339893,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-231,12,1,2,2,4,4,4,5,5,2,6,2,4,2672608,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-232,18,1,3,2,7,7,3,7,7,5,2,7,6,4491311,3.0,Index Trackers (Passive),Index Advisory Group
-233,4,1,1,3,2,3,2,4,5,4,6,3,3,1544729,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-234,12,1,2,3,4,4,2,3,6,4,3,4,3,4306846,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-235,13,1,2,3,3,4,3,3,5,5,2,3,4,4328356,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-236,14,1,2,3,3,4,1,3,7,4,2,4,4,4189138,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-237,16,1,2,3,4,4,2,3,5,5,1,3,3,4837881,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-238,23,1,3,3,6,4,1,0,7,7,1,7,6,7600516,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-239,7,1,1,4,2,6,1,1,5,3,7,2,3,4044670,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-240,25,1,3,4,7,6,1,0,6,6,2,6,7,12486834,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-241,1,0,1,1,1,2,6,4,3,3,5,2,2,98059,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-242,2,0,1,1,2,1,6,3,4,2,6,2,1,99422,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-243,8,0,2,1,0,1,7,5,3,3,3,4,3,180103,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-244,8,0,2,1,1,2,6,5,4,4,2,4,2,159876,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-245,18,0,3,1,2,0,7,7,3,6,0,6,6,459967,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-246,2,0,1,2,2,1,4,4,5,2,7,2,1,273883,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-247,9,0,2,2,4,3,5,6,5,3,5,3,4,2341295,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-248,9,0,2,2,3,4,5,6,6,3,6,3,4,2366375,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-249,10,0,2,2,4,4,4,5,5,2,6,2,4,2775033,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-250,11,0,2,2,4,3,6,5,4,2,5,1,4,2860950,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-251,19,0,3,2,6,6,3,6,6,6,2,6,7,4700108,3.0,Index Trackers (Passive),Index Advisory Group
-252,19,0,3,2,7,7,3,7,7,5,2,7,6,4456316,3.0,Index Trackers (Passive),Index Advisory Group
-253,4,0,1,3,2,3,2,4,5,4,6,3,3,1364632,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-254,4,0,1,3,2,4,1,3,5,4,7,3,3,1604277,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-255,12,0,2,3,4,4,2,3,6,4,3,4,3,4894483,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-256,13,0,2,3,3,4,3,3,5,5,2,3,4,4428550,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-257,12,0,2,3,3,4,1,3,7,4,2,4,4,4167310,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-258,23,0,3,3,6,5,1,2,6,6,1,7,6,7891301,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-259,22,0,3,3,7,5,0,0,5,7,2,6,7,7162956,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-260,24,0,3,3,6,4,1,0,7,7,1,7,6,7410994,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-261,5,0,1,4,2,6,1,1,5,3,7,2,3,3326276,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-262,16,0,2,4,3,6,0,1,5,4,5,2,2,6567567,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-263,24,0,3,4,6,7,2,1,6,6,1,7,6,16924035,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-264,25,0,3,4,7,6,1,0,6,6,2,6,7,18580776,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-265,1,1,1,1,1,2,6,4,3,3,5,2,2,99465,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-266,1,1,1,1,2,1,6,3,4,2,6,2,1,99558,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-267,8,1,2,1,1,2,6,5,4,4,2,4,2,133867,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-268,1,1,1,2,2,1,4,4,5,2,7,2,1,249584,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-269,9,1,2,2,4,3,5,6,5,3,5,3,4,2174111,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-270,10,1,2,2,3,4,5,6,6,3,6,3,4,2352150,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-271,12,1,2,2,4,4,4,5,5,2,6,2,4,2642169,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-272,18,1,3,2,7,7,3,7,7,5,2,7,6,4501589,3.0,Index Trackers (Passive),Index Advisory Group
-273,4,1,1,3,2,3,2,4,5,4,6,3,3,1564769,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-274,12,1,2,3,4,4,2,3,6,4,3,4,3,4253411,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-275,13,1,2,3,3,4,3,3,5,5,2,3,4,4379262,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-276,14,1,2,3,3,4,1,3,7,4,2,4,4,4125158,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-277,16,1,2,3,4,4,2,3,5,5,1,3,3,4878187,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-278,23,1,3,3,6,4,1,0,7,7,1,7,6,7654189,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-279,7,1,1,4,2,6,1,1,5,3,7,2,3,4074515,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-280,25,1,3,4,7,6,1,0,6,6,2,6,7,13070605,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-281,2,0,1,2,2,1,4,4,5,2,7,2,1,273456,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-282,4,0,1,3,2,3,2,4,5,4,6,3,3,1339381,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-283,5,0,1,4,2,6,1,1,5,3,7,2,3,3364752,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-284,10,0,2,2,4,4,4,5,5,2,6,2,4,2785644,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-285,12,0,2,3,4,4,2,3,6,4,3,4,3,4903999,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-286,12,0,2,3,3,4,1,3,7,4,2,4,4,4192950,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-287,16,0,2,4,3,6,0,1,5,4,5,2,2,6569011,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-288,19,0,3,2,6,6,3,6,6,6,2,6,7,4704501,3.0,Index Trackers (Passive),Index Advisory Group
-289,22,0,3,3,7,5,0,0,5,7,2,6,7,7183612,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-290,25,0,3,4,7,6,1,0,6,6,2,6,7,18979799,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-291,1,1,1,2,2,1,4,4,5,2,7,2,1,258023,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-292,4,1,1,3,2,3,2,4,5,4,6,3,3,1551259,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-293,7,1,1,4,2,6,1,1,5,3,7,2,3,4036487,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-294,10,1,2,2,3,4,5,6,6,3,6,3,4,2326787,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-295,16,1,2,3,4,4,2,3,5,5,1,3,3,4890016,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-296,13,1,2,3,3,4,3,3,5,5,2,3,4,4414581,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-297,18,1,3,2,7,7,3,7,7,5,2,7,6,4489566,3.0,Index Trackers (Passive),Index Advisory Group
-298,23,1,3,3,6,4,1,0,7,7,1,7,6,7475555,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-299,12,1,2,2,4,4,4,5,5,2,6,2,4,2659156,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-300,25,1,3,4,7,6,1,0,6,6,2,6,7,12532305,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-301,1,0,1,1,1,2,6,4,3,3,5,2,2,98059,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-302,2,0,1,1,2,1,6,3,4,2,6,2,1,99043,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-303,8,0,2,1,0,1,7,5,3,3,3,4,3,180058,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-304,8,0,2,1,1,2,6,5,4,4,2,4,2,159861,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-305,18,0,3,1,2,0,7,7,3,6,0,6,6,459852,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-306,2,0,1,2,2,1,4,4,5,2,7,2,1,273478,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-307,9,0,2,2,4,3,5,6,5,3,5,3,4,2337227,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-308,9,0,2,2,3,4,5,6,6,3,6,3,4,2443523,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-309,10,0,2,2,4,4,4,5,5,2,6,2,4,2793125,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-310,11,0,2,2,4,3,6,5,4,2,5,1,4,2844304,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-311,19,0,3,2,6,6,3,6,6,6,2,6,7,4741072,3.0,Index Trackers (Passive),Index Advisory Group
-312,19,0,3,2,7,7,3,7,7,5,2,7,6,4486085,3.0,Index Trackers (Passive),Index Advisory Group
-313,4,0,1,3,2,3,2,4,5,4,6,3,3,1279561,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-314,4,0,1,3,2,4,1,3,5,4,7,3,3,1680110,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-315,12,0,2,3,4,4,2,3,6,4,3,4,3,4835148,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-316,13,0,2,3,3,4,3,3,5,5,2,3,4,4438473,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-317,12,0,2,3,3,4,1,3,7,4,2,4,4,4179149,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-318,23,0,3,3,6,5,1,2,6,6,1,7,6,7926468,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-319,22,0,3,3,7,5,0,0,5,7,2,6,7,7212353,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-320,24,0,3,3,6,4,1,0,7,7,1,7,6,7401486,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-321,5,0,1,4,2,6,1,1,5,3,7,2,3,3344703,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-322,16,0,2,4,3,6,0,1,5,4,5,2,2,6569163,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-323,24,0,3,4,6,7,2,1,6,6,1,7,6,16829916,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-324,25,0,3,4,7,6,1,0,6,6,2,6,7,18340977,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-325,1,1,1,1,1,2,6,4,3,3,5,2,2,99931,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-326,1,1,1,1,2,1,6,3,4,2,6,2,1,99741,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-327,8,1,2,1,1,2,6,5,4,4,2,4,2,134117,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-328,1,1,1,2,2,1,4,4,5,2,7,2,1,256613,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-329,9,1,2,2,4,3,5,6,5,3,5,3,4,2123339,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-330,10,1,2,2,3,4,5,6,6,3,6,3,4,2366917,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-331,12,1,2,2,4,4,4,5,5,2,6,2,4,2660929,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-332,18,1,3,2,7,7,3,7,7,5,2,7,6,4482303,3.0,Index Trackers (Passive),Index Advisory Group
-333,4,1,1,3,2,3,2,4,5,4,6,3,3,1547923,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-334,12,1,2,3,4,4,2,3,6,4,3,4,3,4275136,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-335,13,1,2,3,3,4,3,3,5,5,2,3,4,4342595,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-336,14,1,2,3,3,4,1,3,7,4,2,4,4,4184608,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-337,16,1,2,3,4,4,2,3,5,5,1,3,3,4846905,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-338,23,1,3,3,6,4,1,0,7,7,1,7,6,7687193,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-339,7,1,1,4,2,6,1,1,5,3,7,2,3,4084115,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-340,25,1,3,4,7,6,1,0,6,6,2,6,7,12835787,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-341,1,0,1,1,1,2,6,4,3,3,5,2,2,98005,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-342,2,0,1,1,2,1,6,3,4,2,6,2,1,99349,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-343,8,0,2,1,0,1,7,5,3,3,3,4,3,180101,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-344,8,0,2,1,1,2,6,5,4,4,2,4,2,159860,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-345,18,0,3,1,2,0,7,7,3,6,0,6,6,459518,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-346,2,0,1,2,2,1,4,4,5,2,7,2,1,273851,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-347,9,0,2,2,4,3,5,6,5,3,5,3,4,2336727,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-348,9,0,2,2,3,4,5,6,6,3,6,3,4,2438926,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-349,10,0,2,2,4,4,4,5,5,2,6,2,4,2751683,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-350,11,0,2,2,4,3,6,5,4,2,5,1,4,2882368,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-351,19,0,3,2,6,6,3,6,6,6,2,6,7,4730465,3.0,Index Trackers (Passive),Index Advisory Group
-352,19,0,3,2,7,7,3,7,7,5,2,7,6,4464646,3.0,Index Trackers (Passive),Index Advisory Group
-353,4,0,1,3,2,3,2,4,5,4,6,3,3,1268816,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-354,4,0,1,3,2,4,1,3,5,4,7,3,3,1648448,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-355,12,0,2,3,4,4,2,3,6,4,3,4,3,4829652,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-356,13,0,2,3,3,4,3,3,5,5,2,3,4,4427184,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-357,12,0,2,3,3,4,1,3,7,4,2,4,4,4228597,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-358,23,0,3,3,6,5,1,2,6,6,1,7,6,7981776,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-359,22,0,3,3,7,5,0,0,5,7,2,6,7,7125368,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-360,24,0,3,3,6,4,1,0,7,7,1,7,6,7432635,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-361,5,0,1,4,2,6,1,1,5,3,7,2,3,3404742,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-362,16,0,2,4,3,6,0,1,5,4,5,2,2,6568485,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-363,24,0,3,4,6,7,2,1,6,6,1,7,6,16551949,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-364,25,0,3,4,7,6,1,0,6,6,2,6,7,18341680,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-365,1,1,1,1,1,2,6,4,3,3,5,2,2,99313,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-366,1,1,1,1,2,1,6,3,4,2,6,2,1,99939,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-367,8,1,2,1,1,2,6,5,4,4,2,4,2,135207,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-368,1,1,1,2,2,1,4,4,5,2,7,2,1,250144,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-369,9,1,2,2,4,3,5,6,5,3,5,3,4,2141726,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-370,10,1,2,2,3,4,5,6,6,3,6,3,4,2330470,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-371,12,1,2,2,4,4,4,5,5,2,6,2,4,2667538,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-372,18,1,3,2,7,7,3,7,7,5,2,7,6,4506930,3.0,Index Trackers (Passive),Index Advisory Group
-373,4,1,1,3,2,3,2,4,5,4,6,3,3,1550416,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-374,12,1,2,3,4,4,2,3,6,4,3,4,3,4319555,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-375,13,1,2,3,3,4,3,3,5,5,2,3,4,4366111,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-376,14,1,2,3,3,4,1,3,7,4,2,4,4,4161174,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-377,16,1,2,3,4,4,2,3,5,5,1,3,3,4843977,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-378,23,1,3,3,6,4,1,0,7,7,1,7,6,7503494,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-379,7,1,1,4,2,6,1,1,5,3,7,2,3,4069281,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-380,25,1,3,4,7,6,1,0,6,6,2,6,7,12764605,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-381,2,0,1,2,2,1,4,4,5,2,7,2,1,273507,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-382,4,0,1,3,2,3,2,4,5,4,6,3,3,1285762,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-383,5,0,1,4,2,6,1,1,5,3,7,2,3,3400020,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-384,10,0,2,2,4,4,4,5,5,2,6,2,4,2790383,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-385,12,0,2,3,4,4,2,3,6,4,3,4,3,4913251,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-386,12,0,2,3,3,4,1,3,7,4,2,4,4,4172672,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-387,16,0,2,4,3,6,0,1,5,4,5,2,2,6569724,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-388,19,0,3,2,6,6,3,6,6,6,2,6,7,4732717,3.0,Index Trackers (Passive),Index Advisory Group
-389,22,0,3,3,7,5,0,0,5,7,2,6,7,7142146,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-390,25,0,3,4,7,6,1,0,6,6,2,6,7,19018241,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-391,1,1,1,2,2,1,4,4,5,2,7,2,1,249253,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-392,4,1,1,3,2,3,2,4,5,4,6,3,3,1557254,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-393,7,1,1,4,2,6,1,1,5,3,7,2,3,4006770,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-394,10,1,2,2,3,4,5,6,6,3,6,3,4,2387557,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-395,16,1,2,3,4,4,2,3,5,5,1,3,3,4859966,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-396,13,1,2,3,3,4,3,3,5,5,2,3,4,4357961,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-397,18,1,3,2,7,7,3,7,7,5,2,7,6,4532762,3.0,Index Trackers (Passive),Index Advisory Group
-398,23,1,3,3,6,4,1,0,7,7,1,7,6,7440306,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-399,12,1,2,2,4,4,4,5,5,2,6,2,4,2640124,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-400,25,1,3,4,7,6,1,0,6,6,2,6,7,13024181,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-401,1,0,1,1,1,2,6,4,3,3,5,2,2,98002,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-402,2,0,1,1,2,1,6,3,4,2,6,2,1,99270,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-403,8,0,2,1,0,1,7,5,3,3,3,4,3,180042,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-404,8,0,2,1,1,2,6,5,4,4,2,4,2,159952,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-405,18,0,3,1,2,0,7,7,3,6,0,6,6,459459,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-406,2,0,1,2,2,1,4,4,5,2,7,2,1,273377,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-407,9,0,2,2,4,3,5,6,5,3,5,3,4,2341246,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-408,9,0,2,2,3,4,5,6,6,3,6,3,4,2435150,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-409,10,0,2,2,4,4,4,5,5,2,6,2,4,2748524,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-410,11,0,2,2,4,3,6,5,4,2,5,1,4,2816972,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-411,19,0,3,2,6,6,3,6,6,6,2,6,7,4705661,3.0,Index Trackers (Passive),Index Advisory Group
-412,19,0,3,2,7,7,3,7,7,5,2,7,6,4445710,3.0,Index Trackers (Passive),Index Advisory Group
-413,4,0,1,3,2,3,2,4,5,4,6,3,3,1337039,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-414,4,0,1,3,2,4,1,3,5,4,7,3,3,1698497,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-415,12,0,2,3,4,4,2,3,6,4,3,4,3,4915224,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-416,13,0,2,3,3,4,3,3,5,5,2,3,4,4383822,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-417,12,0,2,3,3,4,1,3,7,4,2,4,4,4217743,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-418,23,0,3,3,6,5,1,2,6,6,1,7,6,7891310,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-419,22,0,3,3,7,5,0,0,5,7,2,6,7,7211387,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-420,24,0,3,3,6,4,1,0,7,7,1,7,6,7436417,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-421,5,0,1,4,3,4,1,1,5,3,6,4,5,3379430,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-422,16,0,2,4,4,4,0,1,4,4,5,6,7,6568188,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-423,24,0,3,4,3,5,2,1,4,6,5,2,2,17049629,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-424,25,0,3,4,4,7,1,0,6,6,6,2,6,18618129,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-425,1,1,1,1,1,2,6,4,3,3,5,2,2,99984,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-426,1,1,1,1,2,1,6,3,4,2,6,2,1,100112,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-427,8,1,2,1,1,2,6,5,4,4,2,4,2,146162,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-428,1,1,1,2,2,1,4,4,5,2,7,2,1,259744,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-429,9,1,2,2,4,3,5,6,5,3,5,3,4,2124540,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-430,10,1,2,2,3,4,5,6,6,3,6,3,4,2390941,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-431,12,1,2,2,4,4,4,5,5,2,6,2,4,2632815,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-432,18,1,3,2,7,7,3,7,7,5,2,7,6,4451897,3.0,Index Trackers (Passive),Index Advisory Group
-433,4,1,1,3,2,3,2,4,5,4,6,3,3,1579638,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-434,12,1,2,3,4,4,2,3,6,4,3,4,3,4231190,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-435,13,1,2,3,3,4,3,3,5,5,2,3,4,4327040,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-436,14,1,2,3,3,4,1,3,7,4,2,4,4,4143638,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-437,16,1,2,3,4,4,2,3,5,5,1,3,3,4880314,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-438,23,1,3,3,6,4,1,0,7,7,1,7,6,7528152,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-439,7,1,1,4,5,7,1,1,4,4,6,4,7,4054362,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-440,25,1,3,4,4,6,1,0,4,6,5,5,7,12811334,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-441,2,0,1,2,2,1,4,4,5,2,7,2,1,273731,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-442,4,0,1,3,2,3,2,4,5,4,6,3,3,1350368,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-443,5,0,1,4,4,7,1,1,5,3,4,4,4,3352875,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-444,10,0,2,2,4,4,4,5,5,2,6,2,4,2730641,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-445,12,0,2,3,4,4,2,3,6,4,3,4,3,4847686,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-446,12,0,2,3,3,4,1,3,7,4,2,4,4,4219405,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-447,16,0,2,4,3,5,0,1,6,4,6,5,7,6569236,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-448,19,0,3,2,6,6,3,6,6,6,2,6,7,4753824,3.0,Index Trackers (Passive),Index Advisory Group
-449,22,0,3,3,7,5,0,0,5,7,2,6,7,7214509,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-450,25,0,3,4,5,6,1,0,4,6,3,4,7,18777417,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-451,1,1,1,2,2,1,4,4,5,2,7,2,1,260399,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-452,4,1,1,3,2,3,2,4,5,4,6,3,3,1577281,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-453,7,1,1,4,5,6,1,1,5,4,3,6,7,4080610,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-454,10,1,2,2,3,4,5,6,6,3,6,3,4,2351317,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-455,16,1,2,3,4,4,2,3,5,5,1,3,3,4891746,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-456,13,1,2,3,3,4,3,3,5,5,2,3,4,4387656,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-457,18,1,3,2,7,7,3,7,7,5,2,7,6,4517212,3.0,Index Trackers (Passive),Index Advisory Group
-458,23,1,3,3,6,4,1,0,7,7,1,7,6,7615309,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-459,12,1,2,2,4,4,4,5,5,2,6,2,4,2666810,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-460,25,1,3,4,3,7,1,0,6,6,3,6,4,12790708,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-461,1,0,1,1,1,2,6,4,3,3,5,2,2,98082,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-462,2,0,1,1,2,1,6,3,4,2,6,2,1,99359,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-463,8,0,2,1,0,1,7,5,3,3,3,4,3,180051,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-464,8,0,2,1,1,2,6,5,4,4,2,4,2,159838,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-465,18,0,3,1,2,0,7,7,3,6,0,6,6,459685,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-466,2,0,1,2,2,1,4,4,5,2,7,2,1,273595,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-467,9,0,2,2,4,3,5,6,5,3,5,3,4,2273429,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-468,9,0,2,2,3,4,5,6,6,3,6,3,4,2379313,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-469,10,0,2,2,4,4,4,5,5,2,6,2,4,2704090,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-470,11,0,2,2,4,3,6,5,4,2,5,1,4,2825881,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-471,19,0,3,2,6,6,3,6,6,6,2,6,7,4727126,3.0,Index Trackers (Passive),Index Advisory Group
-472,19,0,3,2,7,7,3,7,7,5,2,7,6,4482981,3.0,Index Trackers (Passive),Index Advisory Group
-473,4,0,1,3,2,3,2,4,5,4,6,3,3,1308923,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-474,4,0,1,3,2,4,1,3,5,4,7,3,3,1606937,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-475,12,0,2,3,4,4,2,3,6,4,3,4,3,4871417,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-476,13,0,2,3,3,4,3,3,5,5,2,3,4,4363441,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-477,12,0,2,3,3,4,1,3,7,4,2,4,4,4232133,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-478,23,0,3,3,6,5,1,2,6,6,1,7,6,7916834,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-479,22,0,3,3,7,5,0,0,5,7,2,6,7,7132453,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-480,24,0,3,3,6,4,1,0,7,7,1,7,6,7401396,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-481,5,0,1,4,5,7,1,1,7,3,4,7,6,3391771,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-482,16,0,2,4,3,4,0,1,7,4,3,7,4,6567149,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-483,24,0,3,4,4,4,2,1,4,6,6,2,2,16464386,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-484,25,0,3,4,5,4,1,0,4,6,3,5,6,18681825,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-485,1,1,1,1,1,2,6,4,3,3,5,2,2,99180,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-486,1,1,1,1,2,1,6,3,4,2,6,2,1,99592,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-487,8,1,2,1,1,2,6,5,4,4,2,4,2,148239,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-488,1,1,1,2,2,1,4,4,5,2,7,2,1,250655,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-489,9,1,2,2,4,3,5,6,5,3,5,3,4,2186425,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-490,10,1,2,2,3,4,5,6,6,3,6,3,4,2369545,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-491,12,1,2,2,4,4,4,5,5,2,6,2,4,2634374,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-492,18,1,3,2,7,7,3,7,7,5,2,7,6,4472845,3.0,Index Trackers (Passive),Index Advisory Group
-493,4,1,1,3,2,3,2,4,5,4,6,3,3,1584416,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-494,12,1,2,3,4,4,2,3,6,4,3,4,3,4312023,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-495,13,1,2,3,3,4,3,3,5,5,2,3,4,4350112,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-496,14,1,2,3,3,4,1,3,7,4,2,4,4,4175736,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-497,16,1,2,3,4,4,2,3,5,5,1,3,3,4867129,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-498,23,1,3,3,6,4,1,0,7,7,1,7,6,7534605,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-499,7,1,1,4,4,7,1,1,4,4,4,2,4,4010459,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-500,25,1,3,4,5,5,1,0,6,6,4,5,7,12473305,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-501,1,0,1,1,1,2,6,4,3,3,5,2,2,98107,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-502,2,0,1,1,2,1,6,3,4,2,6,2,1,99016,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-503,8,0,2,1,0,1,7,5,3,3,3,4,3,180096,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-504,8,0,2,1,1,2,6,5,4,4,2,4,2,159910,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-505,18,0,3,1,2,0,7,7,3,6,0,6,6,459392,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-506,2,0,1,2,2,1,4,4,5,2,7,2,1,273302,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-507,9,0,2,2,4,3,5,6,5,3,5,3,4,2333574,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-508,9,0,2,2,3,4,5,6,6,3,6,3,4,2431080,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-509,10,0,2,2,4,4,4,5,5,2,6,2,4,2773456,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-510,11,0,2,2,4,3,6,5,4,2,5,1,4,2871335,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-511,19,0,3,2,6,6,3,6,6,6,2,6,7,4722752,3.0,Index Trackers (Passive),Index Advisory Group
-512,19,0,3,2,7,7,3,7,7,5,2,7,6,4470178,3.0,Index Trackers (Passive),Index Advisory Group
-513,4,0,1,3,2,3,2,4,5,4,6,3,3,1342320,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-514,4,0,1,3,2,4,1,3,5,4,7,3,3,1634701,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-515,12,0,2,3,4,4,2,3,6,4,3,4,3,4860112,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-516,13,0,2,3,3,4,3,3,5,5,2,3,4,4380003,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-517,12,0,2,3,3,4,1,3,7,4,2,4,4,4164384,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-518,23,0,3,3,6,5,1,2,6,6,1,7,6,7875619,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-519,22,0,3,3,7,5,0,0,5,7,2,6,7,7195017,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-520,24,0,3,3,6,4,1,0,7,7,1,7,6,7437988,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-521,5,0,1,4,3,7,1,1,5,3,4,7,7,3363058,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-522,16,0,2,4,4,4,0,1,4,4,3,3,7,6569722,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-523,24,0,3,4,5,5,2,1,4,6,6,2,2,17012749,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-524,25,0,3,4,4,5,1,0,4,6,4,7,4,18848667,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-525,1,1,1,1,1,2,6,4,3,3,5,2,2,99015,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-526,1,1,1,1,2,1,6,3,4,2,6,2,1,99185,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-527,8,1,2,1,1,2,6,5,4,4,2,4,2,136316,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-528,1,1,1,2,2,1,4,4,5,2,7,2,1,248297,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-529,9,1,2,2,4,3,5,6,5,3,5,3,4,2152858,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-530,10,1,2,2,3,4,5,6,6,3,6,3,4,2325121,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-531,12,1,2,2,4,4,4,5,5,2,6,2,4,2662444,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-532,18,1,3,2,7,7,3,7,7,5,2,7,6,4444740,3.0,Index Trackers (Passive),Index Advisory Group
-533,4,1,1,3,2,3,2,4,5,4,6,3,3,1567500,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-534,12,1,2,3,4,4,2,3,6,4,3,4,3,4293249,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-535,13,1,2,3,3,4,3,3,5,5,2,3,4,4420305,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-536,14,1,2,3,3,4,1,3,7,4,2,4,4,4188511,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-537,16,1,2,3,4,4,2,3,5,5,1,3,3,4854320,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-538,23,1,3,3,6,4,1,0,7,7,1,7,6,7677501,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-539,7,1,1,4,3,4,1,1,7,4,4,3,4,4087027,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-540,25,1,3,4,3,7,1,0,3,6,6,5,5,12662672,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-541,2,0,1,2,2,1,4,4,5,2,7,2,1,273899,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-542,4,0,1,3,2,3,2,4,5,4,6,3,3,1269826,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-543,5,0,1,4,4,7,1,1,6,3,4,5,4,3378189,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-544,10,0,2,2,4,4,4,5,5,2,6,2,4,2661299,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-545,12,0,2,3,4,4,2,3,6,4,3,4,3,4853462,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-546,12,0,2,3,3,4,1,3,7,4,2,4,4,4187320,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-547,16,0,2,4,4,6,0,1,3,4,6,7,6,6568573,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-548,19,0,3,2,6,6,3,6,6,6,2,6,7,4757053,3.0,Index Trackers (Passive),Index Advisory Group
-549,22,0,3,3,7,5,0,0,5,7,2,6,7,7209366,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-550,25,0,3,4,3,6,1,0,6,6,6,6,7,18736668,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-551,1,1,1,2,2,1,4,4,5,2,7,2,1,256193,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-552,4,1,1,3,2,3,2,4,5,4,6,3,3,1538523,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-553,7,1,1,4,5,7,1,1,4,4,3,7,6,4046670,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-554,10,1,2,2,3,4,5,6,6,3,6,3,4,2373567,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-555,16,1,2,3,4,4,2,3,5,5,1,3,3,4840601,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-556,13,1,2,3,3,4,3,3,5,5,2,3,4,4332655,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-557,18,1,3,2,7,7,3,7,7,5,2,7,6,4534398,3.0,Index Trackers (Passive),Index Advisory Group
-558,23,1,3,3,6,4,1,0,7,7,1,7,6,7604796,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-559,12,1,2,2,4,4,4,5,5,2,6,2,4,2664464,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-560,25,1,3,4,3,4,1,0,6,6,3,6,7,13296936,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-561,1,0,1,1,1,2,6,4,3,3,5,2,2,98110,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-562,2,0,1,1,2,1,6,3,4,2,6,2,1,99019,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-563,8,0,2,1,0,1,7,5,3,3,3,4,3,180140,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-564,8,0,2,1,1,2,6,5,4,4,2,4,2,160044,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-565,18,0,3,1,2,0,7,7,3,6,0,6,6,459380,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-566,2,0,1,2,2,1,4,4,5,2,7,2,1,273696,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-567,9,0,2,2,4,3,5,6,5,3,5,3,4,2356487,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-568,9,0,2,2,3,4,5,6,6,3,6,3,4,2447365,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-569,10,0,2,2,4,4,4,5,5,2,6,2,4,2757914,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-570,11,0,2,2,4,3,6,5,4,2,5,1,4,2873833,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-571,19,0,3,2,6,6,3,6,6,6,2,6,7,4680870,3.0,Index Trackers (Passive),Index Advisory Group
-572,19,0,3,2,7,7,3,7,7,5,2,7,6,4498075,3.0,Index Trackers (Passive),Index Advisory Group
-573,4,0,1,3,2,3,2,4,5,4,6,3,3,1325817,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-574,4,0,1,3,2,4,1,3,5,4,7,3,3,1676911,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-575,12,0,2,3,4,4,2,3,6,4,3,4,3,4873648,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-576,13,0,2,3,3,4,3,3,5,5,2,3,4,4421514,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-577,12,0,2,3,3,4,1,3,7,4,2,4,4,4156482,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-578,23,0,3,3,6,5,1,2,6,6,1,7,6,7929294,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-579,22,0,3,3,7,5,0,0,5,7,2,6,7,7173928,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-580,24,0,3,3,6,4,1,0,7,7,1,7,6,7427498,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-581,5,0,1,4,4,4,1,1,4,3,6,4,7,3361098,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-582,16,0,2,4,4,7,0,1,7,4,6,4,4,6566904,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-583,24,0,3,4,4,4,2,1,6,6,6,2,2,17234366,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-584,25,0,3,4,5,4,1,0,6,6,5,6,6,18915151,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-585,1,1,1,1,1,2,6,4,3,3,5,2,2,99355,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-586,1,1,1,1,2,1,6,3,4,2,6,2,1,100057,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-587,8,1,2,1,1,2,6,5,4,4,2,4,2,138178,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-588,1,1,1,2,2,1,4,4,5,2,7,2,1,255409,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-589,9,1,2,2,4,3,5,6,5,3,5,3,4,2165231,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-590,10,1,2,2,3,4,5,6,6,3,6,3,4,2344214,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-591,12,1,2,2,4,4,4,5,5,2,6,2,4,2674288,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-592,18,1,3,2,7,7,3,7,7,5,2,7,6,4482893,3.0,Index Trackers (Passive),Index Advisory Group
-593,4,1,1,3,2,3,2,4,5,4,6,3,3,1553042,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-594,12,1,2,3,4,4,2,3,6,4,3,4,3,4271244,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-595,13,1,2,3,3,4,3,3,5,5,2,3,4,4415154,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-596,14,1,2,3,3,4,1,3,7,4,2,4,4,4133942,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-597,16,1,2,3,4,4,2,3,5,5,1,3,3,4837867,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-598,23,1,3,3,6,4,1,0,7,7,1,7,6,7544877,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-599,7,1,1,4,5,6,1,1,3,4,6,7,4,4066914,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-600,25,1,3,4,3,6,1,0,4,6,3,7,7,12524365,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-601,1,0,1,1,1,2,6,4,3,3,5,2,2,98061,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-602,2,0,1,1,2,1,6,3,4,2,6,2,1,98997,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-603,8,0,2,1,0,1,7,5,3,3,3,4,3,180381,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-604,8,0,2,1,1,2,6,5,4,4,2,4,2,159822,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-605,18,0,3,1,2,0,7,7,3,6,0,6,6,459527,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-606,2,0,1,2,2,1,4,4,5,2,7,2,1,273437,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-607,9,0,2,2,4,3,5,6,5,3,5,3,4,2336849,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-608,9,0,2,2,3,4,5,6,6,3,6,3,4,2452482,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-609,10,0,2,2,4,4,4,5,5,2,6,2,4,2714647,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-610,11,0,2,2,4,3,6,5,4,2,5,1,4,2886400,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-611,19,0,3,2,6,6,3,6,6,6,2,6,7,4757578,3.0,Index Trackers (Passive),Index Advisory Group
-612,19,0,3,2,7,7,3,7,7,5,2,7,6,4483269,3.0,Index Trackers (Passive),Index Advisory Group
-613,4,0,1,3,2,3,2,4,5,4,6,3,3,1282257,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-614,4,0,1,3,2,4,1,3,5,4,7,3,3,1679595,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-615,12,0,2,3,4,4,2,3,6,4,3,4,3,4870621,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-616,13,0,2,3,3,4,3,3,5,5,2,3,4,4380457,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-617,12,0,2,3,3,4,1,3,7,4,2,4,4,4163622,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-618,23,0,3,3,6,5,1,2,6,6,1,7,6,7868448,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-619,22,0,3,3,7,5,0,0,5,7,2,6,7,7151618,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-620,24,0,3,3,6,4,1,0,7,7,1,7,6,7393137,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-621,5,0,1,4,4,5,1,1,3,3,5,6,4,3414414,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-622,16,0,2,4,5,7,0,1,4,4,6,5,5,6567437,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-623,24,0,3,4,3,7,2,1,5,6,4,2,2,16829954,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-624,25,0,3,4,3,6,1,0,6,6,5,3,6,18616485,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-625,1,1,1,1,1,2,6,4,3,3,5,2,2,99532,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-626,1,1,1,1,2,1,6,3,4,2,6,2,1,99390,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-627,8,1,2,1,1,2,6,5,4,4,2,4,2,147963,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-628,1,1,1,2,2,1,4,4,5,2,7,2,1,247945,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-629,9,1,2,2,4,3,5,6,5,3,5,3,4,2185453,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-630,10,1,2,2,3,4,5,6,6,3,6,3,4,2358480,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-631,12,1,2,2,4,4,4,5,5,2,6,2,4,2629436,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-632,18,1,3,2,7,7,3,7,7,5,2,7,6,4522623,3.0,Index Trackers (Passive),Index Advisory Group
-633,4,1,1,3,2,3,2,4,5,4,6,3,3,1574804,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-634,12,1,2,3,4,4,2,3,6,4,3,4,3,4249333,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-635,13,1,2,3,3,4,3,3,5,5,2,3,4,4373853,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-636,14,1,2,3,3,4,1,3,7,4,2,4,4,4182988,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-637,16,1,2,3,4,4,2,3,5,5,1,3,3,4882891,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-638,23,1,3,3,6,4,1,0,7,7,1,7,6,7676660,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-639,7,1,1,4,4,5,1,1,7,4,3,3,7,3999890,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-640,25,1,3,4,5,4,1,0,7,6,3,5,5,12839895,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-641,2,0,1,2,2,1,4,4,5,2,7,2,1,273428,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-642,4,0,1,3,2,3,2,4,5,4,6,3,3,1295662,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-643,5,0,1,4,5,5,1,1,3,3,6,6,7,3380995,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-644,10,0,2,2,4,4,4,5,5,2,6,2,4,2668842,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-645,12,0,2,3,4,4,2,3,6,4,3,4,3,4882271,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-646,12,0,2,3,3,4,1,3,7,4,2,4,4,4184472,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-647,16,0,2,4,3,7,0,1,7,4,5,7,4,6569724,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-648,19,0,3,2,6,6,3,6,6,6,2,6,7,4667241,3.0,Index Trackers (Passive),Index Advisory Group
-649,22,0,3,3,7,5,0,0,5,7,2,6,7,7147386,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-650,25,0,3,4,3,6,1,0,7,6,3,5,4,18769553,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-651,1,1,1,2,2,1,4,4,5,2,7,2,1,253054,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-652,4,1,1,3,2,3,2,4,5,4,6,3,3,1592882,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-653,7,1,1,4,5,4,1,1,3,4,6,7,6,4041200,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-654,10,1,2,2,3,4,5,6,6,3,6,3,4,2314445,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-655,16,1,2,3,4,4,2,3,5,5,1,3,3,4836877,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-656,13,1,2,3,3,4,3,3,5,5,2,3,4,4347140,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-657,18,1,3,2,7,7,3,7,7,5,2,7,6,4524951,3.0,Index Trackers (Passive),Index Advisory Group
-658,23,1,3,3,6,4,1,0,7,7,1,7,6,7448486,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-659,12,1,2,2,4,4,4,5,5,2,6,2,4,2651248,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-660,25,1,3,4,4,7,1,0,7,6,4,3,4,12910328,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-661,1,0,1,1,1,2,6,4,3,3,5,2,2,98125,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-662,2,0,1,1,2,1,6,3,4,2,6,2,1,100019,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-663,8,0,2,1,0,1,7,5,3,3,3,4,3,180179,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-664,8,0,2,1,1,2,6,5,4,4,2,4,2,160039,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-665,18,0,3,1,2,0,7,7,3,6,0,6,6,459881,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-666,2,0,1,2,2,1,4,4,5,2,7,2,1,273636,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-667,9,0,2,2,4,3,5,6,5,3,5,3,4,2291745,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-668,9,0,2,2,3,4,5,6,6,3,6,3,4,2413262,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-669,10,0,2,2,4,4,4,5,5,2,6,2,4,2655678,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-670,11,0,2,2,4,3,6,5,4,2,5,1,4,2826908,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-671,19,0,3,2,6,6,3,6,6,6,2,6,7,4720691,3.0,Index Trackers (Passive),Index Advisory Group
-672,19,0,3,2,7,7,3,7,7,5,2,7,6,4493822,3.0,Index Trackers (Passive),Index Advisory Group
-673,4,0,1,3,2,3,2,4,5,4,6,3,3,1344144,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-674,4,0,1,3,2,4,1,3,5,4,7,3,3,1617304,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-675,12,0,2,3,4,4,2,3,6,4,3,4,3,4832220,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-676,13,0,2,3,3,4,3,3,5,5,2,3,4,4448424,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-677,12,0,2,3,3,4,1,3,7,4,2,4,4,4196390,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-678,23,0,3,3,6,5,1,2,6,6,1,7,6,7982821,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-679,22,0,3,3,7,5,0,0,5,7,2,6,7,7177185,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-680,24,0,3,3,6,4,1,0,7,7,1,7,6,7351871,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-681,5,0,1,4,4,4,1,1,5,3,6,7,4,3331233,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-682,16,0,2,4,3,6,0,1,5,4,4,3,7,6569846,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-683,24,0,3,4,5,6,2,1,7,6,3,2,2,17200367,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-684,25,0,3,4,5,4,1,0,3,6,5,3,6,18651118,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-685,1,1,1,1,1,2,6,4,3,3,5,2,2,99832,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-686,1,1,1,1,2,1,6,3,4,2,6,2,1,99124,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-687,8,1,2,1,1,2,6,5,4,4,2,4,2,136844,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-688,1,1,1,2,2,1,4,4,5,2,7,2,1,248893,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-689,9,1,2,2,4,3,5,6,5,3,5,3,4,2164132,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-690,10,1,2,2,3,4,5,6,6,3,6,3,4,2374213,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-691,12,1,2,2,4,4,4,5,5,2,6,2,4,2664456,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-692,18,1,3,2,7,7,3,7,7,5,2,7,6,4486385,3.0,Index Trackers (Passive),Index Advisory Group
-693,4,1,1,3,2,3,2,4,5,4,6,3,3,1540212,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-694,12,1,2,3,4,4,2,3,6,4,3,4,3,4255852,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-695,13,1,2,3,3,4,3,3,5,5,2,3,4,4370187,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-696,14,1,2,3,3,4,1,3,7,4,2,4,4,4141778,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-697,16,1,2,3,4,4,2,3,5,5,1,3,3,4878035,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-698,23,1,3,3,6,4,1,0,7,7,1,7,6,7528090,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-699,7,1,1,4,3,4,1,1,5,4,4,7,6,4064723,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-700,25,1,3,4,5,4,1,0,6,6,5,7,7,12669536,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-701,1,0,1,1,1,2,6,4,3,3,5,2,2,98004,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-702,2,0,1,1,2,1,6,3,4,2,6,2,1,99499,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-703,8,0,2,1,0,1,7,5,3,3,3,4,3,180115,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-704,8,0,2,1,1,2,6,5,4,4,2,4,2,160045,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-705,18,0,3,1,2,0,7,7,3,6,0,6,6,459783,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-706,2,0,1,2,2,1,4,4,5,2,7,2,1,273356,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-707,9,0,2,2,4,3,5,6,5,3,5,3,4,2343466,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-708,9,0,2,2,3,4,5,6,6,3,6,3,4,2423881,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-709,10,0,2,2,4,4,4,5,5,2,6,2,4,2693282,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-710,11,0,2,2,4,3,6,5,4,2,5,1,4,2888936,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-711,19,0,3,2,6,6,3,6,6,6,2,6,7,4705901,3.0,Index Trackers (Passive),Index Advisory Group
-712,19,0,3,2,7,7,3,7,7,5,2,7,6,4472756,3.0,Index Trackers (Passive),Index Advisory Group
-713,4,0,1,3,2,3,2,4,5,4,6,3,3,1311564,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-714,4,0,1,3,2,4,1,3,5,4,7,3,3,1633790,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-715,12,0,2,3,4,4,2,3,6,4,3,4,3,4856381,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-716,13,0,2,3,3,4,3,3,5,5,2,3,4,4457267,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-717,12,0,2,3,3,4,1,3,7,4,2,4,4,4172894,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-718,23,0,3,3,6,5,1,2,6,6,1,7,6,7948767,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-719,22,0,3,3,7,5,0,0,5,7,2,6,7,7174260,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-720,24,0,3,3,6,4,1,0,7,7,1,7,6,7395219,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-721,5,0,1,4,4,4,1,1,6,3,3,4,4,3402149,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-722,16,0,2,4,3,4,0,1,7,4,6,5,7,6568886,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-723,24,0,3,4,4,5,2,1,5,6,5,2,2,17293478,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-724,25,0,3,4,3,4,1,0,7,6,4,2,5,18912282,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-725,1,1,1,1,1,2,6,4,3,3,5,2,2,100080,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-726,1,1,1,1,2,1,6,3,4,2,6,2,1,99519,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-727,8,1,2,1,1,2,6,5,4,4,2,4,2,133568,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-728,1,1,1,2,2,1,4,4,5,2,7,2,1,255943,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-729,9,1,2,2,4,3,5,6,5,3,5,3,4,2157167,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-730,10,1,2,2,3,4,5,6,6,3,6,3,4,2355969,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-731,12,1,2,2,4,4,4,5,5,2,6,2,4,2649504,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-732,18,1,3,2,7,7,3,7,7,5,2,7,6,4443847,3.0,Index Trackers (Passive),Index Advisory Group
-733,4,1,1,3,2,3,2,4,5,4,6,3,3,1576340,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-734,12,1,2,3,4,4,2,3,6,4,3,4,3,4298464,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-735,13,1,2,3,3,4,3,3,5,5,2,3,4,4346064,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-736,14,1,2,3,3,4,1,3,7,4,2,4,4,4153765,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-737,16,1,2,3,4,4,2,3,5,5,1,3,3,4874971,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-738,23,1,3,3,6,4,1,0,7,7,1,7,6,7527227,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-739,7,1,1,4,3,5,1,1,6,4,3,4,4,4064073,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-740,25,1,3,4,4,5,1,0,3,6,6,2,6,13023154,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-741,2,0,1,2,2,1,4,4,5,2,7,2,1,273916,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-742,4,0,1,3,2,3,2,4,5,4,6,3,3,1341458,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-743,5,0,1,4,5,5,1,1,3,3,5,3,4,3348778,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-744,10,0,2,2,4,4,4,5,5,2,6,2,4,2713830,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-745,12,0,2,3,4,4,2,3,6,4,3,4,3,4926010,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-746,12,0,2,3,3,4,1,3,7,4,2,4,4,4184711,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-747,16,0,2,4,3,7,0,1,7,4,5,4,4,6567499,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-748,19,0,3,2,6,6,3,6,6,6,2,6,7,4721512,3.0,Index Trackers (Passive),Index Advisory Group
-749,22,0,3,3,7,5,0,0,5,7,2,6,7,7194269,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-750,25,0,3,4,4,6,1,0,6,6,5,5,4,19024957,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-751,1,1,1,2,2,1,4,4,5,2,7,2,1,260456,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-752,4,1,1,3,2,3,2,4,5,4,6,3,3,1564098,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-753,7,1,1,4,5,6,1,1,4,4,3,3,4,4011806,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-754,10,1,2,2,3,4,5,6,6,3,6,3,4,2331910,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-755,16,1,2,3,4,4,2,3,5,5,1,3,3,4859666,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-756,13,1,2,3,3,4,3,3,5,5,2,3,4,4399728,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-757,18,1,3,2,7,7,3,7,7,5,2,7,6,4444939,3.0,Index Trackers (Passive),Index Advisory Group
-758,23,1,3,3,6,4,1,0,7,7,1,7,6,7673103,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-759,12,1,2,2,4,4,4,5,5,2,6,2,4,2620156,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-760,25,1,3,4,5,4,1,0,6,6,3,4,4,13005874,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-761,1,0,1,1,1,2,6,4,3,3,5,2,2,98063,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-762,2,0,1,1,2,1,6,3,4,2,6,2,1,99498,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-763,8,0,2,1,0,1,7,5,3,3,3,4,3,180111,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-764,8,0,2,1,1,2,6,5,4,4,2,4,2,159959,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-765,18,0,3,1,2,0,7,7,3,6,0,6,6,459729,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-766,2,0,1,2,2,1,4,4,5,2,7,2,1,273385,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-767,9,0,2,2,4,3,5,6,5,3,5,3,4,2264937,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-768,9,0,2,2,3,4,5,6,6,3,6,3,4,2380489,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-769,10,0,2,2,4,4,4,5,5,2,6,2,4,2709043,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-770,11,0,2,2,4,3,6,5,4,2,5,1,4,2823550,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-771,19,0,3,2,6,6,3,6,6,6,2,6,7,4683279,3.0,Index Trackers (Passive),Index Advisory Group
-772,19,0,3,2,7,7,3,7,7,5,2,7,6,4486164,3.0,Index Trackers (Passive),Index Advisory Group
-773,4,0,1,3,2,3,2,4,5,4,6,3,3,1308725,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-774,4,0,1,3,2,4,1,3,5,4,7,3,3,1700251,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-775,12,0,2,3,4,4,2,3,6,4,3,4,3,4881004,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-776,13,0,2,3,3,4,3,3,5,5,2,3,4,4379648,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-777,12,0,2,3,3,4,1,3,7,4,2,4,4,4198241,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-778,23,0,3,3,6,5,1,2,6,6,1,7,6,7984425,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-779,22,0,3,3,7,5,0,0,5,7,2,6,7,7224877,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-780,24,0,3,3,6,4,1,0,7,7,1,7,6,7379416,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-781,5,0,1,4,5,4,1,1,5,3,6,2,5,3370080,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-782,16,0,2,4,5,5,0,1,3,4,5,5,5,6567607,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-783,24,0,3,4,3,5,2,1,4,6,5,2,2,17222466,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-784,25,0,3,4,3,4,1,0,5,6,5,6,6,18962569,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-785,1,1,1,1,1,2,6,4,3,3,5,2,2,99409,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-786,1,1,1,1,2,1,6,3,4,2,6,2,1,99245,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-787,8,1,2,1,1,2,6,5,4,4,2,4,2,148395,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-788,1,1,1,2,2,1,4,4,5,2,7,2,1,262523,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-789,9,1,2,2,4,3,5,6,5,3,5,3,4,2125330,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-790,10,1,2,2,3,4,5,6,6,3,6,3,4,2376591,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-791,12,1,2,2,4,4,4,5,5,2,6,2,4,2627669,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-792,18,1,3,2,7,7,3,7,7,5,2,7,6,4453871,3.0,Index Trackers (Passive),Index Advisory Group
-793,4,1,1,3,2,3,2,4,5,4,6,3,3,1577242,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-794,12,1,2,3,4,4,2,3,6,4,3,4,3,4275035,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-795,13,1,2,3,3,4,3,3,5,5,2,3,4,4353531,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-796,14,1,2,3,3,4,1,3,7,4,2,4,4,4168329,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-797,16,1,2,3,4,4,2,3,5,5,1,3,3,4890315,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-798,23,1,3,3,6,4,1,0,7,7,1,7,6,7471358,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-799,7,1,1,4,4,6,1,1,5,4,3,3,4,4067793,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-800,25,1,3,4,3,7,1,0,4,6,5,2,7,13239388,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-801,1,0,1,1,1,2,6,4,3,3,5,2,2,98072,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-802,2,0,1,1,2,1,6,3,4,2,6,2,1,99935,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-803,8,0,2,1,0,1,7,5,3,3,3,4,3,180373,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-804,8,0,2,1,1,2,6,5,4,4,2,4,2,159909,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-805,18,0,3,1,2,0,7,7,3,6,0,6,6,459695,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-806,2,0,1,2,2,1,4,4,5,2,7,2,1,273630,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-807,9,0,2,2,4,3,5,6,5,3,5,3,4,2257597,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-808,9,0,2,2,3,4,5,6,6,3,6,3,4,2432871,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-809,10,0,2,2,4,4,4,5,5,2,6,2,4,2710202,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-810,11,0,2,2,4,3,6,5,4,2,5,1,4,2857591,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-811,19,0,3,2,6,6,3,6,6,6,2,6,7,4720532,3.0,Index Trackers (Passive),Index Advisory Group
-812,19,0,3,2,7,7,3,7,7,5,2,7,6,4445920,3.0,Index Trackers (Passive),Index Advisory Group
-813,4,0,1,3,2,3,2,4,5,4,6,3,3,1331312,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-814,4,0,1,3,2,4,1,3,5,4,7,3,3,1690957,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-815,12,0,2,3,4,4,2,3,6,4,3,4,3,4865988,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-816,13,0,2,3,3,4,3,3,5,5,2,3,4,4395135,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-817,12,0,2,3,3,4,1,3,7,4,2,4,4,4242383,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-818,23,0,3,3,6,5,1,2,6,6,1,7,6,7911498,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-819,22,0,3,3,7,5,0,0,5,7,2,6,7,7193186,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-820,24,0,3,3,6,4,1,0,7,7,1,7,6,7396508,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-821,5,0,1,4,4,7,1,1,3,3,4,6,7,3390464,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-822,16,0,2,4,5,5,0,1,7,4,3,3,4,6569023,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-823,24,0,3,4,4,7,2,1,3,6,5,2,2,16694524,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-824,25,0,3,4,4,7,1,0,4,6,6,3,7,19009191,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-825,1,1,1,1,1,2,6,4,3,3,5,2,2,99567,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-826,1,1,1,1,2,1,6,3,4,2,6,2,1,99207,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-827,8,1,2,1,1,2,6,5,4,4,2,4,2,138232,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-828,1,1,1,2,2,1,4,4,5,2,7,2,1,259425,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-829,9,1,2,2,4,3,5,6,5,3,5,3,4,2172354,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-830,10,1,2,2,3,4,5,6,6,3,6,3,4,2366575,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-831,12,1,2,2,4,4,4,5,5,2,6,2,4,2629831,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-832,18,1,3,2,7,7,3,7,7,5,2,7,6,4474235,3.0,Index Trackers (Passive),Index Advisory Group
-833,4,1,1,3,2,3,2,4,5,4,6,3,3,1564401,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-834,12,1,2,3,4,4,2,3,6,4,3,4,3,4275697,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-835,13,1,2,3,3,4,3,3,5,5,2,3,4,4329524,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-836,14,1,2,3,3,4,1,3,7,4,2,4,4,4177917,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-837,16,1,2,3,4,4,2,3,5,5,1,3,3,4844688,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-838,23,1,3,3,6,4,1,0,7,7,1,7,6,7692111,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-839,7,1,1,4,4,7,1,1,6,4,3,6,5,4070047,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-840,25,1,3,4,5,7,1,0,3,6,5,3,6,13112264,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-841,2,0,1,2,2,1,4,4,5,2,7,2,1,273850,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-842,4,0,1,3,2,3,2,4,5,4,6,3,3,1355172,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-843,5,0,1,4,4,7,1,1,4,3,4,5,6,3373530,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-844,10,0,2,2,4,4,4,5,5,2,6,2,4,2781594,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-845,12,0,2,3,4,4,2,3,6,4,3,4,3,4842685,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-846,12,0,2,3,3,4,1,3,7,4,2,4,4,4242444,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-847,16,0,2,4,4,4,0,1,3,4,6,4,5,6569431,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-848,19,0,3,2,6,6,3,6,6,6,2,6,7,4752694,3.0,Index Trackers (Passive),Index Advisory Group
-849,22,0,3,3,7,5,0,0,5,7,2,6,7,7172663,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-850,25,0,3,4,4,4,1,0,3,6,5,7,4,18410344,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-851,1,1,1,2,2,1,4,4,5,2,7,2,1,244345,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-852,4,1,1,3,2,3,2,4,5,4,6,3,3,1584827,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-853,7,1,1,4,5,7,1,1,5,4,6,5,5,4062384,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-854,10,1,2,2,3,4,5,6,6,3,6,3,4,2363300,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-855,16,1,2,3,4,4,2,3,5,5,1,3,3,4836253,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-856,13,1,2,3,3,4,3,3,5,5,2,3,4,4369971,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-857,18,1,3,2,7,7,3,7,7,5,2,7,6,4453462,3.0,Index Trackers (Passive),Index Advisory Group
-858,23,1,3,3,6,4,1,0,7,7,1,7,6,7527875,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-859,12,1,2,2,4,4,4,5,5,2,6,2,4,2652909,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-860,25,1,3,4,3,5,1,0,3,6,4,3,6,13344476,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-861,1,0,1,1,1,2,6,4,3,3,5,2,2,98077,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-862,2,0,1,1,2,1,6,3,4,2,6,2,1,99658,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-863,8,0,2,1,0,1,7,5,3,3,3,4,3,180140,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-864,8,0,2,1,1,2,6,5,4,4,2,4,2,159967,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-865,18,0,3,1,2,0,7,7,3,6,0,6,6,459957,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-866,2,0,1,2,2,1,4,4,5,2,7,2,1,273361,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-867,9,0,2,2,4,3,5,6,5,3,5,3,4,2291437,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-868,9,0,2,2,3,4,5,6,6,3,6,3,4,2390140,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-869,10,0,2,2,4,4,4,5,5,2,6,2,4,2684545,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-870,11,0,2,2,4,3,6,5,4,2,5,1,4,2826674,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-871,19,0,3,2,6,6,3,6,6,6,2,6,7,4697073,3.0,Index Trackers (Passive),Index Advisory Group
-872,19,0,3,2,7,7,3,7,7,5,2,7,6,4459890,3.0,Index Trackers (Passive),Index Advisory Group
-873,4,0,1,3,2,3,2,4,5,4,6,3,3,1337555,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-874,4,0,1,3,2,4,1,3,5,4,7,3,3,1675094,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-875,12,0,2,3,4,4,2,3,6,4,3,4,3,4878254,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-876,13,0,2,3,3,4,3,3,5,5,2,3,4,4424877,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-877,12,0,2,3,3,4,1,3,7,4,2,4,4,4233781,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-878,23,0,3,3,6,5,1,2,6,6,1,7,6,7860373,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-879,22,0,3,3,7,5,0,0,5,7,2,6,7,7158158,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-880,24,0,3,3,6,4,1,0,7,7,1,7,6,7382123,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-881,5,0,1,4,4,6,1,1,6,3,5,6,6,3382746,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-882,16,0,2,4,4,6,0,1,4,4,5,6,6,6568008,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-883,24,0,3,4,3,6,2,1,7,6,6,2,2,16372093,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-884,25,0,3,4,5,6,1,0,6,6,4,6,6,19216265,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-885,1,1,1,1,1,2,6,4,3,3,5,2,2,100005,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-886,1,1,1,1,2,1,6,3,4,2,6,2,1,99368,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-887,8,1,2,1,1,2,6,5,4,4,2,4,2,137591,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-888,1,1,1,2,2,1,4,4,5,2,7,2,1,261385,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-889,9,1,2,2,4,3,5,6,5,3,5,3,4,2153132,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-890,10,1,2,2,3,4,5,6,6,3,6,3,4,2355034,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-891,12,1,2,2,4,4,4,5,5,2,6,2,4,2622404,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-892,18,1,3,2,7,7,3,7,7,5,2,7,6,4495201,3.0,Index Trackers (Passive),Index Advisory Group
-893,4,1,1,3,2,3,2,4,5,4,6,3,3,1575114,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-894,12,1,2,3,4,4,2,3,6,4,3,4,3,4249849,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-895,13,1,2,3,3,4,3,3,5,5,2,3,4,4345439,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-896,14,1,2,3,3,4,1,3,7,4,2,4,4,4171528,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-897,16,1,2,3,4,4,2,3,5,5,1,3,3,4871984,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-898,23,1,3,3,6,4,1,0,7,7,1,7,6,7662467,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-899,7,1,1,4,5,5,1,1,6,4,6,7,4,4099273,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-900,25,1,3,4,3,7,1,0,6,6,5,4,4,12729174,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-901,1,0,1,1,1,2,6,4,3,3,5,2,2,98071,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-902,2,0,1,1,2,1,6,3,4,2,6,2,1,99642,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-903,8,0,2,1,0,1,7,5,3,3,3,4,3,180312,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-904,8,0,2,1,1,2,6,5,4,4,2,4,2,159867,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-905,18,0,3,1,2,0,7,7,3,6,0,6,6,459937,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-906,2,0,1,2,2,1,4,4,5,2,7,2,1,273631,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-907,9,0,2,2,4,3,5,6,5,3,5,3,4,2351120,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-908,9,0,2,2,3,4,5,6,6,3,6,3,4,2413954,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-909,10,0,2,2,4,4,4,5,5,2,6,2,4,2675368,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-910,11,0,2,2,4,3,6,5,4,2,5,1,4,2882842,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-911,19,0,3,2,6,6,3,6,6,6,2,6,7,4696314,3.0,Index Trackers (Passive),Index Advisory Group
-912,19,0,3,2,7,7,3,7,7,5,2,7,6,4440347,3.0,Index Trackers (Passive),Index Advisory Group
-913,4,0,1,3,2,3,2,4,5,4,6,3,3,1342308,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-914,4,0,1,3,2,4,1,3,5,4,7,3,3,1684306,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-915,12,0,2,3,4,4,2,3,6,4,3,4,3,4844956,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-916,13,0,2,3,3,4,3,3,5,5,2,3,4,4426819,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-917,12,0,2,3,3,4,1,3,7,4,2,4,4,4194154,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-918,23,0,3,3,6,5,1,2,6,6,1,7,6,7973309,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-919,22,0,3,3,7,5,0,0,5,7,2,6,7,7179233,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-920,24,0,3,3,6,4,1,0,7,7,1,7,6,7411323,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-921,5,0,1,4,2,6,1,1,5,3,7,2,3,3394068,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-922,16,0,2,4,3,6,0,1,5,4,5,2,2,6566715,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-923,24,0,3,4,6,7,2,1,6,6,1,7,6,17143372,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-924,25,0,3,4,7,6,1,0,6,6,2,6,7,18673016,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-925,1,1,1,1,1,2,6,4,3,3,5,2,2,99828,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-926,1,1,1,1,2,1,6,3,4,2,6,2,1,99114,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-927,8,1,2,1,1,2,6,5,4,4,2,4,2,133437,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-928,1,1,1,2,2,1,4,4,5,2,7,2,1,247613,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-929,9,1,2,2,4,3,5,6,5,3,5,3,4,2122365,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-930,10,1,2,2,3,4,5,6,6,3,6,3,4,2326300,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-931,12,1,2,2,4,4,4,5,5,2,6,2,4,2667636,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-932,18,1,3,2,7,7,3,7,7,5,2,7,6,4531851,3.0,Index Trackers (Passive),Index Advisory Group
-933,4,1,1,3,2,3,2,4,5,4,6,3,3,1581535,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-934,12,1,2,3,4,4,2,3,6,4,3,4,3,4226720,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-935,13,1,2,3,3,4,3,3,5,5,2,3,4,4422777,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-936,14,1,2,3,3,4,1,3,7,4,2,4,4,4193917,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-937,16,1,2,3,4,4,2,3,5,5,1,3,3,4881639,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-938,23,1,3,3,6,4,1,0,7,7,1,7,6,7506430,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-939,7,1,1,4,2,6,1,1,5,3,7,2,3,4097929,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-940,25,1,3,4,7,6,1,0,6,6,2,6,7,12660828,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-941,1,0,1,1,1,2,6,4,3,3,5,2,2,98106,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-942,2,0,1,1,2,1,6,3,4,2,6,2,1,99869,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-943,8,0,2,1,0,1,7,5,3,3,3,4,3,180298,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-944,8,0,2,1,1,2,6,5,4,4,2,4,2,160113,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-945,18,0,3,1,2,0,7,7,3,6,0,6,6,459512,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-946,2,0,1,2,2,1,4,4,5,2,7,2,1,273577,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-947,9,0,2,2,4,3,5,6,5,3,5,3,4,2281116,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-948,9,0,2,2,3,4,5,6,6,3,6,3,4,2441422,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-949,10,0,2,2,4,4,4,5,5,2,6,2,4,2675093,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-950,11,0,2,2,4,3,6,5,4,2,5,1,4,2814514,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-951,19,0,3,2,6,6,3,6,6,6,2,6,7,4727105,3.0,Index Trackers (Passive),Index Advisory Group
-952,19,0,3,2,7,7,3,7,7,5,2,7,6,4439361,3.0,Index Trackers (Passive),Index Advisory Group
-953,4,0,1,3,2,3,2,4,5,4,6,3,3,1267702,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-954,4,0,1,3,2,4,1,3,5,4,7,3,3,1703474,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-955,12,0,2,3,4,4,2,3,6,4,3,4,3,4873434,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-956,13,0,2,3,3,4,3,3,5,5,2,3,4,4363883,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-957,12,0,2,3,3,4,1,3,7,4,2,4,4,4218941,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-958,23,0,3,3,6,5,1,2,6,6,1,7,6,7948230,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-959,22,0,3,3,7,5,0,0,5,7,2,6,7,7168205,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-960,24,0,3,3,6,4,1,0,7,7,1,7,6,7430698,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-961,5,0,1,4,2,6,1,1,5,3,7,2,3,3338197,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-962,16,0,2,4,3,6,0,1,5,4,5,2,2,6567238,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-963,24,0,3,4,6,7,2,1,6,6,1,7,6,16925973,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-964,25,0,3,4,7,6,1,0,6,6,2,6,7,18934402,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-965,1,1,1,1,1,2,6,4,3,3,5,2,2,99726,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-966,1,1,1,1,2,1,6,3,4,2,6,2,1,99236,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-967,8,1,2,1,1,2,6,5,4,4,2,4,2,142393,0.0,Equity Schemes (High Risk),Lume Elite Advisory
-968,1,1,1,2,2,1,4,4,5,2,7,2,1,256556,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-969,9,1,2,2,4,3,5,6,5,3,5,3,4,2181361,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-970,10,1,2,2,3,4,5,6,6,3,6,3,4,2369356,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-971,12,1,2,2,4,4,4,5,5,2,6,2,4,2663232,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-972,18,1,3,2,7,7,3,7,7,5,2,7,6,4520134,3.0,Index Trackers (Passive),Index Advisory Group
-973,4,1,1,3,2,3,2,4,5,4,6,3,3,1540088,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-974,12,1,2,3,4,4,2,3,6,4,3,4,3,4323743,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-975,13,1,2,3,3,4,3,3,5,5,2,3,4,4411153,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-976,14,1,2,3,3,4,1,3,7,4,2,4,4,4144230,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-977,16,1,2,3,4,4,2,3,5,5,1,3,3,4869169,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-978,23,1,3,3,6,4,1,0,7,7,1,7,6,7602609,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-979,7,1,1,4,2,6,1,1,5,3,7,2,3,4041448,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-980,25,1,3,4,7,6,1,0,6,6,2,6,7,12771613,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-981,2,0,1,2,2,1,4,4,5,2,7,2,1,273435,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-982,4,0,1,3,2,3,2,4,5,4,6,3,3,1299290,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-983,5,0,1,4,2,6,1,1,5,3,7,2,3,3359147,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-984,10,0,2,2,4,4,4,5,5,2,6,2,4,2654248,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-985,12,0,2,3,4,4,2,3,6,4,3,4,3,4833809,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-986,12,0,2,3,3,4,1,3,7,4,2,4,4,4202690,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-987,16,0,2,4,3,6,0,1,5,4,5,2,2,6568117,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-988,19,0,3,2,6,6,3,6,6,6,2,6,7,4716278,3.0,Index Trackers (Passive),Index Advisory Group
-989,22,0,3,3,7,5,0,0,5,7,2,6,7,7167008,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-990,25,0,3,4,7,6,1,0,6,6,2,6,7,18600491,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-991,1,1,1,2,2,1,4,4,5,2,7,2,1,248182,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-992,4,1,1,3,2,3,2,4,5,4,6,3,3,1588404,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-993,7,1,1,4,2,6,1,1,5,3,7,2,3,4026809,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-994,10,1,2,2,3,4,5,6,6,3,6,3,4,2390105,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-995,16,1,2,3,4,4,2,3,5,5,1,3,3,4889426,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-996,13,1,2,3,3,4,3,3,5,5,2,3,4,4356312,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-997,18,1,3,2,7,7,3,7,7,5,2,7,6,4509248,3.0,Index Trackers (Passive),Index Advisory Group
-998,23,1,3,3,6,4,1,0,7,7,1,7,6,7414400,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
-999,12,1,2,2,4,4,4,5,5,2,6,2,4,2663658,2.0,Hybrid Allocation Funds,Global Wealth Partners India
-1000,25,1,3,4,7,6,1,0,6,6,2,6,7,12481287,1.0,Liquid/Debt Funds (Safe),MintLeads Premier Capital
+1,1,0,1,1,1,2,6,4,3,3,5,2,2,98062,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+2,2,0,1,1,2,1,6,3,4,2,6,2,1,99187,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+3,8,0,2,1,0,1,7,5,3,3,3,4,3,180043,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+4,8,0,2,1,1,2,6,5,4,4,2,4,2,159982,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+5,18,0,3,1,2,0,7,7,3,6,0,6,6,459815,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+6,2,0,1,2,2,1,4,4,5,2,7,2,1,273750,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+7,9,0,2,2,4,3,5,6,5,3,5,3,4,2282344,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+8,9,0,2,2,3,4,5,6,6,3,6,3,4,2452252,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+9,10,0,2,2,4,4,4,5,5,2,6,2,4,2704762,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+10,11,0,2,2,4,3,6,5,4,2,5,1,4,2820556,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+11,19,0,3,2,6,6,3,6,6,6,2,6,7,4746277,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+12,19,0,3,2,7,7,3,7,7,5,2,7,6,4490534,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+13,4,0,1,3,2,3,2,4,5,4,6,3,3,1358420,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+14,4,0,1,3,2,4,1,3,5,4,7,3,3,1608154,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+15,12,0,2,3,4,4,2,3,6,4,3,4,3,4830633,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+16,13,0,2,3,3,4,3,3,5,5,2,3,4,4380080,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+17,12,0,2,3,3,4,1,3,7,4,2,4,4,4182314,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+18,23,0,3,3,6,5,1,2,6,6,1,7,6,7979653,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+19,22,0,3,3,7,5,0,0,5,7,2,6,7,7206858,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+20,24,0,3,3,6,4,1,0,7,7,1,7,6,7442456,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+21,5,0,1,4,2,6,1,1,5,3,7,2,3,3378709,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+22,16,0,2,4,3,6,0,1,5,4,5,2,2,6568116,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+23,24,0,3,4,6,7,2,1,6,6,1,7,6,16744595,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+24,25,0,3,4,7,6,1,0,6,6,2,6,7,18911813,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+25,1,1,1,1,1,2,6,4,3,3,5,2,2,99782,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+26,1,1,1,1,2,1,6,3,4,2,6,2,1,99542,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+27,8,1,2,1,1,2,6,5,4,4,2,4,2,132244,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+28,1,1,1,2,2,1,4,4,5,2,7,2,1,253138,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+29,9,1,2,2,4,3,5,6,5,3,5,3,4,2145364,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+30,10,1,2,2,3,4,5,6,6,3,6,3,4,2331221,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+31,12,1,2,2,4,4,4,5,5,2,6,2,4,2657126,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+32,18,1,3,2,7,7,3,7,7,5,2,7,6,4470404,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+33,4,1,1,3,2,3,2,4,5,4,6,3,3,1545421,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+34,12,1,2,3,4,4,2,3,6,4,3,4,3,4264422,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+35,13,1,2,3,3,4,3,3,5,5,2,3,4,4418525,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+36,14,1,2,3,3,4,1,3,7,4,2,4,4,4127408,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+37,16,1,2,3,4,4,2,3,5,5,1,3,3,4838072,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+38,23,1,3,3,6,4,1,0,7,7,1,7,6,7692268,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+39,7,1,1,4,2,6,1,1,5,3,7,2,3,4027729,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+40,25,1,3,4,7,6,1,0,6,6,2,6,7,12469566,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+41,1,0,1,1,1,2,6,4,3,3,5,2,2,98029,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+42,2,0,1,1,2,1,6,3,4,2,6,2,1,99776,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+43,8,0,2,1,0,1,7,5,3,3,3,4,3,180406,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+44,8,0,2,1,1,2,6,5,4,4,2,4,2,160071,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+45,18,0,3,1,2,0,7,7,3,6,0,6,6,459904,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+46,2,0,1,2,2,1,4,4,5,2,7,2,1,273367,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+47,9,0,2,2,4,3,5,6,5,3,5,3,4,2341588,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+48,9,0,2,2,3,4,5,6,6,3,6,3,4,2379956,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+49,10,0,2,2,4,4,4,5,5,2,6,2,4,2724531,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+50,11,0,2,2,4,3,6,5,4,2,5,1,4,2862220,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+51,19,0,3,2,6,6,3,6,6,6,2,6,7,4685919,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+52,19,0,3,2,7,7,3,7,7,5,2,7,6,4441102,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+53,4,0,1,3,2,3,2,4,5,4,6,3,3,1355749,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+54,4,0,1,3,2,4,1,3,5,4,7,3,3,1666574,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+55,12,0,2,3,4,4,2,3,6,4,3,4,3,4910999,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+56,13,0,2,3,3,4,3,3,5,5,2,3,4,4392327,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+57,12,0,2,3,3,4,1,3,7,4,2,4,4,4157269,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+58,23,0,3,3,6,5,1,2,6,6,1,7,6,7911320,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+59,22,0,3,3,7,5,0,0,5,7,2,6,7,7136074,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+60,24,0,3,3,6,4,1,0,7,7,1,7,6,7424625,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+61,5,0,1,4,2,6,1,1,5,3,7,2,3,3357427,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+62,16,0,2,4,3,6,0,1,5,4,5,2,2,6568703,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+63,24,0,3,4,6,7,2,1,6,6,1,7,6,17148906,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+64,25,0,3,4,7,6,1,0,6,6,2,6,7,18829337,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+65,1,1,1,1,1,2,6,4,3,3,5,2,2,99925,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+66,1,1,1,1,2,1,6,3,4,2,6,2,1,100059,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+67,8,1,2,1,1,2,6,5,4,4,2,4,2,131901,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+68,1,1,1,2,2,1,4,4,5,2,7,2,1,245820,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+69,9,1,2,2,4,3,5,6,5,3,5,3,4,2159419,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+70,10,1,2,2,3,4,5,6,6,3,6,3,4,2368195,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+71,12,1,2,2,4,4,4,5,5,2,6,2,4,2662068,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+72,18,1,3,2,7,7,3,7,7,5,2,7,6,4468700,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+73,4,1,1,3,2,3,2,4,5,4,6,3,3,1548431,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+74,12,1,2,3,4,4,2,3,6,4,3,4,3,4257507,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+75,13,1,2,3,3,4,3,3,5,5,2,3,4,4344026,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+76,14,1,2,3,3,4,1,3,7,4,2,4,4,4134314,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+77,16,1,2,3,4,4,2,3,5,5,1,3,3,4885544,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+78,23,1,3,3,6,4,1,0,7,7,1,7,6,7674243,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+79,7,1,1,4,2,6,1,1,5,3,7,2,3,4051187,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+80,25,1,3,4,7,6,1,0,6,6,2,6,7,13192860,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+81,2,0,1,2,2,1,4,4,5,2,7,2,1,273423,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+82,4,0,1,3,2,3,2,4,5,4,6,3,3,1311080,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+83,5,0,1,4,2,6,1,1,5,3,7,2,3,3358355,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+84,10,0,2,2,4,4,4,5,5,2,6,2,4,2719604,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+85,12,0,2,3,4,4,2,3,6,4,3,4,3,4897052,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+86,12,0,2,3,3,4,1,3,7,4,2,4,4,4187312,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+87,16,0,2,4,3,6,0,1,5,4,5,2,2,6568150,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+88,19,0,3,2,6,6,3,6,6,6,2,6,7,4730690,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+89,22,0,3,3,7,5,0,0,5,7,2,6,7,7223822,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+90,25,0,3,4,7,6,1,0,6,6,2,6,7,18989323,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+91,1,1,1,2,2,1,4,4,5,2,7,2,1,253314,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+92,4,1,1,3,2,3,2,4,5,4,6,3,3,1561308,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+93,7,1,1,4,2,6,1,1,5,3,7,2,3,4053894,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+94,10,1,2,2,3,4,5,6,6,3,6,3,4,2317957,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+95,16,1,2,3,4,4,2,3,5,5,1,3,3,4848656,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+96,13,1,2,3,3,4,3,3,5,5,2,3,4,4339334,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+97,18,1,3,2,7,7,3,7,7,5,2,7,6,4481290,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+98,23,1,3,3,6,4,1,0,7,7,1,7,6,7496328,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+99,12,1,2,2,4,4,4,5,5,2,6,2,4,2676675,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+100,25,1,3,4,7,6,1,0,6,6,2,6,7,12589420,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+101,1,0,1,1,1,2,6,4,3,3,5,2,2,98066,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+102,2,0,1,1,2,1,6,3,4,2,6,2,1,99982,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+103,8,0,2,1,0,1,7,5,3,3,3,4,3,180003,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+104,8,0,2,1,1,2,6,5,4,4,2,4,2,159847,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+105,18,0,3,1,2,0,7,7,3,6,0,6,6,459716,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+106,2,0,1,2,2,1,4,4,5,2,7,2,1,273744,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+107,9,0,2,2,4,3,5,6,5,3,5,3,4,2253640,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+108,9,0,2,2,3,4,5,6,6,3,6,3,4,2366143,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+109,10,0,2,2,4,4,4,5,5,2,6,2,4,2666990,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+110,11,0,2,2,4,3,6,5,4,2,5,1,4,2830244,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+111,19,0,3,2,6,6,3,6,6,6,2,6,7,4711712,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+112,19,0,3,2,7,7,3,7,7,5,2,7,6,4498405,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+113,4,0,1,3,2,3,2,4,5,4,6,3,3,1350190,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+114,4,0,1,3,2,4,1,3,5,4,7,3,3,1650520,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+115,12,0,2,3,4,4,2,3,6,4,3,4,3,4903220,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+116,13,0,2,3,3,4,3,3,5,5,2,3,4,4425574,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+117,12,0,2,3,3,4,1,3,7,4,2,4,4,4204598,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+118,23,0,3,3,6,5,1,2,6,6,1,7,6,7906324,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+119,22,0,3,3,7,5,0,0,5,7,2,6,7,7128283,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+120,24,0,3,3,6,4,1,0,7,7,1,7,6,7434080,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+121,5,0,1,4,2,6,1,1,5,3,7,2,3,3381440,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+122,16,0,2,4,3,6,0,1,5,4,5,2,2,6568765,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+123,24,0,3,4,6,7,2,1,6,6,1,7,6,16954590,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+124,25,0,3,4,7,6,1,0,6,6,2,6,7,18713008,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+125,1,1,1,1,1,2,6,4,3,3,5,2,2,99265,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+126,1,1,1,1,2,1,6,3,4,2,6,2,1,99104,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+127,8,1,2,1,1,2,6,5,4,4,2,4,2,134444,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+128,1,1,1,2,2,1,4,4,5,2,7,2,1,244301,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+129,9,1,2,2,4,3,5,6,5,3,5,3,4,2170941,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+130,10,1,2,2,3,4,5,6,6,3,6,3,4,2319018,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+131,12,1,2,2,4,4,4,5,5,2,6,2,4,2677758,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+132,18,1,3,2,7,7,3,7,7,5,2,7,6,4462715,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+133,4,1,1,3,2,3,2,4,5,4,6,3,3,1559278,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+134,12,1,2,3,4,4,2,3,6,4,3,4,3,4320129,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+135,13,1,2,3,3,4,3,3,5,5,2,3,4,4355445,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+136,14,1,2,3,3,4,1,3,7,4,2,4,4,4193470,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+137,16,1,2,3,4,4,2,3,5,5,1,3,3,4851698,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+138,23,1,3,3,6,4,1,0,7,7,1,7,6,7499439,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+139,7,1,1,4,2,6,1,1,5,3,7,2,3,4016462,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+140,25,1,3,4,7,6,1,0,6,6,2,6,7,12860421,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+141,1,0,1,1,1,2,6,4,3,3,5,2,2,98089,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+142,2,0,1,1,2,1,6,3,4,2,6,2,1,99447,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+143,8,0,2,1,0,1,7,5,3,3,3,4,3,180228,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+144,8,0,2,1,1,2,6,5,4,4,2,4,2,160091,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+145,18,0,3,1,2,0,7,7,3,6,0,6,6,459691,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+146,2,0,1,2,2,1,4,4,5,2,7,2,1,273584,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+147,9,0,2,2,4,3,5,6,5,3,5,3,4,2315683,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+148,9,0,2,2,3,4,5,6,6,3,6,3,4,2453502,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+149,10,0,2,2,4,4,4,5,5,2,6,2,4,2788940,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+150,11,0,2,2,4,3,6,5,4,2,5,1,4,2879129,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+151,19,0,3,2,6,6,3,6,6,6,2,6,7,4763675,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+152,19,0,3,2,7,7,3,7,7,5,2,7,6,4503629,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+153,4,0,1,3,2,3,2,4,5,4,6,3,3,1301663,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+154,4,0,1,3,2,4,1,3,5,4,7,3,3,1649093,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+155,12,0,2,3,4,4,2,3,6,4,3,4,3,4871760,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+156,13,0,2,3,3,4,3,3,5,5,2,3,4,4396348,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+157,12,0,2,3,3,4,1,3,7,4,2,4,4,4202856,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+158,23,0,3,3,6,5,1,2,6,6,1,7,6,7882123,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+159,22,0,3,3,7,5,0,0,5,7,2,6,7,7160018,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+160,24,0,3,3,6,4,1,0,7,7,1,7,6,7447379,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+161,5,0,1,4,2,6,1,1,5,3,7,2,3,3336903,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+162,16,0,2,4,3,6,0,1,5,4,5,2,2,6568241,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+163,24,0,3,4,6,7,2,1,6,6,1,7,6,16678567,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+164,25,0,3,4,7,6,1,0,6,6,2,6,7,18620329,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+165,1,1,1,1,1,2,6,4,3,3,5,2,2,99996,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+166,1,1,1,1,2,1,6,3,4,2,6,2,1,99100,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+167,8,1,2,1,1,2,6,5,4,4,2,4,2,137806,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+168,1,1,1,2,2,1,4,4,5,2,7,2,1,251205,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+169,9,1,2,2,4,3,5,6,5,3,5,3,4,2184134,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+170,10,1,2,2,3,4,5,6,6,3,6,3,4,2373698,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+171,12,1,2,2,4,4,4,5,5,2,6,2,4,2678589,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+172,18,1,3,2,7,7,3,7,7,5,2,7,6,4502199,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+173,4,1,1,3,2,3,2,4,5,4,6,3,3,1540049,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+174,12,1,2,3,4,4,2,3,6,4,3,4,3,4237862,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+175,13,1,2,3,3,4,3,3,5,5,2,3,4,4351395,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+176,14,1,2,3,3,4,1,3,7,4,2,4,4,4155894,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+177,16,1,2,3,4,4,2,3,5,5,1,3,3,4858045,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+178,23,1,3,3,6,4,1,0,7,7,1,7,6,7625112,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+179,7,1,1,4,2,6,1,1,5,3,7,2,3,4011989,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+180,25,1,3,4,7,6,1,0,6,6,2,6,7,12773244,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+181,2,0,1,2,2,1,4,4,5,2,7,2,1,273744,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+182,4,0,1,3,2,3,2,4,5,4,6,3,3,1339050,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+183,5,0,1,4,2,6,1,1,5,3,7,2,3,3352363,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+184,10,0,2,2,4,4,4,5,5,2,6,2,4,2762276,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+185,12,0,2,3,4,4,2,3,6,4,3,4,3,4831368,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+186,12,0,2,3,3,4,1,3,7,4,2,4,4,4244482,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+187,16,0,2,4,3,6,0,1,5,4,5,2,2,6568154,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+188,19,0,3,2,6,6,3,6,6,6,2,6,7,4757276,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+189,22,0,3,3,7,5,0,0,5,7,2,6,7,7156716,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+190,25,0,3,4,7,6,1,0,6,6,2,6,7,19189009,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+191,1,1,1,2,2,1,4,4,5,2,7,2,1,247780,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+192,4,1,1,3,2,3,2,4,5,4,6,3,3,1588396,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+193,7,1,1,4,2,6,1,1,5,3,7,2,3,4064394,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+194,10,1,2,2,3,4,5,6,6,3,6,3,4,2390857,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+195,16,1,2,3,4,4,2,3,5,5,1,3,3,4863115,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+196,13,1,2,3,3,4,3,3,5,5,2,3,4,4421552,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+197,18,1,3,2,7,7,3,7,7,5,2,7,6,4443827,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+198,23,1,3,3,6,4,1,0,7,7,1,7,6,7436730,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+199,12,1,2,2,4,4,4,5,5,2,6,2,4,2661689,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+200,25,1,3,4,7,6,1,0,6,6,2,6,7,12623162,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+201,1,0,1,1,1,2,6,4,3,3,5,2,2,98032,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+202,2,0,1,1,2,1,6,3,4,2,6,2,1,99091,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+203,8,0,2,1,0,1,7,5,3,3,3,4,3,180077,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+204,8,0,2,1,1,2,6,5,4,4,2,4,2,160025,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+205,18,0,3,1,2,0,7,7,3,6,0,6,6,459632,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+206,2,0,1,2,2,1,4,4,5,2,7,2,1,273582,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+207,9,0,2,2,4,3,5,6,5,3,5,3,4,2331541,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+208,9,0,2,2,3,4,5,6,6,3,6,3,4,2467392,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+209,10,0,2,2,4,4,4,5,5,2,6,2,4,2757924,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+210,11,0,2,2,4,3,6,5,4,2,5,1,4,2875059,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+211,19,0,3,2,6,6,3,6,6,6,2,6,7,4666844,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+212,19,0,3,2,7,7,3,7,7,5,2,7,6,4467521,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+213,4,0,1,3,2,3,2,4,5,4,6,3,3,1300116,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+214,4,0,1,3,2,4,1,3,5,4,7,3,3,1623524,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+215,12,0,2,3,4,4,2,3,6,4,3,4,3,4842770,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+216,13,0,2,3,3,4,3,3,5,5,2,3,4,4398070,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+217,12,0,2,3,3,4,1,3,7,4,2,4,4,4189257,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+218,23,0,3,3,6,5,1,2,6,6,1,7,6,7867484,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+219,22,0,3,3,7,5,0,0,5,7,2,6,7,7153722,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+220,24,0,3,3,6,4,1,0,7,7,1,7,6,7384373,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+221,5,0,1,4,2,6,1,1,5,3,7,2,3,3407258,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+222,16,0,2,4,3,6,0,1,5,4,5,2,2,6569445,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+223,24,0,3,4,6,7,2,1,6,6,1,7,6,16479034,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+224,25,0,3,4,7,6,1,0,6,6,2,6,7,18958998,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+225,1,1,1,1,1,2,6,4,3,3,5,2,2,100004,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+226,1,1,1,1,2,1,6,3,4,2,6,2,1,99653,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+227,8,1,2,1,1,2,6,5,4,4,2,4,2,131427,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+228,1,1,1,2,2,1,4,4,5,2,7,2,1,258632,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+229,9,1,2,2,4,3,5,6,5,3,5,3,4,2191810,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+230,10,1,2,2,3,4,5,6,6,3,6,3,4,2339893,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+231,12,1,2,2,4,4,4,5,5,2,6,2,4,2672608,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+232,18,1,3,2,7,7,3,7,7,5,2,7,6,4491311,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+233,4,1,1,3,2,3,2,4,5,4,6,3,3,1544729,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+234,12,1,2,3,4,4,2,3,6,4,3,4,3,4306846,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+235,13,1,2,3,3,4,3,3,5,5,2,3,4,4328356,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+236,14,1,2,3,3,4,1,3,7,4,2,4,4,4189138,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+237,16,1,2,3,4,4,2,3,5,5,1,3,3,4837881,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+238,23,1,3,3,6,4,1,0,7,7,1,7,6,7600516,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+239,7,1,1,4,2,6,1,1,5,3,7,2,3,4044670,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+240,25,1,3,4,7,6,1,0,6,6,2,6,7,12486834,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+241,1,0,1,1,1,2,6,4,3,3,5,2,2,98059,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+242,2,0,1,1,2,1,6,3,4,2,6,2,1,99422,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+243,8,0,2,1,0,1,7,5,3,3,3,4,3,180103,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+244,8,0,2,1,1,2,6,5,4,4,2,4,2,159876,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+245,18,0,3,1,2,0,7,7,3,6,0,6,6,459967,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+246,2,0,1,2,2,1,4,4,5,2,7,2,1,273883,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+247,9,0,2,2,4,3,5,6,5,3,5,3,4,2341295,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+248,9,0,2,2,3,4,5,6,6,3,6,3,4,2366375,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+249,10,0,2,2,4,4,4,5,5,2,6,2,4,2775033,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+250,11,0,2,2,4,3,6,5,4,2,5,1,4,2860950,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+251,19,0,3,2,6,6,3,6,6,6,2,6,7,4700108,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+252,19,0,3,2,7,7,3,7,7,5,2,7,6,4456316,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+253,4,0,1,3,2,3,2,4,5,4,6,3,3,1364632,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+254,4,0,1,3,2,4,1,3,5,4,7,3,3,1604277,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+255,12,0,2,3,4,4,2,3,6,4,3,4,3,4894483,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+256,13,0,2,3,3,4,3,3,5,5,2,3,4,4428550,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+257,12,0,2,3,3,4,1,3,7,4,2,4,4,4167310,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+258,23,0,3,3,6,5,1,2,6,6,1,7,6,7891301,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+259,22,0,3,3,7,5,0,0,5,7,2,6,7,7162956,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+260,24,0,3,3,6,4,1,0,7,7,1,7,6,7410994,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+261,5,0,1,4,2,6,1,1,5,3,7,2,3,3326276,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+262,16,0,2,4,3,6,0,1,5,4,5,2,2,6567567,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+263,24,0,3,4,6,7,2,1,6,6,1,7,6,16924035,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+264,25,0,3,4,7,6,1,0,6,6,2,6,7,18580776,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+265,1,1,1,1,1,2,6,4,3,3,5,2,2,99465,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+266,1,1,1,1,2,1,6,3,4,2,6,2,1,99558,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+267,8,1,2,1,1,2,6,5,4,4,2,4,2,133867,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+268,1,1,1,2,2,1,4,4,5,2,7,2,1,249584,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+269,9,1,2,2,4,3,5,6,5,3,5,3,4,2174111,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+270,10,1,2,2,3,4,5,6,6,3,6,3,4,2352150,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+271,12,1,2,2,4,4,4,5,5,2,6,2,4,2642169,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+272,18,1,3,2,7,7,3,7,7,5,2,7,6,4501589,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+273,4,1,1,3,2,3,2,4,5,4,6,3,3,1564769,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+274,12,1,2,3,4,4,2,3,6,4,3,4,3,4253411,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+275,13,1,2,3,3,4,3,3,5,5,2,3,4,4379262,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+276,14,1,2,3,3,4,1,3,7,4,2,4,4,4125158,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+277,16,1,2,3,4,4,2,3,5,5,1,3,3,4878187,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+278,23,1,3,3,6,4,1,0,7,7,1,7,6,7654189,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+279,7,1,1,4,2,6,1,1,5,3,7,2,3,4074515,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+280,25,1,3,4,7,6,1,0,6,6,2,6,7,13070605,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+281,2,0,1,2,2,1,4,4,5,2,7,2,1,273456,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+282,4,0,1,3,2,3,2,4,5,4,6,3,3,1339381,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+283,5,0,1,4,2,6,1,1,5,3,7,2,3,3364752,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+284,10,0,2,2,4,4,4,5,5,2,6,2,4,2785644,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+285,12,0,2,3,4,4,2,3,6,4,3,4,3,4903999,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+286,12,0,2,3,3,4,1,3,7,4,2,4,4,4192950,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+287,16,0,2,4,3,6,0,1,5,4,5,2,2,6569011,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+288,19,0,3,2,6,6,3,6,6,6,2,6,7,4704501,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+289,22,0,3,3,7,5,0,0,5,7,2,6,7,7183612,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+290,25,0,3,4,7,6,1,0,6,6,2,6,7,18979799,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+291,1,1,1,2,2,1,4,4,5,2,7,2,1,258023,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+292,4,1,1,3,2,3,2,4,5,4,6,3,3,1551259,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+293,7,1,1,4,2,6,1,1,5,3,7,2,3,4036487,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+294,10,1,2,2,3,4,5,6,6,3,6,3,4,2326787,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+295,16,1,2,3,4,4,2,3,5,5,1,3,3,4890016,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+296,13,1,2,3,3,4,3,3,5,5,2,3,4,4414581,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+297,18,1,3,2,7,7,3,7,7,5,2,7,6,4489566,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+298,23,1,3,3,6,4,1,0,7,7,1,7,6,7475555,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+299,12,1,2,2,4,4,4,5,5,2,6,2,4,2659156,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+300,25,1,3,4,7,6,1,0,6,6,2,6,7,12532305,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+301,1,0,1,1,1,2,6,4,3,3,5,2,2,98059,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+302,2,0,1,1,2,1,6,3,4,2,6,2,1,99043,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+303,8,0,2,1,0,1,7,5,3,3,3,4,3,180058,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+304,8,0,2,1,1,2,6,5,4,4,2,4,2,159861,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+305,18,0,3,1,2,0,7,7,3,6,0,6,6,459852,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+306,2,0,1,2,2,1,4,4,5,2,7,2,1,273478,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+307,9,0,2,2,4,3,5,6,5,3,5,3,4,2337227,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+308,9,0,2,2,3,4,5,6,6,3,6,3,4,2443523,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+309,10,0,2,2,4,4,4,5,5,2,6,2,4,2793125,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+310,11,0,2,2,4,3,6,5,4,2,5,1,4,2844304,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+311,19,0,3,2,6,6,3,6,6,6,2,6,7,4741072,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+312,19,0,3,2,7,7,3,7,7,5,2,7,6,4486085,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+313,4,0,1,3,2,3,2,4,5,4,6,3,3,1279561,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+314,4,0,1,3,2,4,1,3,5,4,7,3,3,1680110,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+315,12,0,2,3,4,4,2,3,6,4,3,4,3,4835148,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+316,13,0,2,3,3,4,3,3,5,5,2,3,4,4438473,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+317,12,0,2,3,3,4,1,3,7,4,2,4,4,4179149,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+318,23,0,3,3,6,5,1,2,6,6,1,7,6,7926468,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+319,22,0,3,3,7,5,0,0,5,7,2,6,7,7212353,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+320,24,0,3,3,6,4,1,0,7,7,1,7,6,7401486,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+321,5,0,1,4,2,6,1,1,5,3,7,2,3,3344703,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+322,16,0,2,4,3,6,0,1,5,4,5,2,2,6569163,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+323,24,0,3,4,6,7,2,1,6,6,1,7,6,16829916,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+324,25,0,3,4,7,6,1,0,6,6,2,6,7,18340977,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+325,1,1,1,1,1,2,6,4,3,3,5,2,2,99931,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+326,1,1,1,1,2,1,6,3,4,2,6,2,1,99741,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+327,8,1,2,1,1,2,6,5,4,4,2,4,2,134117,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+328,1,1,1,2,2,1,4,4,5,2,7,2,1,256613,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+329,9,1,2,2,4,3,5,6,5,3,5,3,4,2123339,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+330,10,1,2,2,3,4,5,6,6,3,6,3,4,2366917,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+331,12,1,2,2,4,4,4,5,5,2,6,2,4,2660929,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+332,18,1,3,2,7,7,3,7,7,5,2,7,6,4482303,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+333,4,1,1,3,2,3,2,4,5,4,6,3,3,1547923,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+334,12,1,2,3,4,4,2,3,6,4,3,4,3,4275136,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+335,13,1,2,3,3,4,3,3,5,5,2,3,4,4342595,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+336,14,1,2,3,3,4,1,3,7,4,2,4,4,4184608,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+337,16,1,2,3,4,4,2,3,5,5,1,3,3,4846905,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+338,23,1,3,3,6,4,1,0,7,7,1,7,6,7687193,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+339,7,1,1,4,2,6,1,1,5,3,7,2,3,4084115,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+340,25,1,3,4,7,6,1,0,6,6,2,6,7,12835787,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+341,1,0,1,1,1,2,6,4,3,3,5,2,2,98005,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+342,2,0,1,1,2,1,6,3,4,2,6,2,1,99349,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+343,8,0,2,1,0,1,7,5,3,3,3,4,3,180101,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+344,8,0,2,1,1,2,6,5,4,4,2,4,2,159860,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+345,18,0,3,1,2,0,7,7,3,6,0,6,6,459518,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+346,2,0,1,2,2,1,4,4,5,2,7,2,1,273851,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+347,9,0,2,2,4,3,5,6,5,3,5,3,4,2336727,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+348,9,0,2,2,3,4,5,6,6,3,6,3,4,2438926,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+349,10,0,2,2,4,4,4,5,5,2,6,2,4,2751683,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+350,11,0,2,2,4,3,6,5,4,2,5,1,4,2882368,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+351,19,0,3,2,6,6,3,6,6,6,2,6,7,4730465,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+352,19,0,3,2,7,7,3,7,7,5,2,7,6,4464646,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+353,4,0,1,3,2,3,2,4,5,4,6,3,3,1268816,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+354,4,0,1,3,2,4,1,3,5,4,7,3,3,1648448,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+355,12,0,2,3,4,4,2,3,6,4,3,4,3,4829652,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+356,13,0,2,3,3,4,3,3,5,5,2,3,4,4427184,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+357,12,0,2,3,3,4,1,3,7,4,2,4,4,4228597,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+358,23,0,3,3,6,5,1,2,6,6,1,7,6,7981776,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+359,22,0,3,3,7,5,0,0,5,7,2,6,7,7125368,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+360,24,0,3,3,6,4,1,0,7,7,1,7,6,7432635,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+361,5,0,1,4,2,6,1,1,5,3,7,2,3,3404742,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+362,16,0,2,4,3,6,0,1,5,4,5,2,2,6568485,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+363,24,0,3,4,6,7,2,1,6,6,1,7,6,16551949,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+364,25,0,3,4,7,6,1,0,6,6,2,6,7,18341680,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+365,1,1,1,1,1,2,6,4,3,3,5,2,2,99313,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+366,1,1,1,1,2,1,6,3,4,2,6,2,1,99939,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+367,8,1,2,1,1,2,6,5,4,4,2,4,2,135207,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+368,1,1,1,2,2,1,4,4,5,2,7,2,1,250144,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+369,9,1,2,2,4,3,5,6,5,3,5,3,4,2141726,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+370,10,1,2,2,3,4,5,6,6,3,6,3,4,2330470,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+371,12,1,2,2,4,4,4,5,5,2,6,2,4,2667538,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+372,18,1,3,2,7,7,3,7,7,5,2,7,6,4506930,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+373,4,1,1,3,2,3,2,4,5,4,6,3,3,1550416,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+374,12,1,2,3,4,4,2,3,6,4,3,4,3,4319555,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+375,13,1,2,3,3,4,3,3,5,5,2,3,4,4366111,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+376,14,1,2,3,3,4,1,3,7,4,2,4,4,4161174,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+377,16,1,2,3,4,4,2,3,5,5,1,3,3,4843977,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+378,23,1,3,3,6,4,1,0,7,7,1,7,6,7503494,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+379,7,1,1,4,2,6,1,1,5,3,7,2,3,4069281,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+380,25,1,3,4,7,6,1,0,6,6,2,6,7,12764605,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+381,2,0,1,2,2,1,4,4,5,2,7,2,1,273507,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+382,4,0,1,3,2,3,2,4,5,4,6,3,3,1285762,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+383,5,0,1,4,2,6,1,1,5,3,7,2,3,3400020,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+384,10,0,2,2,4,4,4,5,5,2,6,2,4,2790383,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+385,12,0,2,3,4,4,2,3,6,4,3,4,3,4913251,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+386,12,0,2,3,3,4,1,3,7,4,2,4,4,4172672,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+387,16,0,2,4,3,6,0,1,5,4,5,2,2,6569724,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+388,19,0,3,2,6,6,3,6,6,6,2,6,7,4732717,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+389,22,0,3,3,7,5,0,0,5,7,2,6,7,7142146,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+390,25,0,3,4,7,6,1,0,6,6,2,6,7,19018241,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+391,1,1,1,2,2,1,4,4,5,2,7,2,1,249253,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+392,4,1,1,3,2,3,2,4,5,4,6,3,3,1557254,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+393,7,1,1,4,2,6,1,1,5,3,7,2,3,4006770,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+394,10,1,2,2,3,4,5,6,6,3,6,3,4,2387557,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+395,16,1,2,3,4,4,2,3,5,5,1,3,3,4859966,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+396,13,1,2,3,3,4,3,3,5,5,2,3,4,4357961,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+397,18,1,3,2,7,7,3,7,7,5,2,7,6,4532762,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+398,23,1,3,3,6,4,1,0,7,7,1,7,6,7440306,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+399,12,1,2,2,4,4,4,5,5,2,6,2,4,2640124,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+400,25,1,3,4,7,6,1,0,6,6,2,6,7,13024181,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+401,1,0,1,1,1,2,6,4,3,3,5,2,2,98002,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+402,2,0,1,1,2,1,6,3,4,2,6,2,1,99270,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+403,8,0,2,1,0,1,7,5,3,3,3,4,3,180042,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+404,8,0,2,1,1,2,6,5,4,4,2,4,2,159952,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+405,18,0,3,1,2,0,7,7,3,6,0,6,6,459459,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+406,2,0,1,2,2,1,4,4,5,2,7,2,1,273377,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+407,9,0,2,2,4,3,5,6,5,3,5,3,4,2341246,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+408,9,0,2,2,3,4,5,6,6,3,6,3,4,2435150,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+409,10,0,2,2,4,4,4,5,5,2,6,2,4,2748524,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+410,11,0,2,2,4,3,6,5,4,2,5,1,4,2816972,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+411,19,0,3,2,6,6,3,6,6,6,2,6,7,4705661,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+412,19,0,3,2,7,7,3,7,7,5,2,7,6,4445710,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+413,4,0,1,3,2,3,2,4,5,4,6,3,3,1337039,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+414,4,0,1,3,2,4,1,3,5,4,7,3,3,1698497,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+415,12,0,2,3,4,4,2,3,6,4,3,4,3,4915224,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+416,13,0,2,3,3,4,3,3,5,5,2,3,4,4383822,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+417,12,0,2,3,3,4,1,3,7,4,2,4,4,4217743,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+418,23,0,3,3,6,5,1,2,6,6,1,7,6,7891310,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+419,22,0,3,3,7,5,0,0,5,7,2,6,7,7211387,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+420,24,0,3,3,6,4,1,0,7,7,1,7,6,7436417,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+421,5,0,1,4,3,4,1,1,5,3,6,4,5,3379430,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+422,16,0,2,4,4,4,0,1,4,4,5,6,7,6568188,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+423,24,0,3,4,3,5,2,1,4,6,5,2,2,17049629,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+424,25,0,3,4,4,7,1,0,6,6,6,2,6,18618129,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+425,1,1,1,1,1,2,6,4,3,3,5,2,2,99984,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+426,1,1,1,1,2,1,6,3,4,2,6,2,1,100112,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+427,8,1,2,1,1,2,6,5,4,4,2,4,2,146162,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+428,1,1,1,2,2,1,4,4,5,2,7,2,1,259744,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+429,9,1,2,2,4,3,5,6,5,3,5,3,4,2124540,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+430,10,1,2,2,3,4,5,6,6,3,6,3,4,2390941,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+431,12,1,2,2,4,4,4,5,5,2,6,2,4,2632815,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+432,18,1,3,2,7,7,3,7,7,5,2,7,6,4451897,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+433,4,1,1,3,2,3,2,4,5,4,6,3,3,1579638,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+434,12,1,2,3,4,4,2,3,6,4,3,4,3,4231190,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+435,13,1,2,3,3,4,3,3,5,5,2,3,4,4327040,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+436,14,1,2,3,3,4,1,3,7,4,2,4,4,4143638,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+437,16,1,2,3,4,4,2,3,5,5,1,3,3,4880314,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+438,23,1,3,3,6,4,1,0,7,7,1,7,6,7528152,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+439,7,1,1,4,5,7,1,1,4,4,6,4,7,4054362,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+440,25,1,3,4,4,6,1,0,4,6,5,5,7,12811334,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+441,2,0,1,2,2,1,4,4,5,2,7,2,1,273731,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+442,4,0,1,3,2,3,2,4,5,4,6,3,3,1350368,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+443,5,0,1,4,4,7,1,1,5,3,4,4,4,3352875,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+444,10,0,2,2,4,4,4,5,5,2,6,2,4,2730641,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+445,12,0,2,3,4,4,2,3,6,4,3,4,3,4847686,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+446,12,0,2,3,3,4,1,3,7,4,2,4,4,4219405,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+447,16,0,2,4,3,5,0,1,6,4,6,5,7,6569236,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+448,19,0,3,2,6,6,3,6,6,6,2,6,7,4753824,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+449,22,0,3,3,7,5,0,0,5,7,2,6,7,7214509,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+450,25,0,3,4,5,6,1,0,4,6,3,4,7,18777417,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+451,1,1,1,2,2,1,4,4,5,2,7,2,1,260399,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+452,4,1,1,3,2,3,2,4,5,4,6,3,3,1577281,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+453,7,1,1,4,5,6,1,1,5,4,3,6,7,4080610,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+454,10,1,2,2,3,4,5,6,6,3,6,3,4,2351317,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+455,16,1,2,3,4,4,2,3,5,5,1,3,3,4891746,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+456,13,1,2,3,3,4,3,3,5,5,2,3,4,4387656,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+457,18,1,3,2,7,7,3,7,7,5,2,7,6,4517212,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+458,23,1,3,3,6,4,1,0,7,7,1,7,6,7615309,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+459,12,1,2,2,4,4,4,5,5,2,6,2,4,2666810,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+460,25,1,3,4,3,7,1,0,6,6,3,6,4,12790708,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+461,1,0,1,1,1,2,6,4,3,3,5,2,2,98082,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+462,2,0,1,1,2,1,6,3,4,2,6,2,1,99359,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+463,8,0,2,1,0,1,7,5,3,3,3,4,3,180051,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+464,8,0,2,1,1,2,6,5,4,4,2,4,2,159838,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+465,18,0,3,1,2,0,7,7,3,6,0,6,6,459685,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+466,2,0,1,2,2,1,4,4,5,2,7,2,1,273595,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+467,9,0,2,2,4,3,5,6,5,3,5,3,4,2273429,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+468,9,0,2,2,3,4,5,6,6,3,6,3,4,2379313,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+469,10,0,2,2,4,4,4,5,5,2,6,2,4,2704090,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+470,11,0,2,2,4,3,6,5,4,2,5,1,4,2825881,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+471,19,0,3,2,6,6,3,6,6,6,2,6,7,4727126,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+472,19,0,3,2,7,7,3,7,7,5,2,7,6,4482981,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+473,4,0,1,3,2,3,2,4,5,4,6,3,3,1308923,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+474,4,0,1,3,2,4,1,3,5,4,7,3,3,1606937,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+475,12,0,2,3,4,4,2,3,6,4,3,4,3,4871417,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+476,13,0,2,3,3,4,3,3,5,5,2,3,4,4363441,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+477,12,0,2,3,3,4,1,3,7,4,2,4,4,4232133,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+478,23,0,3,3,6,5,1,2,6,6,1,7,6,7916834,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+479,22,0,3,3,7,5,0,0,5,7,2,6,7,7132453,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+480,24,0,3,3,6,4,1,0,7,7,1,7,6,7401396,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+481,5,0,1,4,5,7,1,1,7,3,4,7,6,3391771,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+482,16,0,2,4,3,4,0,1,7,4,3,7,4,6567149,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+483,24,0,3,4,4,4,2,1,4,6,6,2,2,16464386,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+484,25,0,3,4,5,4,1,0,4,6,3,5,6,18681825,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+485,1,1,1,1,1,2,6,4,3,3,5,2,2,99180,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+486,1,1,1,1,2,1,6,3,4,2,6,2,1,99592,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+487,8,1,2,1,1,2,6,5,4,4,2,4,2,148239,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+488,1,1,1,2,2,1,4,4,5,2,7,2,1,250655,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+489,9,1,2,2,4,3,5,6,5,3,5,3,4,2186425,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+490,10,1,2,2,3,4,5,6,6,3,6,3,4,2369545,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+491,12,1,2,2,4,4,4,5,5,2,6,2,4,2634374,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+492,18,1,3,2,7,7,3,7,7,5,2,7,6,4472845,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+493,4,1,1,3,2,3,2,4,5,4,6,3,3,1584416,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+494,12,1,2,3,4,4,2,3,6,4,3,4,3,4312023,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+495,13,1,2,3,3,4,3,3,5,5,2,3,4,4350112,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+496,14,1,2,3,3,4,1,3,7,4,2,4,4,4175736,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+497,16,1,2,3,4,4,2,3,5,5,1,3,3,4867129,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+498,23,1,3,3,6,4,1,0,7,7,1,7,6,7534605,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+499,7,1,1,4,4,7,1,1,4,4,4,2,4,4010459,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+500,25,1,3,4,5,5,1,0,6,6,4,5,7,12473305,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+501,1,0,1,1,1,2,6,4,3,3,5,2,2,98107,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+502,2,0,1,1,2,1,6,3,4,2,6,2,1,99016,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+503,8,0,2,1,0,1,7,5,3,3,3,4,3,180096,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+504,8,0,2,1,1,2,6,5,4,4,2,4,2,159910,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+505,18,0,3,1,2,0,7,7,3,6,0,6,6,459392,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+506,2,0,1,2,2,1,4,4,5,2,7,2,1,273302,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+507,9,0,2,2,4,3,5,6,5,3,5,3,4,2333574,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+508,9,0,2,2,3,4,5,6,6,3,6,3,4,2431080,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+509,10,0,2,2,4,4,4,5,5,2,6,2,4,2773456,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+510,11,0,2,2,4,3,6,5,4,2,5,1,4,2871335,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+511,19,0,3,2,6,6,3,6,6,6,2,6,7,4722752,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+512,19,0,3,2,7,7,3,7,7,5,2,7,6,4470178,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+513,4,0,1,3,2,3,2,4,5,4,6,3,3,1342320,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+514,4,0,1,3,2,4,1,3,5,4,7,3,3,1634701,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+515,12,0,2,3,4,4,2,3,6,4,3,4,3,4860112,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+516,13,0,2,3,3,4,3,3,5,5,2,3,4,4380003,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+517,12,0,2,3,3,4,1,3,7,4,2,4,4,4164384,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+518,23,0,3,3,6,5,1,2,6,6,1,7,6,7875619,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+519,22,0,3,3,7,5,0,0,5,7,2,6,7,7195017,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+520,24,0,3,3,6,4,1,0,7,7,1,7,6,7437988,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+521,5,0,1,4,3,7,1,1,5,3,4,7,7,3363058,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+522,16,0,2,4,4,4,0,1,4,4,3,3,7,6569722,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+523,24,0,3,4,5,5,2,1,4,6,6,2,2,17012749,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+524,25,0,3,4,4,5,1,0,4,6,4,7,4,18848667,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+525,1,1,1,1,1,2,6,4,3,3,5,2,2,99015,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+526,1,1,1,1,2,1,6,3,4,2,6,2,1,99185,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+527,8,1,2,1,1,2,6,5,4,4,2,4,2,136316,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+528,1,1,1,2,2,1,4,4,5,2,7,2,1,248297,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+529,9,1,2,2,4,3,5,6,5,3,5,3,4,2152858,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+530,10,1,2,2,3,4,5,6,6,3,6,3,4,2325121,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+531,12,1,2,2,4,4,4,5,5,2,6,2,4,2662444,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+532,18,1,3,2,7,7,3,7,7,5,2,7,6,4444740,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+533,4,1,1,3,2,3,2,4,5,4,6,3,3,1567500,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+534,12,1,2,3,4,4,2,3,6,4,3,4,3,4293249,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+535,13,1,2,3,3,4,3,3,5,5,2,3,4,4420305,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+536,14,1,2,3,3,4,1,3,7,4,2,4,4,4188511,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+537,16,1,2,3,4,4,2,3,5,5,1,3,3,4854320,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+538,23,1,3,3,6,4,1,0,7,7,1,7,6,7677501,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+539,7,1,1,4,3,4,1,1,7,4,4,3,4,4087027,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+540,25,1,3,4,3,7,1,0,3,6,6,5,5,12662672,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+541,2,0,1,2,2,1,4,4,5,2,7,2,1,273899,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+542,4,0,1,3,2,3,2,4,5,4,6,3,3,1269826,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+543,5,0,1,4,4,7,1,1,6,3,4,5,4,3378189,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+544,10,0,2,2,4,4,4,5,5,2,6,2,4,2661299,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+545,12,0,2,3,4,4,2,3,6,4,3,4,3,4853462,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+546,12,0,2,3,3,4,1,3,7,4,2,4,4,4187320,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+547,16,0,2,4,4,6,0,1,3,4,6,7,6,6568573,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+548,19,0,3,2,6,6,3,6,6,6,2,6,7,4757053,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+549,22,0,3,3,7,5,0,0,5,7,2,6,7,7209366,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+550,25,0,3,4,3,6,1,0,6,6,6,6,7,18736668,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+551,1,1,1,2,2,1,4,4,5,2,7,2,1,256193,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+552,4,1,1,3,2,3,2,4,5,4,6,3,3,1538523,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+553,7,1,1,4,5,7,1,1,4,4,3,7,6,4046670,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+554,10,1,2,2,3,4,5,6,6,3,6,3,4,2373567,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+555,16,1,2,3,4,4,2,3,5,5,1,3,3,4840601,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+556,13,1,2,3,3,4,3,3,5,5,2,3,4,4332655,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+557,18,1,3,2,7,7,3,7,7,5,2,7,6,4534398,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+558,23,1,3,3,6,4,1,0,7,7,1,7,6,7604796,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+559,12,1,2,2,4,4,4,5,5,2,6,2,4,2664464,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+560,25,1,3,4,3,4,1,0,6,6,3,6,7,13296936,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+561,1,0,1,1,1,2,6,4,3,3,5,2,2,98110,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+562,2,0,1,1,2,1,6,3,4,2,6,2,1,99019,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+563,8,0,2,1,0,1,7,5,3,3,3,4,3,180140,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+564,8,0,2,1,1,2,6,5,4,4,2,4,2,160044,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+565,18,0,3,1,2,0,7,7,3,6,0,6,6,459380,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+566,2,0,1,2,2,1,4,4,5,2,7,2,1,273696,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+567,9,0,2,2,4,3,5,6,5,3,5,3,4,2356487,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+568,9,0,2,2,3,4,5,6,6,3,6,3,4,2447365,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+569,10,0,2,2,4,4,4,5,5,2,6,2,4,2757914,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+570,11,0,2,2,4,3,6,5,4,2,5,1,4,2873833,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+571,19,0,3,2,6,6,3,6,6,6,2,6,7,4680870,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+572,19,0,3,2,7,7,3,7,7,5,2,7,6,4498075,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+573,4,0,1,3,2,3,2,4,5,4,6,3,3,1325817,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+574,4,0,1,3,2,4,1,3,5,4,7,3,3,1676911,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+575,12,0,2,3,4,4,2,3,6,4,3,4,3,4873648,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+576,13,0,2,3,3,4,3,3,5,5,2,3,4,4421514,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+577,12,0,2,3,3,4,1,3,7,4,2,4,4,4156482,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+578,23,0,3,3,6,5,1,2,6,6,1,7,6,7929294,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+579,22,0,3,3,7,5,0,0,5,7,2,6,7,7173928,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+580,24,0,3,3,6,4,1,0,7,7,1,7,6,7427498,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+581,5,0,1,4,4,4,1,1,4,3,6,4,7,3361098,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+582,16,0,2,4,4,7,0,1,7,4,6,4,4,6566904,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+583,24,0,3,4,4,4,2,1,6,6,6,2,2,17234366,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+584,25,0,3,4,5,4,1,0,6,6,5,6,6,18915151,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+585,1,1,1,1,1,2,6,4,3,3,5,2,2,99355,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+586,1,1,1,1,2,1,6,3,4,2,6,2,1,100057,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+587,8,1,2,1,1,2,6,5,4,4,2,4,2,138178,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+588,1,1,1,2,2,1,4,4,5,2,7,2,1,255409,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+589,9,1,2,2,4,3,5,6,5,3,5,3,4,2165231,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+590,10,1,2,2,3,4,5,6,6,3,6,3,4,2344214,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+591,12,1,2,2,4,4,4,5,5,2,6,2,4,2674288,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+592,18,1,3,2,7,7,3,7,7,5,2,7,6,4482893,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+593,4,1,1,3,2,3,2,4,5,4,6,3,3,1553042,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+594,12,1,2,3,4,4,2,3,6,4,3,4,3,4271244,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+595,13,1,2,3,3,4,3,3,5,5,2,3,4,4415154,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+596,14,1,2,3,3,4,1,3,7,4,2,4,4,4133942,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+597,16,1,2,3,4,4,2,3,5,5,1,3,3,4837867,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+598,23,1,3,3,6,4,1,0,7,7,1,7,6,7544877,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+599,7,1,1,4,5,6,1,1,3,4,6,7,4,4066914,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+600,25,1,3,4,3,6,1,0,4,6,3,7,7,12524365,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+601,1,0,1,1,1,2,6,4,3,3,5,2,2,98061,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+602,2,0,1,1,2,1,6,3,4,2,6,2,1,98997,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+603,8,0,2,1,0,1,7,5,3,3,3,4,3,180381,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+604,8,0,2,1,1,2,6,5,4,4,2,4,2,159822,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+605,18,0,3,1,2,0,7,7,3,6,0,6,6,459527,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+606,2,0,1,2,2,1,4,4,5,2,7,2,1,273437,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+607,9,0,2,2,4,3,5,6,5,3,5,3,4,2336849,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+608,9,0,2,2,3,4,5,6,6,3,6,3,4,2452482,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+609,10,0,2,2,4,4,4,5,5,2,6,2,4,2714647,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+610,11,0,2,2,4,3,6,5,4,2,5,1,4,2886400,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+611,19,0,3,2,6,6,3,6,6,6,2,6,7,4757578,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+612,19,0,3,2,7,7,3,7,7,5,2,7,6,4483269,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+613,4,0,1,3,2,3,2,4,5,4,6,3,3,1282257,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+614,4,0,1,3,2,4,1,3,5,4,7,3,3,1679595,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+615,12,0,2,3,4,4,2,3,6,4,3,4,3,4870621,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+616,13,0,2,3,3,4,3,3,5,5,2,3,4,4380457,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+617,12,0,2,3,3,4,1,3,7,4,2,4,4,4163622,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+618,23,0,3,3,6,5,1,2,6,6,1,7,6,7868448,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+619,22,0,3,3,7,5,0,0,5,7,2,6,7,7151618,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+620,24,0,3,3,6,4,1,0,7,7,1,7,6,7393137,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+621,5,0,1,4,4,5,1,1,3,3,5,6,4,3414414,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+622,16,0,2,4,5,7,0,1,4,4,6,5,5,6567437,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+623,24,0,3,4,3,7,2,1,5,6,4,2,2,16829954,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+624,25,0,3,4,3,6,1,0,6,6,5,3,6,18616485,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+625,1,1,1,1,1,2,6,4,3,3,5,2,2,99532,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+626,1,1,1,1,2,1,6,3,4,2,6,2,1,99390,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+627,8,1,2,1,1,2,6,5,4,4,2,4,2,147963,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+628,1,1,1,2,2,1,4,4,5,2,7,2,1,247945,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+629,9,1,2,2,4,3,5,6,5,3,5,3,4,2185453,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+630,10,1,2,2,3,4,5,6,6,3,6,3,4,2358480,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+631,12,1,2,2,4,4,4,5,5,2,6,2,4,2629436,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+632,18,1,3,2,7,7,3,7,7,5,2,7,6,4522623,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+633,4,1,1,3,2,3,2,4,5,4,6,3,3,1574804,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+634,12,1,2,3,4,4,2,3,6,4,3,4,3,4249333,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+635,13,1,2,3,3,4,3,3,5,5,2,3,4,4373853,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+636,14,1,2,3,3,4,1,3,7,4,2,4,4,4182988,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+637,16,1,2,3,4,4,2,3,5,5,1,3,3,4882891,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+638,23,1,3,3,6,4,1,0,7,7,1,7,6,7676660,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+639,7,1,1,4,4,5,1,1,7,4,3,3,7,3999890,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+640,25,1,3,4,5,4,1,0,7,6,3,5,5,12839895,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+641,2,0,1,2,2,1,4,4,5,2,7,2,1,273428,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+642,4,0,1,3,2,3,2,4,5,4,6,3,3,1295662,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+643,5,0,1,4,5,5,1,1,3,3,6,6,7,3380995,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+644,10,0,2,2,4,4,4,5,5,2,6,2,4,2668842,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+645,12,0,2,3,4,4,2,3,6,4,3,4,3,4882271,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+646,12,0,2,3,3,4,1,3,7,4,2,4,4,4184472,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+647,16,0,2,4,3,7,0,1,7,4,5,7,4,6569724,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+648,19,0,3,2,6,6,3,6,6,6,2,6,7,4667241,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+649,22,0,3,3,7,5,0,0,5,7,2,6,7,7147386,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+650,25,0,3,4,3,6,1,0,7,6,3,5,4,18769553,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+651,1,1,1,2,2,1,4,4,5,2,7,2,1,253054,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+652,4,1,1,3,2,3,2,4,5,4,6,3,3,1592882,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+653,7,1,1,4,5,4,1,1,3,4,6,7,6,4041200,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+654,10,1,2,2,3,4,5,6,6,3,6,3,4,2314445,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+655,16,1,2,3,4,4,2,3,5,5,1,3,3,4836877,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+656,13,1,2,3,3,4,3,3,5,5,2,3,4,4347140,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+657,18,1,3,2,7,7,3,7,7,5,2,7,6,4524951,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+658,23,1,3,3,6,4,1,0,7,7,1,7,6,7448486,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+659,12,1,2,2,4,4,4,5,5,2,6,2,4,2651248,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+660,25,1,3,4,4,7,1,0,7,6,4,3,4,12910328,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+661,1,0,1,1,1,2,6,4,3,3,5,2,2,98125,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+662,2,0,1,1,2,1,6,3,4,2,6,2,1,100019,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+663,8,0,2,1,0,1,7,5,3,3,3,4,3,180179,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+664,8,0,2,1,1,2,6,5,4,4,2,4,2,160039,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+665,18,0,3,1,2,0,7,7,3,6,0,6,6,459881,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+666,2,0,1,2,2,1,4,4,5,2,7,2,1,273636,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+667,9,0,2,2,4,3,5,6,5,3,5,3,4,2291745,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+668,9,0,2,2,3,4,5,6,6,3,6,3,4,2413262,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+669,10,0,2,2,4,4,4,5,5,2,6,2,4,2655678,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+670,11,0,2,2,4,3,6,5,4,2,5,1,4,2826908,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+671,19,0,3,2,6,6,3,6,6,6,2,6,7,4720691,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+672,19,0,3,2,7,7,3,7,7,5,2,7,6,4493822,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+673,4,0,1,3,2,3,2,4,5,4,6,3,3,1344144,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+674,4,0,1,3,2,4,1,3,5,4,7,3,3,1617304,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+675,12,0,2,3,4,4,2,3,6,4,3,4,3,4832220,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+676,13,0,2,3,3,4,3,3,5,5,2,3,4,4448424,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+677,12,0,2,3,3,4,1,3,7,4,2,4,4,4196390,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+678,23,0,3,3,6,5,1,2,6,6,1,7,6,7982821,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+679,22,0,3,3,7,5,0,0,5,7,2,6,7,7177185,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+680,24,0,3,3,6,4,1,0,7,7,1,7,6,7351871,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+681,5,0,1,4,4,4,1,1,5,3,6,7,4,3331233,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+682,16,0,2,4,3,6,0,1,5,4,4,3,7,6569846,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+683,24,0,3,4,5,6,2,1,7,6,3,2,2,17200367,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+684,25,0,3,4,5,4,1,0,3,6,5,3,6,18651118,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+685,1,1,1,1,1,2,6,4,3,3,5,2,2,99832,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+686,1,1,1,1,2,1,6,3,4,2,6,2,1,99124,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+687,8,1,2,1,1,2,6,5,4,4,2,4,2,136844,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+688,1,1,1,2,2,1,4,4,5,2,7,2,1,248893,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+689,9,1,2,2,4,3,5,6,5,3,5,3,4,2164132,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+690,10,1,2,2,3,4,5,6,6,3,6,3,4,2374213,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+691,12,1,2,2,4,4,4,5,5,2,6,2,4,2664456,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+692,18,1,3,2,7,7,3,7,7,5,2,7,6,4486385,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+693,4,1,1,3,2,3,2,4,5,4,6,3,3,1540212,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+694,12,1,2,3,4,4,2,3,6,4,3,4,3,4255852,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+695,13,1,2,3,3,4,3,3,5,5,2,3,4,4370187,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+696,14,1,2,3,3,4,1,3,7,4,2,4,4,4141778,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+697,16,1,2,3,4,4,2,3,5,5,1,3,3,4878035,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+698,23,1,3,3,6,4,1,0,7,7,1,7,6,7528090,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+699,7,1,1,4,3,4,1,1,5,4,4,7,6,4064723,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+700,25,1,3,4,5,4,1,0,6,6,5,7,7,12669536,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+701,1,0,1,1,1,2,6,4,3,3,5,2,2,98004,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+702,2,0,1,1,2,1,6,3,4,2,6,2,1,99499,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+703,8,0,2,1,0,1,7,5,3,3,3,4,3,180115,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+704,8,0,2,1,1,2,6,5,4,4,2,4,2,160045,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+705,18,0,3,1,2,0,7,7,3,6,0,6,6,459783,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+706,2,0,1,2,2,1,4,4,5,2,7,2,1,273356,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+707,9,0,2,2,4,3,5,6,5,3,5,3,4,2343466,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+708,9,0,2,2,3,4,5,6,6,3,6,3,4,2423881,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+709,10,0,2,2,4,4,4,5,5,2,6,2,4,2693282,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+710,11,0,2,2,4,3,6,5,4,2,5,1,4,2888936,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+711,19,0,3,2,6,6,3,6,6,6,2,6,7,4705901,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+712,19,0,3,2,7,7,3,7,7,5,2,7,6,4472756,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+713,4,0,1,3,2,3,2,4,5,4,6,3,3,1311564,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+714,4,0,1,3,2,4,1,3,5,4,7,3,3,1633790,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+715,12,0,2,3,4,4,2,3,6,4,3,4,3,4856381,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+716,13,0,2,3,3,4,3,3,5,5,2,3,4,4457267,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+717,12,0,2,3,3,4,1,3,7,4,2,4,4,4172894,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+718,23,0,3,3,6,5,1,2,6,6,1,7,6,7948767,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+719,22,0,3,3,7,5,0,0,5,7,2,6,7,7174260,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+720,24,0,3,3,6,4,1,0,7,7,1,7,6,7395219,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+721,5,0,1,4,4,4,1,1,6,3,3,4,4,3402149,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+722,16,0,2,4,3,4,0,1,7,4,6,5,7,6568886,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+723,24,0,3,4,4,5,2,1,5,6,5,2,2,17293478,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+724,25,0,3,4,3,4,1,0,7,6,4,2,5,18912282,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+725,1,1,1,1,1,2,6,4,3,3,5,2,2,100080,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+726,1,1,1,1,2,1,6,3,4,2,6,2,1,99519,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+727,8,1,2,1,1,2,6,5,4,4,2,4,2,133568,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+728,1,1,1,2,2,1,4,4,5,2,7,2,1,255943,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+729,9,1,2,2,4,3,5,6,5,3,5,3,4,2157167,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+730,10,1,2,2,3,4,5,6,6,3,6,3,4,2355969,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+731,12,1,2,2,4,4,4,5,5,2,6,2,4,2649504,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+732,18,1,3,2,7,7,3,7,7,5,2,7,6,4443847,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+733,4,1,1,3,2,3,2,4,5,4,6,3,3,1576340,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+734,12,1,2,3,4,4,2,3,6,4,3,4,3,4298464,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+735,13,1,2,3,3,4,3,3,5,5,2,3,4,4346064,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+736,14,1,2,3,3,4,1,3,7,4,2,4,4,4153765,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+737,16,1,2,3,4,4,2,3,5,5,1,3,3,4874971,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+738,23,1,3,3,6,4,1,0,7,7,1,7,6,7527227,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+739,7,1,1,4,3,5,1,1,6,4,3,4,4,4064073,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+740,25,1,3,4,4,5,1,0,3,6,6,2,6,13023154,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+741,2,0,1,2,2,1,4,4,5,2,7,2,1,273916,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+742,4,0,1,3,2,3,2,4,5,4,6,3,3,1341458,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+743,5,0,1,4,5,5,1,1,3,3,5,3,4,3348778,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+744,10,0,2,2,4,4,4,5,5,2,6,2,4,2713830,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+745,12,0,2,3,4,4,2,3,6,4,3,4,3,4926010,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+746,12,0,2,3,3,4,1,3,7,4,2,4,4,4184711,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+747,16,0,2,4,3,7,0,1,7,4,5,4,4,6567499,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+748,19,0,3,2,6,6,3,6,6,6,2,6,7,4721512,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+749,22,0,3,3,7,5,0,0,5,7,2,6,7,7194269,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+750,25,0,3,4,4,6,1,0,6,6,5,5,4,19024957,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+751,1,1,1,2,2,1,4,4,5,2,7,2,1,260456,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+752,4,1,1,3,2,3,2,4,5,4,6,3,3,1564098,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+753,7,1,1,4,5,6,1,1,4,4,3,3,4,4011806,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+754,10,1,2,2,3,4,5,6,6,3,6,3,4,2331910,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+755,16,1,2,3,4,4,2,3,5,5,1,3,3,4859666,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+756,13,1,2,3,3,4,3,3,5,5,2,3,4,4399728,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+757,18,1,3,2,7,7,3,7,7,5,2,7,6,4444939,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+758,23,1,3,3,6,4,1,0,7,7,1,7,6,7673103,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+759,12,1,2,2,4,4,4,5,5,2,6,2,4,2620156,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+760,25,1,3,4,5,4,1,0,6,6,3,4,4,13005874,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+761,1,0,1,1,1,2,6,4,3,3,5,2,2,98063,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+762,2,0,1,1,2,1,6,3,4,2,6,2,1,99498,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+763,8,0,2,1,0,1,7,5,3,3,3,4,3,180111,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+764,8,0,2,1,1,2,6,5,4,4,2,4,2,159959,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+765,18,0,3,1,2,0,7,7,3,6,0,6,6,459729,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+766,2,0,1,2,2,1,4,4,5,2,7,2,1,273385,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+767,9,0,2,2,4,3,5,6,5,3,5,3,4,2264937,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+768,9,0,2,2,3,4,5,6,6,3,6,3,4,2380489,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+769,10,0,2,2,4,4,4,5,5,2,6,2,4,2709043,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+770,11,0,2,2,4,3,6,5,4,2,5,1,4,2823550,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+771,19,0,3,2,6,6,3,6,6,6,2,6,7,4683279,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+772,19,0,3,2,7,7,3,7,7,5,2,7,6,4486164,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+773,4,0,1,3,2,3,2,4,5,4,6,3,3,1308725,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+774,4,0,1,3,2,4,1,3,5,4,7,3,3,1700251,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+775,12,0,2,3,4,4,2,3,6,4,3,4,3,4881004,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+776,13,0,2,3,3,4,3,3,5,5,2,3,4,4379648,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+777,12,0,2,3,3,4,1,3,7,4,2,4,4,4198241,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+778,23,0,3,3,6,5,1,2,6,6,1,7,6,7984425,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+779,22,0,3,3,7,5,0,0,5,7,2,6,7,7224877,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+780,24,0,3,3,6,4,1,0,7,7,1,7,6,7379416,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+781,5,0,1,4,5,4,1,1,5,3,6,2,5,3370080,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+782,16,0,2,4,5,5,0,1,3,4,5,5,5,6567607,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+783,24,0,3,4,3,5,2,1,4,6,5,2,2,17222466,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+784,25,0,3,4,3,4,1,0,5,6,5,6,6,18962569,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+785,1,1,1,1,1,2,6,4,3,3,5,2,2,99409,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+786,1,1,1,1,2,1,6,3,4,2,6,2,1,99245,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+787,8,1,2,1,1,2,6,5,4,4,2,4,2,148395,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+788,1,1,1,2,2,1,4,4,5,2,7,2,1,262523,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+789,9,1,2,2,4,3,5,6,5,3,5,3,4,2125330,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+790,10,1,2,2,3,4,5,6,6,3,6,3,4,2376591,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+791,12,1,2,2,4,4,4,5,5,2,6,2,4,2627669,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+792,18,1,3,2,7,7,3,7,7,5,2,7,6,4453871,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+793,4,1,1,3,2,3,2,4,5,4,6,3,3,1577242,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+794,12,1,2,3,4,4,2,3,6,4,3,4,3,4275035,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+795,13,1,2,3,3,4,3,3,5,5,2,3,4,4353531,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+796,14,1,2,3,3,4,1,3,7,4,2,4,4,4168329,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+797,16,1,2,3,4,4,2,3,5,5,1,3,3,4890315,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+798,23,1,3,3,6,4,1,0,7,7,1,7,6,7471358,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+799,7,1,1,4,4,6,1,1,5,4,3,3,4,4067793,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+800,25,1,3,4,3,7,1,0,4,6,5,2,7,13239388,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+801,1,0,1,1,1,2,6,4,3,3,5,2,2,98072,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+802,2,0,1,1,2,1,6,3,4,2,6,2,1,99935,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+803,8,0,2,1,0,1,7,5,3,3,3,4,3,180373,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+804,8,0,2,1,1,2,6,5,4,4,2,4,2,159909,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+805,18,0,3,1,2,0,7,7,3,6,0,6,6,459695,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+806,2,0,1,2,2,1,4,4,5,2,7,2,1,273630,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+807,9,0,2,2,4,3,5,6,5,3,5,3,4,2257597,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+808,9,0,2,2,3,4,5,6,6,3,6,3,4,2432871,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+809,10,0,2,2,4,4,4,5,5,2,6,2,4,2710202,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+810,11,0,2,2,4,3,6,5,4,2,5,1,4,2857591,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+811,19,0,3,2,6,6,3,6,6,6,2,6,7,4720532,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+812,19,0,3,2,7,7,3,7,7,5,2,7,6,4445920,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+813,4,0,1,3,2,3,2,4,5,4,6,3,3,1331312,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+814,4,0,1,3,2,4,1,3,5,4,7,3,3,1690957,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+815,12,0,2,3,4,4,2,3,6,4,3,4,3,4865988,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+816,13,0,2,3,3,4,3,3,5,5,2,3,4,4395135,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+817,12,0,2,3,3,4,1,3,7,4,2,4,4,4242383,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+818,23,0,3,3,6,5,1,2,6,6,1,7,6,7911498,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+819,22,0,3,3,7,5,0,0,5,7,2,6,7,7193186,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+820,24,0,3,3,6,4,1,0,7,7,1,7,6,7396508,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+821,5,0,1,4,4,7,1,1,3,3,4,6,7,3390464,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+822,16,0,2,4,5,5,0,1,7,4,3,3,4,6569023,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+823,24,0,3,4,4,7,2,1,3,6,5,2,2,16694524,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+824,25,0,3,4,4,7,1,0,4,6,6,3,7,19009191,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+825,1,1,1,1,1,2,6,4,3,3,5,2,2,99567,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+826,1,1,1,1,2,1,6,3,4,2,6,2,1,99207,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+827,8,1,2,1,1,2,6,5,4,4,2,4,2,138232,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+828,1,1,1,2,2,1,4,4,5,2,7,2,1,259425,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+829,9,1,2,2,4,3,5,6,5,3,5,3,4,2172354,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+830,10,1,2,2,3,4,5,6,6,3,6,3,4,2366575,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+831,12,1,2,2,4,4,4,5,5,2,6,2,4,2629831,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+832,18,1,3,2,7,7,3,7,7,5,2,7,6,4474235,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+833,4,1,1,3,2,3,2,4,5,4,6,3,3,1564401,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+834,12,1,2,3,4,4,2,3,6,4,3,4,3,4275697,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+835,13,1,2,3,3,4,3,3,5,5,2,3,4,4329524,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+836,14,1,2,3,3,4,1,3,7,4,2,4,4,4177917,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+837,16,1,2,3,4,4,2,3,5,5,1,3,3,4844688,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+838,23,1,3,3,6,4,1,0,7,7,1,7,6,7692111,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+839,7,1,1,4,4,7,1,1,6,4,3,6,5,4070047,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+840,25,1,3,4,5,7,1,0,3,6,5,3,6,13112264,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+841,2,0,1,2,2,1,4,4,5,2,7,2,1,273850,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+842,4,0,1,3,2,3,2,4,5,4,6,3,3,1355172,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+843,5,0,1,4,4,7,1,1,4,3,4,5,6,3373530,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+844,10,0,2,2,4,4,4,5,5,2,6,2,4,2781594,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+845,12,0,2,3,4,4,2,3,6,4,3,4,3,4842685,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+846,12,0,2,3,3,4,1,3,7,4,2,4,4,4242444,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+847,16,0,2,4,4,4,0,1,3,4,6,4,5,6569431,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+848,19,0,3,2,6,6,3,6,6,6,2,6,7,4752694,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+849,22,0,3,3,7,5,0,0,5,7,2,6,7,7172663,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+850,25,0,3,4,4,4,1,0,3,6,5,7,4,18410344,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+851,1,1,1,2,2,1,4,4,5,2,7,2,1,244345,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+852,4,1,1,3,2,3,2,4,5,4,6,3,3,1584827,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+853,7,1,1,4,5,7,1,1,5,4,6,5,5,4062384,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+854,10,1,2,2,3,4,5,6,6,3,6,3,4,2363300,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+855,16,1,2,3,4,4,2,3,5,5,1,3,3,4836253,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+856,13,1,2,3,3,4,3,3,5,5,2,3,4,4369971,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+857,18,1,3,2,7,7,3,7,7,5,2,7,6,4453462,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+858,23,1,3,3,6,4,1,0,7,7,1,7,6,7527875,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+859,12,1,2,2,4,4,4,5,5,2,6,2,4,2652909,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+860,25,1,3,4,3,5,1,0,3,6,4,3,6,13344476,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+861,1,0,1,1,1,2,6,4,3,3,5,2,2,98077,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+862,2,0,1,1,2,1,6,3,4,2,6,2,1,99658,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+863,8,0,2,1,0,1,7,5,3,3,3,4,3,180140,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+864,8,0,2,1,1,2,6,5,4,4,2,4,2,159967,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+865,18,0,3,1,2,0,7,7,3,6,0,6,6,459957,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+866,2,0,1,2,2,1,4,4,5,2,7,2,1,273361,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+867,9,0,2,2,4,3,5,6,5,3,5,3,4,2291437,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+868,9,0,2,2,3,4,5,6,6,3,6,3,4,2390140,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+869,10,0,2,2,4,4,4,5,5,2,6,2,4,2684545,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+870,11,0,2,2,4,3,6,5,4,2,5,1,4,2826674,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+871,19,0,3,2,6,6,3,6,6,6,2,6,7,4697073,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+872,19,0,3,2,7,7,3,7,7,5,2,7,6,4459890,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+873,4,0,1,3,2,3,2,4,5,4,6,3,3,1337555,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+874,4,0,1,3,2,4,1,3,5,4,7,3,3,1675094,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+875,12,0,2,3,4,4,2,3,6,4,3,4,3,4878254,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+876,13,0,2,3,3,4,3,3,5,5,2,3,4,4424877,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+877,12,0,2,3,3,4,1,3,7,4,2,4,4,4233781,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+878,23,0,3,3,6,5,1,2,6,6,1,7,6,7860373,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+879,22,0,3,3,7,5,0,0,5,7,2,6,7,7158158,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+880,24,0,3,3,6,4,1,0,7,7,1,7,6,7382123,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+881,5,0,1,4,4,6,1,1,6,3,5,6,6,3382746,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+882,16,0,2,4,4,6,0,1,4,4,5,6,6,6568008,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+883,24,0,3,4,3,6,2,1,7,6,6,2,2,16372093,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+884,25,0,3,4,5,6,1,0,6,6,4,6,6,19216265,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+885,1,1,1,1,1,2,6,4,3,3,5,2,2,100005,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+886,1,1,1,1,2,1,6,3,4,2,6,2,1,99368,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+887,8,1,2,1,1,2,6,5,4,4,2,4,2,137591,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+888,1,1,1,2,2,1,4,4,5,2,7,2,1,261385,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+889,9,1,2,2,4,3,5,6,5,3,5,3,4,2153132,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+890,10,1,2,2,3,4,5,6,6,3,6,3,4,2355034,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+891,12,1,2,2,4,4,4,5,5,2,6,2,4,2622404,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+892,18,1,3,2,7,7,3,7,7,5,2,7,6,4495201,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+893,4,1,1,3,2,3,2,4,5,4,6,3,3,1575114,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+894,12,1,2,3,4,4,2,3,6,4,3,4,3,4249849,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+895,13,1,2,3,3,4,3,3,5,5,2,3,4,4345439,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+896,14,1,2,3,3,4,1,3,7,4,2,4,4,4171528,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+897,16,1,2,3,4,4,2,3,5,5,1,3,3,4871984,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+898,23,1,3,3,6,4,1,0,7,7,1,7,6,7662467,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+899,7,1,1,4,5,5,1,1,6,4,6,7,4,4099273,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+900,25,1,3,4,3,7,1,0,6,6,5,4,4,12729174,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+901,1,0,1,1,1,2,6,4,3,3,5,2,2,98071,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+902,2,0,1,1,2,1,6,3,4,2,6,2,1,99642,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+903,8,0,2,1,0,1,7,5,3,3,3,4,3,180312,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+904,8,0,2,1,1,2,6,5,4,4,2,4,2,159867,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+905,18,0,3,1,2,0,7,7,3,6,0,6,6,459937,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+906,2,0,1,2,2,1,4,4,5,2,7,2,1,273631,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+907,9,0,2,2,4,3,5,6,5,3,5,3,4,2351120,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+908,9,0,2,2,3,4,5,6,6,3,6,3,4,2413954,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+909,10,0,2,2,4,4,4,5,5,2,6,2,4,2675368,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+910,11,0,2,2,4,3,6,5,4,2,5,1,4,2882842,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+911,19,0,3,2,6,6,3,6,6,6,2,6,7,4696314,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+912,19,0,3,2,7,7,3,7,7,5,2,7,6,4440347,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+913,4,0,1,3,2,3,2,4,5,4,6,3,3,1342308,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+914,4,0,1,3,2,4,1,3,5,4,7,3,3,1684306,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+915,12,0,2,3,4,4,2,3,6,4,3,4,3,4844956,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+916,13,0,2,3,3,4,3,3,5,5,2,3,4,4426819,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+917,12,0,2,3,3,4,1,3,7,4,2,4,4,4194154,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+918,23,0,3,3,6,5,1,2,6,6,1,7,6,7973309,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+919,22,0,3,3,7,5,0,0,5,7,2,6,7,7179233,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+920,24,0,3,3,6,4,1,0,7,7,1,7,6,7411323,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+921,5,0,1,4,2,6,1,1,5,3,7,2,3,3394068,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+922,16,0,2,4,3,6,0,1,5,4,5,2,2,6566715,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+923,24,0,3,4,6,7,2,1,6,6,1,7,6,17143372,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+924,25,0,3,4,7,6,1,0,6,6,2,6,7,18673016,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+925,1,1,1,1,1,2,6,4,3,3,5,2,2,99828,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+926,1,1,1,1,2,1,6,3,4,2,6,2,1,99114,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+927,8,1,2,1,1,2,6,5,4,4,2,4,2,133437,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+928,1,1,1,2,2,1,4,4,5,2,7,2,1,247613,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+929,9,1,2,2,4,3,5,6,5,3,5,3,4,2122365,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+930,10,1,2,2,3,4,5,6,6,3,6,3,4,2326300,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+931,12,1,2,2,4,4,4,5,5,2,6,2,4,2667636,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+932,18,1,3,2,7,7,3,7,7,5,2,7,6,4531851,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+933,4,1,1,3,2,3,2,4,5,4,6,3,3,1581535,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+934,12,1,2,3,4,4,2,3,6,4,3,4,3,4226720,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+935,13,1,2,3,3,4,3,3,5,5,2,3,4,4422777,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+936,14,1,2,3,3,4,1,3,7,4,2,4,4,4193917,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+937,16,1,2,3,4,4,2,3,5,5,1,3,3,4881639,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+938,23,1,3,3,6,4,1,0,7,7,1,7,6,7506430,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+939,7,1,1,4,2,6,1,1,5,3,7,2,3,4097929,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+940,25,1,3,4,7,6,1,0,6,6,2,6,7,12660828,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+941,1,0,1,1,1,2,6,4,3,3,5,2,2,98106,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+942,2,0,1,1,2,1,6,3,4,2,6,2,1,99869,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+943,8,0,2,1,0,1,7,5,3,3,3,4,3,180298,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+944,8,0,2,1,1,2,6,5,4,4,2,4,2,160113,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+945,18,0,3,1,2,0,7,7,3,6,0,6,6,459512,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+946,2,0,1,2,2,1,4,4,5,2,7,2,1,273577,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+947,9,0,2,2,4,3,5,6,5,3,5,3,4,2281116,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+948,9,0,2,2,3,4,5,6,6,3,6,3,4,2441422,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+949,10,0,2,2,4,4,4,5,5,2,6,2,4,2675093,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+950,11,0,2,2,4,3,6,5,4,2,5,1,4,2814514,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+951,19,0,3,2,6,6,3,6,6,6,2,6,7,4727105,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+952,19,0,3,2,7,7,3,7,7,5,2,7,6,4439361,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+953,4,0,1,3,2,3,2,4,5,4,6,3,3,1267702,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+954,4,0,1,3,2,4,1,3,5,4,7,3,3,1703474,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+955,12,0,2,3,4,4,2,3,6,4,3,4,3,4873434,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+956,13,0,2,3,3,4,3,3,5,5,2,3,4,4363883,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+957,12,0,2,3,3,4,1,3,7,4,2,4,4,4218941,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+958,23,0,3,3,6,5,1,2,6,6,1,7,6,7948230,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+959,22,0,3,3,7,5,0,0,5,7,2,6,7,7168205,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+960,24,0,3,3,6,4,1,0,7,7,1,7,6,7430698,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+961,5,0,1,4,2,6,1,1,5,3,7,2,3,3338197,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+962,16,0,2,4,3,6,0,1,5,4,5,2,2,6567238,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+963,24,0,3,4,6,7,2,1,6,6,1,7,6,16925973,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+964,25,0,3,4,7,6,1,0,6,6,2,6,7,18934402,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+965,1,1,1,1,1,2,6,4,3,3,5,2,2,99726,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+966,1,1,1,1,2,1,6,3,4,2,6,2,1,99236,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+967,8,1,2,1,1,2,6,5,4,4,2,4,2,142393,0.0,Equity & High Growth Funds,NJ IndiaInvest Pvt Ltd (National Distributor)
+968,1,1,1,2,2,1,4,4,5,2,7,2,1,256556,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+969,9,1,2,2,4,3,5,6,5,3,5,3,4,2181361,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+970,10,1,2,2,3,4,5,6,6,3,6,3,4,2369356,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+971,12,1,2,2,4,4,4,5,5,2,6,2,4,2663232,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+972,18,1,3,2,7,7,3,7,7,5,2,7,6,4520134,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+973,4,1,1,3,2,3,2,4,5,4,6,3,3,1540088,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+974,12,1,2,3,4,4,2,3,6,4,3,4,3,4323743,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+975,13,1,2,3,3,4,3,3,5,5,2,3,4,4411153,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+976,14,1,2,3,3,4,1,3,7,4,2,4,4,4144230,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+977,16,1,2,3,4,4,2,3,5,5,1,3,3,4869169,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+978,23,1,3,3,6,4,1,0,7,7,1,7,6,7602609,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+979,7,1,1,4,2,6,1,1,5,3,7,2,3,4041448,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+980,25,1,3,4,7,6,1,0,6,6,2,6,7,12771613,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+981,2,0,1,2,2,1,4,4,5,2,7,2,1,273435,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+982,4,0,1,3,2,3,2,4,5,4,6,3,3,1299290,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+983,5,0,1,4,2,6,1,1,5,3,7,2,3,3359147,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+984,10,0,2,2,4,4,4,5,5,2,6,2,4,2654248,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+985,12,0,2,3,4,4,2,3,6,4,3,4,3,4833809,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+986,12,0,2,3,3,4,1,3,7,4,2,4,4,4202690,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+987,16,0,2,4,3,6,0,1,5,4,5,2,2,6568117,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+988,19,0,3,2,6,6,3,6,6,6,2,6,7,4716278,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+989,22,0,3,3,7,5,0,0,5,7,2,6,7,7167008,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+990,25,0,3,4,7,6,1,0,6,6,2,6,7,18600491,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+991,1,1,1,2,2,1,4,4,5,2,7,2,1,248182,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+992,4,1,1,3,2,3,2,4,5,4,6,3,3,1588404,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+993,7,1,1,4,2,6,1,1,5,3,7,2,3,4026809,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+994,10,1,2,2,3,4,5,6,6,3,6,3,4,2390105,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+995,16,1,2,3,4,4,2,3,5,5,1,3,3,4889426,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+996,13,1,2,3,3,4,3,3,5,5,2,3,4,4356312,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+997,18,1,3,2,7,7,3,7,7,5,2,7,6,4509248,3.0,Index & Passive Smart-Beta,Zerodha Fund House / Coin
+998,23,1,3,3,6,4,1,0,7,7,1,7,6,7414400,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)
+999,12,1,2,2,4,4,4,5,5,2,6,2,4,2663658,2.0,Hybrid & Asset Allocation,Prudent Corporate Advisory Services Ltd
+1000,25,1,3,4,7,6,1,0,6,6,2,6,7,12481287,1.0,Liquid & Debt Preservation,State Bank of India (Wealth)

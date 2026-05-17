@@ -17,8 +17,20 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from lume_platform.config import DATA_ROOT, EXPORT_DIR, PROJECT_ROOT, TABLEAU_PUBLIC_EMBED_URL
 from lume_platform.inference.registry import ModelRegistry
+from lume_platform.db.mongo_client import db_client
+
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Lume AI Platform API", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # For development, allow all
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 registry = ModelRegistry()
 
 
@@ -63,7 +75,17 @@ def predict(body: PredictRequest):
                 raise HTTPException(status_code=503, detail="Lead model not loaded or missing payload")
             d = body.lead.model_dump(by_alias=True)
             pred, proba = registry.lead_bundle.predict_row(d)
-            return {"task": body.task, "label": pred, "conversion_probability": proba}
+            
+            # Persist to MongoDB
+            lead_id = f"L-{hash(str(d)) % 100000}"
+            db_client.upsert_lead(lead_id, {
+                **d,
+                "converted_prediction": int(pred),
+                "conversion_probability": float(proba),
+                "timestamp": str(Path(__file__).stat().st_mtime) # Simple timestamp
+            })
+            
+            return {"task": body.task, "label": pred, "conversion_probability": proba, "lead_id": lead_id}
         if body.task == "investor_cluster":
             if not registry.investor_bundle or not body.investor_behavior:
                 raise HTTPException(status_code=503, detail="Cluster model not loaded or missing payload")
@@ -111,6 +133,12 @@ def analytics():
             else {},
         }
     return out
+
+
+@app.get("/leads")
+def get_leads(limit: int = 50):
+    """Fetches managed leads from MongoDB."""
+    return db_client.get_all_leads(limit=limit)
 
 
 @app.get("/insights")

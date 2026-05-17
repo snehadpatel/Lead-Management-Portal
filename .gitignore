@@ -1,19 +1,58 @@
-# Virtual Environment
-venv/
-.env
-
-# Data and Notebooks
-datasets/
-__pycache__/
-*.pyc
+# System Files
 .DS_Store
+**/.DS_Store
 
-# IDE and System Files
+# IDEs and Editors
 .vscode/
 .idea/
 .claude/
+.codex/
 .gemini/
 
-# Large artifacts or temporary data (already accounted for datasets/)
-# Keep smaller metadata/configs but ignore large binary dumps if any
-# *.pkl  # Uncomment if you want to exclude all pickle files (models)
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python Environments & Caches
+venv/
+env/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / Frontend Environments
+node_modules/
+.next/
+out/
+build/
+dist/
+.npm/
+
+# Data, Models & Generated Output
+data/
+datasets/
+dataset_visualisations/
+visualisations/
+tableau_exports/
+output_production_final/
+model_evaluations/
+*.csv
+*.tsv
+*.parquet
+*.pkl
+*.sqlite
+*.db
+
+# Logs and Scratch Files
+artifacts/
+scratch/
+*.log
+CompleteNavReport.txt

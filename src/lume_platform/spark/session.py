@@ -14,6 +14,7 @@ def build_spark(app_name: str = "lume-bigdata") -> SparkSession:
         .config("spark.driver.memory", SPARK_DRIVER_MEMORY)
         .config("spark.sql.adaptive.enabled", "true")
         .config("spark.sql.adaptive.coalescePartitions.enabled", "true")
+        .config("spark.hadoop.fs.defaultFS", "file:///")
         .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
         .getOrCreate()
     )

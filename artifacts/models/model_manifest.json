@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-04-17T10:51:52.126427",
-  "training_duration_sec": 50.55,
+  "timestamp": "2026-04-29T05:00:55.373463",
+  "training_duration_sec": 19.36,
   "models": {
     "leads": {
-      "accuracy": "87.37%",
-      "precision": "0.81",
-      "recall": "0.87",
-      "f1_score": "0.84",
-      "backend": "xgboost",
+      "accuracy": "85.00%",
+      "precision": "0.75",
+      "recall": "0.90",
+      "f1_score": "0.82",
+      "backend": "random_forest",
       "feature_numeric": [
         "totalvisits",
         "total_time_spent_on_website",
@@ -26,25 +26,24 @@
         "do_not_email",
         "do_not_call"
       ],
-      "decision_threshold": 0.45,
-      "threshold_precision": 0.8117,
-      "threshold_recall": 0.8681,
-      "threshold_f1": 0.8389,
+      "decision_threshold": 0.43,
+      "threshold_precision": 0.7514,
+      "threshold_recall": 0.9028,
+      "threshold_f1": 0.8202,
       "tuned_params": {
-        "colsample_bytree": 0.95,
-        "learning_rate": 0.04,
-        "max_depth": 5,
-        "n_estimators": 180,
-        "subsample": 0.85
+        "n_estimators": 200,
+        "max_depth": 12,
+        "class_weight": "balanced"
       },
-      "roc_auc": "0.939",
-      "average_precision": "0.910",
-      "cv_f1_mean": "0.809",
-      "cv_f1_std": "0.020"
+      "roc_auc": "0.933",
+      "average_precision": "0.890",
+      "cv_f1_mean": "0.806",
+      "cv_f1_std": "0.018"
     },
     "nlp": {
-      "accuracy": 0.6963216424294268,
-      "f1_macro": 0.6374723265153012
+      "accuracy": 0.7159965782720273,
+      "f1_macro": 0.6887803884760672,
+      "method": "sbert"
     },
     "clustering": {
       "silhouette": 0.39518742248527394,

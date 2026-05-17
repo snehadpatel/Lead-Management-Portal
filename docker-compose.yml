@@ -15,6 +15,7 @@ services:
       - LUME_ARTIFACTS=/app/artifacts
       - PYTHONPATH=/app/src
       - LOG_LEVEL=INFO
+      - MONGO_URI=mongodb://mongodb:27017/
     volumes:
       - ./src:/app/src
       - ./api:/app/api
@@ -25,6 +26,8 @@ services:
     command: uvicorn api.main_enhanced:app --host 0.0.0.0 --port 8000 --reload
     networks:
       - lume-network
+    depends_on:
+      - mongodb
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -60,6 +63,19 @@ services:
     depends_on:
       api:
         condition: service_healthy
+      mongodb:
+        condition: service_started
+
+  # MongoDB Service
+  mongodb:
+    image: mongo:latest
+    container_name: lume-mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - lume-network
+    volumes:
+      - mongo-data:/data/db
 
   # Optional: Redis for caching
   redis:
@@ -97,4 +113,6 @@ networks:
 
 volumes:
   redis-data:
+    driver: local
+  mongo-data:
     driver: local

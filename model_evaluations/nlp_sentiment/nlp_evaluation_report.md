@@ -1,7 +1,8 @@
 # NLP sentiment — evaluation (auto-generated)
 
-- **Accuracy:** `0.6963`
-- **F1 (macro):** `0.6375`
+- **Accuracy:** `0.7160`
+- **F1 (macro):** `0.6888`
+- **Method:** `sbert`
 
 ## Artifact
 - `metrics.json`

@@ -1,114 +1,118 @@
 """
-Spark Structured Streaming: Real-Time Ingest & AI Scoring.
-Ingests from streaming/inbox and applies Lead/Sentiment models.
+Spark Structured Streaming Pipeline for Lume AI 2.0.
+Monitors datasets/velocity/inbox for new leads and market data.
+Includes Data Quality Watchdog and real-time aggregations.
 """
 
-import os
 import sys
+import os
 from pathlib import Path
 from pyspark.sql import SparkSession
-
-# Project path discovery
-ROOT = Path(__file__).resolve().parent.parent.parent.parent
-sys.path.insert(0, str(ROOT / "src"))
-
-# Set correct JAVA_HOME for Local Spark compatibility
-os.environ["JAVA_HOME"] = "/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home"
-
-# Ensure Spark workers use the same Python version as the driver (the venv)
-VENV_PYTHON = str(ROOT / "venv/bin/python")
-os.environ["PYSPARK_PYTHON"] = VENV_PYTHON
-os.environ["PYSPARK_DRIVER_PYTHON"] = VENV_PYTHON
-
 from pyspark.sql import functions as F
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, TimestampType
 
+# Setup paths for local imports
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+sys.path.append(str(PROJECT_ROOT / "src"))
+
+from lume_platform.config import DATA_ROOT
 from lume_platform.spark.session import build_spark
-from lume_platform.spark.cleaning import normalize_columns
-from lume_platform.inference.spark_sklearn_udf import score_sentiment_udf, score_lead_probability_udf
+from lume_platform.db.mongo_client import db_client
 
-# Define Schemas
-MARKET_SCHEMA = StructType([
-    StructField("Timestamp", StringType(), True),
-    StructField("Market", StringType(), True),
-    StructField("Status", StringType(), True),
-    StructField("Index", StringType(), True),
-    StructField("Last_Price", DoubleType(), True),
-    StructField("Variation", DoubleType(), True),
-    StructField("Pct_Change", DoubleType(), True),
-    StructField("Trade_Date", StringType(), True),
-])
-
-NEWS_SCHEMA = StructType([
-    StructField("Ingestion_Timestamp", StringType(), True),
-    StructField("Source", StringType(), True),
-    StructField("Title", StringType(), True),
-    StructField("Link", StringType(), True),
-    StructField("Published_Date", StringType(), True),
-    StructField("Summary", StringType(), True),
-])
-
-def run_streaming_engine():
+def start_streaming_pipeline():
     spark = build_spark()
-    # Set logging to WARN to reduce noise
     spark.sparkContext.setLogLevel("WARN")
-    
-    inbox_market = str(ROOT / "streaming/inbox/market")
-    inbox_news = str(ROOT / "streaming/inbox/news")
-    checkpoint_dir = str(ROOT / "streaming/checkpoints")
-    output_dir = str(ROOT / "streaming/outputs")
-    
-    print("="*60)
-    print("🚀 LUME AI SPARK STREAMING ENGINE INITIALIZED")
-    print(f"Watching MARKET: {inbox_market}")
-    print(f"Watching NEWS:   {inbox_news}")
-    print("="*60)
 
-    # 1. Market Pulse Stream
-    market_stream = spark.readStream \
-        .schema(MARKET_SCHEMA) \
-        .option("maxFilesPerTrigger", 1) \
-        .csv(inbox_market)
-    
-    # Process market data (Normalize)
-    market_clean = normalize_columns(market_stream)
-    
-    # 2. News/Sentiment Stream (Intelligence)
-    news_stream = spark.readStream \
-        .schema(NEWS_SCHEMA) \
-        .option("maxFilesPerTrigger", 1) \
-        .csv(inbox_news)
-    
-    # Apply Real-Time Sentiment AI (Senior Feature)
-    scored_news = news_stream.withColumn("sentiment_score", score_sentiment_udf(F.col("Title")))
-    scored_news = scored_news.withColumn("market_impact", 
-                                       F.when(F.col("sentiment_score") > 0.6, "BULLISH")
-                                        .when(F.col("sentiment_score") < 0.4, "BEARISH")
-                                        .otherwise("NEUTRAL"))
+    # 1. Define Schema for Incoming Leads (Data Quality Watchdog)
+    lead_schema = StructType([
+        StructField("lead_id", StringType(), True),
+        StructField("First Name", StringType(), True),
+        StructField("Last Name", StringType(), True),
+        StructField("City", StringType(), True),
+        StructField("Occupation", StringType(), True),
+        StructField("Lead Source", StringType(), True),
+        StructField("total_visits", DoubleType(), True),
+        StructField("total_time_spent_on_website", DoubleType(), True),
+        StructField("page_views_per_visit", DoubleType(), True),
+        StructField("Conversion_Probability", DoubleType(), True),
+        StructField("timestamp", StringType(), True)
+    ])
 
-    # 3. Output to Parquet (The "Live Lake")
-    market_query = market_clean.writeStream \
-        .format("parquet") \
-        .option("path", f"{output_dir}/market_live.parquet") \
-        .option("checkpointLocation", f"{checkpoint_dir}/market") \
-        .outputMode("append") \
+    # 2. Read Stream from Inbox
+    local_inbox = str(DATA_ROOT / "velocity/inbox")
+    inbox_path = f"file://{local_inbox}"
+    os.makedirs(local_inbox, exist_ok=True)
+    
+    print(f"🛰️ Monitoring Stream at: {inbox_path}")
+    
+    raw_stream = (
+        spark.readStream
+        .schema(lead_schema)
+        .json(inbox_path)
+    )
+
+    # 3. Data Quality Watchdog (Filter bad data)
+    valid_stream = raw_stream.filter(
+        F.col("lead_id").isNotNull() & 
+        (F.col("total_visits") >= 0) &
+        (F.col("Conversion_Probability") >= 0)
+    )
+
+    # 4. Real-time Aggregations (Sliding Window)
+    # Convert string timestamp to proper timestamp type
+    processed_stream = valid_stream.withColumn("ts", F.to_timestamp("timestamp"))
+    
+    city_metrics = (
+        processed_stream
+        .groupBy(
+            F.window("ts", "1 minute", "30 seconds"),
+            "City"
+        )
+        .agg(
+            F.avg("Conversion_Probability").alias("avg_lead_score"),
+            F.count("lead_id").alias("lead_count")
+        )
+    )
+
+    # 5. Sinks
+    
+    # A. Write Aggregations to Console for Debug
+    console_query = (
+        city_metrics.writeStream
+        .outputMode("complete")
+        .format("console")
         .start()
+    )
 
-    news_query = scored_news.writeStream \
-        .format("parquet") \
-        .option("path", f"{output_dir}/news_live.parquet") \
-        .option("checkpointLocation", f"{checkpoint_dir}/news") \
-        .outputMode("append") \
+    # B. Write Raw Leads to MongoDB (using foreachBatch)
+    def write_to_mongo(df, epoch_id):
+        batch_data = df.collect()
+        for row in batch_data:
+            data_dict = row.asDict()
+            db_client.upsert_lead(data_dict["lead_id"], data_dict)
+        print(f"✅ Batch {epoch_id} processed: {len(batch_data)} leads synced to MongoDB.")
+
+    mongo_query = (
+        valid_stream.writeStream
+        .foreachBatch(write_to_mongo)
         .start()
+    )
 
-    # 4. Console Sink for Demo Monitoring
-    console_query = scored_news.select("Title", "market_impact") \
-        .writeStream \
-        .format("console") \
+    # C. Write Metrics to JSON (for Dashboard polling)
+    metrics_path = f"file://{DATA_ROOT / 'velocity/outputs/city_metrics'}"
+    checkpoint_path = f"file://{DATA_ROOT / 'velocity/checkpoints/city_metrics'}"
+    
+    json_query = (
+        city_metrics.writeStream
+        .outputMode("complete")
+        .format("json")
+        .option("path", metrics_path)
+        .option("checkpointLocation", checkpoint_path)
         .start()
+    )
 
-    print("Queries started. Waiting for termination...")
+    print("🚀 Streaming Pipeline ACTIVE. Waiting for data...")
     spark.streams.awaitAnyTermination()
 
 if __name__ == "__main__":
-    run_streaming_engine()
+    start_streaming_pipeline()

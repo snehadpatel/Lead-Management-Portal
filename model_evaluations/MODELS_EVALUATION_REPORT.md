@@ -12,11 +12,11 @@ Refreshed by `python -m lume_platform.ml.training`. **JSON under `model_evaluati
 - Report: `model_evaluations/kmeans/clustering_evaluation_report.md`
 - Plots: `model_evaluations/kmeans/`
 
-## 3. Sentiment (TF-IDF + logistic)
+## 3. Sentiment (SBERT + logistic)
 - Metrics: `model_evaluations/nlp_sentiment/metrics.json`
 - Report: `model_evaluations/nlp_sentiment/nlp_evaluation_report.md`
 
-## 4. Fund semantic search (TF-IDF retrieval)
+## 4. Fund semantic search (SBERT)
 - Narrative: `model_evaluations/tfidf_search/semantic_engine_report.md`
 - Plot: `model_evaluations/tfidf_search/cosine_similarity_decay.png`
 

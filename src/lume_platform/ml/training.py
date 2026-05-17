@@ -38,7 +38,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler, OneHotEncoder
 
 from lume_platform.config import CLEANED_DIR, DATA_ROOT, EVAL_DIR, MODELS_DIR, PROJECT_ROOT, ensure_dirs
-from lume_platform.ml.bundles import InvestorClusterBundle, LeadScoringPipelineBundle, SentimentBundle
+from lume_platform.ml.bundles import InvestorClusterBundle, LeadScoringPipelineBundle, SentimentBundle, SBERTSentimentBundle
 from lume_platform.ml.eval_reports import (
     write_kmeans_sidecar,
     write_lead_scoring_markdown,
@@ -53,6 +53,11 @@ try:
     HAS_XGB = True
 except Exception:
     HAS_XGB = False
+try:
+    from sentence_transformers import SentenceTransformer
+    HAS_SBERT = True
+except Exception:
+    HAS_SBERT = False
 
 
 def _load_smart_data(parquet_subpath: str, csv_fallback_path: Path) -> pd.DataFrame:
@@ -308,12 +313,12 @@ def train_investor_kmeans_and_dbscan() -> tuple[Path, Path | None]:
 
     def route_investor(cluster: int) -> tuple[str, str]:
         if cluster == 0:
-            return "Equity Schemes (High Risk)", "Lume Elite Advisory"
+            return "Equity & High Growth Funds", "NJ IndiaInvest Pvt Ltd (National Distributor)"
         if cluster == 1:
-            return "Liquid/Debt Funds (Safe)", "MintLeads Premier Capital"
+            return "Liquid & Debt Preservation", "State Bank of India (Wealth)"
         if cluster == 2:
-            return "Hybrid Allocation Funds", "Global Wealth Partners India"
-        return "Index Trackers (Passive)", "Index Advisory Group"
+            return "Hybrid & Asset Allocation", "Prudent Corporate Advisory Services Ltd"
+        return "Index & Passive Smart-Beta", "Zerodha Fund House / Coin"
 
     routes = df.loc[X.index, "Persona_Cluster"].astype(int).apply(route_investor)
     df.loc[X.index, "Recommended_Fund_Type"] = routes.apply(lambda t: t[0])
@@ -354,30 +359,57 @@ def train_sentiment_nlp() -> Path:
     df = _load_smart_data("social_sentiment_clean", csv_path)
     text_col = "Sentence" if "Sentence" in df.columns else df.columns[0]
     label_col = "Sentiment" if "Sentiment" in df.columns else df.columns[1]
+    
     label_enc = LabelEncoder()
     y = label_enc.fit_transform(df[label_col].astype(str))
-    X_train, X_test, y_train, y_test = train_test_split(
-        df[text_col].astype(str), y, test_size=0.2, random_state=42, stratify=y
-    )
-    vec = TfidfVectorizer(max_features=20000, ngram_range=(1, 2), min_df=2)
-    Xtr = vec.fit_transform(X_train)
-    Xte = vec.transform(X_test)
-    clf = LogisticRegression(max_iter=200, class_weight="balanced")
-    clf.fit(Xtr, y_train)
-    preds = clf.predict(Xte)
+    
+    X_text = df[text_col].astype(str)
+    
+    if HAS_SBERT:
+        print("🧠 Training Sentiment with SBERT Embeddings...")
+        sbert_model = SentenceTransformer('all-MiniLM-L6-v2')
+        X_embeddings = sbert_model.encode(X_text.tolist(), show_progress_bar=True, convert_to_numpy=True)
+        
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_embeddings, y, test_size=0.2, random_state=42, stratify=y
+        )
+        
+        clf = LogisticRegression(max_iter=500, class_weight="balanced")
+        clf.fit(X_train, y_train)
+        preds = clf.predict(X_test)
+        
+        bundle = SBERTSentimentBundle(model=clf, label_classes=label_enc.classes_)
+        out = MODELS_DIR / "sentiment_bundle.pkl" # We keep the same filename for registry compatibility
+    else:
+        print("⚠️ SBERT not available, falling back to TF-IDF for Sentiment...")
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_text, y, test_size=0.2, random_state=42, stratify=y
+        )
+        vec = TfidfVectorizer(max_features=20000, ngram_range=(1, 2), min_df=2)
+        Xtr = vec.fit_transform(X_train)
+        Xte = vec.transform(X_test)
+        
+        clf = LogisticRegression(max_iter=200, class_weight="balanced")
+        clf.fit(Xtr, y_train)
+        preds = clf.predict(Xte)
+        
+        bundle = SentimentBundle(vectorizer=vec, model=clf, label_classes=label_enc.classes_)
+        out = MODELS_DIR / "sentiment_bundle.pkl"
+
     eval_nlp = EVAL_DIR / "nlp_sentiment"
     eval_nlp.mkdir(parents=True, exist_ok=True)
     metrics = {
         "accuracy": float(accuracy_score(y_test, preds)),
         "f1_macro": float(f1_score(y_test, preds, average="macro", zero_division=0)),
+        "method": "sbert" if HAS_SBERT else "tfidf"
     }
     with open(eval_nlp / "metrics.json", "w") as f:
         json.dump(metrics, f, indent=2)
     write_nlp_markdown(eval_nlp, metrics)
-    bundle = SentimentBundle(vectorizer=vec, model=clf, label_classes=label_enc.classes_)
-    out = MODELS_DIR / "sentiment_bundle.pkl"
+    
     with open(out, "wb") as f:
         pickle.dump(bundle, f)
+        
     legacy = DATA_ROOT / "models/saved_models"
     legacy.mkdir(parents=True, exist_ok=True)
     shutil.copy2(out, legacy / "sentiment_bundle.pkl")

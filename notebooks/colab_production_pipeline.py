@@ -18,10 +18,10 @@ Usage in Google Colab:
 # STEP 1 — Install Dependencies
 # ═══════════════════════════════════════════════════════════════════════════════
 
-!pip install -q pyspark==3.5.0 pandas==2.1.4 numpy==1.24.3 scikit-learn==1.3.2
-!pip install -q xgboost==2.0.3 matplotlib==3.8.2 seaborn==0.13.0 pyarrow==14.0.1
-!pip install -q fastapi==0.110.0 uvicorn==0.27.0 pydantic==2.6.0 streamlit==1.32.0
-!pip install -q python-dotenv==1.0.0 openpyxl==3.1.2 pillow==10.2.0
+#pip install -q pyspark==3.5.0 pandas==2.1.4 numpy==1.24.3 scikit-learn==1.3.2
+#pip install -q xgboost==2.0.3 matplotlib==3.8.2 seaborn==0.13.0 pyarrow==14.0.1
+#pip install -q fastapi==0.110.0 uvicorn==0.27.0 pydantic==2.6.0 streamlit==1.32.0
+#pip install -q python-dotenv==1.0.0 openpyxl==3.1.2 pillow==10.2.0
 
 print("✅ All dependencies installed")
 
