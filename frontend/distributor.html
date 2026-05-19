@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distributor Dashboard | Lume AI</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="mesh-bg"></div>
+
+  <nav class="topnav">
+    <div class="topnav-brand"><span>◆</span> LUME AI</div>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="distributor.html" class="active">Dashboard</a>
+      <a href="ai-showcase.html">AI Models</a>
+      <a href="bigdata-showcase.html">Big Data</a>
+    </div>
+    <div class="flex items-center gap-12">
+      <div class="status-bar" id="apiStatus">
+        <div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container" style="padding-top:24px; padding-bottom:64px;">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-24">
+      <div>
+        <div class="flex items-center gap-12">
+          <h2 id="welcomeTitle">Welcome, Distributor</h2>
+          <span class="badge badge-blue">👔 Distributor</span>
+        </div>
+        <p class="text-muted text-sm mt-8" id="personaLabel">Loading persona...</p>
+      </div>
+      <div class="flex gap-8">
+        <button class="btn btn-primary btn-sm" onclick="switchTab('main','tab-leads')">📞 My Leads</button>
+        <button class="btn btn-secondary btn-sm" onclick="switchTab('main','tab-scorer')">🎯 Score Lead</button>
+      </div>
+    </div>
+
+    <!-- KPI Row -->
+    <div class="bento-grid mb-24" id="kpiRow">
+      <div class="bento-3 card card-accent-blue"><div class="metric-value text-blue" id="kpiLeads">—</div><div class="metric-label">Total Leads</div></div>
+      <div class="bento-3 card card-accent-red"><div class="metric-value text-red" id="kpiHot">—</div><div class="metric-label">Hot Prospects</div></div>
+      <div class="bento-3 card card-accent-emerald"><div class="metric-value text-emerald" id="kpiConv">—</div><div class="metric-label">Conversion Rate</div></div>
+      <div class="bento-3 card card-accent-violet"><div class="metric-value text-violet" id="kpiModels">—</div><div class="metric-label">AI Models Active</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" data-tab-group="main">
+      <button class="tab active" data-tab="tab-leads" onclick="switchTab('main','tab-leads')">📞 My Leads</button>
+      <button class="tab" data-tab="tab-scorer" onclick="switchTab('main','tab-scorer')">🎯 Score Lead</button>
+      <button class="tab" data-tab="tab-funds" onclick="switchTab('main','tab-funds')">💼 Fund Recs</button>
+      <button class="tab" data-tab="tab-perf" onclick="switchTab('main','tab-perf')">📊 Performance</button>
+      <button class="tab" data-tab="tab-crm" onclick="switchTab('main','tab-crm')">🛡️ CRM Insights</button>
+      <button class="tab" data-tab="tab-buddy" onclick="switchTab('main','tab-buddy')">🤖 AI Buddy</button>
+      <button class="tab" data-tab="tab-sentiment" onclick="switchTab('main','tab-sentiment')">🧠 Sentiment AI</button>
+    </div>
+
+    <!-- TAB: Leads -->
+    <div class="tab-content active" id="tab-leads" data-tab-content="main">
+      <div class="section-header">
+        <div><h3 class="section-title">Lead Pipeline</h3><p class="section-subtitle">AI-scored investor leads ranked by conversion probability</p></div>
+        <span class="badge badge-emerald"><span class="pulse pulse-live"></span> Live Scoring</span>
+      </div>
+      <div id="leadsContainer">
+        <div class="skeleton" style="height:60px;margin-bottom:12px;"></div>
+        <div class="skeleton" style="height:60px;margin-bottom:12px;"></div>
+        <div class="skeleton" style="height:60px;margin-bottom:12px;"></div>
+      </div>
+    </div>
+
+    <!-- TAB: Lead Scorer -->
+    <div class="tab-content" id="tab-scorer" data-tab-content="main">
+      <div class="bento-grid">
+        <div class="bento-6">
+          <div class="card card-accent-blue">
+            <h4 class="mb-16">🎯 Score a New Lead</h4>
+            <div class="form-group"><label class="form-label">Total Visits</label><input type="number" class="form-input" id="sf-visits" value="5"></div>
+            <div class="form-group"><label class="form-label">Time on Website (sec)</label><input type="number" class="form-input" id="sf-time" value="800"></div>
+            <div class="form-group"><label class="form-label">Page Views / Visit</label><input type="number" class="form-input" id="sf-pages" value="2.5" step="0.1"></div>
+            <div class="form-group"><label class="form-label">Activity Score</label><input type="number" class="form-input" id="sf-activity" value="15"></div>
+            <div class="form-group"><label class="form-label">Profile Score</label><input type="number" class="form-input" id="sf-profile" value="12"></div>
+            <div class="form-group"><label class="form-label">Lead Source</label>
+              <select class="form-select" id="sf-source"><option>Organic Search</option><option>Google Ads</option><option>Referral</option><option>Direct Traffic</option><option>Social Media</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Occupation</label>
+              <select class="form-select" id="sf-occupation"><option>Working Professional</option><option>Student</option><option>Business Owner</option><option>Housewife</option><option>Other</option></select>
+            </div>
+            <button class="btn btn-primary btn-full mt-8" onclick="scoreLead()">🎯 Score Lead</button>
+          </div>
+        </div>
+        <div class="bento-6">
+          <div class="card" id="scoreResult" style="min-height:300px;">
+            <h4 class="text-muted text-center" style="margin-top:120px;">Submit a lead to see AI prediction</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Fund Recommendations -->
+    <div class="tab-content" id="tab-funds" data-tab-content="main">
+      <div class="section-header">
+        <div><h3 class="section-title">Persona-Matched Funds</h3><p class="section-subtitle">Funds recommended based on your assigned persona</p></div>
+      </div>
+      <div class="bento-grid" id="fundsGrid"></div>
+    </div>
+
+    <!-- TAB: Performance -->
+    <div class="tab-content" id="tab-perf" data-tab-content="main">
+      <div class="bento-grid mb-24">
+        <div class="bento-3 card"><div class="metric-value">₹12.5 Cr</div><div class="metric-label">Total AUM</div><div class="metric-delta positive">▲ +15%</div></div>
+        <div class="bento-3 card"><div class="metric-value">48</div><div class="metric-label">Active Investors</div><div class="metric-delta positive">▲ +3</div></div>
+        <div class="bento-3 card"><div class="metric-value">68%</div><div class="metric-label">Conversion Rate</div><div class="metric-delta positive">▲ Above avg</div></div>
+        <div class="bento-3 card"><div class="metric-value">₹45,250</div><div class="metric-label">Commission (Month)</div><div class="metric-delta positive">▲ +12%</div></div>
+      </div>
+      <div class="bento-grid">
+        <div class="bento-6 card"><h4 class="mb-16">AUM Growth</h4><div class="chart-container" style="height:250px;"><canvas id="aumChart"></canvas></div></div>
+        <div class="bento-6 card"><h4 class="mb-16">Lead Funnel</h4><div class="chart-container" style="height:250px;"><canvas id="funnelChart"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- TAB: CRM & Client Insights -->
+    <div class="tab-content" id="tab-crm" data-tab-content="main">
+      <div class="section-header">
+        <div>
+          <h3 class="section-title">AI Client CRM & Recommendation Validator</h3>
+          <p class="section-subtitle">Real-time tracking of client churn risk, portfolio health, and validation of custom recommendation suitability.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="loadCRMData()">🔄 Refresh Insights</button>
+      </div>
+
+      <div class="bento-grid">
+        <!-- CRM Insights Table -->
+        <div class="bento-8 card">
+          <h4 class="mb-16">👥 Client Churn Risk & Retention Scorer</h4>
+          <div style="overflow-x:auto;">
+            <table class="crm-table" style="width:100%; border-collapse:collapse; text-align:left;">
+              <thead>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.08); color:var(--text-muted); font-size:0.8rem;">
+                  <th style="padding:12px 8px;">Client Name</th>
+                  <th style="padding:12px 8px;">SIP Drop Prob</th>
+                  <th style="padding:12px 8px;">Redemption Likelihood</th>
+                  <th style="padding:12px 8px;">Risk Change</th>
+                  <th style="padding:12px 8px;">Portfolio Health</th>
+                  <th style="padding:12px 8px;">Alerts</th>
+                  <th style="padding:12px 8px;">Upsell Triggers</th>
+                </tr>
+              </thead>
+              <tbody id="crmTableBody">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recommendation Validator Widget -->
+        <div class="bento-4 card card-accent-violet">
+          <h4 class="mb-16">⚖️ AI Recommendation Validator</h4>
+          <p class="text-muted text-sm mb-16">Validate if a proposed fund matches your client's risk profile and current market sentiment.</p>
+          
+          <div class="form-group">
+            <label class="form-label">Client Risk Profile</label>
+            <select class="form-select" id="valClientRisk">
+              <option value="conservative">Conservative (Low Risk)</option>
+              <option value="balanced">Moderate/Balanced (Medium Risk)</option>
+              <option value="growth">Growth/Aggressive (High Risk)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Mutual Fund Name</label>
+            <input type="text" class="form-input" id="valFundName" placeholder="e.g. Parag Parikh Flexicap Fund">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Asset Category</label>
+            <select class="form-select" id="valCategory">
+              <option value="equity">Equity (General)</option>
+              <option value="small-cap">Small Cap / High Volatility</option>
+              <option value="mid-cap">Mid Cap</option>
+              <option value="large-cap">Large Cap / Index</option>
+              <option value="hybrid">Hybrid / Balanced</option>
+              <option value="debt">Debt / Low Volatility</option>
+              <option value="liquid">Liquid Cash Parking</option>
+            </select>
+          </div>
+          
+          <button class="btn btn-primary btn-full mt-8" onclick="runValidation()">Validate Rec ⚖️</button>
+          
+          <div id="validationResult" class="mt-16 hidden">
+            <!-- Loaded dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: AI Buddy -->
+    <div class="tab-content" id="tab-buddy" data-tab-content="main">
+      <div class="card card-accent-violet">
+        <h4>🤖 AI Buddy — Distribution Assistant</h4>
+        <p class="text-muted text-sm mt-8">Context-aware guidance for mutual fund distributors</p>
+        <div class="flex gap-8 mt-16" style="flex-wrap:wrap;" id="buddyTopics">
+          <button class="btn btn-secondary btn-sm" onclick="showBuddyTopic('getting_started')">🚀 Getting Started</button>
+          <button class="btn btn-secondary btn-sm" onclick="showBuddyTopic('lead_management')">📞 Lead Management</button>
+          <button class="btn btn-secondary btn-sm" onclick="showBuddyTopic('fund_recommendation')">💡 Fund Recommendation</button>
+          <button class="btn btn-secondary btn-sm" onclick="showBuddyTopic('compliance')">⚖️ Compliance</button>
+        </div>
+        <div class="mt-24" id="buddyResponse"></div>
+        <div class="mt-24">
+          <label class="form-label">Ask AI Buddy anything</label>
+          <div class="flex gap-8">
+            <input type="text" class="form-input" id="buddyQuestion" placeholder="How do I handle investor objections?">
+            <button class="btn btn-primary" onclick="askBuddy()">Ask</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Sentiment AI -->
+    <div class="tab-content" id="tab-sentiment" data-tab-content="main">
+      <div class="bento-grid">
+        <div class="bento-6 card card-accent-emerald">
+          <h4>🧠 Real-Time Sentiment Analysis</h4>
+          <p class="text-muted text-sm mt-8">NLP-powered market sentiment scoring using TF-IDF + Logistic Regression</p>
+          <div class="form-group mt-16"><label class="form-label">Enter financial news or text</label>
+            <textarea class="form-input" id="sentimentText" rows="4" placeholder="Markets rally on strong GDP print..."></textarea>
+          </div>
+          <button class="btn btn-emerald btn-full" onclick="analyzeSentiment()">Analyze Sentiment</button>
+        </div>
+        <div class="bento-6 card" id="sentimentResult">
+          <h4 class="text-muted text-center" style="margin-top:80px;">Submit text to analyze</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // ── Initialize Distributor Dashboard ──
+    document.addEventListener('DOMContentLoaded', async () => {
+      const persona = state.persona || 'balanced';
+      const p = PERSONAS[persona];
+      const el = document.getElementById('personaLabel');
+      if (el) el.innerHTML = `Persona: <strong style="color:${p.color}">${p.name}</strong> · Risk: ${p.risk}`;
+
+      await loadKPIs();
+      loadLeads();
+      loadFunds();
+      loadCRMData();
+      loadPerformanceCharts();
+    });
+
+    async function loadKPIs() {
+      const health = await checkApiHealth();
+      let leadCount = 2930, hotCount = 1117, convRate = '68%', modelCount = 0;
+      if (health) {
+        modelCount = [health.models_loaded?.lead_bundle, health.models_loaded?.investor_bundle, health.models_loaded?.sentiment_bundle].filter(Boolean).length;
+      }
+      const analytics = await getAnalytics();
+      if (analytics?.distributor_leads) {
+        leadCount = analytics.distributor_leads.rows || leadCount;
+        hotCount = analytics.distributor_leads.tier_hot_count || hotCount;
+        const total = analytics.distributor_leads.rows || 1;
+        const mean = analytics.distributor_leads.mean_conversion_probability || 0.68;
+        convRate = (mean * 100).toFixed(0) + '%';
+      }
+      document.getElementById('kpiLeads').textContent = leadCount.toLocaleString();
+      document.getElementById('kpiHot').textContent = hotCount.toLocaleString();
+      document.getElementById('kpiConv').textContent = convRate;
+      document.getElementById('kpiModels').textContent = modelCount || '3';
+    }
+
+    async function loadLeads() {
+      let leads = [];
+      if (state.apiOnline) {
+        const data = await getDashboardLeads(12);
+        if (data && Array.isArray(data)) {
+          leads = data.map(lead => ({
+            id: lead.lead_id || lead.id,
+            name: lead.name || `${lead.first_name || ''} ${lead.last_name || ''}`.trim() || 'Anonymous Lead',
+            occupation: lead.occupation || 'Professional',
+            city: lead.city || 'India',
+            investment: lead.potential_investment || '₹5L',
+            score: Math.round(parseFloat(lead.conversion_probability || lead.Conversion_Probability || 0.5) * 100)
+          }));
+        }
+      }
+      
+      if (!leads || leads.length === 0) {
+        leads = generateSampleLeads(12);
+      }
+      
+      const container = document.getElementById('leadsContainer');
+      container.innerHTML = leads.map(lead => {
+        const tier = getScoreTier(lead.score);
+        const scoreColor = getScoreColor(lead.score);
+        const borderClass = lead.score >= 85 ? 'lead-hot' : lead.score >= 65 ? 'lead-warm' : 'lead-cold';
+        return `
+          <div class="lead-card ${borderClass}">
+            <div class="flex items-center gap-16" style="flex:1;">
+              <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--violet));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;flex-shrink:0;">${lead.name[0]}</div>
+              <div>
+                <div style="font-weight:600;">${lead.name}</div>
+                <div class="text-xs text-muted">${lead.occupation} · ${lead.city} · ${lead.investment}</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-16">
+              <span class="badge ${tier.class}">${tier.label}</span>
+              <div class="text-right">
+                <div class="text-mono" style="font-size:1.5rem;font-weight:700;color:${scoreColor};">${lead.score}%</div>
+                <div class="text-xs text-muted">Conversion</div>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function scoreLead() {
+      const leadData = {
+        'TotalVisits': parseInt(document.getElementById('sf-visits').value),
+        'Total Time Spent on Website': parseFloat(document.getElementById('sf-time').value),
+        'Page Views Per Visit': parseFloat(document.getElementById('sf-pages').value),
+        'Asymmetrique Activity Score': parseInt(document.getElementById('sf-activity').value),
+        'Asymmetrique Profile Score': parseInt(document.getElementById('sf-profile').value),
+        'Lead Source': document.getElementById('sf-source').value,
+        'What is your current occupation': document.getElementById('sf-occupation').value,
+        'Specialization': 'Select', 'Lead Origin': 'API', 'Last Activity': 'Page Visited',
+        'Country': 'India', 'Lead Quality': 'High in Relevance', 'Do Not Email': 'No', 'Do Not Call': 'No',
+      };
+
+      const el = document.getElementById('scoreResult');
+      el.innerHTML = '<div class="text-center mt-48"><div class="skeleton" style="height:100px;"></div><p class="text-muted mt-16">Running Random Forest model...</p></div>';
+
+      const result = await predictLead(leadData);
+      if (result?.prediction) {
+        const prob = (result.prediction.conversion_probability * 100).toFixed(1);
+        const tier = getScoreTier(parseFloat(prob));
+        const color = getScoreColor(parseFloat(prob));
+        const action = parseFloat(prob) >= 85 ? '🚀 Immediate Action — assign to premium advisor within 1 hour'
+          : parseFloat(prob) >= 65 ? '📞 Follow-up Priority — schedule call within 24 hours'
+          : '📧 Nurture Campaign — add to email drip sequence';
+        el.innerHTML = `
+          <div class="text-center">
+            <div class="text-mono" style="font-size:4rem;font-weight:800;color:${color};">${prob}%</div>
+            <div class="mt-8"><span class="badge ${tier.class}" style="font-size:1rem;padding:8px 20px;">${tier.label}</span></div>
+            <p class="text-muted text-sm mt-16">Decision Threshold: ${result.prediction.threshold || 0.50}</p>
+            <div class="card card-left-emerald mt-24" style="text-align:left;"><p style="font-size:0.9rem;">${action}</p></div>
+          </div>`;
+      } else {
+        el.innerHTML = '<div class="text-center"><p class="text-red mt-48">API offline — start FastAPI server to enable live scoring</p><p class="text-muted text-sm mt-8">Run: PYTHONPATH=src uvicorn api.main_enhanced:app --port 8000</p></div>';
+      }
+    }
+
+    function loadFunds() {
+      const persona = state.persona || 'balanced';
+      const funds = generateSampleFunds().filter(f => f.personas.includes(persona));
+      const grid = document.getElementById('fundsGrid');
+      grid.innerHTML = funds.map(fund => {
+        const riskColor = fund.risk === 'high' ? 'var(--red)' : fund.risk === 'medium' ? 'var(--amber)' : 'var(--emerald)';
+        return `
+          <div class="bento-6 card">
+            <div class="flex justify-between items-center">
+              <div><h4 style="margin:0;">${fund.name}</h4><span class="text-xs text-muted">${fund.category.toUpperCase()}</span></div>
+              <span class="badge" style="background:${riskColor}20;color:${riskColor};">${fund.risk.toUpperCase()} RISK</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:20px;">
+              <div class="text-center"><div class="text-mono text-emerald" style="font-size:1.1rem;">${fund.r1}%</div><div class="text-xs text-muted">1Y</div></div>
+              <div class="text-center"><div class="text-mono text-blue" style="font-size:1.1rem;">${fund.r3}%</div><div class="text-xs text-muted">3Y</div></div>
+              <div class="text-center"><div class="text-mono" style="font-size:1.1rem;">${fund.r5}%</div><div class="text-xs text-muted">5Y</div></div>
+              <div class="text-center"><div class="text-mono" style="font-size:1.1rem;">₹${(fund.aum/1000).toFixed(1)}K Cr</div><div class="text-xs text-muted">AUM</div></div>
+              <div class="text-center"><div class="text-mono" style="font-size:1.1rem;">${fund.expense}%</div><div class="text-xs text-muted">Expense</div></div>
+            </div>
+            <div class="mt-8 text-amber">${'⭐'.repeat(fund.rating)}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function loadPerformanceCharts() {
+      createLineChart('aumChart', ['Jan','Feb','Mar','Apr','May','Jun'],
+        [{ label:'AUM (Cr)', data:[8.2,9.1,10.5,11.2,11.8,12.5], borderColor:'#2563EB', backgroundColor:'rgba(37,99,235,0.1)', fill:true, tension:0.4 }],
+        { scales: { ...chartDefaults.scales, y:{ ...chartDefaults.scales.y, beginAtZero:false } } }
+      );
+      createBarChart('funnelChart', ['Hot 🔥','Warm 🌡️','Cold ❄️'], [1117,980,833],
+        ['#EF4444','#F59E0B','#484F58']
+      );
+    }
+
+    async function analyzeSentiment() {
+      const text = document.getElementById('sentimentText').value;
+      if (!text) return;
+      const el = document.getElementById('sentimentResult');
+      el.innerHTML = '<div class="text-center mt-48"><div class="skeleton" style="height:60px;"></div><p class="text-muted mt-8">Running TF-IDF + NLP model...</p></div>';
+      const result = await predictSentiment(text);
+      if (result?.prediction) {
+        const sent = result.prediction.sentiment;
+        const conf = ((result.confidence || 0.75) * 100).toFixed(1);
+        const color = sent === 'positive' ? 'var(--emerald)' : sent === 'negative' ? 'var(--red)' : 'var(--amber)';
+        const emoji = sent === 'positive' ? '📈' : sent === 'negative' ? '📉' : '📊';
+        el.innerHTML = `
+          <div class="text-center">
+            <div style="font-size:4rem;">${emoji}</div>
+            <div class="text-mono mt-8" style="font-size:2rem;font-weight:700;color:${color};text-transform:uppercase;">${sent}</div>
+            <p class="text-muted mt-8">Confidence: <span class="text-mono">${conf}%</span></p>
+            <div class="card card-left-blue mt-24" style="text-align:left;">
+              <p class="text-sm text-muted">Model: TF-IDF (20K features, bigram) + Logistic Regression</p>
+              <p class="text-sm text-muted mt-8">Input: "${text.substring(0, 80)}${text.length > 80 ? '...' : ''}"</p>
+            </div>
+          </div>`;
+      } else {
+        el.innerHTML = '<div class="text-center"><p class="text-red mt-48">API offline — start FastAPI for live NLP</p></div>';
+      }
+    }
+
+    const BUDDY_TOPICS = {
+      getting_started: `<h4>🚀 Getting Started as a Distributor</h4>
+        <p class="mt-8"><strong>Step 1:</strong> Understand your role — you bridge mutual fund houses and investors.</p>
+        <p class="mt-8"><strong>Step 2:</strong> Key terms — NAV, AUM, Expense Ratio, SIP, SWP</p>
+        <p class="mt-8"><strong>Step 3:</strong> Complete NISM Series V-A certification → Register with AMFI → Get ARN</p>`,
+      lead_management: `<h4>📞 How to Handle Leads</h4>
+        <p class="mt-8"><strong>🔥 Hot Leads (>85%):</strong> Call within 1 hour, personalized recommendations ready</p>
+        <p class="mt-8"><strong>🌡️ Warm Leads (65-85%):</strong> Call within 24 hours, send educational content</p>
+        <p class="mt-8"><strong>❄️ Cold Leads (<65%):</strong> Add to email nurture, send monthly updates</p>`,
+      fund_recommendation: `<h4>💡 How to Recommend Funds</h4>
+        <p class="mt-8">Match investor profile: Age, income, horizon, risk appetite, goals</p>
+        <p class="mt-8"><strong>Young Professional →</strong> Equity SIP | <strong>Retiree →</strong> Debt/SWP | <strong>Mid-career →</strong> Hybrid</p>
+        <p class="mt-8 text-red">⚠️ Never promise guaranteed returns or recommend without understanding risk</p>`,
+      compliance: `<h4>⚖️ Compliance Rules</h4>
+        <p class="mt-8">✅ Complete KYC | ✅ Disclose commissions | ✅ Maintain records 5+ years</p>
+        <p class="mt-8">❌ Promise returns | ❌ Invest without consent | ❌ Share investor data</p>
+        <p class="mt-8">Key: SEBI Regulations 2013, AMFI Code of Conduct, KYC norms</p>`,
+    };
+
+    function showBuddyTopic(topic) {
+      document.getElementById('buddyResponse').innerHTML = `<div class="card card-left-violet">${BUDDY_TOPICS[topic]}</div>`;
+    }
+
+    function askBuddy() {
+      const q = document.getElementById('buddyQuestion').value;
+      if (!q) return;
+      document.getElementById('buddyResponse').innerHTML = `
+        <div class="card card-left-violet">
+          <h4>🤖 AI Buddy Response</h4>
+          <p class="mt-8"><strong>Question:</strong> ${q}</p>
+          <p class="mt-8">Always listen first, understand the investor's concern. Use data from the Market Intelligence tab to support your recommendations. For compliance questions, check the Document Auditor.</p>
+        </div>`;
+    }
+
+    // ── CRM Client Insight Engine ──
+    async function loadCRMData() {
+      const tbody = document.getElementById('crmTableBody');
+      if (!tbody) return;
+      
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px;"><span class="pulse pulse-live" style="display:inline-block; width:8px; height:8px; margin-right:8px;"></span> Loading CRM Insights...</td></tr>`;
+      
+      let res = await getClientInsights();
+      let insights = [];
+      if (res && Array.isArray(res.insights)) {
+        insights = res.insights;
+      } else {
+        // Dynamic fallback matching backend logic
+        insights = [
+          { client_id: "C101", name: "Rajesh Sharma", sip_drop_probability: 0.15, inactive_flag: false, redemption_likelihood: 0.22, risk_appetite_change: "Stable", portfolio_health_score: 92.0, retention_alert: false, upsell_opportunity: "Tax Saving ELSS Top-up" },
+          { client_id: "C102", name: "Priya Patel", sip_drop_probability: 0.78, inactive_flag: false, redemption_likelihood: 0.65, risk_appetite_change: "Decreasing due to Volatility", portfolio_health_score: 68.0, retention_alert: true, upsell_opportunity: "Switch to Low-Volatility Debt" },
+          { client_id: "C103", name: "Amit Kumar", sip_drop_probability: 0.35, inactive_flag: false, redemption_likelihood: 0.18, risk_appetite_change: "Stable", portfolio_health_score: 84.0, retention_alert: false, upsell_opportunity: "Increase Mid-cap SIP" },
+          { client_id: "C104", name: "Sneha Rao", sip_drop_probability: 0.92, inactive_flag: true, redemption_likelihood: 0.85, risk_appetite_change: "Risk Averse Shift", portfolio_health_score: 45.0, retention_alert: true, upsell_opportunity: "Retention Meeting Required" },
+          { client_id: "C105", name: "Vikram Singh", sip_drop_probability: 0.12, inactive_flag: false, redemption_likelihood: 0.05, risk_appetite_change: "Increasing", portfolio_health_score: 96.0, retention_alert: false, upsell_opportunity: "International Fund Allocation" },
+          { client_id: "C106", name: "Ananya Sen", sip_drop_probability: 0.44, inactive_flag: false, redemption_likelihood: 0.30, risk_appetite_change: "Stable", portfolio_health_score: 75.0, retention_alert: false, upsell_opportunity: "Index Fund SIP Start" }
+        ];
+      }
+      
+      tbody.innerHTML = insights.map(item => {
+        const dropPct = (item.sip_drop_probability * 100).toFixed(0);
+        const redPct = (item.redemption_likelihood * 100).toFixed(0);
+        
+        const dropBadge = dropPct > 70 ? 'crm-badge-alert' : dropPct > 40 ? 'crm-badge-warn' : 'crm-badge-safe';
+        const redBadge = redPct > 70 ? 'crm-badge-alert' : redPct > 40 ? 'crm-badge-warn' : 'crm-badge-safe';
+        const healthColor = item.portfolio_health_score > 80 ? 'var(--emerald)' : item.portfolio_health_score > 60 ? 'var(--amber)' : 'var(--red)';
+        
+        const alertHtml = item.retention_alert 
+          ? `<span class="crm-badge crm-badge-alert">🚨 CHURN RISK</span>`
+          : item.inactive_flag 
+            ? `<span class="crm-badge crm-badge-warn">💤 INACTIVE</span>`
+            : `<span class="crm-badge crm-badge-safe">Stable</span>`;
+            
+        return `
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.85rem;">
+            <td style="padding:12px 8px; font-weight:600;">${item.name}</td>
+            <td style="padding:12px 8px;"><span class="crm-badge ${dropBadge}">${dropPct}%</span></td>
+            <td style="padding:12px 8px;"><span class="crm-badge ${redBadge}">${redPct}%</span></td>
+            <td style="padding:12px 8px; color:var(--text-secondary);">${item.risk_appetite_change}</td>
+            <td style="padding:12px 8px; font-weight:700; color:${healthColor}">${item.portfolio_health_score}%</td>
+            <td style="padding:12px 8px;">${alertHtml}</td>
+            <td style="padding:12px 8px;"><span class="crm-badge crm-badge-info" style="cursor:pointer;" onclick="selectUpsell('${item.name}', '${item.risk_appetite_change.toLowerCase()}')">${item.upsell_opportunity}</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+    
+    function selectUpsell(clientName, riskKeyword) {
+      document.getElementById('valFundName').value = "Recommended Action for " + clientName;
+      let riskVal = "balanced";
+      if (riskKeyword.includes("risk averse") || riskKeyword.includes("decrease") || riskKeyword.includes("low")) {
+        riskVal = "conservative";
+      } else if (riskKeyword.includes("increasing") || riskKeyword.includes("high") || riskKeyword.includes("grow")) {
+        riskVal = "growth";
+      }
+      document.getElementById('valClientRisk').value = riskVal;
+      switchTab('main', 'tab-crm');
+    }
+    
+    // ── MFD Recommendation Validator ──
+    async function runValidation() {
+      const clientRisk = document.getElementById('valClientRisk').value;
+      const fundName = document.getElementById('valFundName').value.trim();
+      const category = document.getElementById('valCategory').value;
+      
+      if (!fundName) {
+        alert("Please enter a mutual fund name first.");
+        return;
+      }
+      
+      const el = document.getElementById('validationResult');
+      el.classList.remove('hidden');
+      el.innerHTML = `<div class="text-center py-16"><span class="pulse pulse-live" style="display:inline-block; width:8px; height:8px; margin-right:8px;"></span> Checking suitability...</div>`;
+      
+      const res = await validateRecommendation("temp-client", fundName, category, clientRisk);
+      
+      if (res) {
+        const recBadge = res.recommended ? 'badge-emerald' : 'badge-red';
+        const recText = res.recommended ? 'SUITABLE / APPROVED' : 'MISMATCH DETECTED';
+        const cardClass = res.mismatch_flag ? 'card-left-red' : 'card-left-emerald';
+        const borderCol = res.mismatch_flag ? 'var(--red)' : 'var(--emerald)';
+        
+        el.innerHTML = `
+          <div class="card ${cardClass}" style="padding:14px; margin-top:16px; border-left-color:${borderCol};">
+            <div class="flex justify-between items-center mb-8">
+              <span class="badge ${recBadge}">${recText}</span>
+              <span class="text-xs text-muted">Conf: ${(res.confidence_score * 100).toFixed(0)}%</span>
+            </div>
+            <p class="text-sm"><strong>Client Profile:</strong> ${res.client_risk_profile}</p>
+            <p class="text-sm"><strong>Fund Risk Rating:</strong> ${res.fund_risk_rating.toFixed(0)}/100</p>
+            <p class="text-sm"><strong>Market Sentiment:</strong> ${res.market_sentiment}</p>
+            <p class="text-sm" style="margin-top:8px;"><strong>AI Assessment:</strong></p>
+            <p class="text-xs" style="color:var(--text-secondary); margin-bottom:12px;">${res.mismatch_reason || 'Perfect match! This recommendation aligns well with investor profile and current market trends.'}</p>
+            
+            <div class="text-xs" style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.05);">
+              <strong>Alternatives Suggested:</strong>
+              <ul style="margin:4px 0 0 16px; padding:0; list-style-type:square; color:var(--text-secondary);">
+                ${res.alternatives.map(a => `<li>${a}</li>`).join('')}
+              </ul>
+            </div>
+            <p class="text-xs text-muted mt-8"><strong>Suggested Allocation:</strong> ${res.suggested_allocation_pct}% max</p>
+            <p class="text-xs text-muted"><strong>Outlook:</strong> ${res.outlook}</p>
+          </div>
+        `;
+      } else {
+        el.innerHTML = `
+          <div class="card card-left-red" style="padding:14px; margin-top:16px;">
+            <p class="text-sm text-red">Error running validation. Please make sure the API is online.</p>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

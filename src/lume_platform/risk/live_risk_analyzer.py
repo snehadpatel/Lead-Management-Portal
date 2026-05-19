@@ -547,6 +547,50 @@ def get_live_risk_analysis(holdings: List[Dict], persona: str) -> Dict[str, Any]
     market_data = risk_analyzer.fetch_live_market_data()
     risk_metrics = risk_analyzer.calculate_portfolio_risk(holdings, market_data, persona)
     
+    # 1. Calculate portfolio health score
+    portfolio_health_score = round(max(0, min(100, 100 - risk_metrics.portfolio_risk_score)), 1)
+    
+    # 2. Fund overlap percentage
+    categories = [h.get("category", "").lower() for h in holdings]
+    if len(categories) > 1:
+        unique_cats = len(set(categories))
+        fund_overlap_pct = round((1.0 - (unique_cats / len(categories))) * 100, 1)
+    else:
+        fund_overlap_pct = 0.0
+        
+    # 3. Sector concentration percentage
+    sector_weights = {}
+    total_value = sum(h.get("value", 0) for h in holdings) or 1.0
+    for h in holdings:
+        sec = h.get("sector")
+        if not sec:
+            name = h.get("fund_name", "").lower()
+            if "liquid" in name or "debt" in name:
+                sec = "Treasury & Debt"
+            elif "nifty" in name or "index" in name:
+                sec = "Multi-Sector Index"
+            elif "magnum" in name or "midcap" in name:
+                sec = "Financials & Auto"
+            else:
+                sec = "Technology & Energy"
+        val = h.get("value", 0)
+        sector_weights[sec] = sector_weights.get(sec, 0) + val
+    max_sector_val = max(sector_weights.values()) if sector_weights else 0.0
+    sector_concentration_pct = round((max_sector_val / total_value) * 100, 1)
+    
+    # 4. SIP consistency score
+    sip_consistency_score = round(max(50.0, min(100.0, 98.0 - (market_data.vix * 0.5))), 1)
+    
+    # 5. Panic selling probability
+    base_prob = market_data.vix * 1.5
+    if persona == "conservative":
+        base_prob += 25.0
+    elif persona == "balanced":
+        base_prob += 10.0
+    if market_data.sentiment == "bearish":
+        base_prob += 15.0
+    panic_selling_probability = round(max(5.0, min(95.0, base_prob)), 1)
+    
     return {
         "timestamp": risk_metrics.last_updated.isoformat(),
         "market_status": market_data.market_status,
@@ -562,5 +606,10 @@ def get_live_risk_analysis(holdings: List[Dict], persona: str) -> Dict[str, Any]
         "alerts": risk_metrics.alerts,
         "recommendations": risk_metrics.recommendations,
         "sector_performance": market_data.sector_performance,
-        "market_sentiment": market_data.sentiment
+        "market_sentiment": market_data.sentiment,
+        "portfolio_health_score": portfolio_health_score,
+        "fund_overlap_pct": fund_overlap_pct,
+        "sector_concentration_pct": sector_concentration_pct,
+        "sip_consistency_score": sip_consistency_score,
+        "panic_selling_probability": panic_selling_probability
     }

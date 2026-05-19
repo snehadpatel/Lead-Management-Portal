@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lume AI | Fintech Intelligence Platform</title>
+  <meta name="description" content="AI-powered Big Data platform for mutual fund distribution and investor intelligence">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="mesh-bg"></div>
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav class="topnav" id="topnav">
+    <div class="topnav-brand">
+      <span>◆</span> LUME AI
+      <span class="badge badge-emerald" style="font-size:0.65rem;">v2.0</span>
+    </div>
+    <div class="topnav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="ai-showcase.html">AI Models</a>
+      <a href="bigdata-showcase.html">Big Data</a>
+    </div>
+    <div class="status-bar" id="apiStatus">
+      <div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="heroSection">
+    <div class="hero-badges fade-in stagger-1">
+      <div class="hero-badge">🤖 4 AI Engines</div>
+      <div class="hero-badge">⚡ Apache Spark</div>
+      <div class="hero-badge">📊 31GB Dataset</div>
+      <div class="hero-badge">🔄 Real-Time Streaming</div>
+    </div>
+    <h1 class="hero-title fade-in stagger-2">
+      <span class="text-gradient">LUME AI</span>
+    </h1>
+    <p class="hero-subtitle fade-in stagger-3">
+      Production-grade <strong>Big Data + Artificial Intelligence</strong> platform for mutual fund distribution and investor wealth management.
+    </p>
+
+    <!-- Role Selection -->
+    <div class="role-selector fade-in stagger-4" id="roleSelector">
+      <div class="role-card" onclick="selectRole('distributor')">
+        <span class="role-icon">👔</span>
+        <h3>Mutual Fund Distributor</h3>
+        <p class="text-muted mt-8" style="font-size:0.9rem;">
+          AI-powered lead scoring, investor clustering, fund recommendations, and CRM tools
+        </p>
+        <div class="flex gap-8 justify-between mt-24" style="justify-content:center;flex-wrap:wrap;">
+          <span class="badge badge-blue">Lead Scoring</span>
+          <span class="badge badge-violet">AI Buddy</span>
+          <span class="badge badge-emerald">CRM</span>
+        </div>
+        <div class="btn btn-primary btn-full mt-24">Enter as Distributor →</div>
+      </div>
+      <div class="role-card" onclick="selectRole('investor')">
+        <span class="role-icon">💼</span>
+        <h3>Investor</h3>
+        <p class="text-muted mt-8" style="font-size:0.9rem;">
+          Persona-based fund discovery, portfolio risk analysis, market intelligence, and live streaming
+        </p>
+        <div class="flex gap-8 justify-between mt-24" style="justify-content:center;flex-wrap:wrap;">
+          <span class="badge badge-emerald">Portfolio</span>
+          <span class="badge badge-amber">Risk AI</span>
+          <span class="badge badge-blue">Markets</span>
+        </div>
+        <div class="btn btn-emerald btn-full mt-24">Enter as Investor →</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURES OVERVIEW ═══ -->
+  <section class="container mt-48 mb-24" style="padding-bottom:80px;">
+    <h2 class="text-center mb-24">Platform Architecture</h2>
+    <p class="text-center text-muted mb-24" style="max-width:600px;margin-left:auto;margin-right:auto;">
+      End-to-end fintech intelligence — from raw data ingestion to real-time AI inference
+    </p>
+
+    <!-- Pipeline Diagram -->
+    <div class="pipeline-flow mb-24">
+      <div class="pipeline-node card-accent-blue card" style="padding:14px 18px;">
+        <div class="text-xs text-muted">INGEST</div>
+        <div class="text-sm" style="font-weight:600;">31GB Raw Data</div>
+        <div class="text-xs text-muted">CSV/JSON/Text</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node card-accent-violet card" style="padding:14px 18px;">
+        <div class="text-xs text-muted">ETL</div>
+        <div class="text-sm" style="font-weight:600;">Apache Spark</div>
+        <div class="text-xs text-muted">Clean + Transform</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node card-accent-emerald card" style="padding:14px 18px;">
+        <div class="text-xs text-muted">STORE</div>
+        <div class="text-sm" style="font-weight:600;">Parquet</div>
+        <div class="text-xs text-muted">Columnar Format</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node card-accent-amber card" style="padding:14px 18px;">
+        <div class="text-xs text-muted">TRAIN</div>
+        <div class="text-sm" style="font-weight:600;">4 ML Models</div>
+        <div class="text-xs text-muted">RF/KMeans/LSTM/NLP</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node card-accent-blue card" style="padding:14px 18px;">
+        <div class="text-xs text-muted">SERVE</div>
+        <div class="text-sm" style="font-weight:600;">FastAPI</div>
+        <div class="text-xs text-muted">REST Inference</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-node card-accent-emerald card" style="padding:14px 18px;">
+        <div class="text-xs text-muted">DISPLAY</div>
+        <div class="text-sm" style="font-weight:600;">Web Frontend</div>
+        <div class="text-xs text-muted">Real-Time UI</div>
+      </div>
+    </div>
+
+    <!-- Tech Cards -->
+    <div class="bento-grid">
+      <div class="bento-6 card card-accent-blue">
+        <h4>🤖 Artificial Intelligence</h4>
+        <p class="text-muted text-sm mt-8">4 production ML engines powering real-time decisions</p>
+        <div class="flex gap-8 mt-16" style="flex-wrap:wrap;">
+          <span class="badge badge-blue">Random Forest</span>
+          <span class="badge badge-violet">K-Means</span>
+          <span class="badge badge-emerald">LSTM</span>
+          <span class="badge badge-amber">TF-IDF NLP</span>
+        </div>
+        <a href="ai-showcase.html" class="btn btn-secondary btn-sm mt-16">Explore AI →</a>
+      </div>
+      <div class="bento-6 card card-accent-emerald">
+        <h4>📊 Big Data Engineering</h4>
+        <p class="text-muted text-sm mt-8">31GB composite dataset processed with distributed computing</p>
+        <div class="flex gap-8 mt-16" style="flex-wrap:wrap;">
+          <span class="badge badge-emerald">PySpark</span>
+          <span class="badge badge-blue">Parquet</span>
+          <span class="badge badge-amber">Streaming</span>
+          <span class="badge badge-violet">14K+ Funds</span>
+        </div>
+        <a href="bigdata-showcase.html" class="btn btn-secondary btn-sm mt-16">Explore Big Data →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SURVEY MODAL ═══ -->
+  <div id="surveyModal" class="hidden" style="position:fixed;inset:0;z-index:200;background:rgba(6,7,10,0.95);display:flex;align-items:center;justify-content:center;">
+    <div class="survey-container" style="padding:24px;">
+      <div id="surveyContent"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>◆ Lume AI Platform v2.0 — Big Data + AI for Fintech</p>
+      <p class="mt-8">Built with PySpark · scikit-learn · XGBoost · PyTorch · FastAPI</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

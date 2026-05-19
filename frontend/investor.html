@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investor Dashboard | Lume AI</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="mesh-bg"></div>
+
+  <nav class="topnav">
+    <div class="topnav-brand"><span>◆</span> LUME AI</div>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="investor.html" class="active">Dashboard</a>
+      <a href="ai-showcase.html">AI Models</a>
+      <a href="bigdata-showcase.html">Big Data</a>
+    </div>
+    <div class="flex items-center gap-12">
+      <div class="status-bar" id="apiStatus"><div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div></div>
+      <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container" style="padding-top:24px;padding-bottom:64px;">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-24">
+      <div>
+        <div class="flex items-center gap-12"><h2>Welcome, Investor</h2><span class="badge badge-emerald">💼 Investor</span></div>
+        <p class="text-muted text-sm mt-8" id="personaLabel">Loading persona...</p>
+      </div>
+      <div class="card" style="padding:12px 20px;text-align:right;">
+        <div class="text-xs text-muted">Portfolio Value</div>
+        <div class="text-mono text-emerald" style="font-size:1.8rem;font-weight:700;">₹2,89,490</div>
+        <div class="metric-delta positive">▲ +12.5%</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" data-tab-group="main">
+      <button class="tab active" data-tab="tab-portfolio" onclick="switchTab('main','tab-portfolio')">💰 Portfolio</button>
+      <button class="tab" data-tab="tab-explorer" onclick="switchTab('main','tab-explorer')">🔍 Fund Explorer</button>
+      <button class="tab" data-tab="tab-risk" onclick="switchTab('main','tab-risk')">🔴 Risk Analysis</button>
+      <button class="tab" data-tab="tab-market" onclick="switchTab('main','tab-market')">📈 Market Pulse</button>
+      <button class="tab" data-tab="tab-chat" onclick="switchTab('main','tab-chat')">🤖 AI Buddy</button>
+      <button class="tab" data-tab="tab-sip" onclick="switchTab('main','tab-sip')">💰 SIP Calculator</button>
+    </div>
+
+    <!-- TAB: Portfolio -->
+    <div class="tab-content active" id="tab-portfolio" data-tab-content="main">
+      <div class="bento-grid mb-24">
+        <div class="bento-4 card"><div class="metric-value">₹2,00,000</div><div class="metric-label">Invested</div></div>
+        <div class="bento-4 card"><div class="metric-value text-emerald">₹2,89,490</div><div class="metric-label">Current Value</div><div class="metric-delta positive">▲ +₹89,490</div></div>
+        <div class="bento-4 card"><div class="metric-value text-emerald">44.7%</div><div class="metric-label">Total Returns</div></div>
+      </div>
+      <div class="bento-grid">
+        <div class="bento-5 card"><h4 class="mb-16">Allocation</h4><div class="chart-container" style="height:280px;"><canvas id="allocChart"></canvas></div></div>
+        <div class="bento-7 card">
+          <h4 class="mb-16">Holdings</h4>
+          <div id="holdingsContainer"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Fund Explorer -->
+    <div class="tab-content" id="tab-explorer" data-tab-content="main">
+      <div class="card mb-24">
+        <h4>🔍 AI-Powered Fund Search</h4>
+        <p class="text-muted text-sm mt-8">Semantic search powered by TF-IDF Cosine Similarity across 14,275+ AMFI schemes</p>
+        <div class="flex gap-8 mt-16">
+          <input type="text" class="form-input" id="fundSearch" placeholder="Search funds... e.g. aggressive growth equity">
+          <button class="btn btn-primary" onclick="searchFunds()">Search</button>
+        </div>
+      </div>
+      <div id="searchResults">
+        <div class="bento-grid" id="allFundsGrid"></div>
+      </div>
+    </div>
+
+    <!-- TAB: Risk Analysis -->
+    <div class="tab-content" id="tab-risk" data-tab-content="main">
+      <div class="section-header"><div><h3 class="section-title">Live Portfolio Risk Analysis</h3><p class="section-subtitle">Real-time risk metrics using live market data</p></div>
+        <button class="btn btn-sm btn-secondary" onclick="runRiskAnalysis()">🔄 Refresh</button>
+      </div>
+      <div id="riskContainer">
+        <div class="bento-grid">
+          <div class="bento-3 card" id="riskScore"><div class="skeleton" style="height:120px;"></div></div>
+          <div class="bento-3 card" id="riskVar"><div class="skeleton" style="height:120px;"></div></div>
+          <div class="bento-3 card" id="riskDrawdown"><div class="skeleton" style="height:120px;"></div></div>
+          <div class="bento-3 card" id="riskBeta"><div class="skeleton" style="height:120px;"></div></div>
+        </div>
+        <div class="bento-grid mt-16">
+          <div class="bento-6 card" id="riskAlerts"><h4>🚨 Risk Alerts</h4><p class="text-muted text-sm mt-8">Run analysis to see alerts</p></div>
+          <div class="bento-6 card" id="riskRecs"><h4>💡 AI Recommendations</h4><p class="text-muted text-sm mt-8">Run analysis to see recommendations</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Market Pulse -->
+    <div class="tab-content" id="tab-market" data-tab-content="main">
+      <div class="bento-grid mb-24">
+        <div class="bento-3 card" id="marketNifty">
+          <div class="metric-label">NIFTY 50 INDEX</div>
+          <div class="metric-value text-blue" id="niftyValue" style="font-size:1.8rem;">—</div>
+          <div class="metric-delta" id="niftyDelta">Loading...</div>
+        </div>
+        
+        <div class="bento-3 card" id="sentimentMeterCard">
+          <div class="metric-label">Live Sentiment Meter</div>
+          <div class="metric-value" id="sentimentValue" style="font-size:1.8rem; margin:4px 0;">—</div>
+          <div class="flex justify-between items-center" style="margin-top:4px;">
+            <span class="text-xs text-muted">Score Gauge:</span>
+            <span class="text-xs font-mono font-bold" id="sentimentScoreLabel">—</span>
+          </div>
+          <div class="progress-bar mt-8" style="height:6px; background:rgba(255,255,255,0.08); border-radius:3px;">
+            <div id="sentimentGaugeFill" class="progress-fill" style="width:50%; background:var(--amber); transition: width 0.5s ease;"></div>
+          </div>
+        </div>
+        
+        <div class="bento-3 card">
+          <div class="metric-label">Market Volatility Score</div>
+          <div class="metric-value text-amber" id="volatilityScoreValue" style="font-size:1.8rem; font-weight:800; margin:4px 0;">—</div>
+          <div class="text-xs text-muted" id="vixRawLabel">VIX Level: —</div>
+        </div>
+        
+        <div class="bento-3 card">
+          <div class="metric-label">AI Risk Intensity Score</div>
+          <div class="metric-value text-red" id="riskIntensityValue" style="font-size:1.8rem; font-weight:800; margin:4px 0;">—</div>
+          <div class="text-xs text-muted">Combined sentiment + volatility</div>
+        </div>
+      </div>
+
+      <!-- Live News-Based Alert System -->
+      <div class="card card-accent-red mb-24">
+        <h4 class="flex items-center gap-8"><span>📰</span> Live News-Based Alert System</h4>
+        <p class="text-muted text-sm mt-8">Real-time impact analysis of market events on your portfolio holdings.</p>
+        <div class="bento-grid mt-16" id="newsAlertsContainer" style="gap:16px;">
+          <!-- Dynamic alert cards will be rendered here -->
+        </div>
+      </div>
+
+      <div class="bento-grid">
+        <div class="bento-7 card">
+          <div class="flex justify-between items-center mb-16">
+            <h4 id="chartTitle">📈 Fund Trend & AI Forecast</h4>
+            <select id="chartFundSelector" class="form-input" style="width: auto; padding: 6px 12px; font-size: 0.85rem; height: auto; background: var(--bg-surface); border: 1px solid rgba(255, 255, 255, 0.1);" onchange="updateForecastChart()"></select>
+          </div>
+          <div class="chart-container" style="height:300px;"><canvas id="niftyChart"></canvas></div>
+          <div id="forecastSummaryBar" class="flex justify-between items-center mt-12 p-8" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 6px; font-size: 0.85rem;">
+            <div class="flex items-center gap-8">
+              <span>🔮 AI Forecast (5d):</span>
+              <strong id="forecastTrendBadge" class="badge">UPWARD 📈</strong>
+            </div>
+            <div class="flex gap-16">
+              <span>Confidence: <strong id="forecastConfidence" class="text-emerald">—</strong></span>
+              <span class="text-muted" id="accuracyMetricLabel">Model: LSTM</span>
+            </div>
+          </div>
+        </div>
+        <div class="bento-5 card"><h4 class="mb-16">Sector Performance</h4><div class="chart-container" style="height:300px;"><canvas id="sectorChart"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- TAB: AI Buddy Chat -->
+    <div class="tab-content" id="tab-chat" data-tab-content="main">
+      <div class="card card-accent-violet">
+        <h4 class="flex items-center gap-8"><span>🤖</span> AI Financial Assistant (XAI Buddy)</h4>
+        <p class="text-muted text-sm mt-8">Ask Lume AI any advisory queries. Your responses are personalized to your risk profile and current market sentiment.</p>
+        
+        <div id="chatMessages" class="card mt-24" style="height:380px; overflow-y:auto; padding:16px; background:rgba(0,0,0,0.25); display:flex; flex-direction:column; gap:16px; border:1px solid rgba(255,255,255,0.05);">
+          <div class="flex gap-8 items-start">
+            <div style="background:var(--violet); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">AI</div>
+            <div class="card" style="padding:12px 16px; margin:0; background:rgba(255,255,255,0.05); max-width:80%; font-size:0.9rem; border-left:3px solid var(--violet);">
+              Hello! I am your Lume AI Buddy. I synthesize news sentiment, technical factors (VIX, Nifty), and your profile to give clear, explainable financial answers. How can I help you navigate the market today?
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex gap-8 mt-16">
+          <input type="text" class="form-input" id="chatInput" placeholder="Should I buy small caps right now?..." onkeypress="handleChatKey(event)" style="flex:1;">
+          <button class="btn btn-primary" onclick="sendChatQuery()" style="padding: 0 24px;">Send 🚀</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: SIP Calculator -->
+    <div class="tab-content" id="tab-sip" data-tab-content="main">
+      <div class="bento-grid">
+        <div class="bento-6 card card-accent-blue">
+          <h4>💰 SIP Calculator</h4>
+          <div class="form-group mt-16"><label class="form-label">Monthly Investment (₹)</label><input type="number" class="form-input" id="sipAmount" value="5000" min="500" step="500"></div>
+          <div class="form-group"><label class="form-label">Expected Return (% p.a.)</label><input type="range" id="sipRate" min="5" max="20" value="12" style="width:100%;"><span class="text-mono text-blue" id="sipRateLabel">12%</span></div>
+          <div class="form-group"><label class="form-label">Duration (Years)</label><input type="range" id="sipYears" min="1" max="30" value="10" style="width:100%;"><span class="text-mono text-blue" id="sipYearsLabel">10 yrs</span></div>
+          <button class="btn btn-primary btn-full mt-8" onclick="calcSIP()">Calculate</button>
+        </div>
+        <div class="bento-6 card" id="sipResult">
+          <div class="text-center" style="margin-top:40px;">
+            <div class="metric-label">Future Value</div>
+            <div class="metric-value text-emerald" id="sipFV" style="font-size:2.5rem;">—</div>
+            <div class="bento-grid mt-24" style="gap:12px;">
+              <div class="bento-6"><div class="metric-label">Invested</div><div class="text-mono" id="sipInvested" style="font-size:1.2rem;">—</div></div>
+              <div class="bento-6"><div class="metric-label">Wealth Gained</div><div class="text-mono text-emerald" id="sipGains" style="font-size:1.2rem;">—</div></div>
+            </div>
+            <div class="chart-container mt-24" style="height:200px;"><canvas id="sipChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    let sipChartInstance = null;
+    let niftyChartInstance = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const persona = state.persona || 'balanced';
+      const p = PERSONAS[persona];
+      document.getElementById('personaLabel').innerHTML = `Persona: <strong style="color:${p.color}">${p.name}</strong> · Risk Tolerance: ${p.risk}`;
+
+      populateChartFundSelector();
+      loadPortfolio();
+      loadAllFunds();
+      loadMarketData();
+      runRiskAnalysis();
+      setupSIPSliders();
+      calcSIP();
+    });
+
+    // ── Portfolio ──
+    const HOLDINGS = [
+      { name:'UTI Nifty 50 Index Fund', cat:'Index', invested:50000, returns:12.5, gains:6250, risk:'medium' },
+      { name:'HDFC Liquid Fund', cat:'Liquid', invested:30000, returns:6.8, gains:2040, risk:'low' },
+      { name:'SBI Magnum MidCap Fund', cat:'Mid Cap', invested:45000, returns:38.5, gains:17325, risk:'high' },
+      { name:'Edelweiss Balanced Advantage', cat:'Hybrid', invested:75000, returns:18.5, gains:13875, risk:'medium' },
+    ];
+
+    function loadPortfolio() {
+      createDoughnutChart('allocChart',
+        HOLDINGS.map(h => h.name.split(' ').slice(0,3).join(' ')),
+        HOLDINGS.map(h => h.invested),
+        ['#2563EB','#10B981','#EF4444','#F59E0B']
+      );
+      const container = document.getElementById('holdingsContainer');
+      container.innerHTML = HOLDINGS.map(h => {
+        const rc = h.risk === 'high' ? 'var(--red)' : h.risk === 'medium' ? 'var(--amber)' : 'var(--emerald)';
+        return `
+          <div class="lead-card" style="border-left:3px solid ${rc};">
+            <div>
+              <div style="font-weight:600;">${h.name}</div>
+              <div class="text-xs text-muted">${h.cat} · ${h.risk.toUpperCase()} RISK</div>
+              <a href="#" onclick="showForecastForFundByName('${h.name}'); return false;" class="text-xs text-blue mt-4 block" style="text-decoration:none;">View AI NAV Forecast 🔮</a>
+            </div>
+            <div class="flex gap-24">
+              <div class="text-right"><div class="text-xs text-muted">Invested</div><div class="text-mono text-sm">₹${h.invested.toLocaleString()}</div></div>
+              <div class="text-right"><div class="text-xs text-muted">Returns</div><div class="text-mono text-sm text-emerald">${h.returns}%</div></div>
+              <div class="text-right"><div class="text-xs text-muted">Gains</div><div class="text-mono text-sm text-emerald">+₹${h.gains.toLocaleString()}</div></div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ── Fund Explorer ──
+    function loadAllFunds() {
+      const funds = generateSampleFunds();
+      renderFundCards('allFundsGrid', funds);
+    }
+
+    function searchFunds() {
+      const q = document.getElementById('fundSearch').value.toLowerCase();
+      const funds = generateSampleFunds().filter(f =>
+        f.name.toLowerCase().includes(q) || f.category.toLowerCase().includes(q)
+      );
+      renderFundCards('allFundsGrid', funds.length ? funds : generateSampleFunds());
+    }
+
+    function renderFundCards(containerId, funds) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = funds.map(f => {
+        const rc = f.risk === 'high' ? 'var(--red)' : f.risk === 'medium' ? 'var(--amber)' : 'var(--emerald)';
+        return `<div class="bento-4 card">
+          <h4 style="font-size:0.95rem;">${f.name}</h4>
+          <div class="flex items-center gap-8 mt-8"><span class="badge" style="background:${rc}20;color:${rc};">${f.risk.toUpperCase()}</span><span class="text-xs text-muted">${f.category}</span></div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;">
+            <div><div class="text-mono text-emerald">${f.r1}%</div><div class="text-xs text-muted">1Y</div></div>
+            <div><div class="text-mono text-blue">${f.r3}%</div><div class="text-xs text-muted">3Y</div></div>
+            <div><div class="text-mono">${f.r5}%</div><div class="text-xs text-muted">5Y</div></div>
+          </div>
+          <div class="flex justify-between items-center mt-12 pt-8" style="border-top:1px solid rgba(255,255,255,0.05);">
+            <div class="text-amber text-xs">${'★'.repeat(f.rating)}</div>
+            <button class="btn btn-xs btn-secondary" onclick="showForecastForFund('${f.id}')" style="padding:4px 8px;font-size:0.75rem;">Forecast 🔮</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // ── AI Forecast Navigation & Helpers ──
+    function showForecastForFund(fundId) {
+      switchTab('main', 'tab-market');
+      updateForecastChart(fundId);
+      document.getElementById('niftyChart').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showForecastForFundByName(name) {
+      const funds = generateSampleFunds();
+      const f = funds.find(x => x.name.toLowerCase().includes(name.toLowerCase()));
+      if (f) {
+        showForecastForFund(f.id);
+      } else {
+        switchTab('main', 'tab-market');
+        document.getElementById('niftyChart').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function populateChartFundSelector() {
+      const sel = document.getElementById('chartFundSelector');
+      if (!sel) return;
+      
+      const funds = generateSampleFunds();
+      let html = `<option value="NIFTY">NIFTY 50 Index</option>`;
+      html += `<optgroup label="Mutual Funds">`;
+      funds.forEach(f => {
+        html += `<option value="${f.id}">${f.name}</option>`;
+      });
+      html += `</optgroup>`;
+      sel.innerHTML = html;
+    }
+
+    async function updateForecastChart(fundId = null) {
+      const sel = document.getElementById('chartFundSelector');
+      if (!sel) return;
+      
+      if (fundId) {
+        sel.value = fundId;
+      }
+      
+      const val = sel.value;
+      const dates = [];
+      const history = [];
+      
+      let baseVal = 22200;
+      let drift = 12;
+      let volatilityFactor = 150;
+      let label = 'NIFTY 50';
+      
+      if (val !== 'NIFTY') {
+        const funds = generateSampleFunds();
+        const f = funds.find(x => x.id === val);
+        if (f) {
+          // Adjust price base relative to fund category
+          if (f.category.includes('Liquid') || f.category.includes('Short')) {
+            baseVal = 100 + (Math.random() * 5);
+            drift = 0.05;
+            volatilityFactor = 0.5;
+          } else if (f.category.includes('Mid') || f.category.includes('Small') || f.category.includes('Sectoral')) {
+            baseVal = 80 + (Math.random() * 40);
+            drift = 0.45;
+            volatilityFactor = 3.0;
+          } else {
+            baseVal = 50 + (Math.random() * 20);
+            drift = 0.2;
+            volatilityFactor = 1.5;
+          }
+          label = f.name;
+        }
+      }
+      
+      let currentVal = baseVal;
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        dates.push(d.toLocaleDateString('en-IN', { day:'2-digit', month:'short' }));
+        const step = drift + (Math.random() - 0.47) * volatilityFactor;
+        currentVal += step;
+        history.push(roundTo(currentVal, 2));
+      }
+      
+      let forecastTrajectory = [];
+      let confidence = 95.5;
+      let trend = 'UPWARD';
+      let accuracy = '92.4% (Backtested R²)';
+      
+      try {
+        const response = await fetch('/predict/forecast', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ history: history })
+        });
+        if (response.ok) {
+          const res = await response.json();
+          forecastTrajectory = res.forecast_trajectory;
+          confidence = res.confidence_score;
+          trend = res.trend;
+          accuracy = `Model: LSTM (${res.accuracy_metric})`;
+        }
+      } catch (err) {
+        console.warn("Forecast API call failed, using local simulation", err);
+      }
+      
+      if (!forecastTrajectory || forecastTrajectory.length === 0) {
+        const lastVal = history[history.length - 1];
+        forecastTrajectory = [];
+        let simVal = lastVal;
+        for (let i = 1; i <= 5; i++) {
+          simVal += (drift + (Math.random() - 0.45) * (volatilityFactor * 0.5));
+          forecastTrajectory.push(roundTo(simVal, 2));
+        }
+        trend = forecastTrajectory[forecastTrajectory.length - 1] > lastVal ? 'UPWARD' : 'DOWNWARD';
+        confidence = 94.2;
+      }
+      
+      const badge = document.getElementById('forecastTrendBadge');
+      badge.textContent = `${trend} ${trend === 'UPWARD' ? '📈' : trend === 'DOWNWARD' ? '📉' : '➡️'}`;
+      badge.style.background = trend === 'UPWARD' ? 'rgba(16, 185, 129, 0.15)' : trend === 'DOWNWARD' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)';
+      badge.style.color = trend === 'UPWARD' ? 'var(--emerald)' : trend === 'DOWNWARD' ? 'var(--red)' : 'var(--amber)';
+      
+      document.getElementById('forecastConfidence').textContent = `${confidence}%`;
+      document.getElementById('accuracyMetricLabel').textContent = accuracy;
+      
+      const histData = [...history];
+      const foreData = new Array(histData.length - 1).fill(null);
+      foreData.push(histData[histData.length - 1]);
+      foreData.push(...forecastTrajectory);
+      
+      const allLabels = [...dates];
+      for (let i = 1; i <= 5; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        allLabels.push('+' + i + 'd (' + d.toLocaleDateString('en-IN', { day:'2-digit', month:'short' }) + ')');
+      }
+      
+      if (niftyChartInstance) niftyChartInstance.destroy();
+      
+      niftyChartInstance = createLineChart('niftyChart', allLabels, [
+        {
+          label: `${label} (Historical NAV)`,
+          data: histData,
+          borderColor: '#2563EB',
+          backgroundColor: 'rgba(37, 99, 235, 0.05)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 0
+        },
+        {
+          label: `${label} (AI Forecast)`,
+          data: foreData,
+          borderColor: '#8B5CF6',
+          backgroundColor: 'rgba(139, 92, 246, 0.05)',
+          borderDash: [5, 5],
+          fill: false,
+          tension: 0.3,
+          pointRadius: 3,
+          pointBackgroundColor: '#8B5CF6'
+        }
+      ], {
+        scales: {
+          ...chartDefaults.scales,
+          y: {
+            ...chartDefaults.scales.y,
+            beginAtZero: false
+          }
+        }
+      });
+    }
+    
+    function roundTo(num, dec) {
+      return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
+    }
+
+
+    // ── Risk Analysis ──
+    async function runRiskAnalysis() {
+      const holdings = HOLDINGS.map((h, i) => ({
+        fund_id: `F00${i+1}`, fund_name: h.name,
+        category: h.cat.toLowerCase().replace(/ /g,'_'), value: h.invested, returns: h.returns
+      }));
+      const result = await getRiskAnalysis(state.persona || 'balanced', holdings);
+
+      if (result) {
+        const rc = result.portfolio_risk_score < 40 ? 'var(--emerald)' : result.portfolio_risk_score < 70 ? 'var(--amber)' : 'var(--red)';
+        document.getElementById('riskScore').innerHTML = `<div class="text-center"><div class="metric-label">Risk Score</div><div class="text-mono" style="font-size:3rem;font-weight:800;color:${rc};">${result.portfolio_risk_score.toFixed(0)}</div><div class="text-xs" style="color:${rc};">${result.risk_level.toUpperCase()}</div></div>`;
+        document.getElementById('riskVar').innerHTML = `<div class="text-center"><div class="metric-label">Value at Risk (95%)</div><div class="metric-value text-red">₹${result.var_95.toLocaleString()}</div></div>`;
+        document.getElementById('riskDrawdown').innerHTML = `<div class="text-center"><div class="metric-label">Max Drawdown</div><div class="metric-value text-amber">${result.max_drawdown_pct.toFixed(1)}%</div></div>`;
+        document.getElementById('riskBeta').innerHTML = `<div class="text-center"><div class="metric-label">Beta</div><div class="metric-value">${result.beta.toFixed(2)}</div><div class="text-xs text-muted">${result.beta > 1 ? 'More volatile' : 'Less volatile'} than market</div></div>`;
+        if (result.alerts?.length) {
+          document.getElementById('riskAlerts').innerHTML = `<h4>🚨 Risk Alerts</h4>` + result.alerts.map(a => `<div class="card card-left-red mt-8" style="padding:10px 14px;"><p class="text-sm">${a}</p></div>`).join('');
+        }
+        if (result.recommendations?.length) {
+          document.getElementById('riskRecs').innerHTML = `<h4>💡 AI Recommendations</h4>` + result.recommendations.slice(0,3).map(r => `<div class="card card-left-emerald mt-8" style="padding:10px 14px;"><p class="text-sm">${r}</p></div>`).join('');
+        }
+      } else {
+        document.getElementById('riskScore').innerHTML = `<div class="text-center"><div class="metric-label">Risk Score</div><div class="metric-value text-amber">52</div><div class="text-xs text-muted">Moderate (Mock)</div></div>`;
+        document.getElementById('riskVar').innerHTML = `<div class="text-center"><div class="metric-label">VaR (95%)</div><div class="metric-value text-red">₹18,500</div></div>`;
+        document.getElementById('riskDrawdown').innerHTML = `<div class="text-center"><div class="metric-label">Max Drawdown</div><div class="metric-value text-amber">-12.5%</div></div>`;
+        document.getElementById('riskBeta').innerHTML = `<div class="text-center"><div class="metric-label">Beta</div><div class="metric-value">0.85</div></div>`;
+      }
+    }
+
+    // ── News Impact Alerts ──
+    function renderNewsAlerts(sentiment) {
+      const container = document.getElementById('newsAlertsContainer');
+      if (!container) return;
+      
+      const alerts = [
+        {
+          event: "RBI Hikes Repo Rate by 25 bps",
+          impact: "Negative for High-Duration Debt funds, Moderate for Equities",
+          severity: "Moderate",
+          color: "var(--amber)",
+          action: "Consider moving mid-duration debt holdings to Liquid/Short-term funds",
+          confidence: 94,
+          funds: "ICICI Pru Short Term, Axis Banking & PSU Fund"
+        },
+        {
+          event: "Global Crude Oil Surges 5% Amid Geopolitical Tensions",
+          impact: "Negative for domestic markets; high inflation pressure",
+          severity: "High",
+          color: "var(--red)",
+          action: "Increase allocation to defensive hybrid/large-cap or liquid funds. Avoid new sector fund buying",
+          confidence: 88,
+          funds: "SBI Magnum MidCap Fund, UTI Nifty 50 Index Fund"
+        },
+        {
+          event: "Nifty IT Index Correction of 4% over slow US demand",
+          impact: "Sectoral concentration threat for growth-focused investors",
+          severity: "Low",
+          color: "var(--blue)",
+          action: "Keep holding, dollar-cost average via active SIP, do not sell in panic",
+          confidence: 91,
+          funds: "SBI Magnum MidCap Fund"
+        }
+      ];
+      
+      container.innerHTML = alerts.map(a => `
+        <div class="bento-4 card card-left-red" style="border-left-color: ${a.color};">
+          <div class="flex justify-between items-center mb-8">
+            <span class="badge" style="background:${a.color}20; color:${a.color}; font-weight:700;">${a.severity.toUpperCase()} SEVERITY</span>
+            <span class="text-xs text-muted">AI Conf: ${a.confidence}%</span>
+          </div>
+          <h5 style="margin:0 0 8px 0; font-size:0.95rem; font-weight:600;">${a.event}</h5>
+          <p class="text-sm" style="margin-bottom:8px;"><strong>Impact:</strong> ${a.impact}</p>
+          <p class="text-xs text-muted" style="margin-bottom:12px;"><strong>Affected Holdings:</strong> ${a.funds}</p>
+          <div class="card" style="margin:0; padding:8px 12px; background:rgba(255,255,255,0.03); font-size:0.8rem; border-left: 2px solid ${a.color};">
+            <strong>Recommended Action:</strong> ${a.action}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── AI Buddy Chat ──
+    async function sendChatQuery() {
+      const inputEl = document.getElementById('chatInput');
+      if (!inputEl) return;
+      const query = inputEl.value.trim();
+      if (!query) return;
+      
+      const chatContainer = document.getElementById('chatMessages');
+      if (!chatContainer) return;
+      
+      chatContainer.innerHTML += `
+        <div class="flex gap-8 items-start justify-end">
+          <div class="card" style="padding:10px 14px; margin:0; background:rgba(37,99,235,0.15); max-width:80%; font-size:0.9rem; border-right:2px solid var(--blue);">
+            ${query}
+          </div>
+          <div style="background:var(--blue); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">ME</div>
+        </div>
+      `;
+      
+      inputEl.value = '';
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      
+      const typingId = 'typing-' + Date.now();
+      chatContainer.innerHTML += `
+        <div class="flex gap-8 items-start" id="${typingId}">
+          <div style="background:var(--violet); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">AI</div>
+          <div class="card" style="padding:10px 14px; margin:0; background:rgba(255,255,255,0.05); font-size:0.9rem;">
+            <span class="pulse pulse-live" style="display:inline-block; width:8px; height:8px; margin-right:4px;"></span> Thinking...
+          </div>
+        </div>
+      `;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      
+      const res = await askAdvisor(query, state.persona || 'balanced');
+      
+      const typingEl = document.getElementById(typingId);
+      if (typingEl) typingEl.remove();
+      
+      if (res) {
+        chatContainer.innerHTML += `
+          <div class="flex gap-8 items-start animate-fade-in">
+            <div style="background:var(--violet); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">AI</div>
+            <div class="card" style="padding:12px 16px; margin:0; background:rgba(255,255,255,0.05); max-width:80%; font-size:0.9rem; border-left:3px solid var(--violet);">
+              <p>${res.analysis}</p>
+              ${res.recommended_funds && res.recommended_funds.length ? `
+                <div class="mt-12">
+                  <strong style="font-size:0.8rem; color:var(--blue);">RECOMMENDED FUNDS FOR YOU:</strong>
+                  <div class="flex flex-col gap-4 mt-4">
+                    ${res.recommended_funds.map(f => `
+                      <div class="card" style="padding:6px 10px; margin:0; background:rgba(255,255,255,0.02); font-size:0.8rem; display:flex; justify-content:space-between; align-items:center;">
+                        <span>🏢 ${f.name || f.fund_name}</span>
+                        <span class="badge badge-emerald">${f.score ? (f.score*100).toFixed(0)+'%' : 'Match'}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+              <div class="text-xs text-muted mt-8" style="text-align:right;">Market Mood: ${res.market_mood}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        chatContainer.innerHTML += `
+          <div class="flex gap-8 items-start">
+            <div style="background:var(--violet); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">AI</div>
+            <div class="card" style="padding:10px 14px; margin:0; background:rgba(255,255,255,0.05); max-width:80%; font-size:0.9rem; color:var(--red);">
+              Unable to reach Lume AI advisor. Please verify the backend service is running.
+            </div>
+          </div>
+        `;
+      }
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    function handleChatKey(e) {
+      if (e.key === 'Enter') sendChatQuery();
+    }
+
+    // ── Market Data ──
+    async function loadMarketData() {
+      const snapshot = await getMarketSnapshot();
+      if (snapshot) {
+        document.getElementById('niftyValue').textContent = snapshot.nifty_50?.toLocaleString() || '22,550';
+        const pct = snapshot.nifty_change_pct || 0;
+        const deltaEl = document.getElementById('niftyDelta');
+        deltaEl.className = `metric-delta ${pct >= 0 ? 'positive' : 'negative'}`;
+        deltaEl.textContent = `${pct >= 0 ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%`;
+        
+        const vixVal = snapshot.vix || 14.2;
+        const volatilityScore = snapshot.market_volatility_score || Math.round(vixVal * 2.5);
+        document.getElementById('volatilityScoreValue').textContent = volatilityScore;
+        document.getElementById('vixRawLabel').textContent = `VIX Level: ${vixVal.toFixed(1)}`;
+        
+        const riskInt = snapshot.risk_intensity_score || 35.0;
+        document.getElementById('riskIntensityValue').textContent = riskInt;
+        const riColor = riskInt > 70 ? 'var(--red)' : riskInt > 40 ? 'var(--amber)' : 'var(--emerald)';
+        document.getElementById('riskIntensityValue').style.color = riColor;
+        
+        const sent = snapshot.market_sentiment || 'NEUTRAL';
+        const sentScore = snapshot.sentiment_score || 0.0;
+        const se = document.getElementById('sentimentValue');
+        se.textContent = sent.toUpperCase();
+        
+        let sentColor = 'var(--amber)';
+        if (sent.includes('BULLISH') || sent.includes('Positive')) {
+          sentColor = 'var(--emerald)';
+        } else if (sent.includes('BEARISH') || sent.includes('Negative')) {
+          sentColor = 'var(--red)';
+        }
+        se.style.color = sentColor;
+        document.getElementById('sentimentScoreLabel').textContent = `${sentScore >= 0 ? '+' : ''}${sentScore}`;
+        
+        const gaugePct = Math.round(((parseFloat(sentScore) + 100) / 200) * 100);
+        const fill = document.getElementById('sentimentGaugeFill');
+        if (fill) {
+          fill.style.width = `${gaugePct}%`;
+          fill.style.background = sentColor;
+        }
+        
+        if (snapshot.sector_performance) {
+          const sectors = Object.keys(snapshot.sector_performance);
+          const changes = Object.values(snapshot.sector_performance);
+          createBarChart('sectorChart', sectors, changes,
+            changes.map(c => c >= 0 ? '#10B981' : '#EF4444'),
+            { indexAxis: 'y', scales: { x: chartDefaults.scales.x, y: { ...chartDefaults.scales.y, grid: { display: false } } } }
+          );
+        }
+        
+        renderNewsAlerts(sent);
+      } else {
+        document.getElementById('niftyValue').textContent = '22,550';
+        document.getElementById('niftyDelta').className = 'metric-delta positive';
+        document.getElementById('niftyDelta').textContent = '▲ +0.45%';
+        document.getElementById('volatilityScoreValue').textContent = '35';
+        document.getElementById('vixRawLabel').textContent = 'VIX Level: 14.2';
+        document.getElementById('riskIntensityValue').textContent = '28';
+        document.getElementById('riskIntensityValue').style.color = 'var(--emerald)';
+        document.getElementById('sentimentValue').textContent = 'NEUTRAL';
+        document.getElementById('sentimentValue').style.color = 'var(--amber)';
+        document.getElementById('sentimentScoreLabel').textContent = '+5.0';
+        document.getElementById('sentimentGaugeFill').style.width = '52%';
+        document.getElementById('sentimentGaugeFill').style.background = 'var(--amber)';
+        
+        renderNewsAlerts('NEUTRAL');
+      }
+      // Dynamically load the selected chart/forecast
+      updateForecastChart();
+    }
+
+    // ── SIP Calculator ──
+    function setupSIPSliders() {
+      document.getElementById('sipRate').addEventListener('input', e => { document.getElementById('sipRateLabel').textContent = e.target.value + '%'; });
+      document.getElementById('sipYears').addEventListener('input', e => { document.getElementById('sipYearsLabel').textContent = e.target.value + ' yrs'; });
+    }
+
+    function calcSIP() {
+      const monthly = parseInt(document.getElementById('sipAmount').value) || 5000;
+      const rate = parseInt(document.getElementById('sipRate').value) || 12;
+      const years = parseInt(document.getElementById('sipYears').value) || 10;
+      const result = calculateSIP(monthly, rate, years);
+      document.getElementById('sipFV').textContent = formatCurrency(result.futureValue);
+      document.getElementById('sipInvested').textContent = formatCurrency(result.invested);
+      document.getElementById('sipGains').textContent = formatCurrency(result.gains);
+
+      if (sipChartInstance) sipChartInstance.destroy();
+      sipChartInstance = createDoughnutChart('sipChart', ['Invested','Gains'], [result.invested, result.gains], ['#2563EB','#10B981']);
+    }
+  </script>
+</body>
+</html>

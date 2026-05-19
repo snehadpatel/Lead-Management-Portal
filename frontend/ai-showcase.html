@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Showcase | Lume AI</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="mesh-bg"></div>
+
+  <nav class="topnav">
+    <div class="topnav-brand"><span>◆</span> LUME AI</div>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="ai-showcase.html" class="active">AI Models</a>
+      <a href="bigdata-showcase.html">Big Data</a>
+    </div>
+    <div class="status-bar" id="apiStatus"><div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div></div>
+  </nav>
+
+  <div class="container" style="padding:48px 24px 80px;">
+    <div class="text-center mb-48">
+      <span class="badge badge-violet mb-16">🤖 Artificial Intelligence</span>
+      <h1><span class="text-gradient">4 Production ML Engines</span></h1>
+      <p class="text-muted mt-8" style="max-width:600px;margin:12px auto 0;">Each model is trained on real-world financial datasets, serialized as pickle bundles, and served via FastAPI for real-time inference.</p>
+    </div>
+
+    <!-- ═══ ENGINE 1: Random Forest ═══ -->
+    <div class="card card-accent-blue mb-24">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-16">
+          <div style="width:56px;height:56px;border-radius:var(--radius-md);background:rgba(37,99,235,0.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🌲</div>
+          <div><h3 style="margin:0;">Engine 1: Random Forest Classifier</h3><p class="text-muted text-sm">Lead Conversion Prediction</p></div>
+        </div>
+        <span class="badge badge-blue">SUPERVISED</span>
+      </div>
+
+      <div class="bento-grid mt-24">
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Architecture</h4>
+          <ul class="text-sm text-muted mt-8" style="list-style:none;padding:0;">
+            <li>✅ scikit-learn RandomForestClassifier</li>
+            <li>✅ 9,240 training samples (Kaggle CRM)</li>
+            <li>✅ 5 numeric + 9 categorical features</li>
+            <li>✅ One-Hot Encoding + class balancing</li>
+            <li>✅ Pipeline: Preprocessor → Model → Threshold</li>
+          </ul>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Performance Metrics</h4>
+          <div class="mt-8">
+            <div class="flex justify-between text-sm"><span class="text-muted">Accuracy</span><span class="text-mono text-emerald">81.01%</span></div>
+            <div class="progress-bar mt-4 mb-8"><div class="progress-fill" style="width:81%;"></div></div>
+            <div class="flex justify-between text-sm"><span class="text-muted">F1-Score</span><span class="text-mono text-emerald">0.82</span></div>
+            <div class="progress-bar mt-4 mb-8"><div class="progress-fill" style="width:82%;"></div></div>
+            <div class="flex justify-between text-sm"><span class="text-muted">Precision</span><span class="text-mono text-blue">0.79</span></div>
+            <div class="progress-bar mt-4 mb-8"><div class="progress-fill" style="width:79%;"></div></div>
+            <div class="flex justify-between text-sm"><span class="text-muted">Recall</span><span class="text-mono text-blue">0.85</span></div>
+            <div class="progress-bar mt-4 mb-8"><div class="progress-fill" style="width:85%;"></div></div>
+          </div>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Why Random Forest?</h4>
+          <p class="text-sm text-muted mt-8">Human behavioral data (clicks, form fills) is inherently <strong>non-linear</strong>. RF isolates overlapping variables into thousands of independent Decision Trees, preventing overfitting.</p>
+          <h4 class="text-sm mt-16 text-red">Why NOT Logistic Regression?</h4>
+          <p class="text-sm text-muted mt-4">Assumes linear relationships between variables. Would <strong>aggressively misclassify</strong> leads from our chaotic CRM dataset.</p>
+        </div>
+      </div>
+
+      <div class="card mt-16" style="background:var(--bg-surface);">
+        <h4 class="text-sm">📊 Feature Importance (XAI — Explainable AI)</h4>
+        <div class="chart-container" style="height:200px;"><canvas id="featureChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ═══ ENGINE 2: K-Means ═══ -->
+    <div class="card card-accent-emerald mb-24">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-16">
+          <div style="width:56px;height:56px;border-radius:var(--radius-md);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🎯</div>
+          <div><h3 style="margin:0;">Engine 2: K-Means Clustering</h3><p class="text-muted text-sm">Investor Persona Assignment</p></div>
+        </div>
+        <span class="badge badge-emerald">UNSUPERVISED</span>
+      </div>
+
+      <div class="bento-grid mt-24">
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Architecture</h4>
+          <ul class="text-sm text-muted mt-8" style="list-style:none;padding:0;">
+            <li>✅ K-Means with k=4 clusters</li>
+            <li>✅ 7 behavioral dimensions</li>
+            <li>✅ StandardScaler normalization</li>
+            <li>✅ Euclidean distance similarity</li>
+            <li>✅ PCA for 2D visualization</li>
+          </ul>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">4 Investor Personas</h4>
+          <div class="mt-8">
+            <div class="flex items-center gap-8 mb-8"><span style="width:12px;height:12px;border-radius:50%;background:#10B981;"></span><span class="text-sm">🚀 Growth Seeker — High Risk</span></div>
+            <div class="flex items-center gap-8 mb-8"><span style="width:12px;height:12px;border-radius:50%;background:#2563EB;"></span><span class="text-sm">🛡️ Wealth Preserver — Low Risk</span></div>
+            <div class="flex items-center gap-8 mb-8"><span style="width:12px;height:12px;border-radius:50%;background:#F59E0B;"></span><span class="text-sm">⚖️ Balanced Allocator — Medium</span></div>
+            <div class="flex items-center gap-8 mb-8"><span style="width:12px;height:12px;border-radius:50%;background:#8B5CF6;"></span><span class="text-sm">📊 Index Tracker — Passive</span></div>
+          </div>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Why K-Means?</h4>
+          <p class="text-sm text-muted mt-8">Unlabeled psychological survey data. K-Means defines k=4 geometrical boundaries via Euclidean similarity, mapping human behavior into pitchable personas.</p>
+          <h4 class="text-sm mt-16 text-red">Why NOT DBSCAN?</h4>
+          <p class="text-sm text-muted mt-4">DBSCAN ejects outliers as "Noise." In finance, <strong>every investor must be routed</strong> — we can't classify anyone as noise.</p>
+        </div>
+      </div>
+      <div class="card mt-16" style="background:var(--bg-surface);">
+        <h4 class="text-sm">📊 Cluster Distribution</h4>
+        <div class="chart-container" style="height:200px;"><canvas id="clusterChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ═══ ENGINE 3: LSTM ═══ -->
+    <div class="card card-accent-amber mb-24">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-16">
+          <div style="width:56px;height:56px;border-radius:var(--radius-md);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🧠</div>
+          <div><h3 style="margin:0;">Engine 3: PyTorch LSTM</h3><p class="text-muted text-sm">NAV / Price Forecaster</p></div>
+        </div>
+        <span class="badge badge-amber">DEEP LEARNING</span>
+      </div>
+      <div class="bento-grid mt-24">
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Architecture</h4>
+          <ul class="text-sm text-muted mt-8" style="list-style:none;padding:0;">
+            <li>✅ PyTorch LSTM neural network</li>
+            <li>✅ Sequence window: 30 timesteps</li>
+            <li>✅ NIFTY 50 historical data (3 years)</li>
+            <li>✅ Min-Max normalization</li>
+            <li>✅ 5-day forward projection</li>
+          </ul>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">How LSTM Works</h4>
+          <p class="text-sm text-muted mt-8">LSTM cells maintain internal states that <strong>"remember"</strong> previous market volatility while projecting future trends. The forget gate, input gate, and output gate control information flow.</p>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Why LSTM?</h4>
+          <p class="text-sm text-muted mt-8">Fundamentally understands <strong>temporal patterns</strong> in sequential financial data.</p>
+          <h4 class="text-sm mt-16 text-red">Why NOT ARIMA?</h4>
+          <p class="text-sm text-muted mt-4">ARIMA expects stationary patterns. NIFTY spikes are wildly unpredictable — ARIMA would flatline while LSTM rides the volatility.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ENGINE 4: TF-IDF ═══ -->
+    <div class="card card-accent-violet mb-24">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-16">
+          <div style="width:56px;height:56px;border-radius:var(--radius-md);background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">📝</div>
+          <div><h3 style="margin:0;">Engine 4: TF-IDF + NLP</h3><p class="text-muted text-sm">Semantic Search & Sentiment Analysis</p></div>
+        </div>
+        <span class="badge badge-violet">NLP</span>
+      </div>
+      <div class="bento-grid mt-24">
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Architecture</h4>
+          <ul class="text-sm text-muted mt-8" style="list-style:none;padding:0;">
+            <li>✅ TF-IDF vectorizer (20K features)</li>
+            <li>✅ Bigram n-gram range (1,2)</li>
+            <li>✅ Cosine similarity matching</li>
+            <li>✅ 14,275 AMFI fund schemes</li>
+            <li>✅ Logistic Regression sentiment</li>
+          </ul>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Dual Use</h4>
+          <p class="text-sm text-muted mt-8"><strong>Search:</strong> Converts human queries to geometric vectors. Cosine matching finds funds in milliseconds.</p>
+          <p class="text-sm text-muted mt-8"><strong>Sentiment:</strong> Classifies financial text as positive/negative/neutral for market mood analysis.</p>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Why TF-IDF?</h4>
+          <p class="text-sm text-muted mt-8">Converts vocabulary to geometric matrices. Operating a 14K × N array with Cosine Match achieves <strong>millisecond latency</strong>.</p>
+          <h4 class="text-sm mt-16 text-red">Why NOT BERT?</h4>
+          <p class="text-sm text-muted mt-4">BERT requires massive GPU compute. Processing 14,275 funds through a 500-layer transformer would crash the memory heap.</p>
+        </div>
+      </div>
+
+      <!-- Live Sentiment Demo -->
+      <div class="card mt-16" style="background:var(--bg-surface);">
+        <h4 class="text-sm">🔮 Live Sentiment Demo</h4>
+        <div class="flex gap-8 mt-12">
+          <input type="text" class="form-input" id="demoSentiment" placeholder="Enter financial news to classify...">
+          <button class="btn btn-primary btn-sm" onclick="demoSentimentAnalysis()">Analyze</button>
+        </div>
+        <div id="demoSentimentResult" class="mt-12"></div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="card text-center" style="padding:48px;">
+      <h3>Model Pipeline Summary</h3>
+      <div class="pipeline-flow mt-24" style="justify-content:center;">
+        <div class="pipeline-node card-accent-blue card" style="padding:12px 16px;"><div class="text-xs text-muted">Raw Data</div><div class="text-sm" style="font-weight:600;">31GB Dataset</div></div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node card-accent-violet card" style="padding:12px 16px;"><div class="text-xs text-muted">Preprocess</div><div class="text-sm" style="font-weight:600;">Spark ETL</div></div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node card-accent-emerald card" style="padding:12px 16px;"><div class="text-xs text-muted">Train</div><div class="text-sm" style="font-weight:600;">4 ML Engines</div></div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node card-accent-amber card" style="padding:12px 16px;"><div class="text-xs text-muted">Serialize</div><div class="text-sm" style="font-weight:600;">Pickle Bundles</div></div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node card-accent-blue card" style="padding:12px 16px;"><div class="text-xs text-muted">Serve</div><div class="text-sm" style="font-weight:600;">FastAPI REST</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><p>◆ Lume AI — AI Showcase</p></div></footer>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Feature importance chart
+      createBarChart('featureChart',
+        ['Total Time on Site','Page Views','Activity Score','Profile Score','Total Visits','Lead Source','Occupation','Specialization'],
+        [0.18,0.15,0.14,0.13,0.11,0.09,0.08,0.06],
+        ['#2563EB','#3B82F6','#60A5FA','#93C5FD','#2563EB','#3B82F6','#60A5FA','#93C5FD'],
+        { indexAxis:'y', scales: { x:{ ...chartDefaults.scales.x, max:0.25 }, y:{ ...chartDefaults.scales.y, grid:{display:false} } } }
+      );
+
+      // Cluster distribution
+      createDoughnutChart('clusterChart',
+        ['🚀 Growth','🛡️ Conservative','⚖️ Balanced','📊 Passive'],
+        [280,260,250,210],
+        ['#10B981','#2563EB','#F59E0B','#8B5CF6']
+      );
+    });
+
+    async function demoSentimentAnalysis() {
+      const text = document.getElementById('demoSentiment').value;
+      if (!text) return;
+      const el = document.getElementById('demoSentimentResult');
+      el.innerHTML = '<span class="text-muted text-sm">Analyzing...</span>';
+      const result = await predictSentiment(text);
+      if (result?.prediction) {
+        const sent = result.prediction.sentiment;
+        const conf = ((result.confidence || 0.75) * 100).toFixed(1);
+        const color = sent === 'positive' ? 'var(--emerald)' : sent === 'negative' ? 'var(--red)' : 'var(--amber)';
+        el.innerHTML = `<span class="badge" style="background:${color}20;color:${color};font-size:0.9rem;padding:8px 16px;">${sent === 'positive' ? '📈' : sent === 'negative' ? '📉' : '📊'} ${sent.toUpperCase()} (${conf}% confidence)</span>`;
+      } else {
+        el.innerHTML = '<span class="text-sm text-red">API offline — start FastAPI server</span>';
+      }
+    }
+  </script>
+</body>
+</html>

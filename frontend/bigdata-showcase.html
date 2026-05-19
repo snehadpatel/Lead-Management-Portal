@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Big Data Showcase | Lume AI</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="mesh-bg"></div>
+
+  <nav class="topnav">
+    <div class="topnav-brand"><span>◆</span> LUME AI</div>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="ai-showcase.html">AI Models</a>
+      <a href="bigdata-showcase.html" class="active">Big Data</a>
+    </div>
+    <div class="status-bar" id="apiStatus"><div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div></div>
+  </nav>
+
+  <div class="container" style="padding:48px 24px 80px;">
+    <div class="text-center mb-48">
+      <span class="badge badge-emerald mb-16">📊 Big Data Engineering</span>
+      <h1><span class="text-gradient">31GB Composite Dataset</span></h1>
+      <p class="text-muted mt-8" style="max-width:650px;margin:12px auto 0;">End-to-end data engineering pipeline — from raw ingestion through distributed processing to real-time streaming and BI visualization.</p>
+    </div>
+
+    <!-- ═══ DATA ECOSYSTEM ═══ -->
+    <div class="card card-accent-blue mb-24">
+      <h3>📁 Data Ecosystem — 3 Data Paradigms</h3>
+      <p class="text-muted text-sm mt-8">The platform ingests structured, semi-structured, and unstructured data to build a comprehensive fintech intelligence layer.</p>
+
+      <div class="bento-grid mt-24">
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <div class="flex items-center gap-8 mb-12"><span style="font-size:1.5rem;">📋</span><h4 class="text-sm">Structured Data</h4></div>
+          <table class="data-table">
+            <tr><td class="text-sm">Lead Scoring CSV</td><td class="text-mono text-xs text-right">9,240 rows</td></tr>
+            <tr><td class="text-sm">MF Behavior XLSX</td><td class="text-mono text-xs text-right">1,000 rows</td></tr>
+            <tr><td class="text-sm">NIFTY 500 Intraday</td><td class="text-mono text-xs text-right">~5M rows</td></tr>
+            <tr><td class="text-sm">NAV History</td><td class="text-mono text-xs text-right">315+ files</td></tr>
+            <tr><td class="text-sm">NIFTY 50 (3yr)</td><td class="text-mono text-xs text-right">48K records</td></tr>
+          </table>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <div class="flex items-center gap-8 mb-12"><span style="font-size:1.5rem;">🔗</span><h4 class="text-sm">Semi-Structured</h4></div>
+          <table class="data-table">
+            <tr><td class="text-sm">Financial News JSON</td><td class="text-mono text-xs text-right">5,842 articles</td></tr>
+            <tr><td class="text-sm">Social Sentiment CSV</td><td class="text-mono text-xs text-right">5,842 rows</td></tr>
+            <tr><td class="text-sm">Clickstream Logs</td><td class="text-mono text-xs text-right">~100K events</td></tr>
+            <tr><td class="text-sm">API Response Cache</td><td class="text-mono text-xs text-right">JSON blobs</td></tr>
+          </table>
+        </div>
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <div class="flex items-center gap-8 mb-12"><span style="font-size:1.5rem;">📄</span><h4 class="text-sm">Unstructured</h4></div>
+          <table class="data-table">
+            <tr><td class="text-sm">AMFI Fund Names</td><td class="text-mono text-xs text-right">14,275 strings</td></tr>
+            <tr><td class="text-sm">Prospectus Texts</td><td class="text-mono text-xs text-right">PDF → text</td></tr>
+            <tr><td class="text-sm">SEBI Circulars</td><td class="text-mono text-xs text-right">Regulatory docs</td></tr>
+            <tr><td class="text-sm">News Headlines</td><td class="text-mono text-xs text-right">Free-form text</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Dataset Stats Chart -->
+      <div class="bento-grid mt-16">
+        <div class="bento-6 card" style="background:var(--bg-surface);"><h4 class="text-sm mb-12">Dataset Composition</h4><div class="chart-container" style="height:200px;"><canvas id="datasetChart"></canvas></div></div>
+        <div class="bento-6 card" style="background:var(--bg-surface);"><h4 class="text-sm mb-12">Data Sources</h4><div class="chart-container" style="height:200px;"><canvas id="sourcesChart"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ SPARK ETL PIPELINE ═══ -->
+    <div class="card card-accent-violet mb-24">
+      <h3>⚡ Apache Spark — Distributed ETL Pipeline</h3>
+      <p class="text-muted text-sm mt-8">PySpark processes the entire 31GB dataset using distributed computing with configurable shuffle partitions.</p>
+
+      <div class="pipeline-flow mt-24">
+        <div class="pipeline-node card card-accent-blue" style="padding:16px 20px;">
+          <div style="font-size:1.5rem;">📥</div>
+          <div class="text-sm" style="font-weight:700;">Ingest</div>
+          <div class="text-xs text-muted">spark.read.csv<br>recursiveFileLookup</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node card card-accent-violet" style="padding:16px 20px;">
+          <div style="font-size:1.5rem;">🧹</div>
+          <div class="text-sm" style="font-weight:700;">Clean</div>
+          <div class="text-xs text-muted">Null handling<br>Type casting</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node card card-accent-amber" style="padding:16px 20px;">
+          <div style="font-size:1.5rem;">🔧</div>
+          <div class="text-sm" style="font-weight:700;">Transform</div>
+          <div class="text-xs text-muted">Feature engineering<br>One-Hot encoding</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node card card-accent-emerald" style="padding:16px 20px;">
+          <div style="font-size:1.5rem;">✅</div>
+          <div class="text-sm" style="font-weight:700;">Validate</div>
+          <div class="text-xs text-muted">Schema checks<br>Row count audit</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node card card-accent-blue" style="padding:16px 20px;">
+          <div style="font-size:1.5rem;">💾</div>
+          <div class="text-sm" style="font-weight:700;">Persist</div>
+          <div class="text-xs text-muted">Parquet format<br>Columnar storage</div>
+        </div>
+      </div>
+
+      <div class="bento-grid mt-24">
+        <div class="bento-6 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Spark Configuration</h4>
+          <table class="data-table mt-8">
+            <tr><td class="text-sm text-muted">Engine</td><td class="text-mono text-sm">PySpark 3.x</td></tr>
+            <tr><td class="text-sm text-muted">Shuffle Partitions</td><td class="text-mono text-sm">200 (configurable)</td></tr>
+            <tr><td class="text-sm text-muted">File Lookup</td><td class="text-mono text-sm">recursiveFileLookup=true</td></tr>
+            <tr><td class="text-sm text-muted">Output Format</td><td class="text-mono text-sm">Apache Parquet</td></tr>
+            <tr><td class="text-sm text-muted">Chunk Strategy</td><td class="text-mono text-sm">pandas chunksize for audit</td></tr>
+            <tr><td class="text-sm text-muted">Runtime</td><td class="text-mono text-sm">Google Colab / Local</td></tr>
+          </table>
+        </div>
+        <div class="bento-6 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Why Parquet?</h4>
+          <p class="text-sm text-muted mt-8"><strong>Columnar format:</strong> Only reads columns needed for query — 10-100x faster than CSV for analytical workloads.</p>
+          <p class="text-sm text-muted mt-8"><strong>Compression:</strong> Snappy encoding reduces storage by ~75% while maintaining fast read speeds.</p>
+          <p class="text-sm text-muted mt-8"><strong>Schema evolution:</strong> Supports schema validation and type safety that CSV lacks.</p>
+          <p class="text-sm text-muted mt-16"><strong>Key paths:</strong></p>
+          <div class="text-mono text-xs text-muted" style="background:var(--bg-root);padding:12px;border-radius:6px;margin-top:8px;">
+            artifacts/cleaned_parquet/<br>
+            streaming/outputs/market_live.parquet<br>
+            streaming/outputs/news_live.parquet
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STREAMING ═══ -->
+    <div class="card card-accent-emerald mb-24">
+      <div class="flex justify-between items-center">
+        <div><h3>🔄 Real-Time Spark Structured Streaming</h3><p class="text-muted text-sm mt-4">Dual stream architecture for live market data and AI sentiment scoring</p></div>
+        <span class="badge badge-emerald"><span class="pulse pulse-live"></span> Stream Architecture</span>
+      </div>
+
+      <div class="bento-grid mt-24">
+        <div class="bento-6 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm text-blue">Stream 1: Market Data</h4>
+          <div class="pipeline-flow mt-12" style="padding:8px 0;">
+            <div class="pipeline-node" style="padding:8px 12px;font-size:0.75rem;min-width:auto;"><strong>NSE API</strong></div>
+            <div class="pipeline-arrow" style="font-size:1rem;">→</div>
+            <div class="pipeline-node" style="padding:8px 12px;font-size:0.75rem;min-width:auto;"><strong>Spark</strong><br>readStream</div>
+            <div class="pipeline-arrow" style="font-size:1rem;">→</div>
+            <div class="pipeline-node" style="padding:8px 12px;font-size:0.75rem;min-width:auto;"><strong>Parquet</strong><br>Sink</div>
+            <div class="pipeline-arrow" style="font-size:1rem;">→</div>
+            <div class="pipeline-node" style="padding:8px 12px;font-size:0.75rem;min-width:auto;"><strong>Dashboard</strong></div>
+          </div>
+          <p class="text-xs text-muted mt-12">Fields: timestamp, last_price, pct_change, variation, status, volume</p>
+        </div>
+        <div class="bento-6 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm text-emerald">Stream 2: News + Sentiment AI</h4>
+          <div class="pipeline-flow mt-12" style="padding:8px 0;">
+            <div class="pipeline-node" style="padding:8px 12px;font-size:0.75rem;min-width:auto;"><strong>News Feed</strong></div>
+            <div class="pipeline-arrow" style="font-size:1rem;">→</div>
+            <div class="pipeline-node" style="padding:8px 12px;font-size:0.75rem;min-width:auto;"><strong>AI NLP</strong><br>Scoring</div>
+            <div class="pipeline-arrow" style="font-size:1rem;">→</div>
+            <div class="pipeline-node" style="padding:8px 12px;font-size:0.75rem;min-width:auto;"><strong>Parquet</strong><br>Sink</div>
+            <div class="pipeline-arrow" style="font-size:1rem;">→</div>
+            <div class="pipeline-node" style="padding:8px 12px;font-size:0.75rem;min-width:auto;"><strong>Sentiment<br>Gauge</strong></div>
+          </div>
+          <p class="text-xs text-muted mt-12">Fields: title, sentiment_score, market_impact, ingestion_timestamp</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ BI INTEGRATION ═══ -->
+    <div class="card card-accent-amber mb-24">
+      <h3>📊 Business Intelligence & Visualization</h3>
+      <p class="text-muted text-sm mt-8">BI-ready exports for Tableau Public / Power BI Desktop integration</p>
+
+      <div class="bento-grid mt-24">
+        <div class="bento-4 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Export Files</h4>
+          <div class="mt-8">
+            <div class="flex justify-between text-sm mb-8"><span class="text-muted">leads_for_bi.csv</span><span class="text-mono text-xs">9,240 rows</span></div>
+            <div class="flex justify-between text-sm mb-8"><span class="text-muted">investor_clusters_for_bi.csv</span><span class="text-mono text-xs">1,000 rows</span></div>
+            <div class="flex justify-between text-sm"><span class="text-muted">sentiment_for_bi.csv</span><span class="text-mono text-xs">5,842 rows</span></div>
+          </div>
+        </div>
+        <div class="bento-8 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm mb-12">Live Analytics Dashboard</h4>
+          <div id="biDashboard" class="bento-grid" style="gap:12px;">
+            <div class="bento-6"><div class="chart-container" style="height:200px;"><canvas id="biLeadChart"></canvas></div></div>
+            <div class="bento-6"><div class="chart-container" style="height:200px;"><canvas id="biPersonaChart"></canvas></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ DATA QUALITY ═══ -->
+    <div class="card card-accent-emerald mb-24">
+      <h3>✅ Data Quality & Audit</h3>
+      <div class="bento-grid mt-24">
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-emerald">31 GB</div><div class="metric-label">Total Dataset</div></div>
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-blue">14,275</div><div class="metric-label">AMFI Schemes</div></div>
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-violet">315+</div><div class="metric-label">NAV History Files</div></div>
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-amber">3</div><div class="metric-label">Data Paradigms</div></div>
+      </div>
+      <div class="bento-grid mt-16">
+        <div class="bento-6 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Audit Pipeline</h4>
+          <ul class="text-sm text-muted mt-8" style="list-style:none;padding:0;">
+            <li>✅ Schema validation on every ingestion</li>
+            <li>✅ Null rate monitoring per column</li>
+            <li>✅ Row count verification pre/post ETL</li>
+            <li>✅ Statistical distribution checks</li>
+            <li>✅ Auto-generated evaluation reports</li>
+          </ul>
+        </div>
+        <div class="bento-6 card" style="background:var(--bg-surface);">
+          <h4 class="text-sm">Infrastructure</h4>
+          <table class="data-table mt-8">
+            <tr><td class="text-sm text-muted">ETL Engine</td><td class="text-mono text-sm">Apache PySpark</td></tr>
+            <tr><td class="text-sm text-muted">Storage</td><td class="text-mono text-sm">Parquet (Snappy)</td></tr>
+            <tr><td class="text-sm text-muted">API Layer</td><td class="text-mono text-sm">FastAPI (async)</td></tr>
+            <tr><td class="text-sm text-muted">Database</td><td class="text-mono text-sm">MongoDB (CRM state)</td></tr>
+            <tr><td class="text-sm text-muted">Containerization</td><td class="text-mono text-sm">Docker + Compose</td></tr>
+            <tr><td class="text-sm text-muted">Compute</td><td class="text-mono text-sm">Colab / Local</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><p>◆ Lume AI — Big Data Engineering Showcase</p></div></footer>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Dataset composition
+      createDoughnutChart('datasetChart',
+        ['Structured','Semi-Structured','Unstructured'],
+        [65,25,10],
+        ['#2563EB','#F59E0B','#8B5CF6']
+      );
+
+      // Sources
+      createBarChart('sourcesChart',
+        ['Kaggle CRM','AMFI India','NSE India','Social/News','World Bank'],
+        [9240,14275,48000,5842,1000],
+        ['#2563EB','#10B981','#F59E0B','#8B5CF6','#06B6D4'],
+        { indexAxis:'y', scales:{ x:{ ...chartDefaults.scales.x }, y:{ ...chartDefaults.scales.y, grid:{display:false} } } }
+      );
+
+      // BI Charts — load real data if API available
+      const analytics = await getAnalytics();
+      let hotCount = 1117, warmCount = 980, coldCount = 833;
+      if (analytics?.distributor_leads) {
+        hotCount = analytics.distributor_leads.tier_hot_count || hotCount;
+        warmCount = analytics.distributor_leads.tier_warm_count || warmCount;
+        coldCount = analytics.distributor_leads.tier_cold_count || coldCount;
+      }
+      createBarChart('biLeadChart', ['🔥 Hot','🌡️ Warm','❄️ Cold'], [hotCount, warmCount, coldCount], ['#EF4444','#F59E0B','#484F58']);
+
+      let personaCounts = [280, 260, 250, 210];
+      if (analytics?.investor_routing?.persona_counts) {
+        const pc = analytics.investor_routing.persona_counts;
+        personaCounts = [pc['0']||280, pc['1']||260, pc['2']||250, pc['3']||210];
+      }
+      createDoughnutChart('biPersonaChart',
+        ['Growth','Conservative','Balanced','Passive'],
+        personaCounts,
+        ['#10B981','#2563EB','#F59E0B','#8B5CF6']
+      );
+    });
+  </script>
+</body>
+</html>
