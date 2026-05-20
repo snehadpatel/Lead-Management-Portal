@@ -208,6 +208,29 @@ Reproducibility notes:
 - Cross-validation and hyperparameter results are exported to `model_evaluations/` to enable independent verification.
 
 
+## Results & Validation
+
+This section summarizes the model-specific outputs you can cite in the poster, demo, or viva. The evaluation folders contain the screenshots, charts, and metric tables used for validation.
+
+| Model | Prototype output screenshots | Dashboard / visualizations | Performance metrics | Charts / tables | Resource utilization |
+|---|---|---|---|---|---|
+| Lead conversion model (Random Forest) | Use `model_evaluations/random_forest/rf_confusion_matrix.png` and the classification report in `model_evaluations/random_forest/rf_evaluation_report.md` | Confusion matrix plus explainability chart in `model_evaluations/xai_insights/xai_rf_feature_weights.png` | Accuracy: 85.00%; Precision: 0.75; Recall: 0.90; F1: 0.82; ROC-AUC: 0.933; Average Precision: 0.890; CV F1: 0.806 ± 0.018; threshold: 0.43 | `real_metrics.json`, `classification_report.json`, `best_model.json` | Not separately benchmarked in repo; inference is lightweight tree-based scoring after preprocessing |
+| Investor persona clustering (K-Means) | Use `model_evaluations/kmeans/clustering_evaluation_report.md` | `model_evaluations/kmeans/kmeans_cluster_projection.png` and `model_evaluations/kmeans/kmeans_centroids_heatmap.png` | Silhouette score: 0.3952; clusters: 4 | `kmeans_metrics.json`, clustering report | Not separately benchmarked in repo; low-cost batch clustering over 7 behavior features |
+| Sentiment model (SBERT + classifier) | Use `model_evaluations/nlp_sentiment/nlp_evaluation_report.md` | Sentiment evaluation report and API response cards in the dashboard | Accuracy: 0.7160; Macro F1: 0.6888; method: SBERT | `metrics.json` | Not separately benchmarked in repo; transformer-style embeddings are the dominant cost when enabled |
+| Fund semantic search (SBERT retrieval) | Use `model_evaluations/tfidf_search/semantic_engine_report.md` | `model_evaluations/tfidf_search/cosine_similarity_decay.png` | Top-K retrieval: 5; practical query latency: under ~120 ms on the recorded test path | Semantic engine report and similarity decay chart | Retrieval is vector-based; memory cost depends on the cached embedding matrix size |
+| LSTM NAV forecaster | Use `model_evaluations/lstm_forecaster/lstm_nav_predictions.png` | Forecast trajectory plot comparing predicted NAV path against the holdout trend | MSE: 0.0152; RMSE: 0.1233; R²: 0.89 | `neural_regression_report.md` | Not separately benchmarked in repo; higher cost than classical ML because of sequence inference |
+
+Suggested validation language for the poster:
+
+- Lead scoring: "The Random Forest lead classifier achieved 85% accuracy with 0.933 ROC-AUC and strong recall, making it suitable for prioritizing high-intent leads."
+- Investor clustering: "K-Means produced four stable investor personas with a silhouette score of 0.3952, which is acceptable for behavior-driven segmentation."
+- Sentiment: "The SBERT sentiment pipeline reached 0.716 accuracy and 0.689 macro F1, providing a reusable NLP baseline for financial text."
+- Semantic search: "The retrieval engine returns relevant funds from a 14k-row corpus in roughly 120 ms, making it suitable for interactive fund lookup."
+- LSTM forecasting: "The NAV forecaster achieved RMSE 0.1233 and R² 0.89, showing good trend capture on the holdout sequence."
+
+If you want a stricter report layout, the same material can be reformatted into a poster-ready table with columns for screenshot, metric, insight, and takeaway.
+
+
 ## Big Data Phase (Data Engineering)
 
 Purpose: build a scalable, auditable ingestion and preprocessing layer that converts multi-format raw sources into a reproducible columnar lake for analytics and ML.

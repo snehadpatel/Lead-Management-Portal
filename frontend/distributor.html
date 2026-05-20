@@ -435,19 +435,45 @@
         <p class="mt-8">Key: SEBI Regulations 2013, AMFI Code of Conduct, KYC norms</p>`,
     };
 
+    let buddyHistory = [];
+
     function showBuddyTopic(topic) {
       document.getElementById('buddyResponse').innerHTML = `<div class="card card-left-violet">${BUDDY_TOPICS[topic]}</div>`;
     }
 
-    function askBuddy() {
+    async function askBuddy() {
       const q = document.getElementById('buddyQuestion').value;
       if (!q) return;
-      document.getElementById('buddyResponse').innerHTML = `
+      const responseEl = document.getElementById('buddyResponse');
+      const safeQuestion = q.replace(/[&<>"]|'/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+      responseEl.innerHTML = `
         <div class="card card-left-violet">
           <h4>🤖 AI Buddy Response</h4>
-          <p class="mt-8"><strong>Question:</strong> ${q}</p>
-          <p class="mt-8">Always listen first, understand the investor's concern. Use data from the Market Intelligence tab to support your recommendations. For compliance questions, check the Document Auditor.</p>
+          <p class="mt-8"><strong>Question:</strong> ${safeQuestion}</p>
+          <p class="mt-8 text-muted">Thinking with the shared NLP buddy engine...</p>
         </div>`;
+
+      buddyHistory.push({ role: 'user', content: q });
+      buddyHistory = buddyHistory.slice(-8);
+
+      const res = await askBuddyChat(q, buddyHistory, state.role || 'demo_distributor');
+      if (res) {
+        buddyHistory.push({ role: 'assistant', content: res.response || '' });
+        buddyHistory = buddyHistory.slice(-8);
+        const safeResponse = String(res.response || '').replace(/[&<>"]|'/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+        responseEl.innerHTML = `
+          <div class="card card-left-violet">
+            <h4>🤖 AI Buddy Response</h4>
+            <p class="mt-8">${safeResponse}</p>
+            <p class="mt-8 text-xs text-muted">Confidence: ${(res.confidence * 100).toFixed(0)}%</p>
+          </div>`;
+      } else {
+        responseEl.innerHTML = `
+          <div class="card card-left-red">
+            <h4>🤖 AI Buddy Response</h4>
+            <p class="mt-8">The backend AI buddy is offline. Start the FastAPI service to enable live answers.</p>
+          </div>`;
+      }
     }
 
     // ── CRM Client Insight Engine ──

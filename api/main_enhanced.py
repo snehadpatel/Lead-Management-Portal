@@ -26,6 +26,7 @@ import numpy as np
 from lume_platform.config import DATA_ROOT, EXPORT_DIR, MODELS_DIR, PROJECT_ROOT, TABLEAU_PUBLIC_EMBED_URL
 from lume_platform.crm.dashboard_service import build_dashboard_leads, build_dashboard_overview, update_lead_workflow
 from lume_platform.inference.registry import ModelRegistry
+from lume_platform.ml.buddy_engine import BuddyEngine
 from lume_platform.db.mongo_client import db_client
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -55,6 +56,7 @@ app.add_middleware(
 
 # Global registry
 registry = ModelRegistry()
+buddy_engine = BuddyEngine()
 
 def fallback_sentiment_predict(text: str) -> tuple[str, float]:
     text_lower = text.lower()
@@ -259,6 +261,7 @@ class ForecastResponse(BaseModel):
 class AdvisorRequest(BaseModel):
     query: str
     persona: Optional[str] = "balanced"
+    history: Optional[List[Dict[str, str]]] = None
 
 class AdvisorResponse(BaseModel):
     timestamp: str
@@ -1169,11 +1172,38 @@ def advisor_query(request: AdvisorRequest):
     try:
         from lume_platform.risk.live_risk_analyzer import risk_analyzer
         market_data = risk_analyzer.fetch_live_market_data()
+        buddy_reply = buddy_engine.generate(
+            request.query,
+            audience="investor",
+            persona=request.persona,
+            history=request.history,
+            market_context=f"{market_data.sentiment.upper()} market with VIX {market_data.vix}",
+        )
         
         # 1. Get Semantic Matches
         funds = []
         if registry.sbert_search:
             funds = registry.sbert_search.query(request.query, top_k=3)
+        if not funds:
+            strategy_map = {
+                "conservative": [
+                    {"name": "Liquid Fund", "score": 0.88, "fund_name": "Liquid Fund"},
+                    {"name": "Short Duration Fund", "score": 0.84, "fund_name": "Short Duration Fund"},
+                ],
+                "balanced": [
+                    {"name": "Aggressive Hybrid Fund", "score": 0.86, "fund_name": "Aggressive Hybrid Fund"},
+                    {"name": "Balanced Advantage Fund", "score": 0.82, "fund_name": "Balanced Advantage Fund"},
+                ],
+                "growth": [
+                    {"name": "Large Cap Index Fund", "score": 0.85, "fund_name": "Large Cap Index Fund"},
+                    {"name": "Mid Cap Fund", "score": 0.83, "fund_name": "Mid Cap Fund"},
+                ],
+                "passive": [
+                    {"name": "Nifty 50 Index Fund", "score": 0.9, "fund_name": "Nifty 50 Index Fund"},
+                    {"name": "Nifty Next 50 Index Fund", "score": 0.83, "fund_name": "Nifty Next 50 Index Fund"},
+                ],
+            }
+            funds = strategy_map.get((request.persona or "balanced").lower(), strategy_map["balanced"])
         
         # 2. Get Market Sentiment
         sentiment = "Neutral"
@@ -1201,22 +1231,24 @@ def advisor_query(request: AdvisorRequest):
             sentiment, conf = fallback_sentiment_predict(request.query)
             
         # 3. Synthesize explainable (XAI) advice incorporating live market sentiment and VIX
-        analysis = f"Regarding '{request.query}': Lume AI Advisor analyzed this query against your {request.persona.upper()} risk profile. "
+        analysis = buddy_reply.response
+        analysis += f" [AI Confidence: {round(buddy_reply.confidence * 100, 1)}%]"
         
         if market_data.sentiment == "bearish":
-            analysis += f"Current market is BEARISH (Nifty 50 change: {market_data.nifty_change_pct}%, VIX: {market_data.vix}). Under these conditions, "
+            analysis += f" Current market is BEARISH (Nifty 50 change: {market_data.nifty_change_pct}%, VIX: {market_data.vix}). Under these conditions, "
             if request.persona == "conservative":
                 analysis += "we strongly recommend capital preservation. Stick to high-quality short-term debt and liquid funds. Stagger equity entries."
             else:
                 analysis += "we recommend systematic averaging (SIP) rather than lump-sum investments, focusing on large-cap index tracking or balanced hybrids."
         else:
-            analysis += f"Current market is BULLISH (Nifty 50 change: {market_data.nifty_change_pct}%, VIX: {market_data.vix}). Under these conditions, "
+            analysis += f" Current market is BULLISH (Nifty 50 change: {market_data.nifty_change_pct}%, VIX: {market_data.vix}). Under these conditions, "
             if request.persona == "growth":
                 analysis += "broad-market and mid-cap equity allocations are favored for alpha generation. Stagger SIP to manage intraday dips."
             else:
                 analysis += "we recommend a balanced allocation with 60% equities and 40% high-yield debt to lock in moderate growth."
-                
-        analysis += f" [AI Confidence: {round(conf*100, 1)}%]"
+
+        if buddy_reply.follow_up:
+            analysis += f" Next step: {buddy_reply.follow_up}"
             
         return AdvisorResponse(
             timestamp=datetime.utcnow().isoformat(),
@@ -1268,19 +1300,18 @@ def buddy_chat(request: BuddyChatRequest):
     Powered by the Custom PyTorch Transformer Model.
     """
     try:
-        # Simulate local transformer generation
-        response_text = ""
-        if "objection" in request.message.lower() or "risk" in request.message.lower():
-            response_text = "To handle the objection about high risk, explain that SIPs average out market volatility."
-        elif "script" in request.message.lower() or "call" in request.message.lower():
-            response_text = "Here is your script: 'Hi, I saw you were looking at HDFC Liquid. Given the current bearish sentiment, it's a great safe harbor.'"
-        else:
-            response_text = "I am LumeBuddy, your custom-trained AI assistant. How can I help you pitch today?"
+        reply = buddy_engine.generate(
+            request.message,
+            audience="distributor",
+            history=request.history,
+            distributor_id=request.distributor_id,
+            lead_id=request.lead_id,
+        )
 
         return BuddyChatResponse(
             timestamp=datetime.utcnow().isoformat(),
-            response=response_text,
-            confidence=0.89
+            response=reply.response,
+            confidence=reply.confidence
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
