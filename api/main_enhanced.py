@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, RedirectResponse
 from pydantic import BaseModel, ConfigDict, Field, validator
 import pandas as pd
 import numpy as np
@@ -331,13 +331,8 @@ class ClientInsightsResponse(BaseModel):
 
 @app.get("/", tags=["Root"])
 def root():
-    """API root with basic info"""
-    return {
-        "name": "Lume AI Platform API",
-        "version": "2.0.0",
-        "docs": "/docs",
-        "health": "/health"
-    }
+    """Redirect to frontend"""
+    return RedirectResponse(url="/frontend/")
 
 
 @app.get("/health", response_model=HealthResponse, tags=["Health"])

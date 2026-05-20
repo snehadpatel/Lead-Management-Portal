@@ -21,6 +21,14 @@ echo -e "${NC}"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
+# Parse command line arguments
+START_STREAMLIT=true
+for arg in "$@"; do
+    if [ "$arg" == "--no-streamlit" ] || [ "$arg" == "--api-only" ]; then
+        START_STREAMLIT=false
+    fi
+done
+
 # Check if virtual environment exists
 if [ -d "venv" ]; then
     echo -e "${GREEN}✓ Virtual environment found${NC}"
@@ -50,7 +58,7 @@ mkdir -p tableau_exports
 echo -e "${GREEN}✓ Directories created${NC}"
 
 # Check if models exist
-if [ ! -f "artifacts/models/lead_classifier.pkl" ]; then
+if [ ! -f "artifacts/models/lead_classifier_bundle.pkl" ]; then
     echo -e "${YELLOW}⚠ Models not found. Training required.${NC}"
     echo "Run: PYTHONPATH=src python -m lume_platform.ml.training"
     
@@ -100,34 +108,44 @@ echo -e "  ${BLUE}Health: http://localhost:$API_PORT/health${NC}"
 sleep 3
 
 # Start Streamlit Dashboard
-echo -e "\n${BLUE}Starting Streamlit Dashboard...${NC}"
-DASHBOARD_PORT=${STREAMLIT_PORT:-8501}
+if [ "$START_STREAMLIT" = true ]; then
+    echo -e "\n${BLUE}Starting Streamlit Dashboard...${NC}"
+    DASHBOARD_PORT=${STREAMLIT_PORT:-8501}
 
-if check_port $DASHBOARD_PORT; then
-    echo -e "${YELLOW}⚠ Port $DASHBOARD_PORT is already in use${NC}"
-    echo "Killing existing process..."
-    lsof -ti:$DASHBOARD_PORT | xargs kill -9 2>/dev/null || true
-    sleep 1
+    if check_port $DASHBOARD_PORT; then
+        echo -e "${YELLOW}⚠ Port $DASHBOARD_PORT is already in use${NC}"
+        echo "Killing existing process..."
+        lsof -ti:$DASHBOARD_PORT | xargs kill -9 2>/dev/null || true
+        sleep 1
+    fi
+
+    streamlit run streamlit_app.py --server.port $DASHBOARD_PORT &
+    DASHBOARD_PID=$!
+    echo -e "${GREEN}✓ Dashboard started on http://localhost:$DASHBOARD_PORT${NC}"
 fi
-
-streamlit run streamlit_app.py --server.port $DASHBOARD_PORT &
-DASHBOARD_PID=$!
-echo -e "${GREEN}✓ Dashboard started on http://localhost:$DASHBOARD_PORT${NC}"
 
 # Print summary
 echo -e "\n${GREEN}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║                   🎉 ALL SERVICES STARTED                   ║${NC}"
+if [ "$START_STREAMLIT" = true ]; then
+    echo -e "${GREEN}║                   🎉 ALL SERVICES STARTED                   ║${NC}"
+else
+    echo -e "${GREEN}║                   🎉 API SERVICE STARTED                    ║${NC}"
+fi
 echo -e "${GREEN}╠════════════════════════════════════════════════════════════╣${NC}"
 echo -e "${GREEN}║  API Server:    http://localhost:$API_PORT${NC}"
 echo -e "${GREEN}║  API Docs:      http://localhost:$API_PORT/docs${NC}"
-echo -e "${GREEN}║  Dashboard:     http://localhost:$DASHBOARD_PORT${NC}"
+if [ "$START_STREAMLIT" = true ]; then
+    echo -e "${GREEN}║  Dashboard:     http://localhost:$DASHBOARD_PORT${NC}"
+fi
 echo -e "${GREEN}╚════════════════════════════════════════════════════════════╝${NC}"
 
 # Function to cleanup on exit
 cleanup() {
     echo -e "\n${YELLOW}Shutting down services...${NC}"
     kill $API_PID 2>/dev/null || true
-    kill $DASHBOARD_PID 2>/dev/null || true
+    if [ "$START_STREAMLIT" = true ]; then
+        kill $DASHBOARD_PID 2>/dev/null || true
+    fi
     echo -e "${GREEN}✓ Services stopped${NC}"
     exit 0
 }

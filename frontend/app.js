@@ -2,7 +2,9 @@
    LUME AI — Core Application Logic
    ═══════════════════════════════════════════════════════════════ */
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = (window.location.protocol.startsWith('http') && window.location.port !== '5500' && window.location.port !== '3000') 
+  ? window.location.origin 
+  : 'http://localhost:8000';
 
 // ── State ──
 const state = {
@@ -279,10 +281,10 @@ function generateSampleFunds() {
 const chartDefaults = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins: { legend: { labels: { color: '#8B949E', font: { family: 'Inter' } } } },
+  plugins: { legend: { labels: { color: '#64748B', font: { family: 'Inter' } } } },
   scales: {
-    x: { ticks: { color: '#8B949E' }, grid: { color: 'rgba(33,38,45,0.8)' } },
-    y: { ticks: { color: '#8B949E' }, grid: { color: 'rgba(33,38,45,0.8)' } },
+    x: { ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+    y: { ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } },
   },
 };
 
@@ -313,7 +315,7 @@ function createDoughnutChart(canvasId, labels, data, colors, opts = {}) {
     type: 'doughnut',
     data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
     options: { responsive: true, maintainAspectRatio: false, cutout: '70%',
-      plugins: { legend: { position: 'bottom', labels: { color: '#8B949E', font: { family: 'Inter' }, padding: 16 } } }, ...opts },
+      plugins: { legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Inter' }, padding: 16 } } }, ...opts },
   });
 }
 

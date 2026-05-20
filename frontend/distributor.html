@@ -55,7 +55,7 @@
       <button class="tab active" data-tab="tab-leads" onclick="switchTab('main','tab-leads')">📞 My Leads</button>
       <button class="tab" data-tab="tab-scorer" onclick="switchTab('main','tab-scorer')">🎯 Score Lead</button>
       <button class="tab" data-tab="tab-funds" onclick="switchTab('main','tab-funds')">💼 Fund Recs</button>
-      <button class="tab" data-tab="tab-perf" onclick="switchTab('main','tab-perf')">📊 Performance</button>
+      <button class="tab" data-tab="tab-perf" onclick="switchTab('main','tab-perf')">📊 BI Analytics</button>
       <button class="tab" data-tab="tab-crm" onclick="switchTab('main','tab-crm')">🛡️ CRM Insights</button>
       <button class="tab" data-tab="tab-buddy" onclick="switchTab('main','tab-buddy')">🤖 AI Buddy</button>
       <button class="tab" data-tab="tab-sentiment" onclick="switchTab('main','tab-sentiment')">🧠 Sentiment AI</button>
@@ -110,17 +110,93 @@
       <div class="bento-grid" id="fundsGrid"></div>
     </div>
 
-    <!-- TAB: Performance -->
+    <!-- TAB: Performance (BI Analytics) -->
     <div class="tab-content" id="tab-perf" data-tab-content="main">
-      <div class="bento-grid mb-24">
-        <div class="bento-3 card"><div class="metric-value">₹12.5 Cr</div><div class="metric-label">Total AUM</div><div class="metric-delta positive">▲ +15%</div></div>
-        <div class="bento-3 card"><div class="metric-value">48</div><div class="metric-label">Active Investors</div><div class="metric-delta positive">▲ +3</div></div>
-        <div class="bento-3 card"><div class="metric-value">68%</div><div class="metric-label">Conversion Rate</div><div class="metric-delta positive">▲ Above avg</div></div>
-        <div class="bento-3 card"><div class="metric-value">₹45,250</div><div class="metric-label">Commission (Month)</div><div class="metric-delta positive">▲ +12%</div></div>
+      <!-- BI Filter Control Panel -->
+      <div class="card mb-24" style="padding: 16px 24px;">
+        <div class="flex justify-between items-center flex-wrap gap-16">
+          <div class="flex items-center gap-8">
+            <span style="font-size: 1.25rem;">📊</span>
+            <div>
+              <h4 style="margin:0;">BI Interactive Control Center</h4>
+              <p class="text-xs text-muted" style="margin:0;">Slice and dice client portfolio telemetry</p>
+            </div>
+          </div>
+          <div class="flex gap-12 flex-wrap">
+            <div class="flex items-center gap-8">
+              <label class="text-xs text-muted text-mono">Horizon:</label>
+              <select id="biHorizon" class="form-select" style="width: auto; padding: 6px 12px; font-size: 0.8rem; height: auto;" onchange="updateBIAnalytics()">
+                <option value="6m">Last 6 Months</option>
+                <option value="1y" selected>Last 1 Year</option>
+                <option value="3y">Last 3 Years</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-8">
+              <label class="text-xs text-muted text-mono">Segment:</label>
+              <select id="biSegment" class="form-select" style="width: auto; padding: 6px 12px; font-size: 0.8rem; height: auto;" onchange="updateBIAnalytics()">
+                <option value="all" selected>All Schemes</option>
+                <option value="equity">Equity Focus</option>
+                <option value="debt">Debt Focus</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-8">
+              <label class="text-xs text-muted text-mono">Region:</label>
+              <select id="biRegion" class="form-select" style="width: auto; padding: 6px 12px; font-size: 0.8rem; height: auto;" onchange="updateBIAnalytics()">
+                <option value="all" selected>All India</option>
+                <option value="north">North Region</option>
+                <option value="west">West Region</option>
+                <option value="south">South Region</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="bento-grid mb-24">
+        <div class="bento-3 card"><div class="metric-value" id="biKpiAum">₹12.5 Cr</div><div class="metric-label">Total AUM</div><div class="metric-delta positive">▲ +15%</div></div>
+        <div class="bento-3 card"><div class="metric-value" id="biKpiActive">48</div><div class="metric-label">Active Investors</div><div class="metric-delta positive">▲ +3</div></div>
+        <div class="bento-3 card"><div class="metric-value" id="biKpiRate">68%</div><div class="metric-label">Conversion Rate</div><div class="metric-delta positive">▲ Above avg</div></div>
+        <div class="bento-3 card"><div class="metric-value" id="biKpiComm">₹45,250</div><div class="metric-label">Commission (Month)</div><div class="metric-delta positive">▲ +12%</div></div>
+      </div>
+
+      <!-- First Row of BI Charts -->
+      <div class="bento-grid mb-24">
+        <!-- Dual Axis Mixed Chart (AUM Growth vs Commissions) -->
+        <div class="bento-6 card">
+          <h4 class="mb-8">📈 AUM Dynamics & Commission Mix</h4>
+          <p class="text-xs text-muted mb-16">Dual-axis correlation of total managed assets against distributor payouts</p>
+          <div class="chart-container" style="height:280px;"><canvas id="aumCommissionChart"></canvas></div>
+        </div>
+        <!-- Client Persona Footprint (Radar Chart) -->
+        <div class="bento-6 card">
+          <h4 class="mb-8">🕸️ Client Segment Characteristics</h4>
+          <p class="text-xs text-muted mb-16">Interactive profile of investor clusters on 5 behavioral dimensions</p>
+          <div class="chart-container" style="height:280px;"><canvas id="distributorRadarChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Second Row: Lead Conversion Intelligence (Bubble Plot) & Insights -->
       <div class="bento-grid">
-        <div class="bento-6 card"><h4 class="mb-16">AUM Growth</h4><div class="chart-container" style="height:250px;"><canvas id="aumChart"></canvas></div></div>
-        <div class="bento-6 card"><h4 class="mb-16">Lead Funnel</h4><div class="chart-container" style="height:250px;"><canvas id="funnelChart"></canvas></div></div>
+        <div class="bento-8 card">
+          <h4 class="mb-8">💬 Lead Conversion Intelligence</h4>
+          <p class="text-xs text-muted mb-16">Web Session Duration vs AI Conversion Probabilities, sized by Potential AUM</p>
+          <div class="chart-container" style="height:280px;"><canvas id="leadBubbleChart"></canvas></div>
+        </div>
+        <div class="bento-4 card card-accent-violet">
+          <h4>💡 AI Executive Briefing</h4>
+          <p class="text-xs text-muted mt-8">BI diagnostics from client telemetry:</p>
+          <div class="flex flex-col gap-12 mt-16" id="biInsightsList">
+            <div class="card card-left-emerald" style="padding: 10px 14px; margin: 0;">
+              <span class="text-xs font-bold text-emerald">CONVERSION DRIVER</span>
+              <p class="text-xs mt-4">Web sessions longer than 400s demonstrate a 88% higher conversion factor. Pitch active SIPs.</p>
+            </div>
+            <div class="card card-left-blue" style="padding: 10px 14px; margin: 0;">
+              <span class="text-xs font-bold text-blue">PORTFOLIO MIX ALERT</span>
+              <p class="text-xs mt-4">Growth seekers currently represent 62% of your client base. Balanced funds are under-allocated.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -380,14 +456,198 @@
       }).join('');
     }
 
+    let biAumCommChart = null;
+    let biRadarChart = null;
+    let biBubbleChart = null;
+
     function loadPerformanceCharts() {
-      createLineChart('aumChart', ['Jan','Feb','Mar','Apr','May','Jun'],
-        [{ label:'AUM (Cr)', data:[8.2,9.1,10.5,11.2,11.8,12.5], borderColor:'#2563EB', backgroundColor:'rgba(37,99,235,0.1)', fill:true, tension:0.4 }],
-        { scales: { ...chartDefaults.scales, y:{ ...chartDefaults.scales.y, beginAtZero:false } } }
-      );
-      createBarChart('funnelChart', ['Hot 🔥','Warm 🌡️','Cold ❄️'], [1117,980,833],
-        ['#EF4444','#F59E0B','#484F58']
-      );
+      updateBIAnalytics();
+    }
+
+    function updateBIAnalytics() {
+      const horizon = document.getElementById('biHorizon')?.value || '1y';
+      const segment = document.getElementById('biSegment')?.value || 'all';
+      const region = document.getElementById('biRegion')?.value || 'all';
+
+      let aumBase = 12.5;
+      let activeBase = 48;
+      let convBase = 68;
+      let commBase = 45250;
+
+      if (horizon === '6m') { aumBase *= 0.8; activeBase = Math.round(activeBase * 0.85); commBase = Math.round(commBase * 0.75); }
+      else if (horizon === '3y') { aumBase *= 2.2; activeBase = Math.round(activeBase * 2.5); commBase = Math.round(commBase * 2.1); }
+
+      if (segment === 'equity') { aumBase *= 0.65; commBase *= 0.7; }
+      else if (segment === 'debt') { aumBase *= 0.35; commBase *= 0.3; }
+
+      if (region === 'north') { aumBase *= 0.3; activeBase = Math.round(activeBase * 0.3); commBase = Math.round(commBase * 0.3); }
+      else if (region === 'west') { aumBase *= 0.4; activeBase = Math.round(activeBase * 0.4); commBase = Math.round(commBase * 0.4); }
+      else if (region === 'south') { aumBase *= 0.3; activeBase = Math.round(activeBase * 0.3); commBase = Math.round(commBase * 0.3); }
+
+      const biKpiAum = document.getElementById('biKpiAum');
+      const biKpiActive = document.getElementById('biKpiActive');
+      const biKpiRate = document.getElementById('biKpiRate');
+      const biKpiComm = document.getElementById('biKpiComm');
+
+      if (biKpiAum) biKpiAum.textContent = `₹${aumBase.toFixed(1)} Cr`;
+      if (biKpiActive) biKpiActive.textContent = activeBase;
+      if (biKpiRate) biKpiRate.textContent = `${Math.round(convBase + (Math.random() * 6 - 3))}%`;
+      if (biKpiComm) biKpiComm.textContent = `₹${commBase.toLocaleString()}`;
+
+      // Chart 1: Mixed Chart
+      let labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      let aumData = [8.2, 8.5, 9.1, 9.6, 10.5, 10.9, 11.2, 11.5, 11.8, 12.1, 12.3, 12.5].map(v => v * (aumBase / 12.5));
+      let commData = [31000, 32500, 34000, 35200, 38000, 39500, 41000, 42200, 43500, 44200, 44800, 45250].map(v => v * (commBase / 45250));
+
+      if (biAumCommChart) biAumCommChart.destroy();
+      const ctx1 = document.getElementById('aumCommissionChart');
+      if (ctx1) {
+        biAumCommChart = new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                type: 'line',
+                label: 'AUM Growth (Cr)',
+                data: aumData,
+                borderColor: 'var(--blue)',
+                backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                fill: true,
+                yAxisID: 'y',
+                tension: 0.4
+              },
+              {
+                type: 'bar',
+                label: 'Commission (₹)',
+                data: commData,
+                backgroundColor: 'rgba(80, 184, 148, 0.6)',
+                borderColor: 'var(--emerald)',
+                borderWidth: 1,
+                borderRadius: 4,
+                yAxisID: 'y1',
+                barThickness: 12
+              }
+            ]
+          },
+          options: {
+            ...chartDefaults,
+            scales: {
+              x: chartDefaults.scales.x,
+              y: { type: 'linear', position: 'left', ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+              y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#64748B' } }
+            }
+          }
+        });
+      }
+
+      // Chart 2: Radar Chart
+      if (biRadarChart) biRadarChart.destroy();
+      const ctx2 = document.getElementById('distributorRadarChart');
+      if (ctx2) {
+        biRadarChart = new Chart(ctx2, {
+          type: 'radar',
+          data: {
+            labels: ['Risk Tolerance', 'Digital Affinity', 'Advisory Touchpoints', 'Ticket Size', 'Retention Rate'],
+            datasets: [
+              {
+                label: 'Growth Seekers',
+                data: [85, 90, 40, 80, 75].map(v => Math.min(100, Math.max(10, v + Math.round(Math.random() * 10 - 5)))),
+                borderColor: 'var(--emerald)',
+                backgroundColor: 'rgba(80, 184, 148, 0.15)',
+                pointBackgroundColor: 'var(--emerald)'
+              },
+              {
+                label: 'Wealth Preservers',
+                data: [30, 50, 85, 95, 90].map(v => Math.min(100, Math.max(10, v + Math.round(Math.random() * 10 - 5)))),
+                borderColor: 'var(--blue)',
+                backgroundColor: 'rgba(74, 144, 226, 0.15)',
+                pointBackgroundColor: 'var(--blue)'
+              },
+              {
+                label: 'Passive Indexers',
+                data: [50, 95, 20, 60, 85].map(v => Math.min(100, Math.max(10, v + Math.round(Math.random() * 10 - 5)))),
+                borderColor: 'var(--violet)',
+                backgroundColor: 'rgba(165, 105, 189, 0.15)',
+                pointBackgroundColor: 'var(--violet)'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Inter' } } } },
+            scales: {
+              r: {
+                grid: { color: 'rgba(0,0,0,0.05)' },
+                angleLines: { color: 'rgba(0,0,0,0.05)' },
+                ticks: { display: false },
+                pointLabels: { color: '#64748B', font: { family: 'Inter', size: 10 } }
+              }
+            }
+          }
+        });
+      }
+
+      // Chart 3: Bubble Chart
+      if (biBubbleChart) biBubbleChart.destroy();
+      const ctx3 = document.getElementById('leadBubbleChart');
+      if (ctx3) {
+        biBubbleChart = new Chart(ctx3, {
+          type: 'bubble',
+          data: {
+            datasets: [
+              {
+                label: 'Hot Leads',
+                data: [
+                  { x: 420, y: 88, r: 15 },
+                  { x: 550, y: 92, r: 20 },
+                  { x: 610, y: 96, r: 24 }
+                ].map(pt => ({ x: pt.x, y: Math.min(100, pt.y + (Math.random() * 4 - 2)), r: pt.r })),
+                backgroundColor: 'rgba(236, 112, 99, 0.6)',
+                borderColor: 'var(--red)'
+              },
+              {
+                label: 'Warm Leads',
+                data: [
+                  { x: 210, y: 65, r: 10 },
+                  { x: 300, y: 72, r: 12 },
+                  { x: 380, y: 78, r: 16 }
+                ].map(pt => ({ x: pt.x, y: Math.min(100, pt.y + (Math.random() * 4 - 2)), r: pt.r })),
+                backgroundColor: 'rgba(245, 176, 65, 0.6)',
+                borderColor: 'var(--amber)'
+              },
+              {
+                label: 'Cold Leads',
+                data: [
+                  { x: 80, y: 25, r: 6 },
+                  { x: 120, y: 35, r: 8 },
+                  { x: 150, y: 45, r: 10 }
+                ].map(pt => ({ x: pt.x, y: Math.min(100, pt.y + (Math.random() * 4 - 2)), r: pt.r })),
+                backgroundColor: 'rgba(100, 116, 139, 0.5)',
+                borderColor: '#64748B'
+              }
+            ]
+          },
+          options: {
+            ...chartDefaults,
+            plugins: {
+              legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Inter' } } },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return `${context.dataset.label}: Time ${context.raw.x}s, Prob ${context.raw.y.toFixed(0)}%, Size ${context.raw.r}L`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { title: { display: true, text: 'Web Session Time (seconds)', color: '#64748B' }, ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+              y: { title: { display: true, text: 'Conversion Probability (%)', color: '#64748B' }, min: 0, max: 100, ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } }
+            }
+          }
+        });
+      }
     }
 
     async function analyzeSentiment() {
@@ -592,6 +852,126 @@
         `;
       }
     }
+
+    // ── Floating Chatbot Popup Functions ──
+    function toggleChatbotPopup() {
+      const popup = document.getElementById('chatPopup');
+      popup.classList.toggle('active');
+      if (popup.classList.contains('active')) {
+        document.getElementById('chatPopupInput').focus();
+      }
+    }
+
+    let popupHistory = [];
+
+    async function sendPopupMessage() {
+      const inputEl = document.getElementById('chatPopupInput');
+      const text = inputEl.value.trim();
+      if (!text) return;
+      
+      inputEl.value = '';
+      
+      const bodyEl = document.getElementById('chatPopupBody');
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = 'chatbot-msg user';
+      userMsgDiv.textContent = text;
+      bodyEl.appendChild(userMsgDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+
+      // Temporary typing indicator
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'chatbot-msg ai';
+      typingDiv.innerHTML = '<span class="pulse pulse-live" style="display:inline-block;width:6px;height:6px;margin-right:4px;"></span> Thinking...';
+      bodyEl.appendChild(typingDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+
+      popupHistory.push({ role: 'user', content: text });
+      popupHistory = popupHistory.slice(-10);
+
+      const res = await askBuddyChat(text, popupHistory, 'demo_distributor');
+      typingDiv.remove();
+
+      const aiMsgDiv = document.createElement('div');
+      aiMsgDiv.className = 'chatbot-msg ai';
+      if (res && res.response) {
+        popupHistory.push({ role: 'assistant', content: res.response });
+        popupHistory = popupHistory.slice(-10);
+        aiMsgDiv.textContent = res.response;
+      } else {
+        aiMsgDiv.innerHTML = '<span class="text-red">Lume AI server is offline. Please start FastAPI.</span>';
+      }
+      bodyEl.appendChild(aiMsgDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+    }
+
+    async function quickChatAction(topic) {
+      const bodyEl = document.getElementById('chatPopupBody');
+      let text = "";
+      if (topic === 'lead_management') text = "How should I handle hot vs cold leads?";
+      else if (topic === 'compliance') text = "What are the SEBI compliance rules for mutual fund distribution?";
+      else if (topic === 'fund_recommendation') text = "How do I match age and risk profile for recommendations?";
+
+      // Add a quick message from user
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = 'chatbot-msg user';
+      userMsgDiv.textContent = text;
+      bodyEl.appendChild(userMsgDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+
+      // Typing...
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'chatbot-msg ai';
+      typingDiv.innerHTML = '<span class="pulse pulse-live" style="display:inline-block;width:6px;height:6px;margin-right:4px;"></span> Fetching script...';
+      bodyEl.appendChild(typingDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+
+      const res = await askBuddyChat(text, popupHistory, 'demo_distributor');
+      typingDiv.remove();
+
+      const aiMsgDiv = document.createElement('div');
+      aiMsgDiv.className = 'chatbot-msg ai';
+      if (res && res.response) {
+        aiMsgDiv.textContent = res.response;
+      } else {
+        // fallback to templates in page
+        if (topic === 'lead_management') aiMsgDiv.innerHTML = BUDDY_TOPICS.lead_management;
+        else if (topic === 'compliance') aiMsgDiv.innerHTML = BUDDY_TOPICS.compliance;
+        else if (topic === 'fund_recommendation') aiMsgDiv.innerHTML = BUDDY_TOPICS.fund_recommendation;
+      }
+      bodyEl.appendChild(aiMsgDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+    }
   </script>
+
+  <!-- ═══ FLOATING AI CHATBOT POPUP ═══ -->
+  <div class="chatbot-bubble" id="chatBubble" onclick="toggleChatbotPopup()">💬</div>
+  <div class="chatbot-popup" id="chatPopup">
+    <div class="chatbot-header">
+      <div class="flex items-center gap-8">
+        <span style="font-size:1.2rem;">🤖</span>
+        <div>
+          <h4 style="margin:0;font-weight:600;color:white;">Lume AI Assistant</h4>
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:4px;">
+            <span style="display:inline-block;width:6px;height:6px;background:#50B894;border-radius:50%;"></span> Online
+          </span>
+        </div>
+      </div>
+      <button onclick="toggleChatbotPopup()" style="background:none;border:none;color:white;font-size:1.25rem;cursor:pointer;padding:0 4px;">×</button>
+    </div>
+    <div class="chatbot-body" id="chatPopupBody">
+      <div class="chatbot-msg ai">
+        Hello! I am your Lume AI Personal Copilot. I have full context of this dashboard. Ask me anything about leads, fund suitability, SIPs, or market trends!
+      </div>
+    </div>
+    <div class="chatbot-chips">
+      <div class="chatbot-chip" onclick="quickChatAction('lead_management')">📞 Lead scripts</div>
+      <div class="chatbot-chip" onclick="quickChatAction('compliance')">⚖️ SEBI Rules</div>
+      <div class="chatbot-chip" onclick="quickChatAction('fund_recommendation')">💡 Recommending</div>
+    </div>
+    <div class="chatbot-footer">
+      <input type="text" id="chatPopupInput" class="form-input" style="flex:1;font-size:0.85rem;padding:8px 12px;margin:0;" placeholder="Ask Lume AI..." onkeydown="if(event.key==='Enter') sendPopupMessage()">
+      <button class="btn btn-primary btn-sm" style="padding:8px 14px;" onclick="sendPopupMessage()">Send</button>
+    </div>
+  </div>
 </body>
 </html>

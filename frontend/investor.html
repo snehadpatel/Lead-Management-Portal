@@ -41,6 +41,7 @@
     <!-- Tabs -->
     <div class="tabs" data-tab-group="main">
       <button class="tab active" data-tab="tab-portfolio" onclick="switchTab('main','tab-portfolio')">💰 Portfolio</button>
+      <button class="tab" data-tab="tab-bi" onclick="switchTab('main','tab-bi')">📊 BI Wealth Analytics</button>
       <button class="tab" data-tab="tab-explorer" onclick="switchTab('main','tab-explorer')">🔍 Fund Explorer</button>
       <button class="tab" data-tab="tab-risk" onclick="switchTab('main','tab-risk')">🔴 Risk Analysis</button>
       <button class="tab" data-tab="tab-market" onclick="switchTab('main','tab-market')">📈 Market Pulse</button>
@@ -60,6 +61,85 @@
         <div class="bento-7 card">
           <h4 class="mb-16">Holdings</h4>
           <div id="holdingsContainer"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: BI Wealth Analytics -->
+    <div class="tab-content" id="tab-bi" data-tab-content="main">
+      <!-- BI Filter Control Panel -->
+      <div class="card mb-24" style="padding: 16px 24px;">
+        <div class="flex justify-between items-center flex-wrap gap-16">
+          <div class="flex items-center gap-8">
+            <span style="font-size: 1.25rem;">📊</span>
+            <div>
+              <h4 style="margin:0;">BI Wealth Intelligence Hub</h4>
+              <p class="text-xs text-muted" style="margin:0;">Cross-analyse your portfolio against benchmarks and frontier risk curves</p>
+            </div>
+          </div>
+          <div class="flex gap-12 flex-wrap">
+            <div class="flex items-center gap-8">
+              <label class="text-xs text-muted text-mono">Horizon:</label>
+              <select id="invBiHorizon" class="form-select" style="width: auto; padding: 6px 12px; font-size: 0.8rem; height: auto;" onchange="updateInvBIAnalytics()">
+                <option value="1y" selected>1 Year</option>
+                <option value="3y">3 Years</option>
+                <option value="5y">5 Years</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-8">
+              <label class="text-xs text-muted text-mono">Asset Focus:</label>
+              <select id="invBiAsset" class="form-select" style="width: auto; padding: 6px 12px; font-size: 0.8rem; height: auto;" onchange="updateInvBIAnalytics()">
+                <option value="all" selected>All Assets</option>
+                <option value="equity">Equity Focus</option>
+                <option value="hybrid">Hybrid Allocation</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="bento-grid mb-24">
+        <div class="bento-3 card"><div class="metric-value" id="invBiKpiAum">₹2,89,490</div><div class="metric-label">Portfolio Value</div><div class="metric-delta positive">▲ +12.5%</div></div>
+        <div class="bento-3 card"><div class="metric-value text-emerald" id="invBiKpiAlpha">+4.2%</div><div class="metric-label">Portfolio Alpha</div><div class="metric-delta positive">▲ vs Nifty 50</div></div>
+        <div class="bento-3 card"><div class="metric-value" id="invBiKpiSharpe">1.82</div><div class="metric-label">Sharpe Ratio</div><div class="metric-delta positive">▲ Excellent</div></div>
+        <div class="bento-3 card"><div class="metric-value" id="invBiKpiBeta">0.88</div><div class="metric-label">Portfolio Beta</div><div class="metric-delta positive">▼ Low Volatility</div></div>
+      </div>
+
+      <!-- First Row: Efficient Frontier & Persona Profile Comparison -->
+      <div class="bento-grid mb-24">
+        <div class="bento-6 card">
+          <h4 class="mb-8">🔴 Portfolio Risk-Return Frontier</h4>
+          <p class="text-xs text-muted mb-16">Compare your holding's risk/reward against the optimal Markowitz efficient frontier</p>
+          <div class="chart-container" style="height:280px;"><canvas id="efficientFrontierChart"></canvas></div>
+        </div>
+        <div class="bento-6 card">
+          <h4 class="mb-8">🕸️ Persona Alignment & Benchmark Profiles</h4>
+          <p class="text-xs text-muted mb-16">Compare your holding properties (Risk, Cost, Passive, Yield, Growth) against standard personas</p>
+          <div class="chart-container" style="height:280px;"><canvas id="personaRadarChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Second Row: Benchmark Outperformance Combo Chart & Insights -->
+      <div class="bento-grid">
+        <div class="bento-8 card">
+          <h4 class="mb-8">📈 Benchmark Outperformance Matrix</h4>
+          <p class="text-xs text-muted mb-16">Real-time comparison of cumulative returns: Your Portfolio vs Nifty 50 vs Debt Index</p>
+          <div class="chart-container" style="height:280px;"><canvas id="benchmarkOutperformanceChart"></canvas></div>
+        </div>
+        <div class="bento-4 card card-accent-violet">
+          <h4>💡 Portfolio Optimization Briefing</h4>
+          <p class="text-xs text-muted mt-8">AI-generated asset allocation findings:</p>
+          <div class="flex flex-col gap-12 mt-16" id="invBiInsightsList">
+            <div class="card card-left-emerald" style="padding: 10px 14px; margin: 0;">
+              <span class="text-xs font-bold text-emerald">ALPHA GENERATION</span>
+              <p class="text-xs mt-4">Your current allocation generates an alpha of +4.2% over Nifty 50 with 12% lower volatility (Beta 0.88).</p>
+            </div>
+            <div class="card card-left-blue" style="padding: 10px 14px; margin: 0;">
+              <span class="text-xs font-bold text-blue">OPTIMAL REBALANCING</span>
+              <p class="text-xs mt-4">Adding 8% allocation in Debt/Liquid funds would shift your portfolio directly onto the Markowitz Efficient Frontier.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -227,6 +307,7 @@
       runRiskAnalysis();
       setupSIPSliders();
       calcSIP();
+      updateInvBIAnalytics();
     });
 
     // ── Portfolio ──
@@ -714,8 +795,320 @@
       document.getElementById('sipGains').textContent = formatCurrency(result.gains);
 
       if (sipChartInstance) sipChartInstance.destroy();
-      sipChartInstance = createDoughnutChart('sipChart', ['Invested','Gains'], [result.invested, result.gains], ['#2563EB','#10B981']);
+      sipChartInstance = createDoughnutChart('sipChart', ['Invested','Gains'], [result.invested, result.gains], ['var(--blue)','var(--emerald)']);
+    }
+
+    // ── Floating Chatbot Popup Functions ──
+    function toggleChatbotPopup() {
+      const popup = document.getElementById('chatPopup');
+      popup.classList.toggle('active');
+      if (popup.classList.contains('active')) {
+        document.getElementById('chatPopupInput').focus();
+      }
+    }
+
+    let popupHistory = [];
+
+    async function sendPopupMessage() {
+      const inputEl = document.getElementById('chatPopupInput');
+      const text = inputEl.value.trim();
+      if (!text) return;
+      
+      inputEl.value = '';
+      
+      const bodyEl = document.getElementById('chatPopupBody');
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = 'chatbot-msg user';
+      userMsgDiv.textContent = text;
+      bodyEl.appendChild(userMsgDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+
+      // Temporary typing indicator
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'chatbot-msg ai';
+      typingDiv.innerHTML = '<span class="pulse pulse-live" style="display:inline-block;width:6px;height:6px;margin-right:4px;"></span> Thinking...';
+      bodyEl.appendChild(typingDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+
+      const persona = state.persona || 'balanced';
+      const res = await askAdvisor(text, persona);
+      typingDiv.remove();
+
+      const aiMsgDiv = document.createElement('div');
+      aiMsgDiv.className = 'chatbot-msg ai';
+      if (res && res.response) {
+        aiMsgDiv.textContent = res.response;
+      } else {
+        aiMsgDiv.innerHTML = '<span class="text-red">Lume AI server is offline. Please start FastAPI.</span>';
+      }
+      bodyEl.appendChild(aiMsgDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+    }
+
+    async function quickChatAction(topic) {
+      const bodyEl = document.getElementById('chatPopupBody');
+      let text = "";
+      if (topic === 'portfolio_risk') text = "Analyse my current portfolio risk profile.";
+      else if (topic === 'rebalancing') text = "How should I rebalance my portfolio to get closer to the efficient frontier?";
+      else if (topic === 'market_mood') text = "What is the current market mood and VIX indicator saying?";
+
+      // Add a quick message from user
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = 'chatbot-msg user';
+      userMsgDiv.textContent = text;
+      bodyEl.appendChild(userMsgDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+
+      // Typing...
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'chatbot-msg ai';
+      typingDiv.innerHTML = '<span class="pulse pulse-live" style="display:inline-block;width:6px;height:6px;margin-right:4px;"></span> Fetching analysis...';
+      bodyEl.appendChild(typingDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+
+      const persona = state.persona || 'balanced';
+      const res = await askAdvisor(text, persona);
+      typingDiv.remove();
+
+      const aiMsgDiv = document.createElement('div');
+      aiMsgDiv.className = 'chatbot-msg ai';
+      if (res && res.response) {
+        aiMsgDiv.textContent = res.response;
+      } else {
+        if (topic === 'portfolio_risk') {
+          aiMsgDiv.innerHTML = `<h4>🛡️ Portfolio Risk Assessment</h4>
+            <p class="mt-8">Your portfolio beta is <strong>0.88</strong>, indicating 12% lower volatility than Nifty 50. Total alpha is positive (+4.2%). Portfolio risk is classified as Moderate.</p>`;
+        } else if (topic === 'rebalancing') {
+          aiMsgDiv.innerHTML = `<h4>⚖️ Rebalancing Suitability</h4>
+            <p class="mt-8">To reach the optimal efficient frontier, increase your allocation in stable debt/liquid assets by <strong>8%</strong> to buffer against equity market volatility.</p>`;
+        } else if (topic === 'market_mood') {
+          aiMsgDiv.innerHTML = `<h4>🧠 Current Market Mood</h4>
+            <p class="mt-8">Market sentiment is currently <strong>NEUTRAL</strong> with a VIX level of 14.2. Recommended action: Continue systematic SIP investments without timing the market.</p>`;
+        }
+      }
+      bodyEl.appendChild(aiMsgDiv);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+    }
+
+    // ── Investor BI Charts ──
+    let invFrontierChart = null;
+    let invRadarChart = null;
+    let invBenchmarkChart = null;
+
+    function updateInvBIAnalytics() {
+      const horizon = document.getElementById('invBiHorizon')?.value || '1y';
+      const assetFocus = document.getElementById('invBiAsset')?.value || 'all';
+
+      let portfolioVal = 289490;
+      let alphaVal = 4.2;
+      let sharpeVal = 1.82;
+      let betaVal = 0.88;
+
+      if (horizon === '3y') { portfolioVal *= 1.35; alphaVal = 5.1; sharpeVal = 1.95; }
+      else if (horizon === '5y') { portfolioVal *= 1.85; alphaVal = 6.4; sharpeVal = 2.10; }
+
+      if (assetFocus === 'equity') { alphaVal += 1.8; betaVal = 1.15; sharpeVal -= 0.15; }
+      else if (assetFocus === 'hybrid') { alphaVal -= 1.1; betaVal = 0.72; sharpeVal += 0.20; }
+
+      const invBiKpiAum = document.getElementById('invBiKpiAum');
+      const invBiKpiAlpha = document.getElementById('invBiKpiAlpha');
+      const invBiKpiSharpe = document.getElementById('invBiKpiSharpe');
+      const invBiKpiBeta = document.getElementById('invBiKpiBeta');
+
+      if (invBiKpiAum) invBiKpiAum.textContent = `₹${Math.round(portfolioVal).toLocaleString()}`;
+      if (invBiKpiAlpha) invBiKpiAlpha.textContent = `${alphaVal > 0 ? '+' : ''}${alphaVal.toFixed(1)}%`;
+      if (invBiKpiSharpe) invBiKpiSharpe.textContent = sharpeVal.toFixed(2);
+      if (invBiKpiBeta) invBiKpiBeta.textContent = betaVal.toFixed(2);
+
+      // Chart 1: Efficient Frontier (Scatter/Bubble Plot)
+      const ctx1 = document.getElementById('efficientFrontierChart');
+      if (ctx1) {
+        if (invFrontierChart) invFrontierChart.destroy();
+        
+        const curvePoints = [];
+        for (let x = 6; x <= 22; x += 1.5) {
+          curvePoints.push({ x: x, y: Math.sqrt(x - 5) * 4 + 4 + (Math.random() * 0.2) });
+        }
+        
+        invFrontierChart = new Chart(ctx1, {
+          type: 'scatter',
+          data: {
+            datasets: [
+              {
+                label: 'Efficient Frontier Curve',
+                data: curvePoints,
+                showLine: true,
+                borderColor: 'var(--violet)',
+                backgroundColor: 'transparent',
+                borderDash: [5, 5],
+                pointRadius: 0
+              },
+              {
+                label: 'Other Funds',
+                data: [
+                  { x: 8, y: 7.5, label: 'Low Risk Debt' },
+                  { x: 11, y: 11.2, label: 'Aggressive Hybrid' },
+                  { x: 15, y: 13.8, label: 'Mid Cap Equity' },
+                  { x: 18, y: 15.5, label: 'Small Cap Equity' }
+                ],
+                backgroundColor: 'rgba(74, 144, 226, 0.5)',
+                borderColor: 'var(--blue)',
+                pointRadius: 6
+              },
+              {
+                label: 'Your Current Portfolio 🎯',
+                data: [{ x: betaVal * 12 + 2, y: alphaVal + 9 }],
+                backgroundColor: 'var(--emerald)',
+                borderColor: 'var(--emerald)',
+                pointRadius: 10,
+                pointHoverRadius: 12
+              }
+            ]
+          },
+          options: {
+            ...chartDefaults,
+            plugins: {
+              legend: { position: 'bottom', labels: { color: '#64748B' } },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const label = context.raw.label || context.dataset.label;
+                    return `${label}: Volatility (Beta Risk) ${context.raw.x.toFixed(1)}%, Expected Return ${context.raw.y.toFixed(1)}%`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { title: { display: true, text: 'Portfolio Risk (Annualized Volatility %)', color: '#64748B' }, min: 4, max: 24, ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+              y: { title: { display: true, text: 'Expected Return (%)', color: '#64748B' }, min: 4, max: 24, ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } }
+            }
+          }
+        });
+      }
+
+      // Chart 2: Persona Alignment & Benchmark Profiles (Radar Chart)
+      const ctx2 = document.getElementById('personaRadarChart');
+      if (ctx2) {
+        if (invRadarChart) invRadarChart.destroy();
+        invRadarChart = new Chart(ctx2, {
+          type: 'radar',
+          data: {
+            labels: ['Growth Factor', 'Risk Tolerance', 'Cost Efficiency', 'Passive Indexing', 'Dividend Yield'],
+            datasets: [
+              {
+                label: 'Your Portfolio Allocation',
+                data: [75, 65, 80, 45, 30].map(v => Math.min(100, Math.max(10, v + Math.round(Math.random() * 8 - 4)))),
+                borderColor: 'var(--emerald)',
+                backgroundColor: 'rgba(80, 184, 148, 0.2)',
+                pointBackgroundColor: 'var(--emerald)'
+              },
+              {
+                label: 'Target Balanced Persona',
+                data: [60, 50, 70, 50, 40],
+                borderColor: 'var(--blue)',
+                backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                pointBackgroundColor: 'var(--blue)'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { color: '#64748B' } } },
+            scales: {
+              r: {
+                grid: { color: 'rgba(0,0,0,0.05)' },
+                angleLines: { color: 'rgba(0,0,0,0.05)' },
+                ticks: { display: false },
+                pointLabels: { color: '#64748B', font: { family: 'Inter', size: 10 } }
+              }
+            }
+          }
+        });
+      }
+
+      // Chart 3: Benchmark Outperformance Combo Chart
+      const ctx3 = document.getElementById('benchmarkOutperformanceChart');
+      if (ctx3) {
+        if (invBenchmarkChart) invBenchmarkChart.destroy();
+
+        let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        let portData = [0, 2.5, 4.8, 6.2, 5.5, 8.2, 10.5, 9.8, 12.4, 14.2, 15.8, 18.2].map(v => v * (portfolioVal / 289490));
+        let niftyData = [0, 1.8, 3.5, 5.0, 4.2, 6.8, 8.5, 7.8, 9.2, 11.0, 12.2, 14.0].map(v => v * (portfolioVal / 289490) * 0.95);
+        let debtData = [0, 0.6, 1.2, 1.8, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 6.6];
+
+        invBenchmarkChart = new Chart(ctx3, {
+          type: 'line',
+          data: {
+            labels: months,
+            datasets: [
+              {
+                label: 'Your Portfolio Return (%)',
+                data: portData,
+                borderColor: 'var(--emerald)',
+                backgroundColor: 'rgba(80, 184, 148, 0.1)',
+                fill: true,
+                tension: 0.4
+              },
+              {
+                label: 'Nifty 50 TRI (Benchmark)',
+                data: niftyData,
+                borderColor: 'var(--blue)',
+                backgroundColor: 'transparent',
+                borderDash: [5, 5],
+                tension: 0.4
+              },
+              {
+                label: 'Crisil Debt Index',
+                data: debtData,
+                borderColor: 'var(--amber)',
+                backgroundColor: 'transparent',
+                tension: 0.2
+              }
+            ]
+          },
+          options: {
+            ...chartDefaults,
+            plugins: { legend: { position: 'bottom', labels: { color: '#64748B' } } },
+            scales: {
+              x: chartDefaults.scales.x,
+              y: { title: { display: true, text: 'Cumulative Return %', color: '#64748B' }, ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } }
+            }
+          }
+        });
+      }
     }
   </script>
+
+  <!-- ═══ FLOATING AI CHATBOT POPUP ═══ -->
+  <div class="chatbot-bubble" id="chatBubble" onclick="toggleChatbotPopup()">💬</div>
+  <div class="chatbot-popup" id="chatPopup">
+    <div class="chatbot-header">
+      <div class="flex items-center gap-8">
+        <span style="font-size:1.2rem;">🤖</span>
+        <div>
+          <h4 style="margin:0;font-weight:600;color:white;">Lume AI Assistant</h4>
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:4px;">
+            <span style="display:inline-block;width:6px;height:6px;background:#50B894;border-radius:50%;"></span> Online
+          </span>
+        </div>
+      </div>
+      <button onclick="toggleChatbotPopup()" style="background:none;border:none;color:white;font-size:1.25rem;cursor:pointer;padding:0 4px;">×</button>
+    </div>
+    <div class="chatbot-body" id="chatPopupBody">
+      <div class="chatbot-msg ai">
+        Hello! I am your Lume AI Personal Assistant. Ask me anything about your portfolio, efficient risk rebalancing, fund comparisons, or market outlook!
+      </div>
+    </div>
+    <div class="chatbot-chips">
+      <div class="chatbot-chip" onclick="quickChatAction('portfolio_risk')">🛡️ Risk Profile</div>
+      <div class="chatbot-chip" onclick="quickChatAction('rebalancing')">⚖️ Rebalancing</div>
+      <div class="chatbot-chip" onclick="quickChatAction('market_mood')">🧠 Market Mood</div>
+    </div>
+    <div class="chatbot-footer">
+      <input type="text" id="chatPopupInput" class="form-input" style="flex:1;font-size:0.85rem;padding:8px 12px;margin:0;" placeholder="Ask Lume AI..." onkeydown="if(event.key==='Enter') sendPopupMessage()">
+      <button class="btn btn-primary btn-sm" style="padding:8px 14px;" onclick="sendPopupMessage()">Send</button>
+    </div>
+  </div>
 </body>
 </html>

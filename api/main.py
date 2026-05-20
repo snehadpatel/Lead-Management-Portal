@@ -13,6 +13,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from lume_platform.config import DATA_ROOT, EXPORT_DIR, PROJECT_ROOT, TABLEAU_PUBLIC_EMBED_URL
@@ -30,6 +32,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+frontend_dir = Path(__file__).resolve().parents[1] / "frontend"
+app.mount("/frontend", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+
+@app.get("/")
+def root():
+    return RedirectResponse(url="/frontend/")
 
 registry = ModelRegistry()
 

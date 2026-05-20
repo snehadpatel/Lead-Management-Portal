@@ -214,19 +214,72 @@ This section summarizes the model-specific outputs you can cite in the poster, d
 
 | Model | Prototype output screenshots | Dashboard / visualizations | Performance metrics | Charts / tables | Resource utilization |
 |---|---|---|---|---|---|
-| Lead conversion model (Random Forest) | Use `model_evaluations/random_forest/rf_confusion_matrix.png` and the classification report in `model_evaluations/random_forest/rf_evaluation_report.md` | Confusion matrix plus explainability chart in `model_evaluations/xai_insights/xai_rf_feature_weights.png` | Accuracy: 85.00%; Precision: 0.75; Recall: 0.90; F1: 0.82; ROC-AUC: 0.933; Average Precision: 0.890; CV F1: 0.806 ± 0.018; threshold: 0.43 | `real_metrics.json`, `classification_report.json`, `best_model.json` | Not separately benchmarked in repo; inference is lightweight tree-based scoring after preprocessing |
-| Investor persona clustering (K-Means) | Use `model_evaluations/kmeans/clustering_evaluation_report.md` | `model_evaluations/kmeans/kmeans_cluster_projection.png` and `model_evaluations/kmeans/kmeans_centroids_heatmap.png` | Silhouette score: 0.3952; clusters: 4 | `kmeans_metrics.json`, clustering report | Not separately benchmarked in repo; low-cost batch clustering over 7 behavior features |
-| Sentiment model (SBERT + classifier) | Use `model_evaluations/nlp_sentiment/nlp_evaluation_report.md` | Sentiment evaluation report and API response cards in the dashboard | Accuracy: 0.7160; Macro F1: 0.6888; method: SBERT | `metrics.json` | Not separately benchmarked in repo; transformer-style embeddings are the dominant cost when enabled |
-| Fund semantic search (SBERT retrieval) | Use `model_evaluations/tfidf_search/semantic_engine_report.md` | `model_evaluations/tfidf_search/cosine_similarity_decay.png` | Top-K retrieval: 5; practical query latency: under ~120 ms on the recorded test path | Semantic engine report and similarity decay chart | Retrieval is vector-based; memory cost depends on the cached embedding matrix size |
-| LSTM NAV forecaster | Use `model_evaluations/lstm_forecaster/lstm_nav_predictions.png` | Forecast trajectory plot comparing predicted NAV path against the holdout trend | MSE: 0.0152; RMSE: 0.1233; R²: 0.89 | `neural_regression_report.md` | Not separately benchmarked in repo; higher cost than classical ML because of sequence inference |
+| Lead conversion model (Random Forest) | `model_evaluations/random_forest/rf_confusion_matrix.png` | Confusion matrix plus explainability chart in `model_evaluations/xai_insights/xai_rf_feature_weights.png` | Accuracy: 85.00%; class 0 precision/recall/F1: 0.932/0.818/0.871; class 1 precision/recall/F1: 0.751/0.903/0.820; macro F1: 0.846; weighted F1: 0.852; ROC-AUC: 0.933; PR-AUC: 0.890; CV F1: 0.806 ± 0.018; tuned threshold: 0.43 | `real_metrics.json`, `classification_report.json`, `best_model.json`, `rf_evaluation_report.md` | Not separately benchmarked in repo; low-latency tree inference after preprocessing |
+| Investor persona clustering (K-Means) | `model_evaluations/kmeans/kmeans_cluster_projection.png` | `model_evaluations/kmeans/kmeans_centroids_heatmap.png` | Clusters: 4; silhouette: 0.395 | `kmeans_metrics.json`, `clustering_evaluation_report.md` | Not separately benchmarked in repo; cheap batch scoring over 7 survey features |
+| Sentiment model (SBERT + classifier) | `model_evaluations/nlp_sentiment/nlp_evaluation_report.md` | Sentiment report used as the evaluation summary for the dashboard NLP path | Accuracy: 0.7160; macro F1: 0.6888; method: SBERT | `metrics.json`, `nlp_evaluation_report.md` | Not separately benchmarked in repo; transformer embedding cost is the main compute factor |
+| Fund semantic search (SBERT retrieval) | `model_evaluations/tfidf_search/semantic_engine_report.md` | `model_evaluations/tfidf_search/cosine_similarity_decay.png` | Top-K retrieval: 5; practical query latency: under ~120 ms on the recorded test path | Semantic engine report and similarity decay chart | Retrieval is vector-based; memory depends on the cached embedding matrix size |
+| LSTM NAV forecaster | `model_evaluations/lstm_forecaster/lstm_nav_predictions.png` | Forecast trajectory plot comparing predicted NAV path against the holdout trend | MSE: 0.0152; RMSE: 0.1233; R²: 0.89 | `neural_regression_report.md` | Not separately benchmarked in repo; heavier sequence inference than classical ML |
 
 Suggested validation language for the poster:
 
-- Lead scoring: "The Random Forest lead classifier achieved 85% accuracy with 0.933 ROC-AUC and strong recall, making it suitable for prioritizing high-intent leads."
-- Investor clustering: "K-Means produced four stable investor personas with a silhouette score of 0.3952, which is acceptable for behavior-driven segmentation."
+- Lead scoring: "The Random Forest lead classifier achieved 85% accuracy with 0.933 ROC-AUC, 0.890 PR-AUC, class-1 recall of 0.903, and a tuned threshold of 0.43 for better lead capture."
+- Investor clustering: "K-Means produced four investor personas with a silhouette score of 0.395, which is acceptable for behavior-driven segmentation."
 - Sentiment: "The SBERT sentiment pipeline reached 0.716 accuracy and 0.689 macro F1, providing a reusable NLP baseline for financial text."
 - Semantic search: "The retrieval engine returns relevant funds from a 14k-row corpus in roughly 120 ms, making it suitable for interactive fund lookup."
-- LSTM forecasting: "The NAV forecaster achieved RMSE 0.1233 and R² 0.89, showing good trend capture on the holdout sequence."
+- LSTM forecasting: "The NAV forecaster achieved MSE 0.0152, RMSE 0.1233, and R² 0.89, showing good trend capture on the holdout sequence."
+
+Detailed evaluation breakdown by model:
+
+### Lead conversion model
+
+- Holdout accuracy: 85.00%
+- Positive-class precision/recall/F1: 0.751 / 0.903 / 0.820
+- Negative-class precision/recall/F1: 0.932 / 0.818 / 0.871
+- Macro average precision/recall/F1: 0.842 / 0.860 / 0.846
+- Weighted average precision/recall/F1: 0.864 / 0.850 / 0.852
+- ROC-AUC: 0.933
+- Average precision / PR-AUC: 0.890
+- Five-fold CV F1: 0.806 ± 0.018
+- Decision threshold: 0.43
+- Tuned parameters: `n_estimators=200`, `max_depth=12`, `class_weight=balanced`
+- Artifacts: `real_metrics.json`, `classification_report.json`, `best_model.json`, `rf_confusion_matrix.png`, `xai_rf_feature_weights.png`
+
+### Investor persona clustering
+
+- Number of clusters: 4
+- Silhouette score: 0.395
+- Artifacts: `kmeans_metrics.json`, `kmeans_cluster_projection.png`, `kmeans_centroids_heatmap.png`, `clustering_evaluation_report.md`
+
+### Sentiment model
+
+- Accuracy: 0.7160
+- Macro F1: 0.6888
+- Method: SBERT-based sentiment classifier
+- Artifacts: `metrics.json`, `nlp_evaluation_report.md`
+
+### Fund semantic search
+
+- Retrieval method: TF-IDF / cosine similarity engine backed by SBERT-style semantic lookup
+- Top-K setting: 5
+- Recorded query latency: under ~120 ms
+- Evaluation focus: semantic matching rather than exact keyword lookup
+- Artifacts: `semantic_engine_report.md`, `cosine_similarity_decay.png`
+
+### LSTM NAV forecaster
+
+- MSE: 0.0152
+- RMSE: 0.1233
+- R²: 0.89
+- Evaluation focus: holdout NAV trend capture over sequence forecasting
+- Artifacts: `neural_regression_report.md`, `lstm_nav_predictions.png`
+
+### Resource utilization summary
+
+- Random Forest lead scoring: low compute, CPU-friendly inference.
+- K-Means clustering: very low compute for batch persona assignment.
+- SBERT sentiment: moderate compute due to embedding generation.
+- Semantic search: moderate memory use because embeddings are cached for retrieval.
+- LSTM forecasting: highest model cost among the listed pipelines because it runs sequence inference over historical data.
 
 If you want a stricter report layout, the same material can be reformatted into a poster-ready table with columns for screenshot, metric, insight, and takeaway.
 
