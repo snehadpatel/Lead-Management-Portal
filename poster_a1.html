@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A1 Studio Project Poster — Lume AI</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad:true });</script>
+  <style>
+    @page { size: A1 landscape; margin: 10mm; }
+    body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; }
+    .page { width: 841mm; height: 594mm; box-sizing: border-box; padding: 14mm; background:#ffffff }
+    .title-strip { background:#0b63c6; color: #fff; padding: 12px 18px; display:flex; justify-content:space-between; align-items:center; }
+    .title-strip h1 { margin:0; font-size:38px; }
+    .subtitle { font-size:14px; opacity:0.95 }
+    .grid { display:grid; grid-template-columns: 1fr 1.5fr 1fr; grid-gap: 18px; margin-top: 12px; }
+    .box { background:#fff; padding:14px; box-shadow: 0 0 0 1px rgba(0,0,0,0.04); border-radius:4px }
+    h2 { margin:6px 0; font-size:24px; }
+    h3 { margin:4px 0; font-size:16px; }
+    ul { margin:6px 0 0 18px; padding:0; font-size:16px }
+    .diagram { background:#fff; padding:12px; display:flex; align-items:center; justify-content:center; }
+    .metrics { display:flex; flex-direction:column; gap:8px; margin-top:6px }
+    .metric { background:#f6f8fa; padding:8px 10px; border-left:8px solid #007bff; font-size:16px }
+    .footer { display:flex; gap:12px; margin-top:12px; }
+    .wide { grid-column:1 / 4; }
+    .img { max-width:100%; height:auto; display:block; margin-top:8px; }
+    .mono { font-family: monospace; font-size:13px; background:#f4f4f4; padding:6px; display:inline-block; }
+    .small { font-size:13px }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="title-strip">
+      <div>
+        <h1>A1 Studio Project Poster Template</h1>
+        <div class="subtitle">Cloud Computing + AI + Big Data Analytics and Data Visualization</div>
+        <div class="small" style="margin-top:6px">Project: Lume AI — Big Data + ML Platform for Mutual-Fund Lead Intelligence</div>
+      </div>
+      <div style="text-align:right; font-size:13px">
+        Team Members: _______________________<br/>
+        Enrollment Nos: _____________________<br/>
+        Guide/Mentor: _______________________<br/>
+        Third Year (Sem 6) · B.Tech CSE
+      </div>
+    </div>
+
+    <div class="grid">
+      <div style="grid-column:1 / 4; font-size:14px; background:#f7f9fc; padding:10px; border-radius:4px">
+        <strong>Poster Rules:</strong> Rule of Thirds — 60% Visuals · 20% Text · 20% White space. Font sizes: Title 34–40pt; Headings 24–30pt; Body 16–20pt. Palette: Blue=Cloud, Orange=AI, Green=Big Data.
+      </div>
+
+      <div class="box">
+        <h2>1. Introduction & Problem Statement</h2>
+        <ul>
+          <li>Context / Domain: Indian mutual-fund distribution; CRM + market + fund documents</li>
+          <li>Problem: Fragmented data + manual routing → low conversion, poor personalization</li>
+          <li>Objectives:
+            <ul>
+              <li>Objective 1 — Scalable ETL and unified feature store</li>
+              <li>Objective 2 — Accurate lead scoring & persona routing</li>
+              <li>Objective 3 — Serveable prototype with dashboard/API</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="box diagram">
+        <div class="mermaid">
+flowchart LR
+  subgraph BDA["Big Data"]
+    A[Ingest CSV/JSON] --> B[PySpark ETL]
+    B --> C[(Parquet)]
+  end
+  subgraph AI["AI / ML"]
+    C --> D[RF leads]
+    C --> E[K-Means]
+    C --> F[LSTM]
+    C --> G[NLP]
+  end
+  subgraph DEP["Deploy"]
+    D --> H[FastAPI]
+    E --> H
+    F --> H
+    G --> H
+    H --> I[Streamlit]
+    H --> J[Docker]
+    I --> K[Tableau embed]
+  end
+  style BDA fill:#d4edda,stroke:#28a745
+  style AI fill:#ffd8bf,stroke:#fd7e14
+  style DEP fill:#d3e7ff,stroke:#0b63c6
+        </div>
+      </div>
+
+      <div class="box">
+        <h2>2. Methodology & Prototype Implementation</h2>
+        <ul>
+          <li>Tech stack: AWS/GCP | Hadoop/Spark | Python, PyTorch, scikit-learn</li>
+          <li>Prototype steps: Ingest → Clean → Feature → Train → Serve → Dashboard</li>
+          <li>Key algorithms/pipelines: RF/XGBoost, K-Means, LSTM, TF-IDF / SBERT</li>
+          <li>Workflow / Pseudocode: See `src/master_pipeline.py` (`run_full_system()` orchestrator)</li>
+        </ul>
+        <h3>Cloud Mapping</h3>
+        <ul>
+          <li>Storage: HDFS / S3 → Parquet</li>
+          <li>Compute: Spark cluster / serverless ML endpoints</li>
+          <li>API Gateway + CI/CD for deployment</li>
+        </ul>
+      </div>
+
+      <div class="box">
+        <h2>4. Results & Validation</h2>
+        <div class="metrics">
+          <div class="metric"><strong>Accuracy</strong>: 85.00%</div>
+          <div class="metric"><strong>Precision</strong>: 0.75</div>
+          <div class="metric"><strong>Recall</strong>: 0.90</div>
+          <div class="metric"><strong>F1</strong>: 0.82</div>
+          <div class="metric"><strong>ROC-AUC</strong>: 0.933</div>
+        </div>
+        <img src="model_evaluations/random_forest/rf_confusion_matrix.png" alt="confusion" class="img" onerror="this.style.display='none'"/>
+        <div class="small" style="margin-top:6px">Also show: processing latency, throughput, resource utilization (CPU/RAM) where available.</div>
+      </div>
+
+      <div class="box">
+        <h2 class="wide">5. Prototype Output / Screenshots</h2>
+        <ul>
+          <li>Screenshot 1: Streamlit dashboard (lead routing)</li>
+          <li>Screenshot 2: API docs (`/docs`) and sample JSON request/response</li>
+          <li>Screenshot 3: PCA cluster visualization / ROC curve</li>
+        </ul>
+        <div class="small">Place images in `model_evaluations/` or `dataset_visualisations/` and update `src` paths before exporting.</div>
+      </div>
+
+      <div class="box wide">
+        <h2>6. Conclusion & Future Scope</h2>
+        <ul>
+          <li>Key outcomes validated: reproducible ETL, validated models, serving stack</li>
+          <li>Scalability: Parquet + Spark → cloud storage; Docker + API for serving</li>
+          <li>Future: streaming (Kafka), automated retraining, SHAP explainability, SBERT semantic retrieval</li>
+        </ul>
+      </div>
+
+      <div class="box wide footer">
+        <div style="flex:1">
+          <h3>Poster Design & Formatting Guidelines</h3>
+          <ul>
+            <li>Rule of Thirds: 60% visuals / 20% text / 20% whitespace</li>
+            <li>Recommended font sizes: Title 34-40pt; Headings 24-30pt; Body 16-20pt</li>
+            <li>Suggested palette: Blue → Cloud | Orange → AI/ML | Green → Big Data</li>
+            <li>Avoid long paragraphs — use concise bullets only</li>
+          </ul>
+        </div>
+        <div style="width:340px">
+          <h3>Print Checklist</h3>
+          <ul>
+            <li>60% visuals · 20% text · 20% whitespace</li>
+            <li>Fonts readable at 1.5–2m</li>
+            <li>Export to PDF at 300 dpi (A1 landscape)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
