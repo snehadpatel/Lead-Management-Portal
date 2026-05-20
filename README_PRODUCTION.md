@@ -5,7 +5,7 @@ A scalable, production-ready data platform for lead scoring, investor clustering
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
 [![Spark](https://img.shields.io/badge/Apache%20Spark-3.5-orange.svg)](https://spark.apache.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-green.svg)](https://fastapi.tiangolo.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.32+-red.svg)](https://streamlit.io/)
+<!-- Streamlit is legacy; the active UI is the static frontend in /frontend. -->
 
 ## 📋 Table of Contents
 
@@ -31,8 +31,8 @@ A scalable, production-ready data platform for lead scoring, investor clustering
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │   Streamlit  │  │   FastAPI    │  │   Tableau    │          │
-│  │   Dashboard  │  │    Server    │  │   Embedded   │          │
+│  │ Static Front  │  │   FastAPI    │  │   Tableau    │          │
+│  │   Frontend   │  │    Server    │  │   Embedded   │          │
 │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘          │
 │         │                 │                 │                   │
 │         └─────────────────┼─────────────────┘                   │
@@ -93,8 +93,8 @@ PYTHONPATH=src python -m lume_platform.ml.training
 # Start API server
 PYTHONPATH=src uvicorn api.main_enhanced:app --reload --port 8000
 
-# Start dashboard (in new terminal)
-streamlit run streamlit_app.py
+# Start the static frontend (in new terminal)
+cd frontend && python -m http.server 5500
 
 # Export for BI tools
 PYTHONPATH=src python scripts/bi_export.py
@@ -143,7 +143,7 @@ export LUME_TABLEAU_EMBED_URL="your_tableau_public_embed_url"
 # API Configuration
 export FLASK_HOST="0.0.0.0"
 export FLASK_PORT="5000"
-export STREAMLIT_PORT="8501"
+export FRONTEND_PORT="5500"
 ```
 
 ---
@@ -393,9 +393,9 @@ Available models: `lead_scoring`, `investor_cluster`, `sentiment`
 
 ## 📈 Dashboard
 
-### Streamlit Dashboard
+### Static Frontend Dashboard
 
-The dashboard provides:
+The active dashboard is the static frontend in [`frontend/`](frontend/). It provides:
 - Dataset audit and exploration
 - Real-time AI predictions
 - Data visualizations
@@ -404,7 +404,7 @@ The dashboard provides:
 
 **Run**:
 ```bash
-streamlit run streamlit_app.py
+cd frontend && python -m http.server 5500
 ```
 
 **Access**: http://localhost:8501
@@ -525,7 +525,7 @@ BigData/
 │       ├── inference/            # Model inference
 │       ├── ml/                   # ML training
 │       └── spark/                # Spark ETL
-├── streamlit_app.py              # Dashboard
+├── frontend/                     # Static dashboard UI
 ├── tableau_exports/              # BI tool exports
 ├── requirements.txt              # Dependencies
 └── README_PRODUCTION.md          # This file
@@ -704,7 +704,7 @@ MIT License — See LICENSE file for details.
 - Apache Spark for distributed computing
 - scikit-learn for ML algorithms
 - FastAPI for API framework
-- Streamlit for dashboard
+- Static HTML/CSS/JS frontend for dashboard
 - Tableau Public for BI visualization
 
 ---

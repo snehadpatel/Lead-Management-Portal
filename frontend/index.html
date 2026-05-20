@@ -14,7 +14,7 @@
   <!-- ═══ NAVIGATION ═══ -->
   <nav class="topnav" id="topnav">
     <div class="topnav-brand">
-      <span>◆</span> LUME AI
+      <img src="logo.png" alt="Lume AI" style="height:32px; width:auto;">
       <span class="badge badge-emerald" style="font-size:0.65rem;">v2.0</span>
     </div>
     <div class="topnav-links">
@@ -142,6 +142,31 @@
           <span class="badge badge-violet">14K+ Funds</span>
         </div>
         <a href="bigdata-showcase.html" class="btn btn-secondary btn-sm mt-16">Explore Big Data →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ LIVE OPERATIONS ═══ -->
+  <section class="container mb-24" style="padding-bottom:32px;">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Live Operations Console</h2>
+        <p class="section-subtitle">Frontend-only alerts, market impact, and drift monitoring from the FastAPI backend.</p>
+      </div>
+      <span class="badge badge-emerald"><span class="pulse pulse-live"></span> Live API</span>
+    </div>
+    <div class="bento-grid">
+      <div class="bento-4 card card-accent-red" id="homeLiveAlerts">
+        <h4>Live Alerts</h4>
+        <p class="text-sm text-muted mt-8">Waiting for API signals...</p>
+      </div>
+      <div class="bento-4 card card-accent-violet" id="homeMarketImpact">
+        <h4>Market Impact</h4>
+        <p class="text-sm text-muted mt-8">Waiting for impact analysis...</p>
+      </div>
+      <div class="bento-4 card card-accent-emerald" id="homeDriftStatus">
+        <h4>Retraining Monitor</h4>
+        <p class="text-sm text-muted mt-8">Waiting for drift status...</p>
       </div>
     </div>
   </section>

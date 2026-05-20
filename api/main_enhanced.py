@@ -28,6 +28,33 @@ from lume_platform.crm.dashboard_service import build_dashboard_leads, build_das
 from lume_platform.inference.registry import ModelRegistry
 from lume_platform.ml.buddy_engine import BuddyEngine
 from lume_platform.db.mongo_client import db_client
+from lume_platform.recommender import SimpleRecommender
+from lume_platform.auth import create_access_token, decode_access_token
+from fastapi import Header, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from lume_platform.collab import CollabEngine
+from lume_platform.monitoring import Monitor
+from lume_platform.impact import MarketImpactEngine
+from lume_platform.drift_monitor import DriftMonitor
+
+security = HTTPBearer()
+
+
+def _auth_admin(credentials: HTTPAuthorizationCredentials = Depends(security)) -> bool:
+    """Validate a bearer token for admin-only endpoints."""
+    payload = decode_access_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(status_code=401, detail='Invalid or expired token')
+    return True
+
+import threading
+import time
+try:
+    from kafka import KafkaConsumer
+    KAFKA_AVAILABLE = True
+except Exception:
+    KafkaConsumer = None
+    KAFKA_AVAILABLE = False
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # FastAPI Application Setup
@@ -57,8 +84,22 @@ app.add_middleware(
 # Global registry
 registry = ModelRegistry()
 buddy_engine = BuddyEngine()
+recommender = SimpleRecommender(registry=registry)
+collab_engine = CollabEngine()
+monitor = Monitor()
+market_impact_engine = MarketImpactEngine()
+drift_monitor = DriftMonitor()
 
 def fallback_sentiment_predict(text: str) -> tuple[str, float]:
+    try:
+        from lume_platform.ml.transformer_sentiment import get_transformer_sentiment
+        analyzer = get_transformer_sentiment()
+        if analyzer.is_available:
+            label, score = analyzer.predict(text)
+            return label.lower(), score
+    except Exception as e:
+        print(f"Error loading transformer sentiment: {e}")
+        
     text_lower = text.lower()
     positive_words = ["good", "bull", "growth", "buy", "up", "high", "positive", "gain", "profit", "recommend", "great", "best", "benefit", "outperform", "bullish", "strong"]
     negative_words = ["bad", "bear", "loss", "sell", "down", "low", "negative", "drop", "risk", "panic", "crash", "fall", "pause", "drawdown", "bearish", "weak"]
@@ -78,6 +119,106 @@ def startup() -> None:
     """Load all models on startup"""
     registry.load()
     print("✅ Model registry loaded")
+    # Start market signals background listener thread
+    def _start_listener():
+        t = threading.Thread(target=market_signals_listener, daemon=True)
+        t.start()
+
+    try:
+        _start_listener()
+        print("🔔 Market signals listener started")
+    except Exception as e:
+        print(f"⚠️ Failed to start market signals listener: {e}")
+
+    # Start drift monitoring thread
+    try:
+        t = threading.Thread(target=drift_monitor_loop, daemon=True)
+        t.start()
+        print("🧭 Drift monitor started")
+    except Exception as e:
+        print(f"⚠️ Failed to start drift monitor: {e}")
+
+
+def retrain_models_job() -> Dict[str, Any]:
+    """Run the full training pipeline and force-reload the registry."""
+    from lume_platform.ml.training import train_all
+
+    paths = train_all()
+    registry.reload()
+    return {"status": "trained", "paths": paths}
+
+
+def drift_monitor_loop():
+    """Background loop that feeds signals into the drift monitor and auto-retrains on drift."""
+    last_seen = 0
+    while True:
+        try:
+            signals = getattr(registry, 'latest_signals', [])
+            if len(signals) != last_seen:
+                drift_monitor.ingest(signals[:20])
+                last_seen = len(signals)
+
+            if drift_monitor.detect_drift():
+                drift_monitor.request_retrain(retrain_models_job)
+
+            time.sleep(float(os.environ.get('DRIFT_MONITOR_INTERVAL', '60')))
+        except Exception as e:
+            print(f"Drift monitor loop error: {e}")
+            time.sleep(30)
+
+def market_signals_listener():
+    """Background worker to consume `market_signals` topic or fallback file and persist signals."""
+    topic = os.environ.get("KAFKA_SIGNALS_TOPIC", "market_signals")
+    out_file = EXPORT_DIR / "market_signals.jsonl"
+    os.makedirs(out_file.parent, exist_ok=True)
+
+    if KAFKA_AVAILABLE:
+        servers = os.environ.get("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092").split(",")
+        try:
+            consumer = KafkaConsumer(topic, bootstrap_servers=servers, value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+                                     auto_offset_reset="latest", enable_auto_commit=True, consumer_timeout_ms=1000)
+        except Exception as e:
+            print(f"⚠️ Kafka consumer init failed: {e}")
+            consumer = None
+    else:
+        consumer = None
+
+    # File fallback tailing
+    fallback_path = os.environ.get("STREAMING_FALLBACK_OUT", "streaming_output/market_signals.jsonl")
+    last_pos = 0
+
+    while True:
+        try:
+            records = []
+            if consumer:
+                msgs = consumer.poll(timeout_ms=1000)
+                for tp, batch in msgs.items():
+                    for msg in batch:
+                        records.append(msg.value)
+            else:
+                if os.path.exists(fallback_path):
+                    with open(fallback_path, 'r', encoding='utf-8') as fh:
+                        fh.seek(last_pos)
+                        for line in fh:
+                            try:
+                                records.append(json.loads(line))
+                            except Exception:
+                                continue
+                        last_pos = fh.tell()
+
+            for sig in records:
+                # persist to export and registry
+                try:
+                    registry.add_market_signal(sig)
+                    with open(out_file, 'a', encoding='utf-8') as fo:
+                        fo.write(json.dumps(sig) + "\n")
+                except Exception as e:
+                    print(f"⚠️ Failed to persist signal: {e}")
+
+            time.sleep(1.0)
+        except Exception as e:
+            print(f"Market signals listener error: {e}")
+            time.sleep(5.0)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Pydantic Models
@@ -262,6 +403,7 @@ class AdvisorRequest(BaseModel):
     query: str
     persona: Optional[str] = "balanced"
     history: Optional[List[Dict[str, str]]] = None
+    dashboard_context: Optional[str] = None
 
 class AdvisorResponse(BaseModel):
     timestamp: str
@@ -277,6 +419,7 @@ class BuddyChatRequest(BaseModel):
     distributor_id: Optional[str] = None
     lead_id: Optional[str] = None
     history: Optional[List[Dict[str, str]]] = None
+    dashboard_context: Optional[str] = None
 
 class BuddyChatResponse(BaseModel):
     timestamp: str
@@ -325,6 +468,37 @@ class ClientInsightsResponse(BaseModel):
     insights: List[ClientInsightItem]
 
 
+class MarketImpactRequest(BaseModel):
+    signals: Optional[List[Dict[str, Any]]] = None
+    holdings: Optional[List[Dict[str, Any]]] = None
+    persona: Optional[str] = "balanced"
+
+
+class MarketImpactResponse(BaseModel):
+    timestamp: str
+    headline: str
+    severity: str
+    confidence: float
+    sector_impact: Dict[str, float]
+    affected_sectors: List[str]
+    alerts: List[str]
+    recommended_actions: List[str]
+    explanation: List[str]
+
+
+class DriftStatusResponse(BaseModel):
+    drift_detected: bool
+    retrain_in_progress: bool
+    retrain_requested: bool
+    samples_seen: int
+    mean_score: float
+    negative_ratio: float
+    last_signal_at: Optional[str] = None
+    last_retrain_at: Optional[str] = None
+    retrain_count: int
+    last_message: str
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # API Endpoints
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -351,10 +525,109 @@ def health():
             "lead_bundle": registry.lead_bundle is not None,
             "investor_bundle": registry.investor_bundle is not None,
             "sentiment_bundle": registry.sentiment_bundle is not None,
+            "finbert_pipeline": registry.finbert_pipeline is not None,
         },
         api_version="2.0.0",
         manifest=manifest
     )
+
+
+@app.get("/signals/latest", tags=["Signals"])
+def get_latest_signals(limit: int = 20):
+    """Return most recent market signals captured by the background listener."""
+    try:
+        signals = getattr(registry, 'latest_signals', [])[:limit]
+        return {"timestamp": datetime.utcnow().isoformat(), "count": len(signals), "signals": signals}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.post("/market/impact/analyze", response_model=MarketImpactResponse, tags=["Market Impact"])
+def analyze_market_impact(request: MarketImpactRequest):
+    """Analyze news/macro signals into sector impact and actionable alerts."""
+    try:
+        signals = request.signals or getattr(registry, 'latest_signals', [])[:20]
+        market_context = {}
+        try:
+            from lume_platform.risk.live_risk_analyzer import risk_analyzer
+            md = risk_analyzer.fetch_live_market_data()
+            market_context = {
+                'market_sentiment': getattr(md, 'sentiment', 'neutral'),
+                'vix': getattr(md, 'vix', 15.0),
+                'nifty_change_pct': getattr(md, 'nifty_change_pct', 0.0),
+                'market_status': getattr(md, 'market_status', 'CLOSED'),
+            }
+        except Exception:
+            market_context = {}
+
+        profile = {"inferred_risk_profile": request.persona}
+        result = market_impact_engine.analyze(signals, market_context=market_context, user_profile=profile)
+        return MarketImpactResponse(**result.__dict__)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get("/market/impact/latest", response_model=MarketImpactResponse, tags=["Market Impact"])
+def get_latest_market_impact():
+    """Convenience endpoint for the latest market impact based on buffered signals."""
+    try:
+        signals = getattr(registry, 'latest_signals', [])[:20]
+        result = market_impact_engine.analyze(signals, user_profile={"inferred_risk_profile": "balanced"})
+        return MarketImpactResponse(**result.__dict__)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get("/alerts/live", tags=["Alerts"])
+def get_live_alerts(limit: int = 10):
+    """Return live alerts derived from market impact and portfolio risk context."""
+    try:
+        signals = getattr(registry, 'latest_signals', [])[:20]
+        impact = market_impact_engine.analyze(signals, user_profile={"inferred_risk_profile": "balanced"})
+        alerts = impact.alerts[:limit]
+        # include risk alerts if possible
+        try:
+            from lume_platform.risk.live_risk_analyzer import risk_analyzer
+            md = risk_analyzer.fetch_live_market_data()
+            if getattr(md, 'vix', 0) and md.vix > 24:
+                alerts.insert(0, f"Volatility alert: VIX {md.vix:.1f} is elevated")
+        except Exception:
+            pass
+        return {
+            'timestamp': datetime.utcnow().isoformat(),
+            'count': len(alerts),
+            'alerts': alerts,
+            'severity': impact.severity,
+            'confidence': impact.confidence,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get("/monitoring/drift/status", response_model=DriftStatusResponse, tags=["Monitoring"])
+def get_drift_status():
+    """Return the current drift-monitor state for the frontend and operators."""
+    try:
+        status = drift_monitor.status()
+        return DriftStatusResponse(**status.__dict__)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.post("/monitoring/retrain", tags=["Monitoring"])
+def trigger_retrain(auth_ok: bool = Depends(_auth_admin)):
+    """Manually trigger the training pipeline and reload all models."""
+    try:
+        if drift_monitor.retrain_in_progress:
+            return {"status": "already_running"}
+
+        started = drift_monitor.request_retrain(retrain_models_job)
+        return {
+            "status": "started" if started else "skipped",
+            "drift": drift_monitor.status().__dict__,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post("/predict", response_model=PredictionResponse, tags=["Predictions"])
@@ -426,27 +699,10 @@ def predict(request: PredictRequest):
             if not request.text:
                 raise HTTPException(status_code=400, detail="Missing text field")
             
-            label, conf = "neutral", 0.5
-            if registry.sentiment_bundle:
-                from lume_platform.ml.bundles import SBERTSentimentBundle
-                if isinstance(registry.sentiment_bundle, SBERTSentimentBundle):
-                    sbert_model = None
-                    if registry.sbert_search and hasattr(registry.sbert_search, 'model') and registry.sbert_search.model:
-                        sbert_model = registry.sbert_search.model
-                    
-                    if sbert_model:
-                        try:
-                            label, conf = registry.sentiment_bundle.predict_text(request.text, sbert_model)
-                        except Exception:
-                            label, conf = fallback_sentiment_predict(request.text)
-                    else:
-                        label, conf = fallback_sentiment_predict(request.text)
-                else:
-                    try:
-                        label, conf = registry.sentiment_bundle.predict_text(request.text)
-                    except Exception:
-                        label, conf = fallback_sentiment_predict(request.text)
-            else:
+            # Unified registry-backed sentiment prediction (FinBERT preferred)
+            try:
+                label, conf = registry.predict_sentiment(request.text)
+            except Exception:
                 label, conf = fallback_sentiment_predict(request.text)
             
             return PredictionResponse(
@@ -510,11 +766,13 @@ def batch_predict(request: BatchPredictRequest):
                 })
         
         elif request.task == "sentiment":
-            if not registry.sentiment_bundle or not request.texts:
-                raise HTTPException(status_code=503, detail="NLP model not loaded or missing texts")
-            
+            if not request.texts:
+                raise HTTPException(status_code=400, detail="Missing texts list")
             for text in request.texts:
-                label, conf = registry.sentiment_bundle.predict_text(text)
+                try:
+                    label, conf = registry.predict_sentiment(text)
+                except Exception:
+                    label, conf = fallback_sentiment_predict(text)
                 predictions.append({
                     "sentiment": label,
                     "confidence": round(conf, 4)
@@ -737,6 +995,238 @@ def insights():
             data_sources=data_sources
         )
     
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get("/search/funds", response_model=SearchResponse, tags=["Search"])
+def search_funds(q: str = Query(..., alias="query"), top_k: int = 5):
+    """Semantic fund search using SBERT embeddings loaded in the registry."""
+    try:
+        if not registry.sbert_search:
+            raise HTTPException(status_code=503, detail="Semantic search not enabled or embeddings missing")
+        results = registry.sbert_search.query(q, top_k=top_k)
+        return SearchResponse(timestamp=datetime.utcnow().isoformat(), query=q, results=results)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+def _check_admin_key(headers: dict) -> bool:
+    admin_key = os.environ.get('ADMIN_API_KEY')
+    if not admin_key:
+        # No admin key set — allow for local dev (but log warning)
+        print('⚠️ ADMIN_API_KEY not set — admin endpoints are unprotected')
+        return True
+    header_val = headers.get('x-admin-key') or headers.get('X-ADMIN-KEY') or headers.get('X-Admin-Key')
+    return header_val == admin_key
+
+
+def _auth_admin(credentials: HTTPAuthorizationCredentials = Depends(security)) -> bool:
+    payload = decode_access_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(status_code=401, detail='Invalid or expired token')
+    return True
+
+
+@app.post('/auth/token', tags=['Auth'])
+def issue_token(api_key: str = Query(..., description='Admin API key')):
+    """Issue a short-lived JWT if the provided API key matches ADMIN_API_KEY."""
+    admin_key = os.environ.get('ADMIN_API_KEY')
+    if admin_key and api_key != admin_key:
+        raise HTTPException(status_code=401, detail='Unauthorized')
+    token = create_access_token('admin')
+    return {'access_token': token, 'token_type': 'bearer'}
+
+
+@app.post('/admin/funds/upload', tags=['Admin'])
+def admin_upload_fund_catalog(payload: List[Dict[str, Any]], headers: Dict[str, str] = None, auth_ok: bool = Depends(_auth_admin)):
+    """Upload or replace the fund catalog (expects list of fund dicts).
+    Protected by `X-ADMIN-KEY` header when `ADMIN_API_KEY` is set.
+    """
+    try:
+        if headers is None:
+            headers = {}
+        if not _check_admin_key(headers):
+            raise HTTPException(status_code=401, detail='Unauthorized')
+
+        catalog_path = MODELS_DIR / 'fund_catalog.json'
+        with open(catalog_path, 'w', encoding='utf-8') as f:
+            json.dump(payload, f, indent=2)
+
+        # Also write a minimal embeddings cache placeholder file location
+        return {'status': 'uploaded', 'catalog_path': str(catalog_path)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.post('/admin/funds/reindex', tags=['Admin'])
+def admin_reindex_fund_embeddings(headers: Dict[str, str] = None, auth_ok: bool = Depends(_auth_admin)):
+    """Rebuild SBERT fund embeddings from the catalog and load into registry.
+
+    This endpoint runs `scripts/build_fund_embeddings.py` logic inline (requires sentence-transformers).
+    Protected by `X-ADMIN-KEY` when `ADMIN_API_KEY` set.
+    """
+    try:
+        if headers is None:
+            headers = {}
+        if not _check_admin_key(headers):
+            raise HTTPException(status_code=401, detail='Unauthorized')
+
+        catalog_path = MODELS_DIR / 'fund_catalog.json'
+        cache_path = MODELS_DIR / 'fund_embeddings.pkl'
+        if not catalog_path.is_file():
+            raise HTTPException(status_code=400, detail='Fund catalog not found; upload first')
+
+        # Load catalog
+        with open(catalog_path, 'r', encoding='utf-8') as f:
+            funds = json.load(f)
+
+        # Build embeddings inline
+        try:
+            from sentence_transformers import SentenceTransformer
+        except Exception:
+            raise HTTPException(status_code=500, detail='sentence-transformers not installed')
+
+        model_name = os.environ.get('SBERT_MODEL', 'sentence-transformers/all-mpnet-base-v2')
+        model = SentenceTransformer(model_name)
+        texts = [ (f.get('scheme_name','') + ' ' + f.get('description','')).strip() for f in funds ]
+        embeddings = model.encode(texts, convert_to_numpy=True, show_progress_bar=False)
+
+        # Save cache
+        import pickle
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(cache_path, 'wb') as fh:
+            pickle.dump({'funds': funds, 'embeddings': embeddings}, fh)
+
+        # Load into registry
+        ok = registry.load_sbert_cache(cache_path)
+        if not ok:
+            raise HTTPException(status_code=500, detail='Failed to load SBERT cache into registry')
+
+        return {'status': 'reindexed', 'cache_path': str(cache_path)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get('/admin/metrics', tags=['Admin'])
+def admin_metrics(auth_ok: bool = Depends(_auth_admin)):
+    """Expose basic monitoring metrics."""
+    try:
+        return {
+            'timestamp': datetime.utcnow().isoformat(),
+            'total_requests': monitor.total_requests,
+            'errors': monitor.errors,
+            'avg_latency': monitor.average_latency(),
+            'sentiment_mean': monitor.sentiment_mean(),
+            'drift_detected': monitor.check_drift(),
+            'latest_signals_count': len(getattr(registry, 'latest_signals', [])),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get('/user/{user_id}/collaborative-recommend', tags=['User'])
+def collaborative_recommend(user_id: str, top_k: int = 5):
+    """Collaborative recommendations using transaction history."""
+    try:
+        recs = collab_engine.recommend_for_user(user_id, top_k=top_k)
+        if not recs:
+            raise HTTPException(status_code=404, detail='No collaborative recommendations available')
+        return {'user_id': user_id, 'recommendations': recs}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.post('/user/profile', tags=['User'])
+def upsert_user_profile(user_id: str = Query(...), profile: Dict[str, Any] = None):
+    """Save or update a user profile for personalization."""
+    try:
+        if profile is None:
+            raise HTTPException(status_code=400, detail='Missing profile payload')
+        recommender.save_profile(user_id, profile)
+        return { 'status': 'saved', 'user_id': user_id }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get('/user/{user_id}/recommend', tags=['User'])
+def recommend_for_user(user_id: str, top_k: int = 5):
+    """Return personalized fund recommendations for a given user id."""
+    try:
+        profile = recommender.load_profile(user_id)
+        if not profile:
+            raise HTTPException(status_code=404, detail='Profile not found')
+
+        # Build minimal market context from risk analyzer if available
+        market_context = {}
+        try:
+            from lume_platform.risk.live_risk_analyzer import risk_analyzer
+            md = risk_analyzer.fetch_live_market_data()
+            market_context = {
+                'market_sentiment': md.sentiment if hasattr(md, 'sentiment') else None,
+                'vix': md.vix if hasattr(md, 'vix') else None
+            }
+        except Exception:
+            market_context = {}
+
+        recs = recommender.recommend_for_profile(profile, market_context=market_context, top_k=top_k)
+        return { 'user_id': user_id, 'recommendations': recs, 'market_context': market_context }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get('/funds/catalog', tags=['Funds'])
+def funds_catalog(persona: Optional[str] = None, query: Optional[str] = None, top_k: int = 100):
+    """Return a live mutual-fund catalog derived from the dataset."""
+    try:
+        return {
+            'persona': persona,
+            'query': query,
+            'count': min(top_k, len(recommender.catalog_view(top_k=top_k, persona=persona, query=query))),
+            'funds': recommender.catalog_view(top_k=top_k, persona=persona, query=query),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get('/funds/recommendations', tags=['Funds'])
+def funds_recommendations(persona: str = Query(...), top_k: int = 5, investment_horizon: Optional[str] = None):
+    """Return persona-based mutual-fund recommendations from the live catalog."""
+    try:
+        profile = {
+            'inferred_risk_profile': persona,
+            'goals': f'{persona} mutual fund recommendations',
+            'investment_horizon': investment_horizon or ('long term' if persona in {'growth', 'balanced'} else 'short to medium term'),
+        }
+        market_context = {}
+        try:
+            from lume_platform.risk.live_risk_analyzer import risk_analyzer
+            md = risk_analyzer.fetch_live_market_data()
+            market_context = {
+                'market_sentiment': md.sentiment if hasattr(md, 'sentiment') else None,
+                'vix': md.vix if hasattr(md, 'vix') else None,
+            }
+        except Exception:
+            market_context = {}
+
+        recs = recommender.recommend_for_profile(profile, market_context=market_context, top_k=top_k)
+        return {
+            'persona': persona,
+            'recommendations': recs,
+            'market_context': market_context,
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
@@ -1173,6 +1663,7 @@ def advisor_query(request: AdvisorRequest):
             persona=request.persona,
             history=request.history,
             market_context=f"{market_data.sentiment.upper()} market with VIX {market_data.vix}",
+            dashboard_context=request.dashboard_context,
         )
         
         # 1. Get Semantic Matches
@@ -1182,20 +1673,20 @@ def advisor_query(request: AdvisorRequest):
         if not funds:
             strategy_map = {
                 "conservative": [
-                    {"name": "Liquid Fund", "score": 0.88, "fund_name": "Liquid Fund"},
-                    {"name": "Short Duration Fund", "score": 0.84, "fund_name": "Short Duration Fund"},
+                    {"scheme_code": "LIQ001", "scheme_name": "Liquid Fund", "category": "Debt - Liquid", "match_score": 0.88},
+                    {"scheme_code": "SDF001", "scheme_name": "Short Duration Fund", "category": "Debt - Short Duration", "match_score": 0.84},
                 ],
                 "balanced": [
-                    {"name": "Aggressive Hybrid Fund", "score": 0.86, "fund_name": "Aggressive Hybrid Fund"},
-                    {"name": "Balanced Advantage Fund", "score": 0.82, "fund_name": "Balanced Advantage Fund"},
+                    {"scheme_code": "AHF001", "scheme_name": "Aggressive Hybrid Fund", "category": "Hybrid - Aggressive", "match_score": 0.86},
+                    {"scheme_code": "BAF001", "scheme_name": "Balanced Advantage Fund", "category": "Hybrid - Balanced Advantage", "match_score": 0.82},
                 ],
                 "growth": [
-                    {"name": "Large Cap Index Fund", "score": 0.85, "fund_name": "Large Cap Index Fund"},
-                    {"name": "Mid Cap Fund", "score": 0.83, "fund_name": "Mid Cap Fund"},
+                    {"scheme_code": "LCI001", "scheme_name": "Large Cap Index Fund", "category": "Equity - Large Cap", "match_score": 0.85},
+                    {"scheme_code": "MCF001", "scheme_name": "Mid Cap Fund", "category": "Equity - Mid Cap", "match_score": 0.83},
                 ],
                 "passive": [
-                    {"name": "Nifty 50 Index Fund", "score": 0.9, "fund_name": "Nifty 50 Index Fund"},
-                    {"name": "Nifty Next 50 Index Fund", "score": 0.83, "fund_name": "Nifty Next 50 Index Fund"},
+                    {"scheme_code": "N50001", "scheme_name": "Nifty 50 Index Fund", "category": "Index Fund - Large Cap", "match_score": 0.90},
+                    {"scheme_code": "NN5001", "scheme_name": "Nifty Next 50 Index Fund", "category": "Index Fund - Large Mid Cap", "match_score": 0.83},
                 ],
             }
             funds = strategy_map.get((request.persona or "balanced").lower(), strategy_map["balanced"])
@@ -1301,6 +1792,7 @@ def buddy_chat(request: BuddyChatRequest):
             history=request.history,
             distributor_id=request.distributor_id,
             lead_id=request.lead_id,
+            dashboard_context=request.dashboard_context,
         )
 
         return BuddyChatResponse(

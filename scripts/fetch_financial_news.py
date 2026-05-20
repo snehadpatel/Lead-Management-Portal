@@ -11,6 +11,43 @@ DATASETS_DIR = os.path.join(BASE_DIR, "datasets")
 UNSTRUCTURED_DIR = os.path.join(DATASETS_DIR, "unstructured", "financial_news")
 os.makedirs(UNSTRUCTURED_DIR, exist_ok=True)
 
+# Kafka producer (optional)
+try:
+    from kafka import KafkaProducer
+    KAFKA_AVAILABLE = True
+except Exception:
+    KafkaProducer = None
+    KAFKA_AVAILABLE = False
+
+_kafka_producer = None
+def get_kafka_producer():
+    global _kafka_producer
+    if _kafka_producer is not None:
+        return _kafka_producer
+    if not KAFKA_AVAILABLE:
+        return None
+    servers = os.environ.get("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
+    try:
+        _kafka_producer = KafkaProducer(bootstrap_servers=servers.split(","), value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+        return _kafka_producer
+    except Exception as e:
+        print(f"⚠️ Kafka producer init failed: {e}")
+        _kafka_producer = None
+        return None
+
+def produce_article_to_kafka(article: dict):
+    prod = get_kafka_producer()
+    if not prod:
+        return False
+    topic = os.environ.get("KAFKA_NEWS_TOPIC", "news_raw")
+    try:
+        prod.send(topic, article)
+        prod.flush()
+        return True
+    except Exception as e:
+        print(f"⚠️ Failed to send article to Kafka: {e}")
+        return False
+
 # Ignore SSL certificate errors for RSS feeds
 if hasattr(ssl, '_create_unverified_context'):
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -76,6 +113,13 @@ def fetch_financial_news():
                     f.write(f"{title}\n\n{article['Body_Text']}")
 
                 count += 1
+                # Publish to Kafka topic for downstream streaming processing (optional)
+                try:
+                    produced = produce_article_to_kafka(article)
+                    if produced:
+                        print(f"  → Published to Kafka topic {os.environ.get('KAFKA_NEWS_TOPIC','news_raw')}")
+                except Exception:
+                    pass
                 
         except Exception as e:
             print(f"    Failed to parse {url}: {e}")

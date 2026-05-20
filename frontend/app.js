@@ -104,6 +104,97 @@ async function getInsights() {
   return apiCall('/insights');
 }
 
+async function getLiveAlerts() {
+  return apiCall('/alerts/live');
+}
+
+async function getMarketImpact() {
+  return apiCall('/market/impact/latest');
+}
+
+async function getDriftStatus() {
+  return apiCall('/monitoring/drift/status');
+}
+
+async function triggerRetrain() {
+  return apiCall('/monitoring/retrain', { method: 'POST' });
+}
+
+async function getFundCatalog(persona = null, topK = 100, query = null) {
+  const params = new URLSearchParams({ top_k: String(topK) });
+  if (persona) params.set('persona', persona);
+  if (query) params.set('query', query);
+  return apiCall(`/funds/catalog?${params.toString()}`);
+}
+
+async function getPersonaRecommendations(persona, topK = 5, investmentHorizon = null) {
+  const params = new URLSearchParams({ persona, top_k: String(topK) });
+  if (investmentHorizon) params.set('investment_horizon', investmentHorizon);
+  return apiCall(`/funds/recommendations?${params.toString()}`);
+}
+
+async function saveUserProfile(userId, profile) {
+  return apiCall(`/user/profile?user_id=${encodeURIComponent(userId)}`, {
+    method: 'POST',
+    body: JSON.stringify(profile),
+  });
+}
+
+function renderAlertItems(container, title, items, accent = 'var(--red)') {
+  if (!container) return;
+  const list = Array.isArray(items) ? items : [];
+  if (!list.length) {
+    container.innerHTML = `<div class="card card-left-amber" style="padding:12px 14px; border-left-color:${accent};"><h4 style="margin:0;">${title}</h4><p class="text-sm text-muted mt-8">No active signals right now.</p></div>`;
+    return;
+  }
+  container.innerHTML = `<h4 style="margin-bottom:12px;">${title}</h4>` + list.map(item => {
+    const text = typeof item === 'string' ? item : (item.message || item.alert || item.text || JSON.stringify(item));
+    return `<div class="card card-left-red mt-8" style="padding:10px 14px; border-left-color:${accent};"><p class="text-sm">${text}</p></div>`;
+  }).join('');
+}
+
+async function refreshLiveOpsWidgets() {
+  const [alerts, impact, drift] = await Promise.all([
+    getLiveAlerts(),
+    getMarketImpact(),
+    getDriftStatus(),
+  ]);
+
+  const alertsTargets = ['homeLiveAlerts', 'distLiveAlerts', 'invLiveAlerts'];
+  alertsTargets.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && alerts) renderAlertItems(el, 'Live Alerts', alerts.alerts || []);
+  });
+
+  const impactTargets = ['homeMarketImpact', 'distMarketImpact', 'invMarketImpact'];
+  impactTargets.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || !impact) return;
+    const sectors = impact.affected_sectors || [];
+    el.innerHTML = `
+      <h4 style="margin-bottom:12px;">Market Impact</h4>
+      <div class="badge badge-${impact.severity === 'critical' || impact.severity === 'high' ? 'red' : impact.severity === 'positive' ? 'emerald' : 'amber'}">${String(impact.severity || 'moderate').toUpperCase()}</div>
+      <p class="text-sm mt-12"><strong>Confidence:</strong> ${(impact.confidence || 0).toFixed ? impact.confidence.toFixed(2) : impact.confidence}</p>
+      <p class="text-sm text-muted mt-8"><strong>Affected sectors:</strong> ${sectors.length ? sectors.join(', ') : 'None'}</p>
+    `;
+  });
+
+  const driftTargets = ['homeDriftStatus', 'distDriftStatus', 'invDriftStatus'];
+  driftTargets.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || !drift) return;
+    const color = drift.drift_detected ? 'var(--red)' : drift.retrain_in_progress ? 'var(--amber)' : 'var(--emerald)';
+    el.innerHTML = `
+      <h4 style="margin-bottom:12px;">Retraining Monitor</h4>
+      <div class="badge" style="background:${color}20;color:${color};">${drift.drift_detected ? 'DRIFT DETECTED' : drift.retrain_in_progress ? 'TRAINING' : 'STABLE'}</div>
+      <p class="text-sm mt-12"><strong>Samples:</strong> ${drift.samples_seen || 0}</p>
+      <p class="text-sm"><strong>Mean Score:</strong> ${Number(drift.mean_score || 0).toFixed(3)}</p>
+      <p class="text-sm"><strong>Negative Ratio:</strong> ${Number(drift.negative_ratio || 0).toFixed(2)}</p>
+      <p class="text-xs text-muted mt-8">${drift.last_message || 'idle'}</p>
+    `;
+  });
+}
+
 // ── Role Selection ──
 function selectRole(role) {
   state.role = role;
@@ -331,17 +422,17 @@ async function getClientInsights() {
   return apiCall('/distributors/client-insights');
 }
 
-async function askAdvisor(query, persona) {
+async function askAdvisor(query, persona, dashboard_context = null) {
   return apiCall('/advisor/query', {
     method: 'POST',
-    body: JSON.stringify({ query, persona })
+    body: JSON.stringify({ query, persona, dashboard_context })
   });
 }
 
-async function askBuddyChat(message, history = [], distributorId = null, leadId = null) {
+async function askBuddyChat(message, history = [], distributorId = null, leadId = null, dashboard_context = null) {
   return apiCall('/buddy/chat', {
     method: 'POST',
-    body: JSON.stringify({ message, history, distributor_id: distributorId, lead_id: leadId })
+    body: JSON.stringify({ message, history, distributor_id: distributorId, lead_id: leadId, dashboard_context })
   });
 }
 
@@ -357,4 +448,6 @@ function calculateSIP(monthly, rate, years) {
 document.addEventListener('DOMContentLoaded', () => {
   checkApiHealth();
   setInterval(checkApiHealth, 30000);
+  refreshLiveOpsWidgets();
+  setInterval(refreshLiveOpsWidgets, 30000);
 });

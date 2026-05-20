@@ -29,8 +29,11 @@ for arg in "$@"; do
     fi
 done
 
-# Check if virtual environment exists
-if [ -d "venv" ]; then
+# Check if local virtual environment exists to avoid Google Drive FUSE hang on Mac
+if [ -d "/Users/snehapatel/BigData/venv" ]; then
+    echo -e "${GREEN}✓ Using local virtual environment at /Users/snehapatel/BigData/venv${NC}"
+    source /Users/snehapatel/BigData/venv/bin/activate
+elif [ -d "venv" ]; then
     echo -e "${GREEN}✓ Virtual environment found${NC}"
     source venv/bin/activate
 else

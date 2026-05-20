@@ -24,6 +24,8 @@ class ModelRegistry:
         self.lead_bundle = None
         self.investor_bundle = None
         self.sentiment_bundle = None
+        self.finbert_pipeline = None
+        self.latest_signals: list[dict] = []
         self.forecaster = None
         self.sbert_search = None
         self.buddy = None
@@ -35,8 +37,10 @@ class ModelRegistry:
             with open(primary, "rb") as f: return pickle.load(f)
         return None
 
-    def load(self) -> None:
-        if self.is_loaded: return
+    def load(self, force: bool = False) -> None:
+        if self.is_loaded and not force:
+            return
+        self.is_loaded = False
         print("📥 Loading AI Model Bundles...")
         raw = self._load_pickle("lead_classifier_bundle.pkl")
         if isinstance(raw, LeadScoringPipelineBundle):
@@ -65,7 +69,7 @@ class ModelRegistry:
                     self.sbert_search = SBERTMutualFundSearch(sbert_cache)
                 except Exception:
                     self.sbert_search = None
-        
+
         buddy_path = self.models_dir / "custom_buddy_model.pth"
         if buddy_path.is_file():
             try:
@@ -76,3 +80,86 @@ class ModelRegistry:
                 self.buddy = None
 
         self.is_loaded = True
+
+    def load_sbert_cache(self, cache_path: str | Path | None = None) -> bool:
+        """Load or reload SBERT mutual fund embeddings from a cache file.
+
+        Returns True if loaded successfully, False otherwise.
+        """
+        try:
+            from lume_platform.ml.semantic_search import SBERTMutualFundSearch
+            cp = Path(cache_path) if cache_path else (self.models_dir / "fund_embeddings.pkl")
+            if not cp.is_file():
+                return False
+            self.sbert_search = SBERTMutualFundSearch(cp)
+            return True
+        except Exception:
+            self.sbert_search = None
+            return False
+
+    def reload(self) -> None:
+        """Force reload all model bundles from disk."""
+        self.load(force=True)
+
+        # Attempt to load FinBERT / transformers sentiment pipeline (if available)
+        try:
+            from transformers import pipeline
+            finbert_model = os.getenv("FINBERT_MODEL", "yiyanghkust/finbert-tone")
+            try:
+                self.finbert_pipeline = pipeline("sentiment-analysis", model=finbert_model, device=-1)
+                print(f"✅ Loaded FinBERT pipeline: {finbert_model}")
+            except Exception as e:
+                print(f"⚠️ Failed to init FinBERT pipeline '{finbert_model}': {e}")
+                self.finbert_pipeline = None
+        except Exception:
+            self.finbert_pipeline = None
+
+    def predict_sentiment(self, text: str) -> tuple[str, float]:
+        """Unified sentiment prediction: prefer serialized sentiment bundle, then FinBERT pipeline, then simple fallback heuristic."""
+        # 1) Use pickled sentiment bundle if available
+        try:
+            if self.sentiment_bundle is not None and hasattr(self.sentiment_bundle, 'predict_text'):
+                try:
+                    label, conf = self.sentiment_bundle.predict_text(text)
+                    return label, float(conf)
+                except Exception:
+                    pass
+
+            # 2) Use transformers FinBERT pipeline
+            if self.finbert_pipeline is not None:
+                try:
+                    out = self.finbert_pipeline(text[:1000])[0]
+                    label = out.get('label')
+                    score = float(out.get('score', 0.0))
+                    return label, score
+                except Exception:
+                    pass
+
+        except Exception:
+            pass
+
+        # 3) Fallback heuristic
+        text_lower = (text or "").lower()
+        positive_words = ["good", "bull", "growth", "buy", "up", "high", "positive", "gain", "profit", "recommend", "great", "best", "benefit", "outperform", "bullish", "strong"]
+        negative_words = ["bad", "bear", "loss", "sell", "down", "low", "negative", "drop", "risk", "panic", "crash", "fall", "pause", "drawdown", "bearish", "weak"]
+        pos_count = sum(1 for w in positive_words if w in text_lower)
+        neg_count = sum(1 for w in negative_words if w in text_lower)
+
+        if pos_count > neg_count:
+            return "positive", 0.80
+        elif neg_count > pos_count:
+            return "negative", 0.80
+        else:
+            return "neutral", 0.50
+
+    def add_market_signal(self, signal: dict, max_len: int = 250) -> None:
+        """Store incoming market signals in a capped in-memory buffer."""
+        try:
+            if not isinstance(signal, dict):
+                return
+            self.latest_signals.insert(0, signal)
+            # cap buffer
+            if len(self.latest_signals) > max_len:
+                self.latest_signals = self.latest_signals[:max_len]
+        except Exception:
+            pass

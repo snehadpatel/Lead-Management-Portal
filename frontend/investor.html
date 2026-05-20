@@ -11,7 +11,7 @@
   <div class="mesh-bg"></div>
 
   <nav class="topnav">
-    <div class="topnav-brand"><span>◆</span> LUME AI</div>
+    <div class="topnav-brand"><img src="logo.png" alt="Lume AI" style="height:32px; width:auto;"></div>
     <div class="topnav-links">
       <a href="index.html">Home</a>
       <a href="investor.html" class="active">Dashboard</a>
@@ -45,21 +45,20 @@
       <button class="tab" data-tab="tab-explorer" onclick="switchTab('main','tab-explorer')">🔍 Fund Explorer</button>
       <button class="tab" data-tab="tab-risk" onclick="switchTab('main','tab-risk')">🔴 Risk Analysis</button>
       <button class="tab" data-tab="tab-market" onclick="switchTab('main','tab-market')">📈 Market Pulse</button>
-      <button class="tab" data-tab="tab-chat" onclick="switchTab('main','tab-chat')">🤖 AI Buddy</button>
       <button class="tab" data-tab="tab-sip" onclick="switchTab('main','tab-sip')">💰 SIP Calculator</button>
     </div>
 
     <!-- TAB: Portfolio -->
     <div class="tab-content active" id="tab-portfolio" data-tab-content="main">
       <div class="bento-grid mb-24">
-        <div class="bento-4 card"><div class="metric-value">₹2,00,000</div><div class="metric-label">Invested</div></div>
-        <div class="bento-4 card"><div class="metric-value text-emerald">₹2,89,490</div><div class="metric-label">Current Value</div><div class="metric-delta positive">▲ +₹89,490</div></div>
-        <div class="bento-4 card"><div class="metric-value text-emerald">44.7%</div><div class="metric-label">Total Returns</div></div>
+        <div class="bento-4 card"><div class="metric-value" id="portfolioInvested">—</div><div class="metric-label">Suggested Capital</div></div>
+        <div class="bento-4 card"><div class="metric-value text-emerald" id="portfolioCurrentValue">—</div><div class="metric-label">Projected Value</div><div class="metric-delta positive" id="portfolioDelta">—</div></div>
+        <div class="bento-4 card"><div class="metric-value text-emerald" id="portfolioReturns">—</div><div class="metric-label">Expected Returns</div></div>
       </div>
       <div class="bento-grid">
         <div class="bento-5 card"><h4 class="mb-16">Allocation</h4><div class="chart-container" style="height:280px;"><canvas id="allocChart"></canvas></div></div>
         <div class="bento-7 card">
-          <h4 class="mb-16">Holdings</h4>
+          <h4 class="mb-16">AI-Suggested Funds</h4>
           <div id="holdingsContainer"></div>
         </div>
       </div>
@@ -243,28 +242,6 @@
       </div>
     </div>
 
-    <!-- TAB: AI Buddy Chat -->
-    <div class="tab-content" id="tab-chat" data-tab-content="main">
-      <div class="card card-accent-violet">
-        <h4 class="flex items-center gap-8"><span>🤖</span> AI Financial Assistant (XAI Buddy)</h4>
-        <p class="text-muted text-sm mt-8">Ask Lume AI any advisory queries. Your responses are personalized to your risk profile and current market sentiment.</p>
-        
-        <div id="chatMessages" class="card mt-24" style="height:380px; overflow-y:auto; padding:16px; background:rgba(0,0,0,0.25); display:flex; flex-direction:column; gap:16px; border:1px solid rgba(255,255,255,0.05);">
-          <div class="flex gap-8 items-start">
-            <div style="background:var(--violet); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">AI</div>
-            <div class="card" style="padding:12px 16px; margin:0; background:rgba(255,255,255,0.05); max-width:80%; font-size:0.9rem; border-left:3px solid var(--violet);">
-              Hello! I am your Lume AI Buddy. I synthesize news sentiment, technical factors (VIX, Nifty), and your profile to give clear, explainable financial answers. How can I help you navigate the market today?
-            </div>
-          </div>
-        </div>
-        
-        <div class="flex gap-8 mt-16">
-          <input type="text" class="form-input" id="chatInput" placeholder="Should I buy small caps right now?..." onkeypress="handleChatKey(event)" style="flex:1;">
-          <button class="btn btn-primary" onclick="sendChatQuery()" style="padding: 0 24px;">Send 🚀</button>
-        </div>
-      </div>
-    </div>
-
     <!-- TAB: SIP Calculator -->
     <div class="tab-content" id="tab-sip" data-tab-content="main">
       <div class="bento-grid">
@@ -301,77 +278,133 @@
       document.getElementById('personaLabel').innerHTML = `Persona: <strong style="color:${p.color}">${p.name}</strong> · Risk Tolerance: ${p.risk}`;
 
       populateChartFundSelector();
-      loadPortfolio();
-      loadAllFunds();
+      await loadPortfolio();
+      await loadAllFunds();
       loadMarketData();
-      runRiskAnalysis();
+      await runRiskAnalysis();
       setupSIPSliders();
       calcSIP();
       updateInvBIAnalytics();
     });
 
     // ── Portfolio ──
-    const HOLDINGS = [
-      { name:'UTI Nifty 50 Index Fund', cat:'Index', invested:50000, returns:12.5, gains:6250, risk:'medium' },
-      { name:'HDFC Liquid Fund', cat:'Liquid', invested:30000, returns:6.8, gains:2040, risk:'low' },
-      { name:'SBI Magnum MidCap Fund', cat:'Mid Cap', invested:45000, returns:38.5, gains:17325, risk:'high' },
-      { name:'Edelweiss Balanced Advantage', cat:'Hybrid', invested:75000, returns:18.5, gains:13875, risk:'medium' },
-    ];
+    function toPersonaLabel(persona) {
+      return PERSONAS[persona] || PERSONAS.balanced;
+    }
 
-    function loadPortfolio() {
-      createDoughnutChart('allocChart',
-        HOLDINGS.map(h => h.name.split(' ').slice(0,3).join(' ')),
-        HOLDINGS.map(h => h.invested),
+    function normalizeRecommendation(fund, index = 0, baseCapital = 200000) {
+      const allocation = Number(fund.recommended_allocation_pct ?? fund.allocation_pct ?? fund.weight ?? 0) || Math.max(10, 28 - index * 5);
+      const invested = Math.round(baseCapital * allocation / 100);
+      const expectedReturn = Number(fund.r5 ?? fund.r3 ?? (Number(fund.match_score || 0) * 20) ?? 12);
+      const gains = Math.round(invested * expectedReturn / 100);
+      return {
+        id: fund.scheme_code || fund.id || `fund-${index}`,
+        name: fund.scheme_name || fund.name || 'Unknown Fund',
+        cat: fund.category || fund.category_group || 'Mutual Fund',
+        invested,
+        returns: expectedReturn,
+        gains,
+        risk: (fund.risk || 'medium').toLowerCase(),
+        allocation,
+        matchScore: Number(fund.match_score || 0),
+        aum: Number(fund.aum || 0),
+        personas: fund.personas || [],
+      };
+    }
+
+    function updatePortfolioSummary() {
+      const invested = state.portfolioHoldings.reduce((sum, h) => sum + h.invested, 0);
+      const currentValue = state.portfolioHoldings.reduce((sum, h) => sum + h.invested + h.gains, 0);
+      const delta = currentValue - invested;
+      const returns = invested > 0 ? (delta / invested) * 100 : 0;
+
+      document.getElementById('portfolioInvested').textContent = formatCurrency(invested);
+      document.getElementById('portfolioCurrentValue').textContent = formatCurrency(currentValue);
+      document.getElementById('portfolioDelta').textContent = `${delta >= 0 ? '▲' : '▼'} ${formatCurrency(Math.abs(delta))}`;
+      document.getElementById('portfolioReturns').textContent = `${returns.toFixed(1)}%`;
+
+      const persona = toPersonaLabel(state.persona || 'balanced');
+      document.getElementById('personaLabel').innerHTML = `Persona: <strong style="color:${persona.color}">${persona.name}</strong> · Risk Tolerance: ${persona.risk}`;
+    }
+
+    async function loadPortfolio() {
+      const persona = state.persona || 'balanced';
+      const response = await getPersonaRecommendations(persona, 4);
+      const recs = response?.recommendations?.length ? response.recommendations : generateSampleFunds().filter(f => (f.personas || []).includes(persona)).slice(0, 4);
+      const baseCapital = Math.max(150000, Math.round(100000 + recs.reduce((sum, f, index) => sum + (Number(f.match_score || 0.55) * 12000) + (index * 5000), 0)));
+
+      state.portfolioBaseCapital = baseCapital;
+      state.recommendedFunds = recs;
+      state.portfolioHoldings = recs.map((fund, index) => normalizeRecommendation(fund, index, baseCapital));
+
+      createDoughnutChart(
+        'allocChart',
+        state.portfolioHoldings.map(h => h.name.split(' ').slice(0, 3).join(' ')),
+        state.portfolioHoldings.map(h => h.invested),
         ['#2563EB','#10B981','#EF4444','#F59E0B']
       );
+
       const container = document.getElementById('holdingsContainer');
-      container.innerHTML = HOLDINGS.map(h => {
+      container.innerHTML = state.portfolioHoldings.map(h => {
         const rc = h.risk === 'high' ? 'var(--red)' : h.risk === 'medium' ? 'var(--amber)' : 'var(--emerald)';
         return `
           <div class="lead-card" style="border-left:3px solid ${rc};">
             <div>
               <div style="font-weight:600;">${h.name}</div>
-              <div class="text-xs text-muted">${h.cat} · ${h.risk.toUpperCase()} RISK</div>
+              <div class="text-xs text-muted">${h.cat} · ${h.risk.toUpperCase()} RISK · ${h.allocation.toFixed(0)}% ALLOCATION</div>
               <a href="#" onclick="showForecastForFundByName('${h.name}'); return false;" class="text-xs text-blue mt-4 block" style="text-decoration:none;">View AI NAV Forecast 🔮</a>
             </div>
             <div class="flex gap-24">
-              <div class="text-right"><div class="text-xs text-muted">Invested</div><div class="text-mono text-sm">₹${h.invested.toLocaleString()}</div></div>
-              <div class="text-right"><div class="text-xs text-muted">Returns</div><div class="text-mono text-sm text-emerald">${h.returns}%</div></div>
-              <div class="text-right"><div class="text-xs text-muted">Gains</div><div class="text-mono text-sm text-emerald">+₹${h.gains.toLocaleString()}</div></div>
+              <div class="text-right"><div class="text-xs text-muted">Suggested</div><div class="text-mono text-sm">₹${h.invested.toLocaleString()}</div></div>
+              <div class="text-right"><div class="text-xs text-muted">Model Return</div><div class="text-mono text-sm text-emerald">${h.returns.toFixed(1)}%</div></div>
+              <div class="text-right"><div class="text-xs text-muted">Projected Gains</div><div class="text-mono text-sm text-emerald">+₹${h.gains.toLocaleString()}</div></div>
             </div>
           </div>`;
       }).join('');
+
+      updatePortfolioSummary();
     }
 
     // ── Fund Explorer ──
-    function loadAllFunds() {
-      const funds = generateSampleFunds();
+    async function loadAllFunds() {
+      const response = await getFundCatalog(state.persona || 'balanced', 100);
+      const funds = response?.funds?.length ? response.funds : generateSampleFunds();
+      state.fundCatalog = funds;
       renderFundCards('allFundsGrid', funds);
+      populateChartFundSelector();
     }
 
-    function searchFunds() {
+    async function searchFunds() {
       const q = document.getElementById('fundSearch').value.toLowerCase();
-      const funds = generateSampleFunds().filter(f =>
-        f.name.toLowerCase().includes(q) || f.category.toLowerCase().includes(q)
+      const catalog = state.fundCatalog || generateSampleFunds();
+      const funds = catalog.filter(f =>
+        (f.scheme_name || f.name || '').toLowerCase().includes(q) ||
+        (f.category || f.category_group || '').toLowerCase().includes(q) ||
+        (f.amc || '').toLowerCase().includes(q)
       );
-      renderFundCards('allFundsGrid', funds.length ? funds : generateSampleFunds());
+      renderFundCards('allFundsGrid', funds.length ? funds : catalog);
     }
 
     function renderFundCards(containerId, funds) {
       const el = document.getElementById(containerId);
       el.innerHTML = funds.map(f => {
-        const rc = f.risk === 'high' ? 'var(--red)' : f.risk === 'medium' ? 'var(--amber)' : 'var(--emerald)';
+        const category = f.category || f.category_group || 'Mutual Fund';
+        const risk = (f.risk || 'medium').toLowerCase();
+        const rc = risk === 'high' ? 'var(--red)' : risk === 'medium' ? 'var(--amber)' : 'var(--emerald)';
+        const r1 = Number(f.r1 ?? (Number(f.match_score || 0) * 100) ?? 0).toFixed(1);
+        const r3 = Number(f.r3 ?? (Number(f.match_score || 0) * 95) ?? 0).toFixed(1);
+        const r5 = Number(f.r5 ?? (Number(f.match_score || 0) * 88) ?? 0).toFixed(1);
         return `<div class="bento-4 card">
-          <h4 style="font-size:0.95rem;">${f.name}</h4>
-          <div class="flex items-center gap-8 mt-8"><span class="badge" style="background:${rc}20;color:${rc};">${f.risk.toUpperCase()}</span><span class="text-xs text-muted">${f.category}</span></div>
+          <h4 style="font-size:0.95rem;">${f.scheme_name || f.name}</h4>
+          <div class="flex items-center gap-8 mt-8"><span class="badge" style="background:${rc}20;color:${rc};">${risk.toUpperCase()}</span><span class="text-xs text-muted">${category}</span></div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;">
-            <div><div class="text-mono text-emerald">${f.r1}%</div><div class="text-xs text-muted">1Y</div></div>
-            <div><div class="text-mono text-blue">${f.r3}%</div><div class="text-xs text-muted">3Y</div></div>
-            <div><div class="text-mono">${f.r5}%</div><div class="text-xs text-muted">5Y</div></div>
+            <div><div class="text-mono text-emerald">${r1}%</div><div class="text-xs text-muted">1Y</div></div>
+            <div><div class="text-mono text-blue">${r3}%</div><div class="text-xs text-muted">3Y</div></div>
+            <div><div class="text-mono">${r5}%</div><div class="text-xs text-muted">5Y</div></div>
           </div>
           <div class="flex justify-between items-center mt-12 pt-8" style="border-top:1px solid rgba(255,255,255,0.05);">
-            <div class="text-amber text-xs">${'★'.repeat(f.rating)}</div>
-            <button class="btn btn-xs btn-secondary" onclick="showForecastForFund('${f.id}')" style="padding:4px 8px;font-size:0.75rem;">Forecast 🔮</button>
+            <div class="text-amber text-xs">${'★'.repeat(Number(f.rating || 4))}</div>
+            <button class="btn btn-xs btn-secondary" onclick="showForecastForFund('${f.scheme_code || f.id || ''}')" style="padding:4px 8px;font-size:0.75rem;">Forecast 🔮</button>
           </div>
         </div>`;
       }).join('');
@@ -385,10 +418,10 @@
     }
 
     function showForecastForFundByName(name) {
-      const funds = generateSampleFunds();
-      const f = funds.find(x => x.name.toLowerCase().includes(name.toLowerCase()));
+      const funds = state.fundCatalog || generateSampleFunds();
+      const f = funds.find(x => (x.scheme_name || x.name || '').toLowerCase().includes(name.toLowerCase()));
       if (f) {
-        showForecastForFund(f.id);
+        showForecastForFund(f.scheme_code || f.id);
       } else {
         switchTab('main', 'tab-market');
         document.getElementById('niftyChart').scrollIntoView({ behavior: 'smooth' });
@@ -399,11 +432,11 @@
       const sel = document.getElementById('chartFundSelector');
       if (!sel) return;
       
-      const funds = generateSampleFunds();
+      const funds = state.fundCatalog || generateSampleFunds();
       let html = `<option value="NIFTY">NIFTY 50 Index</option>`;
       html += `<optgroup label="Mutual Funds">`;
       funds.forEach(f => {
-        html += `<option value="${f.id}">${f.name}</option>`;
+        html += `<option value="${f.scheme_code || f.id}">${f.scheme_name || f.name}</option>`;
       });
       html += `</optgroup>`;
       sel.innerHTML = html;
@@ -427,15 +460,16 @@
       let label = 'NIFTY 50';
       
       if (val !== 'NIFTY') {
-        const funds = generateSampleFunds();
-        const f = funds.find(x => x.id === val);
+        const funds = state.fundCatalog || generateSampleFunds();
+        const f = funds.find(x => (x.scheme_code || x.id) === val);
         if (f) {
           // Adjust price base relative to fund category
-          if (f.category.includes('Liquid') || f.category.includes('Short')) {
+          const category = (f.category || f.category_group || '').toLowerCase();
+          if (category.includes('liquid') || category.includes('short')) {
             baseVal = 100 + (Math.random() * 5);
             drift = 0.05;
             volatilityFactor = 0.5;
-          } else if (f.category.includes('Mid') || f.category.includes('Small') || f.category.includes('Sectoral')) {
+          } else if (category.includes('mid') || category.includes('small') || category.includes('sectoral')) {
             baseVal = 80 + (Math.random() * 40);
             drift = 0.45;
             volatilityFactor = 3.0;
@@ -444,7 +478,7 @@
             drift = 0.2;
             volatilityFactor = 1.5;
           }
-          label = f.name;
+          label = f.scheme_name || f.name;
         }
       }
       
@@ -553,9 +587,12 @@
 
     // ── Risk Analysis ──
     async function runRiskAnalysis() {
-      const holdings = HOLDINGS.map((h, i) => ({
-        fund_id: `F00${i+1}`, fund_name: h.name,
-        category: h.cat.toLowerCase().replace(/ /g,'_'), value: h.invested, returns: h.returns
+      const holdings = (state.portfolioHoldings || []).map((h, i) => ({
+        fund_id: h.id || `F00${i+1}`,
+        fund_name: h.name,
+        category: (h.cat || 'mutual_fund').toLowerCase().replace(/ /g,'_'),
+        value: h.invested,
+        returns: h.returns,
       }));
       const result = await getRiskAnalysis(state.persona || 'balanced', holdings);
 
@@ -580,10 +617,31 @@
     }
 
     // ── News Impact Alerts ──
-    function renderNewsAlerts(sentiment) {
+    async function renderNewsAlerts(sentiment) {
       const container = document.getElementById('newsAlertsContainer');
       if (!container) return;
-      
+
+      const [liveAlerts, marketImpact] = await Promise.all([getLiveAlerts(), getMarketImpact()]);
+
+      if (liveAlerts?.alerts?.length) {
+        const sev = String(liveAlerts.severity || 'moderate').toLowerCase();
+        const sevColor = sev === 'critical' || sev === 'high' ? 'var(--red)' : sev === 'positive' ? 'var(--emerald)' : 'var(--amber)';
+        container.innerHTML = `
+          <div class="bento-4 card card-left-red" style="border-left-color:${sevColor};">
+            <div class="flex justify-between items-center mb-8">
+              <span class="badge" style="background:${sevColor}20; color:${sevColor}; font-weight:700;">${sev.toUpperCase()} LIVE</span>
+              <span class="text-xs text-muted">AI Conf: ${Math.round((liveAlerts.confidence || 0.75) * 100)}%</span>
+            </div>
+            <h5 style="margin:0 0 8px 0; font-size:0.95rem; font-weight:600;">API-backed Market Alerts</h5>
+            ${liveAlerts.alerts.slice(0, 3).map(a => `<p class="text-sm mb-8">• ${a}</p>`).join('')}
+            <div class="card" style="margin:0; padding:8px 12px; background:rgba(255,255,255,0.03); font-size:0.8rem; border-left: 2px solid ${sevColor};">
+              <strong>Recommended Action:</strong> ${marketImpact?.recommended_actions?.[0] || 'Review your portfolio allocation'}
+            </div>
+          </div>
+        `;
+        return;
+      }
+
       const alerts = [
         {
           event: "RBI Hikes Repo Rate by 25 bps",
@@ -630,83 +688,7 @@
       `).join('');
     }
 
-    // ── AI Buddy Chat ──
-    async function sendChatQuery() {
-      const inputEl = document.getElementById('chatInput');
-      if (!inputEl) return;
-      const query = inputEl.value.trim();
-      if (!query) return;
-      
-      const chatContainer = document.getElementById('chatMessages');
-      if (!chatContainer) return;
-      
-      chatContainer.innerHTML += `
-        <div class="flex gap-8 items-start justify-end">
-          <div class="card" style="padding:10px 14px; margin:0; background:rgba(37,99,235,0.15); max-width:80%; font-size:0.9rem; border-right:2px solid var(--blue);">
-            ${query}
-          </div>
-          <div style="background:var(--blue); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">ME</div>
-        </div>
-      `;
-      
-      inputEl.value = '';
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      
-      const typingId = 'typing-' + Date.now();
-      chatContainer.innerHTML += `
-        <div class="flex gap-8 items-start" id="${typingId}">
-          <div style="background:var(--violet); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">AI</div>
-          <div class="card" style="padding:10px 14px; margin:0; background:rgba(255,255,255,0.05); font-size:0.9rem;">
-            <span class="pulse pulse-live" style="display:inline-block; width:8px; height:8px; margin-right:4px;"></span> Thinking...
-          </div>
-        </div>
-      `;
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      
-      const res = await askAdvisor(query, state.persona || 'balanced');
-      
-      const typingEl = document.getElementById(typingId);
-      if (typingEl) typingEl.remove();
-      
-      if (res) {
-        chatContainer.innerHTML += `
-          <div class="flex gap-8 items-start animate-fade-in">
-            <div style="background:var(--violet); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">AI</div>
-            <div class="card" style="padding:12px 16px; margin:0; background:rgba(255,255,255,0.05); max-width:80%; font-size:0.9rem; border-left:3px solid var(--violet);">
-              <p>${res.analysis}</p>
-              ${res.recommended_funds && res.recommended_funds.length ? `
-                <div class="mt-12">
-                  <strong style="font-size:0.8rem; color:var(--blue);">RECOMMENDED FUNDS FOR YOU:</strong>
-                  <div class="flex flex-col gap-4 mt-4">
-                    ${res.recommended_funds.map(f => `
-                      <div class="card" style="padding:6px 10px; margin:0; background:rgba(255,255,255,0.02); font-size:0.8rem; display:flex; justify-content:space-between; align-items:center;">
-                        <span>🏢 ${f.name || f.fund_name}</span>
-                        <span class="badge badge-emerald">${f.score ? (f.score*100).toFixed(0)+'%' : 'Match'}</span>
-                      </div>
-                    `).join('')}
-                  </div>
-                </div>
-              ` : ''}
-              <div class="text-xs text-muted mt-8" style="text-align:right;">Market Mood: ${res.market_mood}</div>
-            </div>
-          </div>
-        `;
-      } else {
-        chatContainer.innerHTML += `
-          <div class="flex gap-8 items-start">
-            <div style="background:var(--violet); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:0.85rem;">AI</div>
-            <div class="card" style="padding:10px 14px; margin:0; background:rgba(255,255,255,0.05); max-width:80%; font-size:0.9rem; color:var(--red);">
-              Unable to reach Lume AI advisor. Please verify the backend service is running.
-            </div>
-          </div>
-        `;
-      }
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-    
-    function handleChatKey(e) {
-      if (e.key === 'Enter') sendChatQuery();
-    }
+    // AI chat operations are handled exclusively by the persistent floating bottom-right popup widget.
 
     // ── Market Data ──
     async function loadMarketData() {
@@ -758,7 +740,7 @@
           );
         }
         
-        renderNewsAlerts(sent);
+        await renderNewsAlerts(sent);
       } else {
         document.getElementById('niftyValue').textContent = '22,550';
         document.getElementById('niftyDelta').className = 'metric-delta positive';
@@ -773,7 +755,7 @@
         document.getElementById('sentimentGaugeFill').style.width = '52%';
         document.getElementById('sentimentGaugeFill').style.background = 'var(--amber)';
         
-        renderNewsAlerts('NEUTRAL');
+        await renderNewsAlerts('NEUTRAL');
       }
       // Dynamically load the selected chart/forecast
       updateForecastChart();
@@ -807,6 +789,73 @@
       }
     }
 
+    function getDashboardContext() {
+      const activeTabEl = document.querySelector('[data-tab-group="main"] .tab.active');
+      const activeTab = activeTabEl ? activeTabEl.textContent.trim() : 'Portfolio';
+      const horizon = document.getElementById('invBiHorizon')?.value || '1y';
+      const assetFocus = document.getElementById('invBiAsset')?.value || 'all';
+      
+      const portfolioVal = document.getElementById('invBiKpiAum')?.textContent || '₹2,89,490';
+      const alphaVal = document.getElementById('invBiKpiAlpha')?.textContent || '+4.2%';
+      const sharpeVal = document.getElementById('invBiKpiSharpe')?.textContent || '1.82';
+      const betaVal = document.getElementById('invBiKpiBeta')?.textContent || '0.88';
+
+      let context = `Active Dashboard Tab: ${activeTab}\n`;
+      context += `Current BI Filters: Horizon: ${horizon}, Asset Focus: ${assetFocus}\n`;
+      context += `Core Portfolio Metrics:\n`;
+      context += `- Portfolio Value: ${portfolioVal}\n`;
+      context += `- Portfolio Alpha: ${alphaVal} vs Nifty 50\n`;
+      context += `- Sharpe Ratio: ${sharpeVal}\n`;
+      context += `- Portfolio Beta: ${betaVal} (Volatility)\n\n`;
+
+      if (activeTab.includes("BI Wealth")) {
+        context += `BI Analytics View:\n`;
+        context += `- Markowitz Efficient Frontier shows risk-return profile. Current coordinates: risk ${(parseFloat(betaVal)*12 + 2).toFixed(1)}%, expected return ${(parseFloat(alphaVal) + 9).toFixed(1)}%.\n`;
+        context += `- Benchmark Outperformance Matrix: Your Portfolio is outperforming the Nifty 50 and Crisil Debt Index over the ${horizon} horizon.\n`;
+        context += `- Persona Alignment & Radar Chart compares Risk, Cost, Passive, Yield, Growth against Target Balanced Persona.\n`;
+      } else if (activeTab.includes("Portfolio")) {
+        context += `Portfolio Composition:\n`;
+        context += `- Allocations: Equity Growth (65%), High Yield Debt (25%), Liquid Cash (10%).\n`;
+        context += `- Assets are diversified across 5 key sectors: Technology, Financial Services, Energy, Healthcare, Consumer Goods.\n`;
+      } else if (activeTab.includes("SIP")) {
+        const monthly = document.getElementById('sipAmount')?.value || '5000';
+        const rate = document.getElementById('sipRate')?.value || '12';
+        const years = document.getElementById('sipYears')?.value || '10';
+        const fv = document.getElementById('sipFV')?.textContent || '';
+        const invested = document.getElementById('sipInvested')?.textContent || '';
+        const gains = document.getElementById('sipGains')?.textContent || '';
+        context += `SIP Calculator Parameters:\n`;
+        context += `- Monthly SIP: ₹${monthly}\n`;
+        context += `- Duration: ${years} years at expected rate ${rate}%\n`;
+        context += `- Future Value Projection: ${fv} (Invested: ${invested}, Gains: ${gains})\n`;
+      } else if (activeTab.includes("Risk")) {
+        const score = document.getElementById('riskScore')?.textContent.replace('Risk Score', '').trim() || '52';
+        const v = document.getElementById('riskVar')?.textContent.replace('Value at Risk (95%)', '').replace('VaR (95%)', '').trim() || '₹18,500';
+        const dd = document.getElementById('riskDrawdown')?.textContent.replace('Max Drawdown', '').trim() || '12.5%';
+        const betaVal = document.getElementById('riskBeta')?.textContent.replace('Beta', '').trim() || '0.85';
+        context += `Risk Analysis View:\n`;
+        context += `- Portfolio Risk Score: ${score}\n`;
+        context += `- Value at Risk (95%): ${v}\n`;
+        context += `- Max Drawdown: ${dd}\n`;
+        context += `- Beta Volatility: ${betaVal}\n`;
+      } else if (activeTab.includes("Market")) {
+        const stateSentiment = document.getElementById('sentimentValue')?.textContent || 'BULLISH';
+        const vix = document.getElementById('vixRawLabel')?.textContent || '13.3';
+        context += `Market Pulse Indicators:\n`;
+        context += `- AI Sentiment: ${stateSentiment}\n`;
+        context += `- ${vix}\n`;
+      }
+
+      if (state.portfolioHoldings && state.portfolioHoldings.length) {
+        context += `\nPortfolio Holdings Summary:\n`;
+        state.portfolioHoldings.forEach(h => {
+          context += `- ${h.name}: Invested ₹${h.invested.toLocaleString()}, Gains ₹${h.gains.toLocaleString()} (${h.returns.toFixed(1)}% Return, Category: ${h.cat})\n`;
+        });
+      }
+
+      return context;
+    }
+
     let popupHistory = [];
 
     async function sendPopupMessage() {
@@ -831,13 +880,14 @@
       bodyEl.scrollTop = bodyEl.scrollHeight;
 
       const persona = state.persona || 'balanced';
-      const res = await askAdvisor(text, persona);
+      const dashboardContext = getDashboardContext();
+      const res = await askAdvisor(text, persona, dashboardContext);
       typingDiv.remove();
 
       const aiMsgDiv = document.createElement('div');
       aiMsgDiv.className = 'chatbot-msg ai';
-      if (res && res.response) {
-        aiMsgDiv.textContent = res.response;
+      if (res && (res.analysis || res.response)) {
+        aiMsgDiv.textContent = res.analysis || res.response;
       } else {
         aiMsgDiv.innerHTML = '<span class="text-red">Lume AI server is offline. Please start FastAPI.</span>';
       }
@@ -867,13 +917,14 @@
       bodyEl.scrollTop = bodyEl.scrollHeight;
 
       const persona = state.persona || 'balanced';
-      const res = await askAdvisor(text, persona);
+      const dashboardContext = getDashboardContext();
+      const res = await askAdvisor(text, persona, dashboardContext);
       typingDiv.remove();
 
       const aiMsgDiv = document.createElement('div');
       aiMsgDiv.className = 'chatbot-msg ai';
-      if (res && res.response) {
-        aiMsgDiv.textContent = res.response;
+      if (res && (res.analysis || res.response)) {
+        aiMsgDiv.textContent = res.analysis || res.response;
       } else {
         if (topic === 'portfolio_risk') {
           aiMsgDiv.innerHTML = `<h4>🛡️ Portfolio Risk Assessment</h4>
@@ -904,11 +955,29 @@
       let sharpeVal = 1.82;
       let betaVal = 0.88;
 
-      if (horizon === '3y') { portfolioVal *= 1.35; alphaVal = 5.1; sharpeVal = 1.95; }
-      else if (horizon === '5y') { portfolioVal *= 1.85; alphaVal = 6.4; sharpeVal = 2.10; }
+      if (horizon === '3y') {
+        portfolioVal = 391800;
+        alphaVal = 5.4;
+        sharpeVal = 1.95;
+        betaVal = 0.85;
+      } else if (horizon === '5y') {
+        portfolioVal = 535500;
+        alphaVal = 6.8;
+        sharpeVal = 2.15;
+        betaVal = 0.80;
+      }
 
-      if (assetFocus === 'equity') { alphaVal += 1.8; betaVal = 1.15; sharpeVal -= 0.15; }
-      else if (assetFocus === 'hybrid') { alphaVal -= 1.1; betaVal = 0.72; sharpeVal += 0.20; }
+      if (assetFocus === 'equity') {
+        alphaVal += 2.1;
+        betaVal = 1.18;
+        sharpeVal -= 0.12;
+        portfolioVal *= 1.10;
+      } else if (assetFocus === 'hybrid') {
+        alphaVal -= 0.8;
+        betaVal = 0.72;
+        sharpeVal += 0.18;
+        portfolioVal *= 0.95;
+      }
 
       const invBiKpiAum = document.getElementById('invBiKpiAum');
       const invBiKpiAlpha = document.getElementById('invBiKpiAlpha');
@@ -926,8 +995,10 @@
         if (invFrontierChart) invFrontierChart.destroy();
         
         const curvePoints = [];
+        // Adjust efficient frontier curve based on asset focus
+        let curveYShift = assetFocus === 'equity' ? 2.5 : assetFocus === 'hybrid' ? -1.0 : 0.0;
         for (let x = 6; x <= 22; x += 1.5) {
-          curvePoints.push({ x: x, y: Math.sqrt(x - 5) * 4 + 4 + (Math.random() * 0.2) });
+          curvePoints.push({ x: x, y: Math.sqrt(x - 5) * 4.2 + 3.8 + curveYShift });
         }
         
         invFrontierChart = new Chart(ctx1, {
@@ -944,14 +1015,14 @@
                 pointRadius: 0
               },
               {
-                label: 'Other Funds',
+                label: 'Other Benchmark Funds',
                 data: [
-                  { x: 8, y: 7.5, label: 'Low Risk Debt' },
+                  { x: 8, y: 7.5, label: 'Low Risk Debt Index' },
                   { x: 11, y: 11.2, label: 'Aggressive Hybrid' },
-                  { x: 15, y: 13.8, label: 'Mid Cap Equity' },
-                  { x: 18, y: 15.5, label: 'Small Cap Equity' }
+                  { x: 15, y: 13.8, label: 'Mid Cap Equity Index' },
+                  { x: 18, y: 15.5, label: 'Small Cap Growth' }
                 ],
-                backgroundColor: 'rgba(74, 144, 226, 0.5)',
+                backgroundColor: 'rgba(143, 174, 198, 0.6)',
                 borderColor: 'var(--blue)',
                 pointRadius: 6
               },
@@ -968,19 +1039,19 @@
           options: {
             ...chartDefaults,
             plugins: {
-              legend: { position: 'bottom', labels: { color: '#64748B' } },
+              legend: { position: 'bottom', labels: { color: '#706860', font: { family: 'Inter' } } },
               tooltip: {
                 callbacks: {
                   label: function(context) {
                     const label = context.raw.label || context.dataset.label;
-                    return `${label}: Volatility (Beta Risk) ${context.raw.x.toFixed(1)}%, Expected Return ${context.raw.y.toFixed(1)}%`;
+                    return `${label}: Volatility (Risk) ${context.raw.x.toFixed(1)}%, Return ${context.raw.y.toFixed(1)}%`;
                   }
                 }
               }
             },
             scales: {
-              x: { title: { display: true, text: 'Portfolio Risk (Annualized Volatility %)', color: '#64748B' }, min: 4, max: 24, ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } },
-              y: { title: { display: true, text: 'Expected Return (%)', color: '#64748B' }, min: 4, max: 24, ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } }
+              x: { title: { display: true, text: 'Portfolio Risk (Annualized Volatility %)', color: '#706860' }, min: 4, max: 24, ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } },
+              y: { title: { display: true, text: 'Expected Return (%)', color: '#706860' }, min: 4, max: 24, ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } }
             }
           }
         });
@@ -990,6 +1061,14 @@
       const ctx2 = document.getElementById('personaRadarChart');
       if (ctx2) {
         if (invRadarChart) invRadarChart.destroy();
+        
+        let allocData = [75, 65, 80, 45, 30];
+        if (assetFocus === 'equity') {
+          allocData = [90, 85, 60, 30, 20];
+        } else if (assetFocus === 'hybrid') {
+          allocData = [65, 52, 85, 62, 45];
+        }
+
         invRadarChart = new Chart(ctx2, {
           type: 'radar',
           data: {
@@ -997,16 +1076,16 @@
             datasets: [
               {
                 label: 'Your Portfolio Allocation',
-                data: [75, 65, 80, 45, 30].map(v => Math.min(100, Math.max(10, v + Math.round(Math.random() * 8 - 4)))),
+                data: allocData,
                 borderColor: 'var(--emerald)',
-                backgroundColor: 'rgba(80, 184, 148, 0.2)',
+                backgroundColor: 'rgba(145, 184, 156, 0.15)',
                 pointBackgroundColor: 'var(--emerald)'
               },
               {
                 label: 'Target Balanced Persona',
                 data: [60, 50, 70, 50, 40],
                 borderColor: 'var(--blue)',
-                backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                backgroundColor: 'rgba(143, 174, 198, 0.1)',
                 pointBackgroundColor: 'var(--blue)'
               }
             ]
@@ -1014,13 +1093,13 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { color: '#64748B' } } },
+            plugins: { legend: { position: 'bottom', labels: { color: '#706860', font: { family: 'Inter' } } } },
             scales: {
               r: {
-                grid: { color: 'rgba(0,0,0,0.05)' },
-                angleLines: { color: 'rgba(0,0,0,0.05)' },
+                grid: { color: 'rgba(0,0,0,0.03)' },
+                angleLines: { color: 'rgba(0,0,0,0.03)' },
                 ticks: { display: false },
-                pointLabels: { color: '#64748B', font: { family: 'Inter', size: 10 } }
+                pointLabels: { color: '#706860', font: { family: 'Inter', size: 10 } }
               }
             }
           }
@@ -1032,10 +1111,37 @@
       if (ctx3) {
         if (invBenchmarkChart) invBenchmarkChart.destroy();
 
-        let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        let portData = [0, 2.5, 4.8, 6.2, 5.5, 8.2, 10.5, 9.8, 12.4, 14.2, 15.8, 18.2].map(v => v * (portfolioVal / 289490));
-        let niftyData = [0, 1.8, 3.5, 5.0, 4.2, 6.8, 8.5, 7.8, 9.2, 11.0, 12.2, 14.0].map(v => v * (portfolioVal / 289490) * 0.95);
-        let debtData = [0, 0.6, 1.2, 1.8, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 6.6];
+        let months = [];
+        let portData = [];
+        let niftyData = [];
+        let debtData = [];
+
+        if (horizon === '6m') {
+          months = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'];
+          portData = [0, 1.5, 3.2, 4.8, 5.9, 7.2];
+          niftyData = [0, 1.1, 2.3, 3.5, 4.6, 5.5];
+          debtData = [0, 0.6, 1.2, 1.8, 2.4, 3.0];
+        } else if (horizon === '3y') {
+          months = ['2024 H1', '2024 H2', '2025 H1', '2025 H2', '2026 H1', '2026 H2'];
+          portData = [0, 8.5, 17.2, 26.5, 38.2, 49.5];
+          niftyData = [0, 6.8, 13.9, 21.0, 31.5, 40.2];
+          debtData = [0, 3.6, 7.2, 11.0, 14.8, 18.5];
+        } else if (horizon === '5y') {
+          months = ['2022', '2023', '2024', '2025', '2026'];
+          portData = [0, 14.5, 32.8, 56.2, 85.6];
+          niftyData = [0, 11.2, 26.0, 44.5, 68.2];
+          debtData = [0, 6.5, 13.5, 21.0, 29.5];
+        } else { // 1y
+          months = ['Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May'];
+          portData = [0, 2.5, 4.8, 6.2, 5.5, 8.2, 10.5, 9.8, 12.4, 14.2, 15.8, 18.2];
+          niftyData = [0, 1.8, 3.5, 5.0, 4.2, 6.8, 8.5, 7.8, 9.2, 11.0, 12.2, 14.0];
+          debtData = [0, 0.6, 1.2, 1.8, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 6.6];
+        }
+
+        // Apply scale factors based on active alpha
+        let scale = (alphaVal + 9) / 13.2;
+        portData = portData.map(v => v * scale);
+        niftyData = niftyData.map(v => v * 0.95);
 
         invBenchmarkChart = new Chart(ctx3, {
           type: 'line',
@@ -1046,7 +1152,7 @@
                 label: 'Your Portfolio Return (%)',
                 data: portData,
                 borderColor: 'var(--emerald)',
-                backgroundColor: 'rgba(80, 184, 148, 0.1)',
+                backgroundColor: 'rgba(145, 184, 156, 0.1)',
                 fill: true,
                 tension: 0.4
               },
@@ -1069,13 +1175,42 @@
           },
           options: {
             ...chartDefaults,
-            plugins: { legend: { position: 'bottom', labels: { color: '#64748B' } } },
+            plugins: { legend: { position: 'bottom', labels: { color: '#706860', font: { family: 'Inter' } } } },
             scales: {
               x: chartDefaults.scales.x,
-              y: { title: { display: true, text: 'Cumulative Return %', color: '#64748B' }, ticks: { color: '#64748B' }, grid: { color: 'rgba(0,0,0,0.05)' } }
+              y: { title: { display: true, text: 'Cumulative Return %', color: '#706860' }, ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } }
             }
           }
         });
+      }
+
+      // Update Portfolio Optimization Briefing dynamically
+      const insightsList = document.getElementById('invBiInsightsList');
+      if (insightsList) {
+        let optimalRebalancingMsg = "";
+        let alphaGenerationMsg = "";
+        
+        if (assetFocus === 'equity') {
+          alphaGenerationMsg = `Your current allocation over a ${horizon} horizon generates an elevated alpha of +${alphaVal.toFixed(1)}% over Nifty 50 with a Beta risk of ${betaVal.toFixed(2)}. High exposure to growth sectors drives outperformance but increases downside volatility.`;
+          optimalRebalancingMsg = `Reducing aggressive equity by 8% and reallocating to short-duration debt or arbitrage funds would shift your portfolio directly onto the optimal Markowitz Efficient Frontier (Sharpe Ratio: ${sharpeVal.toFixed(2)}).`;
+        } else if (assetFocus === 'hybrid') {
+          alphaGenerationMsg = `By focusing on Hybrid assets over a ${horizon} horizon, you achieve an alpha of +${alphaVal.toFixed(1)}% with an extremely resilient Beta of ${betaVal.toFixed(2)}. Your risk-adjusted return profile is highly optimized.`;
+          optimalRebalancingMsg = `Adding 5% large-cap index funds can capture market momentum and boost alpha with negligible impact on overall portfolio volatility.`;
+        } else { // 'all' or default
+          alphaGenerationMsg = `Your standard multi-asset allocation over a ${horizon} horizon generates a steady alpha of +${alphaVal.toFixed(1)}% over Nifty 50 with a stable Beta of ${betaVal.toFixed(2)}. This represents a highly diversified core holding.`;
+          optimalRebalancingMsg = `Adding 8% allocation in Debt/Liquid funds would reduce overall portfolio variance and shift your asset mix directly onto the Markowitz Efficient Frontier (Sharpe Ratio: ${sharpeVal.toFixed(2)}).`;
+        }
+
+        insightsList.innerHTML = `
+          <div class="card card-left-emerald" style="padding: 10px 14px; margin: 0; background: var(--bg-surface); border: 1px solid var(--border); border-left: 4px solid var(--emerald);">
+            <span class="text-xs font-bold text-emerald">ALPHA GENERATION</span>
+            <p class="text-xs mt-4">${alphaGenerationMsg}</p>
+          </div>
+          <div class="card card-left-blue" style="padding: 10px 14px; margin: 0; background: var(--bg-surface); border: 1px solid var(--border); border-left: 4px solid var(--blue);">
+            <span class="text-xs font-bold text-blue">OPTIMAL REBALANCING</span>
+            <p class="text-xs mt-4">${optimalRebalancingMsg}</p>
+          </div>
+        `;
       }
     }
   </script>
