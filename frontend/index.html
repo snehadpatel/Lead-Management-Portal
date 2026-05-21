@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lume AI | Fintech Intelligence Platform</title>
-  <meta name="description" content="AI-powered Big Data platform for mutual fund distribution and investor intelligence">
+  <meta name="description"
+    content="AI-powered Big Data platform for mutual fund distribution and investor intelligence">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
+
 <body>
+  <!-- ═══ SPLASH SCREEN ═══ -->
+  <div id="splashScreen" class="splash-overlay">
+    <div class="splash-content">
+      <img src="splash screen.mp4" alt="Lume AI" class="splash-logo">
+      <h1 class="splash-title">
+        <span class="splash-text-gradient">LUME AI</span>
+      </h1>
+      <p class="splash-tagline">Big Data + AI Intelligence Platform</p>
+      <div class="splash-loader">
+        <div class="splash-loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="mesh-bg"></div>
 
   <!-- ═══ NAVIGATION ═══ -->
   <nav class="topnav" id="topnav">
     <div class="topnav-brand">
-      <img src="logo.png" alt="Lume AI" style="height:32px; width:auto;">
+      <img src="logo.png" alt="Lume AI" style="height:44px; width:auto;">
       <span class="badge badge-emerald" style="font-size:0.65rem;">v2.0</span>
     </div>
     <div class="topnav-links">
@@ -39,7 +56,8 @@
       <span class="text-gradient">LUME AI</span>
     </h1>
     <p class="hero-subtitle fade-in stagger-3">
-      Production-grade <strong>Big Data + Artificial Intelligence</strong> platform for mutual fund distribution and investor wealth management.
+      Production-grade <strong>Big Data + Artificial Intelligence</strong> platform for mutual fund distribution and
+      investor wealth management.
     </p>
 
     <!-- Role Selection -->
@@ -151,7 +169,8 @@
     <div class="section-header">
       <div>
         <h2 class="section-title">Live Operations Console</h2>
-        <p class="section-subtitle">Frontend-only alerts, market impact, and drift monitoring from the FastAPI backend.</p>
+        <p class="section-subtitle">Frontend-only alerts, market impact, and drift monitoring from the FastAPI backend.
+        </p>
       </div>
       <span class="badge badge-emerald"><span class="pulse pulse-live"></span> Live API</span>
     </div>
@@ -172,7 +191,8 @@
   </section>
 
   <!-- ═══ SURVEY MODAL ═══ -->
-  <div id="surveyModal" class="hidden" style="position:fixed;inset:0;z-index:200;background:rgba(245,247,250,0.96);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
+  <div id="surveyModal" class="hidden"
+    style="position:fixed;inset:0;z-index:200;background:rgba(245,247,250,0.96);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
     <div class="survey-container" style="padding:24px;">
       <div id="surveyContent"></div>
     </div>
@@ -186,5 +206,19 @@
   </footer>
 
   <script src="app.js"></script>
+  <script>
+    // Splash screen auto-dismiss
+    (function () {
+      const splash = document.getElementById('splashScreen');
+      if (!splash) return;
+      setTimeout(function () {
+        splash.classList.add('splash-fade-out');
+        setTimeout(function () {
+          splash.style.display = 'none';
+        }, 600);
+      }, 3000);
+    })();
+  </script>
 </body>
+
 </html>
