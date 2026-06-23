@@ -1,11 +1,27 @@
 {
   "version": 2,
-  "outputDirectory": "frontend",
-  "buildCommand": "echo 'No build step required for vanilla frontend'",
+  "builds": [
+    {
+      "src": "api/main_enhanced.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
+    }
+  ],
   "routes": [
     {
+      "src": "/(health|predict|analytics|risk/.*|dashboard/.*|model/.*|insights|alerts/.*|market/.*|monitoring/.*|funds/.*|user/.*|distributors/.*|advisor/.*|buddy/.*)",
+      "dest": "api/main_enhanced.py"
+    },
+    {
+      "src": "/frontend/(.*)",
+      "dest": "frontend/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "api/main_enhanced.py"
     }
   ]
 }
