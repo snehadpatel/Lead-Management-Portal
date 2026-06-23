@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "outputDirectory": "frontend",
+  "buildCommand": "echo 'No build step required for vanilla frontend'",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
