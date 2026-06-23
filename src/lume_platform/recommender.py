@@ -25,7 +25,15 @@ class SimpleRecommender:
         # profiles storage
         self.profiles_path = EXPORT_DIR / "users_profiles.json"
         if not self.profiles_path.parent.exists():
-            os.makedirs(self.profiles_path.parent, exist_ok=True)
+            try:
+                os.makedirs(self.profiles_path.parent, exist_ok=True)
+            except OSError:
+                # Fallback to /tmp for write access on Vercel/read-only filesystems
+                self.profiles_path = Path("/tmp") / "users_profiles.json"
+                try:
+                    os.makedirs(self.profiles_path.parent, exist_ok=True)
+                except Exception:
+                    pass
 
     def save_profile(self, user_id: str, profile: dict) -> None:
         data = {}

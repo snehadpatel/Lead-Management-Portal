@@ -170,7 +170,12 @@ def market_signals_listener():
     """Background worker to consume `market_signals` topic or fallback file and persist signals."""
     topic = os.environ.get("KAFKA_SIGNALS_TOPIC", "market_signals")
     out_file = EXPORT_DIR / "market_signals.jsonl"
-    os.makedirs(out_file.parent, exist_ok=True)
+    if "VERCEL" in os.environ:
+        out_file = Path("/tmp") / "market_signals.jsonl"
+    try:
+        os.makedirs(out_file.parent, exist_ok=True)
+    except Exception as e:
+        print(f"⚠️ Could not create market signals directory: {e}")
 
     if KAFKA_AVAILABLE:
         servers = os.environ.get("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092").split(",")

@@ -5,7 +5,6 @@ venv/
 data/
 streaming/
 tableau_exports/
-output_production_final/
 archive/
 scratch/
 scripts/

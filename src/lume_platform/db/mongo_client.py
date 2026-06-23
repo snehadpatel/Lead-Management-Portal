@@ -37,6 +37,8 @@ class MockMongoClient:
     def __init__(self):
         self.leads_db: Dict[str, dict] = {}
         self.custom_leads_file = EXPORT_DIR / "db_custom_leads.json"
+        if "VERCEL" in os.environ:
+            self.custom_leads_file = Path("/tmp") / "db_custom_leads.json"
         self._load_initial_data()
 
     def _load_initial_data(self) -> None:
