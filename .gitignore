@@ -56,3 +56,4 @@ artifacts/
 scratch/
 *.log
 CompleteNavReport.txt
+.vercel
