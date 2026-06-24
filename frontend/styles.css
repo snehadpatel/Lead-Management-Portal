@@ -711,3 +711,32 @@ h4 { font-size: 1.125rem; }
   100% { width: 100%; }
 }
 
+/* ── Auth Page Styles ── */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hover);
+  text-align: center;
+}
+
+/* ── ROI Calculator & Pricing Styles ── */
+.mt-8 { margin-top: 8px; }
+.mt-24 { margin-top: 24px; }
+.mb-32 { margin-bottom: 32px; }
+
+ul {
+  padding-left: 20px;
+}
+
+

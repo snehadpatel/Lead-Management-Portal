@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up | Lume AI</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 460px;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-hover);
+      text-align: center;
+      animation: authAppear 0.5s ease forwards;
+    }
+
+    @keyframes authAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .auth-logo {
+      font-size: 2.5rem;
+      font-weight: 900;
+      font-family: var(--font-display);
+      margin-bottom: 8px;
+    }
+
+    .auth-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .auth-error {
+      background: rgba(226, 158, 158, 0.15);
+      color: var(--red);
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      text-align: left;
+      border: 1px solid rgba(226, 158, 158, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="mesh-bg"></div>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo"><span class="text-gradient">LUME AI</span></div>
+      <div class="auth-subtitle">Create your account and unlock smart financial intelligence.</div>
+
+      <div id="errorBox" class="auth-error hidden"></div>
+
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="name@company.com" required>
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label" for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" class="form-input" placeholder="••••••••" required>
+        </div>
+
+        <div class="form-group" style="text-align: left; margin-bottom: 24px;">
+          <label class="form-label" for="role">Register As</label>
+          <select id="role" class="form-select" required>
+            <option value="distributor" selected>👔 Mutual Fund Distributor</option>
+            <option value="investor">💼 Individual Investor</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top: 8px;">
+          Sign Up &rarr;
+        </button>
+      </form>
+
+      <p class="text-sm text-muted mt-24">
+        Already have an account? <a href="login.html" style="font-weight: 600; color: var(--blue);">Log In</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Prevent access if token exists
+    if (localStorage.getItem('lume_auth_token')) {
+      const role = localStorage.getItem('lume_role') || 'distributor';
+      window.location.href = role === 'distributor' ? 'distributor.html' : 'investor.html';
+    }
+  </script>
+</body>
+
+</html>

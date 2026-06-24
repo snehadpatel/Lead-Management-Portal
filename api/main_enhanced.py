@@ -504,6 +504,21 @@ class DriftStatusResponse(BaseModel):
     last_message: str
 
 
+class UserRegisterRequest(BaseModel):
+    email: str
+    password: str
+    role: str
+
+
+class UserLoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class UserProfileUpdateRequest(BaseModel):
+    profile: Dict[str, Any]
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # API Endpoints
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -1035,6 +1050,62 @@ def _auth_admin(credentials: HTTPAuthorizationCredentials = Depends(security)) -
     return True
 
 
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
+    """Validate token and return current user details."""
+    payload = decode_access_token(credentials.credentials)
+    if not payload or "sub" not in payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    email = payload["sub"]
+    user = db_client.get_user(email)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
+@app.post('/auth/register', tags=['Auth'])
+def register(request: UserRegisterRequest):
+    """Register a new SaaS user."""
+    email_clean = request.email.strip().lower()
+    if db_client.get_user(email_clean):
+        raise HTTPException(status_code=400, detail="Account with this email already exists")
+    
+    pwd_hash = hash_password(request.password)
+    user = db_client.create_user(email_clean, pwd_hash, request.role)
+    token = create_access_token(email_clean)
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "email": email_clean,
+        "role": request.role
+    }
+
+
+@app.post('/auth/login', tags=['Auth'])
+def login(request: UserLoginRequest):
+    """Authenticate and return JWT token for a user."""
+    email_clean = request.email.strip().lower()
+    user = db_client.get_user(email_clean)
+    if not user or not verify_password(user["password_hash"], request.password):
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
+    
+    token = create_access_token(email_clean)
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "email": email_clean,
+        "role": user["role"]
+    }
+
+
+@app.get('/auth/me', tags=['Auth'])
+def auth_me(user: dict = Depends(get_current_user)):
+    """Get the current authenticated user's profile."""
+    # Exclude password hash from response
+    user_copy = user.copy()
+    user_copy.pop("password_hash", None)
+    return user_copy
+
+
 @app.post('/auth/token', tags=['Auth'])
 def issue_token(api_key: str = Query(..., description='Admin API key')):
     """Issue a short-lived JWT if the provided API key matches ADMIN_API_KEY."""
@@ -1157,6 +1228,14 @@ def upsert_user_profile(user_id: str = Query(...), profile: Dict[str, Any] = Non
         if profile is None:
             raise HTTPException(status_code=400, detail='Missing profile payload')
         recommender.save_profile(user_id, profile)
+        
+        # Sync with users database
+        db_client.update_user_profile(user_id, {
+            "persona": profile.get("inferred_risk_profile", "balanced"),
+            "goals": profile.get("goals", ""),
+            "investment_horizon": profile.get("investment_horizon", "")
+        })
+        
         return { 'status': 'saved', 'user_id': user_id }
     except HTTPException:
         raise

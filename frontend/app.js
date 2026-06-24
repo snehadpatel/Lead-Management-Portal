@@ -197,15 +197,8 @@ async function refreshLiveOpsWidgets() {
 
 // ── Role Selection ──
 function selectRole(role) {
-  state.role = role;
-  localStorage.setItem('lume_role', role);
-  const saved = localStorage.getItem('lume_persona');
-  if (saved) {
-    state.persona = saved;
-    window.location.href = role === 'distributor' ? 'distributor.html' : 'investor.html';
-  } else {
-    openSurvey();
-  }
+  localStorage.setItem('lume_onboarding_role', role);
+  window.location.href = `signup.html?role=${role}`;
 }
 
 // ── Survey Engine ──
@@ -277,6 +270,15 @@ async function finishSurvey() {
   state.persona = persona;
   localStorage.setItem('lume_persona', persona);
 
+  // Sync profile with the backend
+  if (state.userName) {
+    await saveUserProfile(state.userName, {
+      inferred_risk_profile: persona,
+      goals: `${persona} mutual fund recommendations`,
+      investment_horizon: 'long term'
+    });
+  }
+
   if (container) {
     const p = PERSONAS[persona];
     container.innerHTML = `
@@ -290,15 +292,109 @@ async function finishSurvey() {
 }
 
 function goToDashboard() {
-  window.location.href = state.role === 'distributor' ? 'distributor.html' : 'investor.html';
+  const role = state.role || localStorage.getItem('lume_role') || 'distributor';
+  window.location.href = role === 'distributor' ? 'distributor.html' : 'investor.html';
 }
 
 function logout() {
   localStorage.removeItem('lume_role');
   localStorage.removeItem('lume_persona');
   localStorage.removeItem('lume_name');
+  localStorage.removeItem('lume_auth_token');
   window.location.href = 'index.html';
 }
+
+// ── Client-Side Authentication Handlers ──
+async function handleSignup(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const role = document.getElementById('role').value;
+  const errorBox = document.getElementById('errorBox');
+
+  if (password !== confirmPassword) {
+    errorBox.textContent = 'Passwords do not match';
+    errorBox.classList.remove('hidden');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, role })
+    });
+    
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Registration failed');
+
+    localStorage.setItem('lume_auth_token', data.access_token);
+    localStorage.setItem('lume_role', data.role);
+    localStorage.setItem('lume_name', email.split('@')[0]);
+
+    state.role = data.role;
+    state.userName = email.split('@')[0];
+
+    // Show survey modal for onboarding matching
+    openSurvey();
+  } catch (err) {
+    errorBox.textContent = err.message;
+    errorBox.classList.remove('hidden');
+  }
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const errorBox = document.getElementById('errorBox');
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Login failed');
+
+    localStorage.setItem('lume_auth_token', data.access_token);
+    localStorage.setItem('lume_role', data.role);
+    localStorage.setItem('lume_name', email.split('@')[0]);
+
+    state.role = data.role;
+    state.userName = email.split('@')[0];
+
+    // Fetch profile from me endpoint
+    const meRes = await fetch(`${API_BASE}/auth/me`, {
+      headers: { 'Authorization': `Bearer ${data.access_token}` }
+    });
+    if (meRes.ok) {
+      const meData = await meRes.json();
+      if (meData.persona) {
+        localStorage.setItem('lume_persona', meData.persona);
+        state.persona = meData.persona;
+        window.location.href = data.role === 'distributor' ? 'distributor.html' : 'investor.html';
+        return;
+      }
+    }
+
+    openSurvey();
+  } catch (err) {
+    errorBox.textContent = err.message;
+    errorBox.classList.remove('hidden');
+  }
+}
+
+function checkAuthRedirect() {
+  const token = localStorage.getItem('lume_auth_token');
+  if (!token) {
+    window.location.href = 'login.html';
+  }
+}
+
 
 // ── Tab System ──
 function switchTab(tabGroup, tabId) {
@@ -450,4 +546,51 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(checkApiHealth, 30000);
   refreshLiveOpsWidgets();
   setInterval(refreshLiveOpsWidgets, 30000);
+
+  // Pre-fill signup role if present in query parameters
+  if (window.location.pathname.endsWith('signup.html')) {
+    const params = new URLSearchParams(window.location.search);
+    const r = params.get('role');
+    if (r && document.getElementById('role')) {
+      document.getElementById('role').value = r;
+    }
+  }
+
+  // Handle dynamic navigation auth buttons
+  const token = localStorage.getItem('lume_auth_token');
+  const role = localStorage.getItem('lume_role');
+  const navAuth = document.getElementById('navAuthSection');
+  if (navAuth) {
+    if (token) {
+      const dashboardUrl = role === 'distributor' ? 'distributor.html' : 'investor.html';
+      navAuth.innerHTML = `
+        <a href="${dashboardUrl}" class="btn btn-sm btn-primary">Dashboard &rarr;</a>
+        <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
+      `;
+    } else {
+      navAuth.innerHTML = `
+        <a href="login.html" class="btn btn-sm btn-secondary">Log In</a>
+        <a href="signup.html" class="btn btn-sm btn-primary">Sign Up</a>
+      `;
+    }
+  }
+
+  // Pre-calculate ROI on landing page load if elements exist
+  if (document.getElementById('roiLeads')) {
+    calculateROI();
+  }
 });
+
+// ── ROI Calculator Handler ──
+function calculateROI() {
+  const leads = parseInt(document.getElementById('roiLeads').value) || 0;
+  const hours = parseFloat(document.getElementById('roiHours').value) || 0;
+  const rate = parseFloat(document.getElementById('roiRate').value) || 0;
+
+  const timeReduction = 0.85; // Assume 85% time reduction with Lume AI
+  const hoursSavedPerMonth = Math.round(leads * hours * timeReduction);
+  const annualSavings = Math.round(hoursSavedPerMonth * rate * 12);
+
+  document.getElementById('roiSavedHours').textContent = `${hoursSavedPerMonth} hrs`;
+  document.getElementById('roiSavedWealth').textContent = `₹${annualSavings.toLocaleString('en-IN')}`;
+}

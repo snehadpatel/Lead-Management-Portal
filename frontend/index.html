@@ -42,6 +42,7 @@
     <div class="status-bar" id="apiStatus">
       <div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div>
     </div>
+    <div class="flex items-center gap-12" id="navAuthSection"></div>
   </nav>
 
   <!-- ═══ HERO ═══ -->
@@ -163,6 +164,98 @@
       </div>
     </div>
   </section>
+
+  <!-- ═══ ROI CALCULATOR ═══ -->
+  <section class="container mb-32" style="padding-top:40px; border-top:1px solid var(--border);">
+    <h2 class="text-center mb-24">Calculate your Advisor ROI</h2>
+    <p class="text-center text-muted mb-32" style="max-width:600px;margin-left:auto;margin-right:auto;">
+      Estimate how much time and money Lume AI's automated profiling and scoring saves your wealth management practice annually.
+    </p>
+    <div class="bento-grid">
+      <div class="bento-5 card card-accent-blue">
+        <h4>Practice Details</h4>
+        <div class="form-group mt-16" style="text-align: left;">
+          <label class="form-label">Active Client Leads per Month</label>
+          <input type="number" id="roiLeads" class="form-input" value="50" min="5" oninput="calculateROI()">
+        </div>
+        <div class="form-group mt-16" style="text-align: left;">
+          <label class="form-label">Profiling Time per Client (Hours)</label>
+          <input type="number" id="roiHours" class="form-input" value="3" min="1" step="0.5" oninput="calculateROI()">
+        </div>
+        <div class="form-group mt-16" style="text-align: left;">
+          <label class="form-label">Advisor Hourly Rate (₹)</label>
+          <input type="number" id="roiRate" class="form-input" value="1500" min="500" step="100" oninput="calculateROI()">
+        </div>
+      </div>
+      <div class="bento-7 card card-accent-emerald">
+        <h4>Estimated Savings</h4>
+        <div class="bento-grid mt-24 text-center">
+          <div class="bento-6">
+            <div class="metric-label">Hours Saved / Month</div>
+            <div class="metric-value text-emerald" id="roiSavedHours" style="font-size: 2.5rem; font-weight: 800;">—</div>
+          </div>
+          <div class="bento-6">
+            <div class="metric-label">Annual Wealth Saved</div>
+            <div class="metric-value text-emerald" id="roiSavedWealth" style="font-size: 2.5rem; font-weight: 800;">—</div>
+          </div>
+        </div>
+        <div class="card card-left-blue mt-32" style="padding: 16px 20px;">
+          <p class="text-sm">
+            💡 <strong>SaaS Accelerator Insight:</strong> Lume AI automates lead scoring and persona matching in under 5 seconds per prospect, reducing your onboarding overhead by up to <strong>85%</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PRICING PLANS ═══ -->
+  <section class="container mb-32" style="padding-top:40px; border-top:1px solid var(--border);">
+    <h2 class="text-center mb-24">Flexible Pricing for Any Stage</h2>
+    <p class="text-center text-muted mb-32" style="max-width:600px;margin-left:auto;margin-right:auto;">
+      Choose the plan that fits your practice or personal investment workflow.
+    </p>
+    <div class="bento-grid">
+      <!-- Free Plan -->
+      <div class="bento-4 card">
+        <h3 class="mb-8">Free</h3>
+        <p class="text-muted text-sm mb-24">Basic profiling & scoring for early advisors.</p>
+        <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 24px; font-family: var(--font-display);">₹0 <span style="font-size: 1.0rem; color: var(--text-secondary); font-weight: normal;">/ forever</span></div>
+        <ul style="text-align: left; list-style: none; padding: 0; margin: 0 0 32px 0; font-size: 0.9rem; color: var(--text-secondary);">
+          <li style="margin-bottom: 12px;">✓ 5 Lead Predictions per Month</li>
+          <li style="margin-bottom: 12px;">✓ Basic Investor Personas</li>
+          <li style="margin-bottom: 12px;">✓ Standard Fund Catalog Search</li>
+        </ul>
+        <a href="signup.html" class="btn btn-secondary btn-full">Get Started</a>
+      </div>
+      <!-- Pro Plan -->
+      <div class="bento-4 card card-accent-blue" style="border-width: 2px;">
+        <h3 class="mb-8">Growth Pro</h3>
+        <p class="text-muted text-sm mb-24">High-performance AI for active distributors.</p>
+        <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 24px; font-family: var(--font-display);">₹3,999 <span style="font-size: 1.0rem; color: var(--text-secondary); font-weight: normal;">/ month</span></div>
+        <ul style="text-align: left; list-style: none; padding: 0; margin: 0 0 32px 0; font-size: 0.9rem; color: var(--text-secondary);">
+          <li style="margin-bottom: 12px;">✓ Unlimited AI Lead Scoring</li>
+          <li style="margin-bottom: 12px;">✓ Interactive BI Wealth Dashboards</li>
+          <li style="margin-bottom: 12px;">✓ Real-time News-based Alerts</li>
+          <li style="margin-bottom: 12px;">✓ Live Chatbot Advisor Buddy</li>
+        </ul>
+        <a href="signup.html" class="btn btn-primary btn-full">Choose Pro</a>
+      </div>
+      <!-- Enterprise Plan -->
+      <div class="bento-4 card">
+        <h3 class="mb-8">Enterprise</h3>
+        <p class="text-muted text-sm mb-24">Advanced capabilities for advisory networks.</p>
+        <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 24px; font-family: var(--font-display);">Custom <span style="font-size: 1.0rem; color: var(--text-secondary); font-weight: normal;">/ contact sales</span></div>
+        <ul style="text-align: left; list-style: none; padding: 0; margin: 0 0 32px 0; font-size: 0.9rem; color: var(--text-secondary);">
+          <li style="margin-bottom: 12px;">✓ Custom Model Retraining</li>
+          <li style="margin-bottom: 12px;">✓ Dedicated API Key & Sub-accounts</li>
+          <li style="margin-bottom: 12px;">✓ Multi-tenant Distributor Workspace</li>
+          <li style="margin-bottom: 12px;">✓ 24/7 SLA Priority Support</li>
+        </ul>
+        <a href="mailto:sales@lumeai.com" class="btn btn-secondary btn-full">Contact Sales</a>
+      </div>
+    </div>
+  </section>
+
 
   <!-- ═══ LIVE OPERATIONS ═══ -->
   <section class="container mb-24" style="padding-bottom:32px;">
