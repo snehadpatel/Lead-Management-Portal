@@ -29,7 +29,7 @@ from lume_platform.inference.registry import ModelRegistry
 from lume_platform.ml.buddy_engine import BuddyEngine
 from lume_platform.db.mongo_client import db_client
 from lume_platform.recommender import SimpleRecommender
-from lume_platform.auth import create_access_token, decode_access_token
+from lume_platform.auth import create_access_token, decode_access_token, hash_password, verify_password
 from fastapi import Header, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from lume_platform.collab import CollabEngine

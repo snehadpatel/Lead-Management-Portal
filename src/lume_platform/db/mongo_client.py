@@ -36,10 +36,14 @@ class MockCollection:
 class MockMongoClient:
     def __init__(self):
         self.leads_db: Dict[str, dict] = {}
+        self.users_db: Dict[str, dict] = {}
         self.custom_leads_file = EXPORT_DIR / "db_custom_leads.json"
+        self.users_file = EXPORT_DIR / "db_users.json"
         if "VERCEL" in os.environ:
             self.custom_leads_file = Path("/tmp") / "db_custom_leads.json"
+            self.users_file = Path("/tmp") / "db_users.json"
         self._load_initial_data()
+        self._load_users()
 
     def _load_initial_data(self) -> None:
         """Seed leads and matches from output_production_final CSV exports."""
@@ -99,6 +103,53 @@ class MockMongoClient:
                 json.dump(self.leads_db, f, indent=4)
         except Exception as e:
             print(f"⚠️ Error writing custom leads JSON: {e}")
+
+    def _load_users(self) -> None:
+        """Load persistent user profiles from JSON file."""
+        if self.users_file.is_file():
+            try:
+                with open(self.users_file, "r") as f:
+                    self.users_db = json.load(f)
+                print(f"✅ Loaded {len(self.users_db)} persistent user profiles from {self.users_file}")
+            except Exception as e:
+                print(f"⚠️ Error loading users JSON: {e}")
+
+    def _save_users(self) -> None:
+        """Save persistent user profiles to JSON file."""
+        try:
+            self.users_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.users_file, "w") as f:
+                json.dump(self.users_db, f, indent=4)
+        except Exception as e:
+            print(f"⚠️ Error writing users JSON: {e}")
+
+    def get_user(self, email: str) -> Optional[dict]:
+        """Fetch user by email."""
+        return self.users_db.get(email.lower())
+
+    def create_user(self, email: str, password_hash: str, role: str) -> dict:
+        """Create a new user profile."""
+        email_clean = email.lower()
+        user_data = {
+            "email": email_clean,
+            "password_hash": password_hash,
+            "role": role,
+            "persona": "balanced",  # Default persona
+            "created_at": str(pd.Timestamp.now())
+        }
+        self.users_db[email_clean] = user_data
+        self._save_users()
+        return user_data
+
+    def update_user_profile(self, email: str, profile: dict) -> Optional[dict]:
+        """Update user profile fields."""
+        email_clean = email.lower()
+        if email_clean in self.users_db:
+            self.users_db[email_clean].update(profile)
+            self._save_users()
+            return self.users_db[email_clean]
+        return None
+
 
     def upsert_lead(self, lead_id: str, data: dict) -> None:
         """Upsert lead details."""
