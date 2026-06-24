@@ -317,10 +317,8 @@
   <script>
     // ── Initialize Distributor Dashboard ──
     document.addEventListener('DOMContentLoaded', async () => {
-      const persona = state.persona || 'balanced';
-      const p = PERSONAS[persona];
-      const el = document.getElementById('personaLabel');
-      if (el) el.innerHTML = `Persona: <strong style="color:${p.color}">${p.name}</strong> · Risk: ${p.risk}`;
+      // Verify login session and synchronize profile details
+      await verifyAuthAndSyncProfile();
 
       await loadKPIs();
       loadLeads();

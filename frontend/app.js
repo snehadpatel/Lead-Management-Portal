@@ -37,11 +37,25 @@ const PERSONAS = {
 // ── API Client ──
 async function apiCall(endpoint, options = {}) {
   try {
+    const token = localStorage.getItem('lume_auth_token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
     const res = await fetch(`${API_BASE}${endpoint}`, {
-      headers: { 'Content-Type': 'application/json' },
       ...options,
+      headers: {
+        ...headers,
+        ...(options.headers || {})
+      },
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) {
+      if (res.status === 401) {
+        console.warn('Unauthorized request - logging out');
+        logout();
+      }
+      throw new Error(`HTTP ${res.status}`);
+    }
     return await res.json();
   } catch (e) {
     console.warn(`API ${endpoint} failed:`, e.message);
@@ -392,6 +406,73 @@ function checkAuthRedirect() {
   const token = localStorage.getItem('lume_auth_token');
   if (!token) {
     window.location.href = 'login.html';
+  }
+}
+
+async function verifyAuthAndSyncProfile() {
+  const token = localStorage.getItem('lume_auth_token');
+  if (!token) {
+    window.location.href = 'login.html';
+    return null;
+  }
+  
+  try {
+    const res = await fetch(`${API_BASE}/auth/me`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) {
+      logout();
+      return null;
+    }
+    const user = await res.json();
+    
+    // Sync state
+    state.userName = user.email.split('@')[0];
+    localStorage.setItem('lume_name', state.userName);
+    if (user.persona) {
+      state.persona = user.persona;
+      localStorage.setItem('lume_persona', user.persona);
+    }
+    state.role = user.role;
+    localStorage.setItem('lume_role', user.role);
+    
+    const pathname = window.location.pathname;
+    if (pathname.endsWith('distributor.html') && user.role !== 'distributor') {
+      window.location.href = 'investor.html';
+      return null;
+    }
+    if (pathname.endsWith('investor.html') && user.role !== 'investor') {
+      window.location.href = 'distributor.html';
+      return null;
+    }
+    
+    // Update welcome title
+    const welcomeTitle = document.getElementById('welcomeTitle');
+    if (welcomeTitle) {
+      const displayName = state.userName.charAt(0).toUpperCase() + state.userName.slice(1);
+      welcomeTitle.textContent = `Welcome, ${displayName}`;
+    }
+    
+    // Update persona label
+    const personaLabel = document.getElementById('personaLabel');
+    if (personaLabel) {
+      const p = PERSONAS[state.persona || 'balanced'] || PERSONAS.balanced;
+      const isDist = pathname.endsWith('distributor.html');
+      personaLabel.innerHTML = isDist 
+        ? `Persona: <strong style="color:${p.color}">${p.name}</strong> · Risk: ${p.risk}`
+        : `Persona: <strong style="color:${p.color}">${p.name}</strong> · Risk Tolerance: ${p.risk}`;
+    }
+    
+    return user;
+  } catch (err) {
+    console.warn('Error in verifyAuthAndSyncProfile:', err);
+    // If API is down, use local storage fallback
+    const welcomeTitle = document.getElementById('welcomeTitle');
+    if (welcomeTitle && state.userName) {
+      const displayName = state.userName.charAt(0).toUpperCase() + state.userName.slice(1);
+      welcomeTitle.textContent = `Welcome, ${displayName}`;
+    }
+    return null;
   }
 }
 

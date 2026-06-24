@@ -33,7 +33,7 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-24">
       <div>
-        <div class="flex items-center gap-12"><h2>Welcome, Investor</h2><span class="badge badge-emerald">💼 Investor</span></div>
+        <div class="flex items-center gap-12"><h2 id="welcomeTitle">Welcome, Investor</h2><span class="badge badge-emerald">💼 Investor</span></div>
         <p class="text-muted text-sm mt-8" id="personaLabel">Loading persona...</p>
       </div>
       <div class="card" style="padding:12px 20px;text-align:right;">
@@ -278,9 +278,8 @@
     let niftyChartInstance = null;
 
     document.addEventListener('DOMContentLoaded', async () => {
-      const persona = state.persona || 'balanced';
-      const p = PERSONAS[persona];
-      document.getElementById('personaLabel').innerHTML = `Persona: <strong style="color:${p.color}">${p.name}</strong> · Risk Tolerance: ${p.risk}`;
+      // Verify login session and synchronize profile details
+      await verifyAuthAndSyncProfile();
 
       populateChartFundSelector();
       await loadPortfolio();
@@ -503,13 +502,11 @@
       let accuracy = '92.4% (Backtested R²)';
       
       try {
-        const response = await fetch('/predict/forecast', {
+        const res = await apiCall('/predict/forecast', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ history: history })
         });
-        if (response.ok) {
-          const res = await response.json();
+        if (res) {
           forecastTrajectory = res.forecast_trajectory;
           confidence = res.confidence_score;
           trend = res.trend;
