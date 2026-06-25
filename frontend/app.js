@@ -181,6 +181,14 @@ async function fetchNavHistory(schemeCode, days = 365) {
   return apiCall(`/nav/${schemeCode}/history?days=${days}`);
 }
 
+async function fetchPortfolioAnalytics(horizon = '1y') {
+  return apiCall(`/portfolio/analytics?horizon=${horizon}`);
+}
+
+async function fetchLiveNews(maxArticles = 12) {
+  return apiCall(`/news/live?max_articles=${maxArticles}`);
+}
+
 function renderAlertItems(container, title, items, accent = 'var(--red)') {
   if (!container) return;
   const list = Array.isArray(items) ? items : [];

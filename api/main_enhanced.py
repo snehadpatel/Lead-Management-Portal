@@ -1338,6 +1338,30 @@ def get_nav_history(scheme_code: str, days: int = 365):
         raise HTTPException(status_code=500, detail=str(e)) from e
 
 
+@app.get('/portfolio/analytics', tags=['Portfolio'])
+def get_portfolio_analytics(horizon: str = '1y', user: dict = Depends(get_current_user)):
+    """Get advanced portfolio analytics (Alpha, Sharpe, Beta, Drawdown, Frontier, Radar)."""
+    try:
+        from lume_platform.risk.portfolio_analytics import portfolio_analytics
+        email = user["email"]
+        holdings = db_client.get_portfolio(email)
+        return portfolio_analytics.analyze_portfolio(holdings, horizon=horizon)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get('/news/live', tags=['News'])
+def get_live_news_endpoint(max_articles: int = 12, user: dict = Depends(get_current_user)):
+    """Get live financial news personalized for user's holdings with sentiment scores."""
+    try:
+        from lume_platform.news.news_fetcher import news_fetcher
+        email = user["email"]
+        holdings = db_client.get_portfolio(email)
+        return news_fetcher.get_personalized_alerts(holdings, max_alerts=max_articles)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
 @app.post('/admin/funds/upload', tags=['Admin'])
 def admin_upload_fund_catalog(payload: List[Dict[str, Any]], headers: Dict[str, str] = None, auth_ok: bool = Depends(_auth_admin)):
     """Upload or replace the fund catalog (expects list of fund dicts).
