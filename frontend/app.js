@@ -189,6 +189,10 @@ async function fetchLiveNews(maxArticles = 12) {
   return apiCall(`/news/live?max_articles=${maxArticles}`);
 }
 
+async function fetchBenchmarkHistory(days = 30) {
+  return apiCall(`/benchmark/history?days=${days}`);
+}
+
 function renderAlertItems(container, title, items, accent = 'var(--red)') {
   if (!container) return;
   const list = Array.isArray(items) ? items : [];

@@ -631,45 +631,84 @@
       }
       
       const val = sel.value;
-      const dates = [];
-      const history = [];
-      
+      let dates = [];
+      let history = [];
+      let label = 'NIFTY 50';
       let baseVal = 22200;
       let drift = 12;
       let volatilityFactor = 150;
-      let label = 'NIFTY 50';
       
-      if (val !== 'NIFTY') {
-        const funds = state.fundCatalog || generateSampleFunds();
-        const f = funds.find(x => (x.scheme_code || x.id) === val);
-        if (f) {
-          // Adjust price base relative to fund category
-          const category = (f.category || f.category_group || '').toLowerCase();
-          if (category.includes('liquid') || category.includes('short')) {
-            baseVal = 100 + (Math.random() * 5);
-            drift = 0.05;
-            volatilityFactor = 0.5;
-          } else if (category.includes('mid') || category.includes('small') || category.includes('sectoral')) {
-            baseVal = 80 + (Math.random() * 40);
-            drift = 0.45;
-            volatilityFactor = 3.0;
-          } else {
-            baseVal = 50 + (Math.random() * 20);
-            drift = 0.2;
-            volatilityFactor = 1.5;
-          }
-          label = f.scheme_name || f.name;
+      let fetchedSuccessfully = false;
+
+      try {
+        let historyData = null;
+        if (val === 'NIFTY') {
+          historyData = await fetchBenchmarkHistory(30);
+          label = 'NIFTY 50';
+        } else {
+          historyData = await fetchNavHistory(val, 30);
+          const funds = state.fundCatalog || [];
+          const f = funds.find(x => String(x.scheme_code || x.id) === val);
+          label = f ? (f.scheme_name || f.name) : `Fund ${val}`;
         }
+
+        if (historyData && historyData.history && historyData.history.length > 0) {
+          const pts = [...historyData.history].reverse();
+          pts.forEach(p => {
+            const dateStr = p.date || '';
+            let formattedDate = dateStr;
+            try {
+              const parts = dateStr.split('-');
+              if (parts.length === 3) {
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const day = parts[0];
+                const monthIdx = parseInt(parts[1], 10) - 1;
+                if (monthIdx >= 0 && monthIdx < 12) {
+                  formattedDate = `${day} ${months[monthIdx]}`;
+                }
+              }
+            } catch (e) {}
+            dates.push(formattedDate);
+            history.push(p.nav || p.value);
+          });
+          fetchedSuccessfully = true;
+        }
+      } catch (err) {
+        console.warn("Real history fetch failed, using local simulation:", err);
       }
-      
-      let currentVal = baseVal;
-      for (let i = 29; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        dates.push(d.toLocaleDateString('en-IN', { day:'2-digit', month:'short' }));
-        const step = drift + (Math.random() - 0.47) * volatilityFactor;
-        currentVal += step;
-        history.push(roundTo(currentVal, 2));
+
+      if (!fetchedSuccessfully) {
+        if (val !== 'NIFTY') {
+          const funds = state.fundCatalog || generateSampleFunds();
+          const f = funds.find(x => (x.scheme_code || x.id) === val);
+          if (f) {
+            const category = (f.category || f.category_group || '').toLowerCase();
+            if (category.includes('liquid') || category.includes('short')) {
+              baseVal = 100 + (Math.random() * 5);
+              drift = 0.05;
+              volatilityFactor = 0.5;
+            } else if (category.includes('mid') || category.includes('small') || category.includes('sectoral')) {
+              baseVal = 80 + (Math.random() * 40);
+              drift = 0.45;
+              volatilityFactor = 3.0;
+            } else {
+              baseVal = 50 + (Math.random() * 20);
+              drift = 0.2;
+              volatilityFactor = 1.5;
+            }
+            label = f.scheme_name || f.name;
+          }
+        }
+        
+        let currentVal = baseVal;
+        for (let i = 29; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          dates.push(d.toLocaleDateString('en-IN', { day:'2-digit', month:'short' }));
+          const step = drift + (Math.random() - 0.47) * volatilityFactor;
+          currentVal += step;
+          history.push(roundTo(currentVal, 2));
+        }
       }
       
       let forecastTrajectory = [];
@@ -799,71 +838,55 @@
       const container = document.getElementById('newsAlertsContainer');
       if (!container) return;
 
-      const [liveAlerts, marketImpact] = await Promise.all([getLiveAlerts(), getMarketImpact()]);
-
-      if (liveAlerts?.alerts?.length) {
-        const sev = String(liveAlerts.severity || 'moderate').toLowerCase();
-        const sevColor = sev === 'critical' || sev === 'high' ? 'var(--red)' : sev === 'positive' ? 'var(--emerald)' : 'var(--amber)';
-        container.innerHTML = `
-          <div class="bento-4 card card-left-red" style="border-left-color:${sevColor};">
-            <div class="flex justify-between items-center mb-8">
-              <span class="badge" style="background:${sevColor}20; color:${sevColor}; font-weight:700;">${sev.toUpperCase()} LIVE</span>
-              <span class="text-xs text-muted">AI Conf: ${Math.round((liveAlerts.confidence || 0.75) * 100)}%</span>
-            </div>
-            <h5 style="margin:0 0 8px 0; font-size:0.95rem; font-weight:600;">API-backed Market Alerts</h5>
-            ${liveAlerts.alerts.slice(0, 3).map(a => `<p class="text-sm mb-8">• ${a}</p>`).join('')}
-            <div class="card" style="margin:0; padding:8px 12px; background:rgba(255,255,255,0.03); font-size:0.8rem; border-left: 2px solid ${sevColor};">
-              <strong>Recommended Action:</strong> ${marketImpact?.recommended_actions?.[0] || 'Review your portfolio allocation'}
-            </div>
-          </div>
-        `;
-        return;
-      }
-
-      const alerts = [
-        {
-          event: "RBI Hikes Repo Rate by 25 bps",
-          impact: "Negative for High-Duration Debt funds, Moderate for Equities",
-          severity: "Moderate",
-          color: "var(--amber)",
-          action: "Consider moving mid-duration debt holdings to Liquid/Short-term funds",
-          confidence: 94,
-          funds: "ICICI Pru Short Term, Axis Banking & PSU Fund"
-        },
-        {
-          event: "Global Crude Oil Surges 5% Amid Geopolitical Tensions",
-          impact: "Negative for domestic markets; high inflation pressure",
-          severity: "High",
-          color: "var(--red)",
-          action: "Increase allocation to defensive hybrid/large-cap or liquid funds. Avoid new sector fund buying",
-          confidence: 88,
-          funds: "SBI Magnum MidCap Fund, UTI Nifty 50 Index Fund"
-        },
-        {
-          event: "Nifty IT Index Correction of 4% over slow US demand",
-          impact: "Sectoral concentration threat for growth-focused investors",
-          severity: "Low",
-          color: "var(--blue)",
-          action: "Keep holding, dollar-cost average via active SIP, do not sell in panic",
-          confidence: 91,
-          funds: "SBI Magnum MidCap Fund"
+      try {
+        const news = await fetchLiveNews(3); // Fetch top 3 live alerts
+        
+        if (!news || !news.length) {
+          container.innerHTML = `<div class="card" style="grid-column: span 12; text-align: center;"><p class="text-muted">No active market alerts right now.</p></div>`;
+          return;
         }
-      ];
-      
-      container.innerHTML = alerts.map(a => `
-        <div class="bento-4 card card-left-red" style="border-left-color: ${a.color};">
-          <div class="flex justify-between items-center mb-8">
-            <span class="badge" style="background:${a.color}20; color:${a.color}; font-weight:700;">${a.severity.toUpperCase()} SEVERITY</span>
-            <span class="text-xs text-muted">AI Conf: ${a.confidence}%</span>
-          </div>
-          <h5 style="margin:0 0 8px 0; font-size:0.95rem; font-weight:600;">${a.event}</h5>
-          <p class="text-sm" style="margin-bottom:8px;"><strong>Impact:</strong> ${a.impact}</p>
-          <p class="text-xs text-muted" style="margin-bottom:12px;"><strong>Affected Holdings:</strong> ${a.funds}</p>
-          <div class="card" style="margin:0; padding:8px 12px; background:rgba(255,255,255,0.03); font-size:0.8rem; border-left: 2px solid ${a.color};">
-            <strong>Recommended Action:</strong> ${a.action}
-          </div>
-        </div>
-      `).join('');
+
+        container.innerHTML = news.map(a => {
+          const isBear = a.sentiment === 'bearish';
+          const isBull = a.sentiment === 'bullish';
+          const color = isBear ? 'var(--red)' : (isBull ? 'var(--emerald)' : 'var(--blue)');
+          const severity = a.impact ? a.impact.toUpperCase() : 'LOW';
+          
+          const affectedText = a.personalized && a.matched_keywords && a.matched_keywords.length
+            ? `Your holdings (${a.matched_keywords.join(', ')})`
+            : "General Market Alert";
+            
+          const actionText = isBear 
+            ? "Market signal is negative. Monitor affected holdings. Avoid panic selling, but consider rebalancing if risk bounds are breached."
+            : (isBull 
+                ? "Market signal is bullish. A favorable environment for SIP accumulation. No action needed." 
+                : "Neutral market signal. Maintain your current asset allocation strategy.");
+
+          const confidence = Math.round((Math.abs(a.sentiment_score) || 0.5) * 100);
+
+          return `
+            <div class="bento-4 card card-left-red" style="border-left-color: ${color}; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div class="flex justify-between items-center mb-8">
+                  <span class="badge" style="background:${color}20; color:${color}; font-weight:700;">${severity} SEVERITY</span>
+                  <span class="text-xs text-muted">AI Conf: ${confidence || 85}%</span>
+                </div>
+                <h5 style="margin:0 0 8px 0; font-size:0.95rem; font-weight:600;">
+                  <a href="${a.link || '#'}" target="_blank" style="color: inherit; text-decoration: none; font-weight: 600;">${a.title}</a>
+                </h5>
+                <p class="text-xs text-muted mb-8">Source: ${a.source || 'Google News'} · ${a.published ? a.published.slice(0, 16) : ''}</p>
+                <p class="text-sm" style="margin-bottom:8px;"><strong>Impact:</strong> ${a.sentiment.toUpperCase()} (${a.impact} impact)</p>
+                <p class="text-xs text-muted" style="margin-bottom:12px;"><strong>Affected Holdings:</strong> ${affectedText}</p>
+              </div>
+              <div class="card" style="margin:0; padding:8px 12px; background:rgba(255,255,255,0.03); font-size:0.8rem; border-left: 2px solid ${color};">
+                <strong>Recommended Action:</strong> ${actionText}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error("Failed to render news alerts:", err);
+      }
     }
 
     // AI chat operations are handled exclusively by the persistent floating bottom-right popup widget.
@@ -1124,242 +1147,183 @@
     let invRadarChart = null;
     let invBenchmarkChart = null;
 
-    function updateInvBIAnalytics() {
+    async function updateInvBIAnalytics() {
       const horizon = document.getElementById('invBiHorizon')?.value || '1y';
       const assetFocus = document.getElementById('invBiAsset')?.value || 'all';
 
-      let portfolioVal = 289490;
-      let alphaVal = 4.2;
-      let sharpeVal = 1.82;
-      let betaVal = 0.88;
+      let alphaVal = 0.0;
+      let sharpeVal = 0.0;
+      let betaVal = 1.0;
+      let portfolioVal = 0.0;
 
-      if (horizon === '3y') {
-        portfolioVal = 391800;
-        alphaVal = 5.4;
-        sharpeVal = 1.95;
-        betaVal = 0.85;
-      } else if (horizon === '5y') {
-        portfolioVal = 535500;
-        alphaVal = 6.8;
-        sharpeVal = 2.15;
-        betaVal = 0.80;
-      }
-
-      if (assetFocus === 'equity') {
-        alphaVal += 2.1;
-        betaVal = 1.18;
-        sharpeVal -= 0.12;
-        portfolioVal *= 1.10;
-      } else if (assetFocus === 'hybrid') {
-        alphaVal -= 0.8;
-        betaVal = 0.72;
-        sharpeVal += 0.18;
-        portfolioVal *= 0.95;
-      }
-
-      const invBiKpiAum = document.getElementById('invBiKpiAum');
-      const invBiKpiAlpha = document.getElementById('invBiKpiAlpha');
-      const invBiKpiSharpe = document.getElementById('invBiKpiSharpe');
-      const invBiKpiBeta = document.getElementById('invBiKpiBeta');
-
-      if (invBiKpiAum) invBiKpiAum.textContent = `₹${Math.round(portfolioVal).toLocaleString()}`;
-      if (invBiKpiAlpha) invBiKpiAlpha.textContent = `${alphaVal > 0 ? '+' : ''}${alphaVal.toFixed(1)}%`;
-      if (invBiKpiSharpe) invBiKpiSharpe.textContent = sharpeVal.toFixed(2);
-      if (invBiKpiBeta) invBiKpiBeta.textContent = betaVal.toFixed(2);
-
-      // Chart 1: Efficient Frontier (Scatter/Bubble Plot)
-      const ctx1 = document.getElementById('efficientFrontierChart');
-      if (ctx1) {
-        if (invFrontierChart) invFrontierChart.destroy();
+      try {
+        const data = await fetchPortfolioAnalytics(horizon);
+        const summary = await fetchPortfolioSummary();
         
-        const curvePoints = [];
-        // Adjust efficient frontier curve based on asset focus
-        let curveYShift = assetFocus === 'equity' ? 2.5 : assetFocus === 'hybrid' ? -1.0 : 0.0;
-        for (let x = 6; x <= 22; x += 1.5) {
-          curvePoints.push({ x: x, y: Math.sqrt(x - 5) * 4.2 + 3.8 + curveYShift });
+        portfolioVal = summary?.total_current || 0;
+        if (data && data.kpis) {
+          alphaVal = data.kpis.alpha || 0.0;
+          sharpeVal = data.kpis.sharpe || 0.0;
+          betaVal = data.kpis.beta || 1.0;
         }
-        
-        invFrontierChart = new Chart(ctx1, {
-          type: 'scatter',
-          data: {
-            datasets: [
-              {
-                label: 'Efficient Frontier Curve',
-                data: curvePoints,
-                showLine: true,
-                borderColor: 'var(--violet)',
-                backgroundColor: 'transparent',
-                borderDash: [5, 5],
-                pointRadius: 0
-              },
-              {
-                label: 'Other Benchmark Funds',
-                data: [
-                  { x: 8, y: 7.5, label: 'Low Risk Debt Index' },
-                  { x: 11, y: 11.2, label: 'Aggressive Hybrid' },
-                  { x: 15, y: 13.8, label: 'Mid Cap Equity Index' },
-                  { x: 18, y: 15.5, label: 'Small Cap Growth' }
-                ],
-                backgroundColor: 'rgba(143, 174, 198, 0.6)',
-                borderColor: 'var(--blue)',
-                pointRadius: 6
-              },
-              {
-                label: 'Your Current Portfolio 🎯',
-                data: [{ x: betaVal * 12 + 2, y: alphaVal + 9 }],
-                backgroundColor: 'var(--emerald)',
-                borderColor: 'var(--emerald)',
-                pointRadius: 10,
-                pointHoverRadius: 12
-              }
-            ]
-          },
-          options: {
-            ...chartDefaults,
-            plugins: {
-              legend: { position: 'bottom', labels: { color: '#706860', font: { family: 'Inter' } } },
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    const label = context.raw.label || context.dataset.label;
-                    return `${label}: Volatility (Risk) ${context.raw.x.toFixed(1)}%, Return ${context.raw.y.toFixed(1)}%`;
+
+        const invBiKpiAum = document.getElementById('invBiKpiAum');
+        const invBiKpiAlpha = document.getElementById('invBiKpiAlpha');
+        const invBiKpiSharpe = document.getElementById('invBiKpiSharpe');
+        const invBiKpiBeta = document.getElementById('invBiKpiBeta');
+
+        if (invBiKpiAum) invBiKpiAum.textContent = `₹${Math.round(portfolioVal).toLocaleString()}`;
+        if (invBiKpiAlpha) invBiKpiAlpha.textContent = `${alphaVal > 0 ? '+' : ''}${alphaVal.toFixed(1)}%`;
+        if (invBiKpiSharpe) invBiKpiSharpe.textContent = sharpeVal.toFixed(2);
+        if (invBiKpiBeta) invBiKpiBeta.textContent = betaVal.toFixed(2);
+
+        // Chart 1: Efficient Frontier (Scatter/Bubble Plot)
+        const ctx1 = document.getElementById('efficientFrontierChart');
+        if (ctx1 && data && data.efficient_frontier) {
+          if (invFrontierChart) invFrontierChart.destroy();
+          
+          invFrontierChart = new Chart(ctx1, {
+            type: 'scatter',
+            data: {
+              datasets: [
+                {
+                  label: 'Efficient Frontier Curve',
+                  data: data.efficient_frontier.curve,
+                  showLine: true,
+                  borderColor: 'var(--violet)',
+                  backgroundColor: 'transparent',
+                  borderDash: [5, 5],
+                  pointRadius: 0
+                },
+                {
+                  label: 'Other Benchmark Funds',
+                  data: data.efficient_frontier.benchmarks,
+                  backgroundColor: 'rgba(143, 174, 198, 0.6)',
+                  borderColor: 'var(--blue)',
+                  pointRadius: 6
+                },
+                {
+                  label: 'Your Current Portfolio 🎯',
+                  data: [data.efficient_frontier.portfolio],
+                  backgroundColor: 'var(--emerald)',
+                  borderColor: 'var(--emerald)',
+                  pointRadius: 10,
+                  pointHoverRadius: 12
+                }
+              ]
+            },
+            options: {
+              ...chartDefaults,
+              plugins: {
+                legend: { position: 'bottom', labels: { color: '#706860', font: { family: 'Inter' } } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.raw.label || context.dataset.label;
+                      return `${label}: Volatility (Risk) ${context.raw.x.toFixed(1)}%, Return ${context.raw.y.toFixed(1)}%`;
+                    }
                   }
                 }
+              },
+              scales: {
+                x: { title: { display: true, text: 'Portfolio Risk (Annualized Volatility %)', color: '#706860' }, ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } },
+                y: { title: { display: true, text: 'Expected Return (%)', color: '#706860' }, ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } }
               }
+            }
+          });
+        }
+
+        // Chart 2: Persona Alignment & Benchmark Profiles (Radar Chart)
+        const ctx2 = document.getElementById('personaRadarChart');
+        if (ctx2 && data && data.radar) {
+          if (invRadarChart) invRadarChart.destroy();
+          
+          invRadarChart = new Chart(ctx2, {
+            type: 'radar',
+            data: {
+              labels: ['Growth Factor', 'Risk Tolerance', 'Cost Efficiency', 'Passive Indexing', 'Dividend Yield'],
+              datasets: [
+                {
+                  label: 'Your Portfolio Allocation',
+                  data: data.radar,
+                  borderColor: 'var(--emerald)',
+                  backgroundColor: 'rgba(145, 184, 156, 0.15)',
+                  pointBackgroundColor: 'var(--emerald)'
+                },
+                {
+                  label: 'Target Balanced Persona',
+                  data: [60, 50, 70, 50, 40],
+                  borderColor: 'var(--blue)',
+                  backgroundColor: 'rgba(143, 174, 198, 0.1)',
+                  pointBackgroundColor: 'var(--blue)'
+                }
+              ]
             },
-            scales: {
-              x: { title: { display: true, text: 'Portfolio Risk (Annualized Volatility %)', color: '#706860' }, min: 4, max: 24, ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } },
-              y: { title: { display: true, text: 'Expected Return (%)', color: '#706860' }, min: 4, max: 24, ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } }
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { position: 'bottom', labels: { color: '#706860', font: { family: 'Inter' } } } },
+              scales: {
+                r: {
+                  grid: { color: 'rgba(0,0,0,0.03)' },
+                  angleLines: { color: 'rgba(0,0,0,0.03)' },
+                  ticks: { display: false },
+                  pointLabels: { color: '#706860', font: { family: 'Inter', size: 10 } }
+                }
+              }
             }
-          }
-        });
-      }
-
-      // Chart 2: Persona Alignment & Benchmark Profiles (Radar Chart)
-      const ctx2 = document.getElementById('personaRadarChart');
-      if (ctx2) {
-        if (invRadarChart) invRadarChart.destroy();
-        
-        let allocData = [75, 65, 80, 45, 30];
-        if (assetFocus === 'equity') {
-          allocData = [90, 85, 60, 30, 20];
-        } else if (assetFocus === 'hybrid') {
-          allocData = [65, 52, 85, 62, 45];
+          });
         }
 
-        invRadarChart = new Chart(ctx2, {
-          type: 'radar',
-          data: {
-            labels: ['Growth Factor', 'Risk Tolerance', 'Cost Efficiency', 'Passive Indexing', 'Dividend Yield'],
-            datasets: [
-              {
-                label: 'Your Portfolio Allocation',
-                data: allocData,
-                borderColor: 'var(--emerald)',
-                backgroundColor: 'rgba(145, 184, 156, 0.15)',
-                pointBackgroundColor: 'var(--emerald)'
-              },
-              {
-                label: 'Target Balanced Persona',
-                data: [60, 50, 70, 50, 40],
-                borderColor: 'var(--blue)',
-                backgroundColor: 'rgba(143, 174, 198, 0.1)',
-                pointBackgroundColor: 'var(--blue)'
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { color: '#706860', font: { family: 'Inter' } } } },
-            scales: {
-              r: {
-                grid: { color: 'rgba(0,0,0,0.03)' },
-                angleLines: { color: 'rgba(0,0,0,0.03)' },
-                ticks: { display: false },
-                pointLabels: { color: '#706860', font: { family: 'Inter', size: 10 } }
+        // Chart 3: Benchmark Outperformance Combo Chart
+        const ctx3 = document.getElementById('benchmarkOutperformanceChart');
+        if (ctx3 && data && data.performance_comparison) {
+          if (invBenchmarkChart) invBenchmarkChart.destroy();
+
+          const comp = data.performance_comparison;
+
+          invBenchmarkChart = new Chart(ctx3, {
+            type: 'line',
+            data: {
+              labels: comp.labels,
+              datasets: [
+                {
+                  label: 'Your Portfolio Return (%)',
+                  data: comp.portfolio,
+                  borderColor: 'var(--emerald)',
+                  backgroundColor: 'rgba(145, 184, 156, 0.1)',
+                  fill: true,
+                  tension: 0.4
+                },
+                {
+                  label: 'Nifty 50 TRI (Benchmark)',
+                  data: comp.benchmark,
+                  borderColor: 'var(--blue)',
+                  backgroundColor: 'transparent',
+                  borderDash: [5, 5],
+                  tension: 0.4
+                },
+                {
+                  label: 'Crisil Debt Index',
+                  data: comp.debt,
+                  borderColor: 'var(--amber)',
+                  backgroundColor: 'transparent',
+                  tension: 0.2
+                }
+              ]
+            },
+            options: {
+              ...chartDefaults,
+              plugins: { legend: { position: 'bottom', labels: { color: '#706860', font: { family: 'Inter' } } } },
+              scales: {
+                x: { ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } },
+                y: { title: { display: true, text: 'Cumulative Performance (%)', color: '#706860' }, ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } }
               }
             }
-          }
-        });
-      }
-
-      // Chart 3: Benchmark Outperformance Combo Chart
-      const ctx3 = document.getElementById('benchmarkOutperformanceChart');
-      if (ctx3) {
-        if (invBenchmarkChart) invBenchmarkChart.destroy();
-
-        let months = [];
-        let portData = [];
-        let niftyData = [];
-        let debtData = [];
-
-        if (horizon === '6m') {
-          months = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'];
-          portData = [0, 1.5, 3.2, 4.8, 5.9, 7.2];
-          niftyData = [0, 1.1, 2.3, 3.5, 4.6, 5.5];
-          debtData = [0, 0.6, 1.2, 1.8, 2.4, 3.0];
-        } else if (horizon === '3y') {
-          months = ['2024 H1', '2024 H2', '2025 H1', '2025 H2', '2026 H1', '2026 H2'];
-          portData = [0, 8.5, 17.2, 26.5, 38.2, 49.5];
-          niftyData = [0, 6.8, 13.9, 21.0, 31.5, 40.2];
-          debtData = [0, 3.6, 7.2, 11.0, 14.8, 18.5];
-        } else if (horizon === '5y') {
-          months = ['2022', '2023', '2024', '2025', '2026'];
-          portData = [0, 14.5, 32.8, 56.2, 85.6];
-          niftyData = [0, 11.2, 26.0, 44.5, 68.2];
-          debtData = [0, 6.5, 13.5, 21.0, 29.5];
-        } else { // 1y
-          months = ['Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May'];
-          portData = [0, 2.5, 4.8, 6.2, 5.5, 8.2, 10.5, 9.8, 12.4, 14.2, 15.8, 18.2];
-          niftyData = [0, 1.8, 3.5, 5.0, 4.2, 6.8, 8.5, 7.8, 9.2, 11.0, 12.2, 14.0];
-          debtData = [0, 0.6, 1.2, 1.8, 2.4, 3.0, 3.6, 4.2, 4.8, 5.4, 6.0, 6.6];
+          });
         }
-
-        // Apply scale factors based on active alpha
-        let scale = (alphaVal + 9) / 13.2;
-        portData = portData.map(v => v * scale);
-        niftyData = niftyData.map(v => v * 0.95);
-
-        invBenchmarkChart = new Chart(ctx3, {
-          type: 'line',
-          data: {
-            labels: months,
-            datasets: [
-              {
-                label: 'Your Portfolio Return (%)',
-                data: portData,
-                borderColor: 'var(--emerald)',
-                backgroundColor: 'rgba(145, 184, 156, 0.1)',
-                fill: true,
-                tension: 0.4
-              },
-              {
-                label: 'Nifty 50 TRI (Benchmark)',
-                data: niftyData,
-                borderColor: 'var(--blue)',
-                backgroundColor: 'transparent',
-                borderDash: [5, 5],
-                tension: 0.4
-              },
-              {
-                label: 'Crisil Debt Index',
-                data: debtData,
-                borderColor: 'var(--amber)',
-                backgroundColor: 'transparent',
-                tension: 0.2
-              }
-            ]
-          },
-          options: {
-            ...chartDefaults,
-            plugins: { legend: { position: 'bottom', labels: { color: '#706860', font: { family: 'Inter' } } } },
-            scales: {
-              x: chartDefaults.scales.x,
-              y: { title: { display: true, text: 'Cumulative Return %', color: '#706860' }, ticks: { color: '#706860' }, grid: { color: '#FAF7F2' } }
-            }
-          }
-        });
+      } catch (err) {
+        console.error("Failed to update BI analytics:", err);
       }
 
       // Update Portfolio Optimization Briefing dynamically

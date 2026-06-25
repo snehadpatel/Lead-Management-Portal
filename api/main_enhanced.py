@@ -1362,6 +1362,28 @@ def get_live_news_endpoint(max_articles: int = 12, user: dict = Depends(get_curr
         raise HTTPException(status_code=500, detail=str(e)) from e
 
 
+@app.get('/benchmark/history', tags=['Market Data'])
+def get_benchmark_history(days: int = 30):
+    """Get historical NIFTY 50 closing prices for charts."""
+    try:
+        from lume_platform.risk.portfolio_analytics import portfolio_analytics
+        df = portfolio_analytics.get_historical_benchmark(days=days)
+        df_sorted = df.sort_index(ascending=False).head(days)
+        history = []
+        for idx, row in df_sorted.iterrows():
+            history.append({
+                "date": idx.strftime("%d-%m-%Y"),
+                "nav": round(float(row["Close"]), 2)
+            })
+        return {
+            "symbol": "^NSEI",
+            "data_points": len(history),
+            "history": history
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
 @app.post('/admin/funds/upload', tags=['Admin'])
 def admin_upload_fund_catalog(payload: List[Dict[str, Any]], headers: Dict[str, str] = None, auth_ok: bool = Depends(_auth_admin)):
     """Upload or replace the fund catalog (expects list of fund dicts).
