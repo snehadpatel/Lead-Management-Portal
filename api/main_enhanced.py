@@ -1116,6 +1116,228 @@ def issue_token(api_key: str = Query(..., description='Admin API key')):
     return {'access_token': token, 'token_type': 'bearer'}
 
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# Portfolio CRUD — Persistent user portfolio with live NAV valuation
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class AddHoldingRequest(BaseModel):
+    scheme_code: str
+    scheme_name: str
+    category: str = "Mutual Fund"
+    amount: float = Field(..., gt=0, description="Investment amount in INR")
+    buy_date: Optional[str] = None  # YYYY-MM-DD, defaults to today
+
+
+@app.get('/portfolio', tags=['Portfolio'])
+def get_portfolio(user: dict = Depends(get_current_user)):
+    """Get user's portfolio with live NAV-based valuations."""
+    try:
+        from lume_platform.data.nav_fetcher import nav_fetcher
+
+        email = user["email"]
+        holdings = db_client.get_portfolio(email)
+
+        if not holdings:
+            return {"holdings": [], "total_invested": 0, "total_current": 0, "total_pnl": 0, "total_pnl_pct": 0, "holding_count": 0}
+
+        # Fetch live NAVs in bulk
+        scheme_codes = [h["scheme_code"] for h in holdings]
+        live_navs = nav_fetcher.get_latest_navs_bulk(scheme_codes)
+
+        enriched = []
+        total_invested = 0
+        total_current = 0
+
+        for h in holdings:
+            code = h["scheme_code"]
+            buy_nav = float(h.get("buy_nav", 0))
+            units = float(h.get("units", 0))
+            buy_value = float(h.get("buy_value", 0))
+            current_nav = live_navs.get(code, buy_nav)
+
+            current_value = round(units * current_nav, 2) if units > 0 else buy_value
+            pnl = round(current_value - buy_value, 2)
+            pnl_pct = round((pnl / buy_value) * 100, 2) if buy_value > 0 else 0
+
+            # XIRR approximation
+            xirr = nav_fetcher.calculate_xirr_return(
+                buy_nav, current_nav, h.get("buy_date", datetime.now().strftime("%Y-%m-%d"))
+            )
+
+            total_invested += buy_value
+            total_current += current_value
+
+            enriched.append({
+                **h,
+                "current_nav": current_nav,
+                "current_value": current_value,
+                "pnl": pnl,
+                "pnl_pct": pnl_pct,
+                "xirr": xirr,
+                "nav_live": code in live_navs,
+            })
+
+        total_pnl = round(total_current - total_invested, 2)
+        total_pnl_pct = round((total_pnl / total_invested) * 100, 2) if total_invested > 0 else 0
+
+        return {
+            "holdings": enriched,
+            "total_invested": round(total_invested, 2),
+            "total_current": round(total_current, 2),
+            "total_pnl": total_pnl,
+            "total_pnl_pct": total_pnl_pct,
+            "holding_count": len(enriched),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.post('/portfolio/add', tags=['Portfolio'])
+def add_to_portfolio(request: AddHoldingRequest, user: dict = Depends(get_current_user)):
+    """Add an investment to the user's portfolio. Auto-calculates units from current NAV."""
+    try:
+        from lume_platform.data.nav_fetcher import nav_fetcher
+
+        email = user["email"]
+        buy_date = request.buy_date or datetime.now().strftime("%Y-%m-%d")
+
+        # Get current NAV for the scheme
+        current_nav = nav_fetcher.get_latest_nav(request.scheme_code)
+        if not current_nav or current_nav <= 0:
+            # Fallback: try from catalog
+            fund = next(
+                (f for f in (recommender.fallback_funds or []) if f.get("scheme_code") == request.scheme_code),
+                None
+            )
+            current_nav = float(fund.get("nav", 100)) if fund and fund.get("nav") else 100.0
+
+        units = round(request.amount / current_nav, 4)
+
+        holding = {
+            "scheme_code": request.scheme_code,
+            "scheme_name": request.scheme_name,
+            "category": request.category,
+            "units": units,
+            "buy_nav": current_nav,
+            "buy_date": buy_date,
+            "buy_value": round(request.amount, 2),
+        }
+
+        saved = db_client.add_holding(email, holding)
+        return {"status": "added", "holding": saved}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.put('/portfolio/{holding_id}', tags=['Portfolio'])
+def update_portfolio_holding(holding_id: str, updates: Dict[str, Any], user: dict = Depends(get_current_user)):
+    """Update an existing holding (e.g., add more units via SIP)."""
+    email = user["email"]
+    result = db_client.update_holding(email, holding_id, updates)
+    if not result:
+        raise HTTPException(status_code=404, detail="Holding not found")
+    return {"status": "updated", "holding": result}
+
+
+@app.delete('/portfolio/{holding_id}', tags=['Portfolio'])
+def remove_portfolio_holding(holding_id: str, user: dict = Depends(get_current_user)):
+    """Remove a holding from the portfolio."""
+    email = user["email"]
+    removed = db_client.remove_holding(email, holding_id)
+    if not removed:
+        raise HTTPException(status_code=404, detail="Holding not found")
+    return {"status": "removed", "holding_id": holding_id}
+
+
+@app.get('/portfolio/summary', tags=['Portfolio'])
+def get_portfolio_summary(user: dict = Depends(get_current_user)):
+    """Get aggregated portfolio analytics: total value, allocation, day change."""
+    try:
+        from lume_platform.data.nav_fetcher import nav_fetcher
+
+        email = user["email"]
+        holdings = db_client.get_portfolio(email)
+
+        if not holdings:
+            return {
+                "total_invested": 0, "total_current": 0, "total_pnl": 0,
+                "total_pnl_pct": 0, "allocation": [], "holding_count": 0,
+            }
+
+        scheme_codes = [h["scheme_code"] for h in holdings]
+        live_navs = nav_fetcher.get_latest_navs_bulk(scheme_codes)
+
+        total_invested = 0
+        total_current = 0
+        allocation = []
+
+        for h in holdings:
+            code = h["scheme_code"]
+            buy_nav = float(h.get("buy_nav", 0))
+            units = float(h.get("units", 0))
+            buy_value = float(h.get("buy_value", 0))
+            current_nav = live_navs.get(code, buy_nav)
+            current_value = round(units * current_nav, 2)
+
+            total_invested += buy_value
+            total_current += current_value
+            allocation.append({
+                "name": h.get("scheme_name", "Unknown"),
+                "value": current_value,
+                "category": h.get("category", ""),
+            })
+
+        total_pnl = round(total_current - total_invested, 2)
+        total_pnl_pct = round((total_pnl / total_invested) * 100, 2) if total_invested > 0 else 0
+
+        # Allocation percentages
+        for item in allocation:
+            item["pct"] = round((item["value"] / total_current) * 100, 1) if total_current > 0 else 0
+
+        return {
+            "total_invested": round(total_invested, 2),
+            "total_current": round(total_current, 2),
+            "total_pnl": total_pnl,
+            "total_pnl_pct": total_pnl_pct,
+            "allocation": allocation,
+            "holding_count": len(holdings),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get('/nav/{scheme_code}', tags=['Market Data'])
+def get_live_nav(scheme_code: str):
+    """Get the latest live NAV for a mutual fund scheme."""
+    try:
+        from lume_platform.data.nav_fetcher import nav_fetcher
+        nav = nav_fetcher.get_latest_nav(scheme_code)
+        if nav is None:
+            raise HTTPException(status_code=404, detail=f"NAV not found for scheme {scheme_code}")
+        return {"scheme_code": scheme_code, "nav": nav, "timestamp": datetime.now().isoformat()}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get('/nav/{scheme_code}/history', tags=['Market Data'])
+def get_nav_history(scheme_code: str, days: int = 365):
+    """Get historical NAV data for a fund (for charts)."""
+    try:
+        from lume_platform.data.nav_fetcher import nav_fetcher
+        hist = nav_fetcher.get_historical_nav(scheme_code, days=days)
+        returns = nav_fetcher.calculate_returns(scheme_code)
+        return {
+            "scheme_code": scheme_code,
+            "data_points": len(hist),
+            "history": hist[:60],  # Limit to 60 for chart rendering
+            "returns": returns,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
 @app.post('/admin/funds/upload', tags=['Admin'])
 def admin_upload_fund_catalog(payload: List[Dict[str, Any]], headers: Dict[str, str] = None, auth_ok: bool = Depends(_auth_admin)):
     """Upload or replace the fund catalog (expects list of fund dicts).

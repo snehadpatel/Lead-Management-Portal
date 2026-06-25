@@ -38,8 +38,8 @@
       </div>
       <div class="card" style="padding:12px 20px;text-align:right;">
         <div class="text-xs text-muted">Portfolio Value</div>
-        <div class="text-mono text-emerald" style="font-size:1.8rem;font-weight:700;">₹2,89,490</div>
-        <div class="metric-delta positive">▲ +12.5%</div>
+        <div class="text-mono text-emerald" style="font-size:1.8rem;font-weight:700;" id="headerPortfolioValue">Loading...</div>
+        <div class="metric-delta positive" id="headerPortfolioDelta">—</div>
       </div>
     </div>
 
@@ -56,16 +56,46 @@
     <!-- TAB: Portfolio -->
     <div class="tab-content active" id="tab-portfolio" data-tab-content="main">
       <div class="bento-grid mb-24">
-        <div class="bento-4 card"><div class="metric-value" id="portfolioInvested">—</div><div class="metric-label">Suggested Capital</div></div>
-        <div class="bento-4 card"><div class="metric-value text-emerald" id="portfolioCurrentValue">—</div><div class="metric-label">Projected Value</div><div class="metric-delta positive" id="portfolioDelta">—</div></div>
-        <div class="bento-4 card"><div class="metric-value text-emerald" id="portfolioReturns">—</div><div class="metric-label">Expected Returns</div></div>
+        <div class="bento-4 card"><div class="metric-value" id="portfolioInvested">—</div><div class="metric-label">Total Invested</div></div>
+        <div class="bento-4 card"><div class="metric-value text-emerald" id="portfolioCurrentValue">—</div><div class="metric-label">Current Value</div><div class="metric-delta positive" id="portfolioDelta">—</div></div>
+        <div class="bento-4 card"><div class="metric-value text-emerald" id="portfolioReturns">—</div><div class="metric-label">Total P&L</div></div>
       </div>
       <div class="bento-grid">
         <div class="bento-5 card"><h4 class="mb-16">Allocation</h4><div class="chart-container" style="height:280px;"><canvas id="allocChart"></canvas></div></div>
         <div class="bento-7 card">
-          <h4 class="mb-16">AI-Suggested Funds</h4>
-          <div id="holdingsContainer"></div>
+          <div class="flex justify-between items-center mb-16">
+            <h4 style="margin:0;">My Holdings</h4>
+            <button class="btn btn-sm btn-primary" onclick="openInvestModal()" style="padding:6px 14px;font-size:0.8rem;">+ Add Investment</button>
+          </div>
+          <div id="holdingsContainer"><p class="text-muted text-sm">Loading portfolio...</p></div>
         </div>
+      </div>
+    </div>
+
+    <!-- Add Investment Modal -->
+    <div id="investModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;">
+      <div class="card" style="width:480px;max-width:95vw;max-height:85vh;overflow-y:auto;padding:32px;position:relative;">
+        <button onclick="closeInvestModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;">&times;</button>
+        <h3 style="margin:0 0 8px 0;">💰 Add Investment</h3>
+        <p class="text-xs text-muted mb-24">Search for a fund and enter your investment amount</p>
+        <div style="margin-bottom:16px;">
+          <label class="text-xs text-muted">Search Fund</label>
+          <input type="text" id="investFundSearch" class="form-input" placeholder="Search by fund name..." oninput="searchInvestFunds()" style="width:100%;">
+          <div id="investFundResults" style="max-height:180px;overflow-y:auto;margin-top:8px;"></div>
+        </div>
+        <div id="investSelectedFund" style="display:none;margin-bottom:16px;padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;border:1px solid rgba(16,185,129,0.2);">
+          <div class="text-sm" style="font-weight:600;" id="investSelectedName"></div>
+          <div class="text-xs text-muted" id="investSelectedMeta"></div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <label class="text-xs text-muted">Investment Amount (₹)</label>
+          <input type="number" id="investAmount" class="form-input" placeholder="10000" min="500" step="500" style="width:100%;">
+        </div>
+        <div style="margin-bottom:24px;">
+          <label class="text-xs text-muted">Buy Date (optional, defaults to today)</label>
+          <input type="date" id="investBuyDate" class="form-input" style="width:100%;">
+        </div>
+        <button class="btn btn-primary" onclick="submitInvestment()" style="width:100%;padding:12px;">Invest Now</button>
       </div>
     </div>
 
@@ -316,57 +346,198 @@
       };
     }
 
-    function updatePortfolioSummary() {
-      const invested = state.portfolioHoldings.reduce((sum, h) => sum + h.invested, 0);
-      const currentValue = state.portfolioHoldings.reduce((sum, h) => sum + h.invested + h.gains, 0);
-      const delta = currentValue - invested;
-      const returns = invested > 0 ? (delta / invested) * 100 : 0;
+    function updatePortfolioSummary(data) {
+      const invested = data?.total_invested || 0;
+      const currentValue = data?.total_current || 0;
+      const pnl = data?.total_pnl || 0;
+      const pnlPct = data?.total_pnl_pct || 0;
 
       document.getElementById('portfolioInvested').textContent = formatCurrency(invested);
       document.getElementById('portfolioCurrentValue').textContent = formatCurrency(currentValue);
-      document.getElementById('portfolioDelta').textContent = `${delta >= 0 ? '▲' : '▼'} ${formatCurrency(Math.abs(delta))}`;
-      document.getElementById('portfolioReturns').textContent = `${returns.toFixed(1)}%`;
+      const deltaClass = pnl >= 0 ? 'positive' : 'negative';
+      document.getElementById('portfolioDelta').className = `metric-delta ${deltaClass}`;
+      document.getElementById('portfolioDelta').textContent = `${pnl >= 0 ? '▲' : '▼'} ${formatCurrency(Math.abs(pnl))}`;
+      document.getElementById('portfolioReturns').textContent = `${pnl >= 0 ? '+' : ''}${pnlPct.toFixed(1)}%`;
+      document.getElementById('portfolioReturns').style.color = pnl >= 0 ? 'var(--emerald)' : 'var(--red)';
+
+      // Update header
+      document.getElementById('headerPortfolioValue').textContent = formatCurrency(currentValue || invested);
+      const headerDelta = document.getElementById('headerPortfolioDelta');
+      headerDelta.className = `metric-delta ${deltaClass}`;
+      headerDelta.textContent = `${pnl >= 0 ? '▲' : '▼'} ${pnlPct.toFixed(1)}%`;
 
       const persona = toPersonaLabel(state.persona || 'balanced');
       document.getElementById('personaLabel').innerHTML = `Persona: <strong style="color:${persona.color}">${persona.name}</strong> · Risk Tolerance: ${persona.risk}`;
     }
 
     async function loadPortfolio() {
-      const persona = state.persona || 'balanced';
-      const response = await getPersonaRecommendations(persona, 4);
-      const recs = response?.recommendations?.length ? response.recommendations : generateSampleFunds().filter(f => (f.personas || []).includes(persona)).slice(0, 4);
-      const baseCapital = Math.max(150000, Math.round(100000 + recs.reduce((sum, f, index) => sum + (Number(f.match_score || 0.55) * 12000) + (index * 5000), 0)));
+      try {
+        const data = await fetchPortfolio();
+        const holdings = data?.holdings || [];
 
-      state.portfolioBaseCapital = baseCapital;
-      state.recommendedFunds = recs;
-      state.portfolioHoldings = recs.map((fund, index) => normalizeRecommendation(fund, index, baseCapital));
+        state.portfolioHoldings = holdings;
 
-      createDoughnutChart(
-        'allocChart',
-        state.portfolioHoldings.map(h => h.name.split(' ').slice(0, 3).join(' ')),
-        state.portfolioHoldings.map(h => h.invested),
-        ['#2563EB','#10B981','#EF4444','#F59E0B']
-      );
+        if (holdings.length === 0) {
+          // No portfolio — show empty state + AI recommendations
+          const persona = state.persona || 'balanced';
+          const response = await getPersonaRecommendations(persona, 4);
+          const recs = response?.recommendations?.length ? response.recommendations : generateSampleFunds().filter(f => (f.personas || []).includes(persona)).slice(0, 4);
 
-      const container = document.getElementById('holdingsContainer');
-      container.innerHTML = state.portfolioHoldings.map(h => {
-        const rc = h.risk === 'high' ? 'var(--red)' : h.risk === 'medium' ? 'var(--amber)' : 'var(--emerald)';
-        return `
-          <div class="lead-card" style="border-left:3px solid ${rc};">
-            <div>
-              <div style="font-weight:600;">${h.name}</div>
-              <div class="text-xs text-muted">${h.cat} · ${h.risk.toUpperCase()} RISK · ${h.allocation.toFixed(0)}% ALLOCATION</div>
-              <a href="#" onclick="showForecastForFundByName('${h.name}'); return false;" class="text-xs text-blue mt-4 block" style="text-decoration:none;">View AI NAV Forecast 🔮</a>
+          const container = document.getElementById('holdingsContainer');
+          container.innerHTML = `
+            <div style="text-align:center;padding:32px 16px;">
+              <div style="font-size:2.5rem;margin-bottom:12px;">📂</div>
+              <h4 style="margin:0 0 8px 0;">No Investments Yet</h4>
+              <p class="text-sm text-muted" style="margin-bottom:20px;">Start building your portfolio by adding funds from the Fund Explorer or use our AI recommendations below.</p>
+              <button class="btn btn-primary btn-sm" onclick="openInvestModal()" style="padding:8px 20px;">+ Add Your First Investment</button>
             </div>
-            <div class="flex gap-24">
-              <div class="text-right"><div class="text-xs text-muted">Suggested</div><div class="text-mono text-sm">₹${h.invested.toLocaleString()}</div></div>
-              <div class="text-right"><div class="text-xs text-muted">Model Return</div><div class="text-mono text-sm text-emerald">${h.returns.toFixed(1)}%</div></div>
-              <div class="text-right"><div class="text-xs text-muted">Projected Gains</div><div class="text-mono text-sm text-emerald">+₹${h.gains.toLocaleString()}</div></div>
-            </div>
-          </div>`;
-      }).join('');
+            <h4 class="mt-24 mb-16">🤖 AI Suggested Funds</h4>
+            ${recs.map(f => {
+              const rc = (f.risk || 'medium') === 'high' ? 'var(--red)' : (f.risk || 'medium') === 'low' ? 'var(--emerald)' : 'var(--amber)';
+              return `<div class="lead-card" style="border-left:3px solid ${rc};">
+                <div>
+                  <div style="font-weight:600;">${f.scheme_name || f.name || 'Fund'}</div>
+                  <div class="text-xs text-muted">${f.category || ''} · Match: ${(Number(f.match_score || 0) * 100).toFixed(0)}%</div>
+                </div>
+                <button class="btn btn-xs btn-primary" onclick="quickInvest('${f.scheme_code || ''}', '${(f.scheme_name || f.name || '').replace(/'/g, "\\'")}'  , '${f.category || 'Mutual Fund'}')" style="padding:4px 12px;font-size:0.75rem;">Invest</button>
+              </div>`;
+            }).join('')}`;
 
-      updatePortfolioSummary();
+          updatePortfolioSummary({ total_invested: 0, total_current: 0, total_pnl: 0, total_pnl_pct: 0 });
+          return;
+        }
+
+        // Real portfolio with live NAV data
+        const colors = ['#2563EB','#10B981','#EF4444','#F59E0B','#8B5CF6','#EC4899','#06B6D4','#84CC16'];
+        createDoughnutChart(
+          'allocChart',
+          holdings.map(h => (h.scheme_name || 'Fund').split(' ').slice(0, 3).join(' ')),
+          holdings.map(h => h.current_value || h.buy_value),
+          colors.slice(0, holdings.length)
+        );
+
+        const container = document.getElementById('holdingsContainer');
+        container.innerHTML = holdings.map(h => {
+          const pnl = h.pnl || 0;
+          const pnlPct = h.pnl_pct || 0;
+          const pnlColor = pnl >= 0 ? 'var(--emerald)' : 'var(--red)';
+          const pnlSign = pnl >= 0 ? '+' : '';
+          const xirr = h.xirr != null ? `${h.xirr.toFixed(1)}%` : '—';
+          const navBadge = h.nav_live ? '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--emerald);margin-right:4px;"></span>LIVE' : 'Cached';
+          return `
+            <div class="lead-card" style="border-left:3px solid ${pnlColor};margin-bottom:8px;">
+              <div style="flex:1;">
+                <div style="font-weight:600;font-size:0.95rem;">${h.scheme_name || 'Fund'}</div>
+                <div class="text-xs text-muted">${h.category || ''} · ${navBadge} NAV: ₹${(h.current_nav || h.buy_nav || 0).toFixed(2)}</div>
+                <div class="text-xs text-muted mt-4">${h.units?.toFixed(3) || 0} units @ ₹${(h.buy_nav || 0).toFixed(2)} · ${h.buy_date || ''}</div>
+              </div>
+              <div class="flex gap-16" style="flex-wrap:wrap;">
+                <div class="text-right"><div class="text-xs text-muted">Invested</div><div class="text-mono text-sm">₹${(h.buy_value || 0).toLocaleString()}</div></div>
+                <div class="text-right"><div class="text-xs text-muted">Current</div><div class="text-mono text-sm">₹${(h.current_value || 0).toLocaleString()}</div></div>
+                <div class="text-right"><div class="text-xs text-muted">P&L</div><div class="text-mono text-sm" style="color:${pnlColor};">${pnlSign}₹${Math.abs(pnl).toLocaleString()} (${pnlSign}${pnlPct.toFixed(1)}%)</div></div>
+                <div class="text-right"><div class="text-xs text-muted">XIRR</div><div class="text-mono text-sm">${xirr}</div></div>
+                <button class="btn btn-xs btn-secondary" onclick="confirmRemoveHolding('${h.holding_id}','${(h.scheme_name || '').replace(/'/g, "\\'")  }')" style="padding:2px 8px;font-size:0.7rem;color:var(--red);" title="Remove">✕</button>
+              </div>
+            </div>`;
+        }).join('');
+
+        updatePortfolioSummary(data);
+      } catch (err) {
+        console.error('Portfolio load error:', err);
+        document.getElementById('holdingsContainer').innerHTML = '<p class="text-muted text-sm">Failed to load portfolio. Is the API running?</p>';
+        updatePortfolioSummary({ total_invested: 0, total_current: 0, total_pnl: 0, total_pnl_pct: 0 });
+      }
+    }
+
+    // ── Investment Modal Functions ──
+    let selectedInvestFund = null;
+
+    function openInvestModal(schemeCode, schemeName, category) {
+      const modal = document.getElementById('investModal');
+      modal.style.display = 'flex';
+      if (schemeCode) {
+        selectedInvestFund = { scheme_code: schemeCode, scheme_name: schemeName, category: category || 'Mutual Fund' };
+        document.getElementById('investSelectedFund').style.display = 'block';
+        document.getElementById('investSelectedName').textContent = schemeName;
+        document.getElementById('investSelectedMeta').textContent = `Code: ${schemeCode} · ${category || ''}`;
+        document.getElementById('investFundSearch').value = schemeName;
+      } else {
+        selectedInvestFund = null;
+        document.getElementById('investSelectedFund').style.display = 'none';
+        document.getElementById('investFundSearch').value = '';
+        document.getElementById('investFundResults').innerHTML = '';
+      }
+      document.getElementById('investAmount').value = '';
+      document.getElementById('investBuyDate').value = '';
+    }
+
+    function closeInvestModal() {
+      document.getElementById('investModal').style.display = 'none';
+      selectedInvestFund = null;
+    }
+
+    function searchInvestFunds() {
+      const q = document.getElementById('investFundSearch').value.toLowerCase();
+      if (q.length < 2) { document.getElementById('investFundResults').innerHTML = ''; return; }
+      const catalog = state.fundCatalog || [];
+      const matches = catalog.filter(f =>
+        (f.scheme_name || f.name || '').toLowerCase().includes(q) ||
+        (f.category || '').toLowerCase().includes(q)
+      ).slice(0, 8);
+      document.getElementById('investFundResults').innerHTML = matches.map(f => `
+        <div onclick="selectInvestFund('${f.scheme_code || f.id}','${(f.scheme_name || f.name || '').replace(/'/g, "\\'")  }','${(f.category || f.category_group || 'Mutual Fund').replace(/'/g, "\\'")}')" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85rem;" onmouseover="this.style.background='rgba(37,99,235,0.1)'" onmouseout="this.style.background='transparent'">
+          <div style="font-weight:500;">${f.scheme_name || f.name}</div>
+          <div class="text-xs text-muted">${f.category || f.category_group || ''} · Code: ${f.scheme_code || f.id || ''}</div>
+        </div>
+      `).join('') || '<p class="text-xs text-muted" style="padding:8px;">No funds found</p>';
+    }
+
+    function selectInvestFund(code, name, category) {
+      selectedInvestFund = { scheme_code: code, scheme_name: name, category };
+      document.getElementById('investSelectedFund').style.display = 'block';
+      document.getElementById('investSelectedName').textContent = name;
+      document.getElementById('investSelectedMeta').textContent = `Code: ${code} · ${category}`;
+      document.getElementById('investFundResults').innerHTML = '';
+      document.getElementById('investFundSearch').value = name;
+    }
+
+    async function submitInvestment() {
+      if (!selectedInvestFund) { alert('Please select a fund first'); return; }
+      const amount = parseFloat(document.getElementById('investAmount').value);
+      if (!amount || amount < 500) { alert('Minimum investment is ₹500'); return; }
+      const buyDate = document.getElementById('investBuyDate').value || null;
+
+      try {
+        const result = await addToPortfolio(
+          selectedInvestFund.scheme_code,
+          selectedInvestFund.scheme_name,
+          selectedInvestFund.category,
+          amount,
+          buyDate
+        );
+        if (result?.status === 'added') {
+          closeInvestModal();
+          await loadPortfolio(); // Refresh
+        } else {
+          alert('Failed to add investment. Check API.');
+        }
+      } catch (e) {
+        alert('Error: ' + (e.message || 'Investment failed'));
+      }
+    }
+
+    function quickInvest(code, name, category) {
+      openInvestModal(code, name, category);
+    }
+
+    async function confirmRemoveHolding(holdingId, name) {
+      if (!confirm(`Remove "${name}" from your portfolio?`)) return;
+      try {
+        await removeHolding(holdingId);
+        await loadPortfolio();
+      } catch (e) {
+        alert('Error removing holding');
+      }
     }
 
     // ── Fund Explorer ──
@@ -398,6 +569,8 @@
         const r1 = Number(f.r1 ?? (Number(f.match_score || 0) * 100) ?? 0).toFixed(1);
         const r3 = Number(f.r3 ?? (Number(f.match_score || 0) * 95) ?? 0).toFixed(1);
         const r5 = Number(f.r5 ?? (Number(f.match_score || 0) * 88) ?? 0).toFixed(1);
+        const safeName = (f.scheme_name || f.name || '').replace(/'/g, "\\'");
+        const safeCategory = (category).replace(/'/g, "\\'");
         return `<div class="bento-4 card">
           <h4 style="font-size:0.95rem;">${f.scheme_name || f.name}</h4>
           <div class="flex items-center gap-8 mt-8"><span class="badge" style="background:${rc}20;color:${rc};">${risk.toUpperCase()}</span><span class="text-xs text-muted">${category}</span></div>
@@ -408,7 +581,10 @@
           </div>
           <div class="flex justify-between items-center mt-12 pt-8" style="border-top:1px solid rgba(255,255,255,0.05);">
             <div class="text-amber text-xs">${'★'.repeat(Number(f.rating || 4))}</div>
-            <button class="btn btn-xs btn-secondary" onclick="showForecastForFund('${f.scheme_code || f.id || ''}')" style="padding:4px 8px;font-size:0.75rem;">Forecast 🔮</button>
+            <div class="flex gap-8">
+              <button class="btn btn-xs btn-primary" onclick="openInvestModal('${f.scheme_code || f.id || ''}','${safeName}','${safeCategory}')" style="padding:4px 10px;font-size:0.75rem;">Invest 💰</button>
+              <button class="btn btn-xs btn-secondary" onclick="showForecastForFund('${f.scheme_code || f.id || ''}')" style="padding:4px 8px;font-size:0.75rem;">Forecast 🔮</button>
+            </div>
           </div>
         </div>`;
       }).join('');

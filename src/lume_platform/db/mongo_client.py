@@ -37,13 +37,17 @@ class MockMongoClient:
     def __init__(self):
         self.leads_db: Dict[str, dict] = {}
         self.users_db: Dict[str, dict] = {}
+        self.portfolios_db: Dict[str, list] = {}
         self.custom_leads_file = EXPORT_DIR / "db_custom_leads.json"
         self.users_file = EXPORT_DIR / "db_users.json"
+        self.portfolios_file = EXPORT_DIR / "db_portfolios.json"
         if "VERCEL" in os.environ:
             self.custom_leads_file = Path("/tmp") / "db_custom_leads.json"
             self.users_file = Path("/tmp") / "db_users.json"
+            self.portfolios_file = Path("/tmp") / "db_portfolios.json"
         self._load_initial_data()
         self._load_users()
+        self._load_portfolios()
 
     def _load_initial_data(self) -> None:
         """Seed leads and matches from output_production_final CSV exports."""
@@ -268,5 +272,88 @@ class MockMongoClient:
         """Get collection interface."""
         return MockCollection(name, self)
 
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Portfolio Management — Persistent per-user investment tracking
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    def _load_portfolios(self) -> None:
+        """Load persistent portfolio data from JSON file."""
+        if self.portfolios_file.is_file():
+            try:
+                with open(self.portfolios_file, "r") as f:
+                    self.portfolios_db = json.load(f)
+                print(f"✅ Loaded {len(self.portfolios_db)} user portfolios")
+            except Exception as e:
+                print(f"⚠️ Error loading portfolios JSON: {e}")
+
+    def _save_portfolios(self) -> None:
+        """Save portfolio data to JSON file."""
+        try:
+            self.portfolios_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.portfolios_file, "w") as f:
+                json.dump(self.portfolios_db, f, indent=2)
+        except Exception as e:
+            print(f"⚠️ Error writing portfolios JSON: {e}")
+
+    def get_portfolio(self, email: str) -> List[dict]:
+        """Get all holdings for a user."""
+        email_clean = email.lower()
+        return self.portfolios_db.get(email_clean, [])
+
+    def add_holding(self, email: str, holding: dict) -> dict:
+        """Add a new investment to user's portfolio."""
+        import uuid
+        email_clean = email.lower()
+        if email_clean not in self.portfolios_db:
+            self.portfolios_db[email_clean] = []
+
+        holding["holding_id"] = str(uuid.uuid4())[:8]
+        holding["added_at"] = str(pd.Timestamp.now())
+        self.portfolios_db[email_clean].append(holding)
+        self._save_portfolios()
+        return holding
+
+    def update_holding(self, email: str, holding_id: str, updates: dict) -> Optional[dict]:
+        """Update units/details for an existing holding."""
+        email_clean = email.lower()
+        holdings = self.portfolios_db.get(email_clean, [])
+        for h in holdings:
+            if h.get("holding_id") == holding_id:
+                h.update(updates)
+                self._save_portfolios()
+                return h
+        return None
+
+    def remove_holding(self, email: str, holding_id: str) -> bool:
+        """Remove a holding from user's portfolio."""
+        email_clean = email.lower()
+        holdings = self.portfolios_db.get(email_clean, [])
+        original_len = len(holdings)
+        self.portfolios_db[email_clean] = [
+            h for h in holdings if h.get("holding_id") != holding_id
+        ]
+        if len(self.portfolios_db[email_clean]) < original_len:
+            self._save_portfolios()
+            return True
+        return False
+
+    def get_portfolio_summary(self, email: str) -> dict:
+        """Get portfolio value summary (before NAV enrichment)."""
+        holdings = self.get_portfolio(email)
+        if not holdings:
+            return {
+                "total_invested": 0,
+                "holding_count": 0,
+                "holdings": [],
+            }
+        total_invested = sum(float(h.get("buy_value", 0)) for h in holdings)
+        return {
+            "total_invested": round(total_invested, 2),
+            "holding_count": len(holdings),
+            "holdings": holdings,
+        }
+
+
 # Instantiate singleton client
 db_client = MockMongoClient()
+

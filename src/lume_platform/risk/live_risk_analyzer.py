@@ -62,99 +62,198 @@ class LiveRiskAnalyzer:
         
     def fetch_live_market_data(self) -> MarketData:
         """
-        Fetch live market data from NSE and other sources
-        In production: Replace with actual API calls to NSE/AMFI
+        Fetch REAL market data from Yahoo Finance (yfinance).
+        Falls back to simulation if yfinance is unavailable or fails.
+        Caches results for 5 minutes to avoid rate limiting.
         """
+        now = datetime.now()
+
+        # Return cached if fresh (< 5 min)
+        if self.cache.get("market_data") and self.last_fetch:
+            age = (now - self.last_fetch).total_seconds()
+            if age < self.cache_ttl:
+                return self.cache["market_data"]
+
         try:
-            # In production, fetch from:
-            # - NSE: https://www.nseindia.com/api/marketStatus
-            # - NSE VIX: https://www.nseindia.com/api/vix
-            # - AMFI NAV: https://www.amfiindia.com/spages/NAVAll.txt
-            
-            # For demo: Simulate live data with realistic patterns
-            base_nifty = 22400
-            time_factor = datetime.now().hour + datetime.now().minute / 60
-            
-            # Market hours: 9:15 AM - 3:30 PM IST
-            market_open = 9.25
-            market_close = 15.5
-            is_market_open = market_open <= time_factor <= market_close
-            
-            # Generate realistic intraday movement
-            if is_market_open:
-                intraday_change = np.sin(time_factor * 0.5) * 100 + random.gauss(0, 50)
-                market_status = "OPEN"
+            import yfinance as yf
+
+            # Fetch NIFTY 50 index
+            nifty = yf.Ticker("^NSEI")
+            nifty_hist = nifty.history(period="5d")
+            if nifty_hist.empty:
+                raise ValueError("No NIFTY data returned")
+
+            nifty_value = round(float(nifty_hist["Close"].iloc[-1]), 2)
+            if len(nifty_hist) >= 2:
+                prev_close = float(nifty_hist["Close"].iloc[-2])
+                change_pct = round(((nifty_value - prev_close) / prev_close) * 100, 2)
             else:
-                intraday_change = 0
-                market_status = "CLOSED"
-            
-            nifty_value = base_nifty + intraday_change
-            change_pct = (intraday_change / base_nifty) * 100
-            
-            # Calculate VIX (volatility index) - higher when market volatile
-            base_vix = 15
-            vix = base_vix + abs(change_pct) * 2 + random.gauss(0, 2)
-            vix = max(10, min(40, vix))  # Clamp between 10-40
-            
-            # Detect volatility
+                change_pct = 0.0
+
+            # Fetch India VIX
+            try:
+                vix_ticker = yf.Ticker("^INDIAVIX")
+                vix_hist = vix_ticker.history(period="2d")
+                vix = round(float(vix_hist["Close"].iloc[-1]), 2) if not vix_hist.empty else 15.0
+            except Exception:
+                vix = round(15.0 + abs(change_pct) * 2, 2)
+
+            # Market hours: 9:15 AM - 3:30 PM IST
+            time_factor = now.hour + now.minute / 60
+            is_market_open = 9.25 <= time_factor <= 15.5
             is_volatile = abs(change_pct) > 1.5 or vix > 25
+
             if is_volatile:
                 market_status = "VOLATILE"
-            
-            # Sector performance (correlated with NIFTY)
-            sectors = {
-                "Banking": change_pct + random.gauss(0, 1.5),
-                "IT": change_pct * 0.8 + random.gauss(0, 2),
-                "Pharma": change_pct * 0.6 + random.gauss(0, 1),
-                "Auto": change_pct * 1.2 + random.gauss(0, 1.8),
-                "FMCG": change_pct * 0.4 + random.gauss(0, 0.8),
-                "Energy": change_pct * 1.1 + random.gauss(0, 2.5),
-                "Metals": change_pct * 1.5 + random.gauss(0, 3),
+            elif is_market_open:
+                market_status = "OPEN"
+            else:
+                market_status = "CLOSED"
+
+            # Fetch real sector indices from yfinance
+            sector_tickers = {
+                "Banking": "^NSEBANK",
+                "IT": "^CNXIT",
+                "Pharma": "^CNXPHARMA",
+                "Auto": "^CNXAUTO",
+                "FMCG": "^CNXFMCG",
+                "Energy": "^CNXENERGY",
+                "Metals": "^CNXMETAL",
             }
-            
-            # Top gainers/losers
-            all_stocks = [
-                ("RELIANCE", change_pct + random.gauss(0, 3)),
-                ("TCS", change_pct * 0.9 + random.gauss(0, 2)),
-                ("HDFCBANK", change_pct * 1.1 + random.gauss(0, 2.5)),
-                ("INFY", change_pct * 0.8 + random.gauss(0, 2.2)),
-                ("ICICIBANK", change_pct * 1.3 + random.gauss(0, 2.8)),
-                ("KOTAKBANK", change_pct * 0.95 + random.gauss(0, 1.8)),
-                ("HINDUNILVR", change_pct * 0.5 + random.gauss(0, 1)),
-                ("SBIN", change_pct * 1.4 + random.gauss(0, 3.2)),
-            ]
-            
+            sectors = {}
+            for sector_name, ticker_sym in sector_tickers.items():
+                try:
+                    t = yf.Ticker(ticker_sym)
+                    h = t.history(period="5d")
+                    if len(h) >= 2:
+                        curr = float(h["Close"].iloc[-1])
+                        prev = float(h["Close"].iloc[-2])
+                        sectors[sector_name] = round(((curr - prev) / prev) * 100, 2)
+                    else:
+                        sectors[sector_name] = round(change_pct + random.gauss(0, 0.5), 2)
+                except Exception:
+                    sectors[sector_name] = round(change_pct + random.gauss(0, 0.5), 2)
+
+            # Top NIFTY 50 stocks for gainers/losers
+            stock_tickers = {
+                "RELIANCE": "RELIANCE.NS", "TCS": "TCS.NS", "HDFCBANK": "HDFCBANK.NS",
+                "INFY": "INFY.NS", "ICICIBANK": "ICICIBANK.NS", "KOTAKBANK": "KOTAKBANK.NS",
+                "HINDUNILVR": "HINDUNILVR.NS", "SBIN": "SBIN.NS",
+            }
+            all_stocks = []
+            for name, sym in stock_tickers.items():
+                try:
+                    st = yf.Ticker(sym)
+                    sh = st.history(period="5d")
+                    if len(sh) >= 2:
+                        sc = float(sh["Close"].iloc[-1])
+                        sp = float(sh["Close"].iloc[-2])
+                        all_stocks.append((name, round(((sc - sp) / sp) * 100, 2)))
+                    else:
+                        all_stocks.append((name, round(change_pct + random.gauss(0, 1), 2)))
+                except Exception:
+                    all_stocks.append((name, round(change_pct + random.gauss(0, 1), 2)))
+
             all_stocks.sort(key=lambda x: x[1], reverse=True)
             top_gainers = all_stocks[:3]
             top_losers = all_stocks[-3:][::-1]
-            
-            # Volume spike detection
-            volume_spike = random.random() > 0.7 or is_volatile
-            
-            # Market sentiment
+
+            volume_spike = is_volatile or abs(change_pct) > 1.0
+
             if change_pct > 1:
                 sentiment = "bullish"
             elif change_pct < -1:
                 sentiment = "bearish"
             else:
                 sentiment = "neutral"
-            
-            return MarketData(
-                timestamp=datetime.now(),
-                nifty_50=round(nifty_value, 2),
-                nifty_change_pct=round(change_pct, 2),
+
+            result = MarketData(
+                timestamp=now,
+                nifty_50=nifty_value,
+                nifty_change_pct=change_pct,
                 market_status=market_status,
-                vix=round(vix, 2),
+                vix=vix,
                 sector_performance=sectors,
                 top_gainers=top_gainers,
                 top_losers=top_losers,
                 volume_spike=volume_spike,
-                sentiment=sentiment
+                sentiment=sentiment,
             )
-            
+            self.cache["market_data"] = result
+            self.last_fetch = now
+            print(f"✅ Live market data fetched: NIFTY={nifty_value}, VIX={vix}, Δ={change_pct}%")
+            return result
+
         except Exception as e:
-            # Fallback to cached/simulated data
-            return self._generate_fallback_data()
+            print(f"⚠️ yfinance fetch failed ({e}), falling back to simulation")
+            return self._generate_simulated_data()
+
+    def _generate_simulated_data(self) -> MarketData:
+        """Simulation fallback when yfinance is unavailable."""
+        base_nifty = 22400
+        time_factor = datetime.now().hour + datetime.now().minute / 60
+        market_open = 9.25
+        market_close = 15.5
+        is_market_open = market_open <= time_factor <= market_close
+
+        if is_market_open:
+            intraday_change = np.sin(time_factor * 0.5) * 100 + random.gauss(0, 50)
+            market_status = "OPEN"
+        else:
+            intraday_change = 0
+            market_status = "CLOSED"
+
+        nifty_value = base_nifty + intraday_change
+        change_pct = (intraday_change / base_nifty) * 100
+        base_vix = 15
+        vix = base_vix + abs(change_pct) * 2 + random.gauss(0, 2)
+        vix = max(10, min(40, vix))
+
+        is_volatile = abs(change_pct) > 1.5 or vix > 25
+        if is_volatile:
+            market_status = "VOLATILE"
+
+        sectors = {
+            "Banking": change_pct + random.gauss(0, 1.5),
+            "IT": change_pct * 0.8 + random.gauss(0, 2),
+            "Pharma": change_pct * 0.6 + random.gauss(0, 1),
+            "Auto": change_pct * 1.2 + random.gauss(0, 1.8),
+            "FMCG": change_pct * 0.4 + random.gauss(0, 0.8),
+            "Energy": change_pct * 1.1 + random.gauss(0, 2.5),
+            "Metals": change_pct * 1.5 + random.gauss(0, 3),
+        }
+
+        all_stocks = [
+            ("RELIANCE", change_pct + random.gauss(0, 3)),
+            ("TCS", change_pct * 0.9 + random.gauss(0, 2)),
+            ("HDFCBANK", change_pct * 1.1 + random.gauss(0, 2.5)),
+            ("INFY", change_pct * 0.8 + random.gauss(0, 2.2)),
+            ("ICICIBANK", change_pct * 1.3 + random.gauss(0, 2.8)),
+            ("KOTAKBANK", change_pct * 0.95 + random.gauss(0, 1.8)),
+            ("HINDUNILVR", change_pct * 0.5 + random.gauss(0, 1)),
+            ("SBIN", change_pct * 1.4 + random.gauss(0, 3.2)),
+        ]
+        all_stocks.sort(key=lambda x: x[1], reverse=True)
+
+        if change_pct > 1:
+            sentiment = "bullish"
+        elif change_pct < -1:
+            sentiment = "bearish"
+        else:
+            sentiment = "neutral"
+
+        return MarketData(
+            timestamp=datetime.now(),
+            nifty_50=round(nifty_value, 2),
+            nifty_change_pct=round(change_pct, 2),
+            market_status=market_status,
+            vix=round(vix, 2),
+            sector_performance=sectors,
+            top_gainers=all_stocks[:3],
+            top_losers=all_stocks[-3:][::-1],
+            volume_spike=random.random() > 0.7 or is_volatile,
+            sentiment=sentiment,
+        )
     
     def _generate_fallback_data(self) -> MarketData:
         """Generate fallback data when API fails"""

@@ -154,6 +154,33 @@ async function saveUserProfile(userId, profile) {
   });
 }
 
+// ── Portfolio API ──
+async function fetchPortfolio() {
+  return apiCall('/portfolio');
+}
+
+async function addToPortfolio(schemeCode, schemeName, category, amount, buyDate = null) {
+  const body = { scheme_code: schemeCode, scheme_name: schemeName, category, amount };
+  if (buyDate) body.buy_date = buyDate;
+  return apiCall('/portfolio/add', { method: 'POST', body: JSON.stringify(body) });
+}
+
+async function removeHolding(holdingId) {
+  return apiCall(`/portfolio/${holdingId}`, { method: 'DELETE' });
+}
+
+async function fetchPortfolioSummary() {
+  return apiCall('/portfolio/summary');
+}
+
+async function fetchLiveNav(schemeCode) {
+  return apiCall(`/nav/${schemeCode}`);
+}
+
+async function fetchNavHistory(schemeCode, days = 365) {
+  return apiCall(`/nav/${schemeCode}/history?days=${days}`);
+}
+
 function renderAlertItems(container, title, items, accent = 'var(--red)') {
   if (!container) return;
   const list = Array.isArray(items) ? items : [];
