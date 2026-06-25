@@ -23,7 +23,13 @@ class LeadScoringPipelineBundle:
         return self.numeric_features + self.cat_features
 
     def _frame(self, row: dict) -> pd.DataFrame:
-        frame = pd.DataFrame([row])
+        norm_row = {}
+        for k, v in row.items():
+            k_norm = str(k).lower().replace(" ", "_").replace("-", "_").strip()
+            if k_norm == 'occupation':
+                k_norm = 'what_is_your_current_occupation'
+            norm_row[k_norm] = v
+        frame = pd.DataFrame([norm_row])
         for c in self.numeric_features:
             if c not in frame.columns:
                 frame[c] = 0

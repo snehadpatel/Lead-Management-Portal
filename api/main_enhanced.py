@@ -1062,6 +1062,13 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     return user
 
 
+def get_current_distributor(user: dict = Depends(get_current_user)) -> dict:
+    """Ensure user has a distributor or admin role."""
+    if user.get("role") not in ("distributor", "admin"):
+        raise HTTPException(status_code=403, detail="Access forbidden: distributor role required")
+    return user
+
+
 @app.post('/auth/register', tags=['Auth'])
 def register(request: UserRegisterRequest):
     """Register a new SaaS user."""
@@ -1680,7 +1687,7 @@ def funds_recommendations(persona: str = Query(...), top_k: int = 5, investment_
 
 
 @app.post("/distributors/validate-rec", response_model=ValidationResponse, tags=["MFD Copilot"])
-def validate_recommendation(request: ValidationRequest):
+def validate_recommendation(request: ValidationRequest, current_user: dict = Depends(get_current_distributor)):
     """
     Validates a distributor's mutual fund recommendation against a client's risk profile and current market sentiment.
     """
@@ -1755,7 +1762,7 @@ def validate_recommendation(request: ValidationRequest):
 
 
 @app.get("/distributors/client-insights", response_model=ClientInsightsResponse, tags=["MFD Copilot"])
-def get_client_insights():
+def get_client_insights(current_user: dict = Depends(get_current_distributor)):
     """
     Get AI-driven insights for distributor clients, including SIP drop probability, redemption likelihood, and upsell triggers.
     """
@@ -1830,7 +1837,7 @@ def get_client_insights():
 
 
 @app.get("/dashboard/overview", tags=["Dashboard"])
-def dashboard_overview():
+def dashboard_overview(current_user: dict = Depends(get_current_distributor)):
     """
     Unified CRM dashboard payload for distributor and admin workspaces.
     """
@@ -1846,6 +1853,7 @@ def dashboard_leads(
     q: Optional[str] = Query(None, alias="query"),
     stage: Optional[str] = Query(None),
     priority: Optional[str] = Query(None),
+    current_user: dict = Depends(get_current_distributor),
 ):
     """
     CRM lead queue with enterprise-ready scoring context and workflow metadata.

@@ -238,7 +238,7 @@ class PortfolioAnalytics:
         
         # Metrics: Return, Volatility, Sharpe, Beta, Alpha, Max Drawdown
         total_days = (combined.index[-1] - combined.index[0]).days
-        years = total_days / 365.25 if total_days > 0 else 1.0
+        years = total_days / 365.0 if total_days > 0 else 1.0
         if years < 0.01:
             years = 0.01
             

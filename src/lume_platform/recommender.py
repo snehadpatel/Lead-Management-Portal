@@ -197,7 +197,7 @@ class SimpleRecommender:
                 'conservative': {'conservative'},
             }.get(persona_key, set())
             if allowed_groups:
-                funds = [f for f in funds if f.get('category_group') in allowed_groups or f.get('risk') in ({'low'} if persona_key == 'conservative' else {'medium', 'high'})]
+                funds = [f for f in funds if f.get('category_group') in allowed_groups and f.get('risk') in ({'low'} if persona_key == 'conservative' else {'medium', 'high'})]
 
         if query_text:
             tokens = [token for token in re.split(r'[^a-z0-9]+', query_text) if len(token) > 2]
@@ -248,12 +248,12 @@ class SimpleRecommender:
         query = " ".join(query_parts).strip() or "mutual funds recommended"
 
         results = []
+
         # Prefer SBERT search
         try:
             if self.registry and getattr(self.registry, 'sbert_search', None):
                 funds = self.registry.sbert_search.query(query, top_k=top_k)
-                for f in funds:
-                    # confidence adjusted by market context (simple heuristic)
+                for rank, f in enumerate(funds, start=1):
                     conf = f.get('match_score', 0.5)
                     if market_sent and 'bear' in market_sent.lower() and 'equity' in (f.get('category','').lower()):
                         conf *= 0.75
@@ -262,35 +262,50 @@ class SimpleRecommender:
                         'scheme_name': f['scheme_name'],
                         'category': f['category'],
                         'match_score': round(float(conf), 4),
+                        'recommended_allocation_pct': 0,
                         'reason': f"Matched by semantic similarity to profile: '{query}'"
                     })
-                if results:
-                    return results
         except Exception:
             results = []
 
-        # Fallback: category-based recommendations from fallback_funds
-        persona_key = 'balanced'
-        if 'aggressive' in risk or 'equity' in risk or 'growth' in risk:
-            persona_key = 'growth'
-        elif 'conservative' in risk or 'debt' in risk or 'liquid' in risk:
-            persona_key = 'conservative'
-        elif 'passive' in risk or 'index' in risk:
-            persona_key = 'passive'
+        if not results:
+            # Fallback: category-based recommendations from fallback_funds
+            persona_key = 'balanced'
+            if 'aggressive' in risk or 'equity' in risk or 'growth' in risk:
+                persona_key = 'growth'
+            elif 'conservative' in risk or 'debt' in risk or 'liquid' in risk:
+                persona_key = 'conservative'
+            elif 'passive' in risk or 'index' in risk:
+                persona_key = 'passive'
 
-        candidates = self.catalog_view(top_k=top_k * 3, persona=persona_key, query=query)
+            candidates = self.catalog_view(top_k=top_k * 3, persona=persona_key, query=query)
+            if not candidates and query:
+                candidates = self.catalog_view(top_k=top_k * 3, persona=persona_key, query=None)
 
-        for rank, f in enumerate(candidates[:top_k], start=1):
-            allocation = max(8, min(40, 24 - (rank - 1) * 4))
-            results.append({
-                'scheme_code': f.get('scheme_code', 'UNK'),
-                'scheme_name': f.get('scheme_name', f.get('name', 'Unknown Fund')),
-                'category': f.get('category', 'Unknown'),
-                'risk': f.get('risk', 'medium'),
-                'aum': f.get('aum', 0.0),
-                'match_score': round(float(f.get('match_score', 0.6)), 4),
-                'recommended_allocation_pct': allocation,
-                'reason': f"Persona fit for '{profile.get('inferred_risk_profile', persona_key)}' based on category {f.get('category_group', f.get('category', 'balanced'))} and live catalog data"
-            })
+            for rank, f in enumerate(candidates[:top_k], start=1):
+                results.append({
+                    'scheme_code': f.get('scheme_code', 'UNK'),
+                    'scheme_name': f.get('scheme_name', f.get('name', 'Unknown Fund')),
+                    'category': f.get('category', 'Unknown'),
+                    'risk': f.get('risk', 'medium'),
+                    'aum': f.get('aum', 0.0),
+                    'match_score': round(float(f.get('match_score', 0.6)), 4),
+                    'recommended_allocation_pct': 0,
+                    'reason': f"Persona fit for '{profile.get('inferred_risk_profile', persona_key)}' based on category {f.get('category_group', f.get('category', 'balanced'))} and live catalog data"
+                })
+
+        # Dynamically scale allocations to sum to exactly 100%
+        n_results = len(results)
+        if n_results > 0:
+            sum_w = sum(max(1, n_results + 1 - r) for r in range(1, n_results + 1))
+            dyn_allocations = []
+            for r in range(1, n_results + 1):
+                w = max(1, n_results + 1 - r)
+                dyn_allocations.append(round((w / sum_w) * 100))
+            diff = 100 - sum(dyn_allocations)
+            if dyn_allocations:
+                dyn_allocations[-1] += diff
+            for idx, r in enumerate(results):
+                r['recommended_allocation_pct'] = dyn_allocations[idx]
 
         return results
