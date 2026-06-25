@@ -1128,6 +1128,13 @@ class AddHoldingRequest(BaseModel):
     buy_date: Optional[str] = None  # YYYY-MM-DD, defaults to today
 
 
+class SellHoldingRequest(BaseModel):
+    holding_id: str
+    units: Optional[float] = None
+    amount: Optional[float] = None
+    sell_all: bool = False
+
+
 @app.get('/portfolio', tags=['Portfolio'])
 def get_portfolio(user: dict = Depends(get_current_user)):
     """Get user's portfolio with live NAV-based valuations."""
@@ -1225,6 +1232,95 @@ def add_to_portfolio(request: AddHoldingRequest, user: dict = Depends(get_curren
 
         saved = db_client.add_holding(email, holding)
         return {"status": "added", "holding": saved}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.post('/portfolio/sell', tags=['Portfolio'])
+def sell_portfolio_holding(request: SellHoldingRequest, user: dict = Depends(get_current_user)):
+    """Sell/redeem units of a holding. Auto-calculates units from current NAV for amount-based sells."""
+    try:
+        from lume_platform.data.nav_fetcher import nav_fetcher
+
+        email = user["email"]
+        holdings = db_client.get_portfolio(email)
+        
+        # Find matching holding
+        holding = next((h for h in holdings if h.get("holding_id") == request.holding_id), None)
+        if not holding:
+            raise HTTPException(status_code=404, detail="Holding not found")
+
+        current_units = float(holding.get("units", 0))
+        buy_nav = float(holding.get("buy_nav", 0))
+        buy_value = float(holding.get("buy_value", 0))
+        scheme_code = holding.get("scheme_code")
+
+        if current_units <= 0:
+            raise HTTPException(status_code=400, detail="No units available to sell")
+
+        # Determine how many units to sell
+        sell_units = 0.0
+        
+        if request.sell_all:
+            sell_units = current_units
+        elif request.units is not None:
+            sell_units = float(request.units)
+        elif request.amount is not None:
+            # Fetch current NAV to convert amount to units
+            current_nav = nav_fetcher.get_latest_nav(scheme_code)
+            if not current_nav or current_nav <= 0:
+                current_nav = buy_nav
+            sell_units = float(request.amount) / current_nav
+        else:
+            raise HTTPException(status_code=400, detail="Must specify either units, amount, or sell_all")
+
+        if sell_units <= 0:
+            raise HTTPException(status_code=400, detail="Units/Amount to sell must be greater than zero")
+
+        # Handle float accuracy issues: if sell_units is very close to current_units, sell all
+        if sell_units >= current_units - 0.0001:
+            sell_units = current_units
+            
+        if sell_units > current_units:
+            raise HTTPException(status_code=400, detail=f"Cannot sell {sell_units:.4f} units. Only {current_units:.4f} units are held.")
+
+        # Calculate transaction details
+        current_nav = nav_fetcher.get_latest_nav(scheme_code)
+        if not current_nav or current_nav <= 0:
+            current_nav = buy_nav
+            
+        redemption_value = round(sell_units * current_nav, 2)
+        realized_pnl = round(sell_units * (current_nav - buy_nav), 2)
+
+        # Update database
+        if sell_units == current_units:
+            db_client.remove_holding(email, request.holding_id)
+            status = "fully_redeemed"
+            remaining_units = 0.0
+            new_buy_value = 0.0
+        else:
+            remaining_units = round(current_units - sell_units, 4)
+            # Adjust the buy value down proportionally to reflect remaining average cost basis
+            new_buy_value = round(remaining_units * buy_nav, 2)
+            
+            updates = {
+                "units": remaining_units,
+                "buy_value": new_buy_value
+            }
+            db_client.update_holding(email, request.holding_id, updates)
+            status = "partially_redeemed"
+
+        return {
+            "status": status,
+            "scheme_name": holding.get("scheme_name"),
+            "sell_units": round(sell_units, 4),
+            "redemption_value": redemption_value,
+            "realized_pnl": realized_pnl,
+            "remaining_units": remaining_units,
+            "new_buy_value": new_buy_value
+        }
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 

@@ -99,6 +99,41 @@
       </div>
     </div>
 
+    <!-- Sell/Redemption Modal -->
+    <div id="sellModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;">
+      <div class="card" style="width:480px;max-width:95vw;padding:32px;position:relative;">
+        <button onclick="closeSellModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;">&times;</button>
+        <h3 style="margin:0 0 8px 0;">💸 Sell Investment</h3>
+        <p class="text-xs text-muted mb-24">Redeem your units/amount from this scheme</p>
+        
+        <div style="margin-bottom:16px;padding:12px;background:rgba(239,68,68,0.08);border-radius:8px;border:1px solid rgba(239,68,68,0.2);">
+          <div class="text-sm" style="font-weight:600;" id="sellFundName"></div>
+          <div class="text-xs text-muted" id="sellFundMeta"></div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label class="flex items-center gap-8 mb-8" style="cursor:pointer;font-size:0.85rem;">
+            <input type="checkbox" id="sellAllCheckbox" onchange="toggleSellInputs()">
+            <strong>Sell All Units (Full Redemption)</strong>
+          </label>
+        </div>
+
+        <div id="sellInputsContainer">
+          <div style="margin-bottom:16px;">
+            <label class="text-xs text-muted">Units to Sell</label>
+            <input type="number" id="sellUnitsInput" class="form-input" placeholder="Enter units (e.g. 10.5)" step="0.0001" min="0.0001" style="width:100%;" oninput="clearSellAmount()">
+          </div>
+          <div style="margin-bottom:24px;text-align:center;" class="text-xs text-muted">— OR —</div>
+          <div style="margin-bottom:24px;">
+            <label class="text-xs text-muted">Amount to Sell (₹)</label>
+            <input type="number" id="sellAmountInput" class="form-input" placeholder="Enter amount (e.g. 5000)" step="100" min="100" style="width:100%;" oninput="clearSellUnits()">
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="submitSell()" style="width:100%;padding:12px;background:var(--red);border-color:var(--red);">Redeem Now</button>
+      </div>
+    </div>
+
     <!-- TAB: BI Wealth Analytics -->
     <div class="tab-content" id="tab-bi" data-tab-content="main">
       <!-- BI Filter Control Panel -->
@@ -436,6 +471,7 @@
                 <div class="text-right"><div class="text-xs text-muted">Current</div><div class="text-mono text-sm">₹${(h.current_value || 0).toLocaleString()}</div></div>
                 <div class="text-right"><div class="text-xs text-muted">P&L</div><div class="text-mono text-sm" style="color:${pnlColor};">${pnlSign}₹${Math.abs(pnl).toLocaleString()} (${pnlSign}${pnlPct.toFixed(1)}%)</div></div>
                 <div class="text-right"><div class="text-xs text-muted">XIRR</div><div class="text-mono text-sm">${xirr}</div></div>
+                <button class="btn btn-xs btn-primary" onclick="openSellModal('${h.holding_id}', '${(h.scheme_name || '').replace(/'/g, "\\'")}', ${h.units}, ${(h.current_nav || h.buy_nav || 0)})" style="padding:2px 8px;font-size:0.7rem;margin-right:4px;">Sell</button>
                 <button class="btn btn-xs btn-secondary" onclick="confirmRemoveHolding('${h.holding_id}','${(h.scheme_name || '').replace(/'/g, "\\'")  }')" style="padding:2px 8px;font-size:0.7rem;color:var(--red);" title="Remove">✕</button>
               </div>
             </div>`;
@@ -537,6 +573,75 @@
         await loadPortfolio();
       } catch (e) {
         alert('Error removing holding');
+      }
+    }
+
+    // ── Sell Modal Functions ──
+    let activeSellHolding = null;
+
+    function openSellModal(holdingId, name, units, nav) {
+      activeSellHolding = { holding_id: holdingId, name, units, nav };
+      document.getElementById('sellFundName').textContent = name;
+      document.getElementById('sellFundMeta').textContent = `Units Available: ${units.toFixed(4)} · Current NAV: ₹${nav.toFixed(2)}`;
+      
+      // Reset inputs
+      document.getElementById('sellAllCheckbox').checked = false;
+      document.getElementById('sellUnitsInput').value = '';
+      document.getElementById('sellAmountInput').value = '';
+      document.getElementById('sellInputsContainer').style.display = 'block';
+      
+      document.getElementById('sellModal').style.display = 'flex';
+    }
+
+    function closeSellModal() {
+      document.getElementById('sellModal').style.display = 'none';
+      activeSellHolding = null;
+    }
+
+    function toggleSellInputs() {
+      const isSellAll = document.getElementById('sellAllCheckbox').checked;
+      document.getElementById('sellInputsContainer').style.display = isSellAll ? 'none' : 'block';
+    }
+
+    function clearSellAmount() {
+      document.getElementById('sellAmountInput').value = '';
+    }
+
+    function clearSellUnits() {
+      document.getElementById('sellUnitsInput').value = '';
+    }
+
+    async function submitSell() {
+      if (!activeSellHolding) return;
+      const isSellAll = document.getElementById('sellAllCheckbox').checked;
+      const units = document.getElementById('sellUnitsInput').value;
+      const amount = document.getElementById('sellAmountInput').value;
+
+      if (!isSellAll && !units && !amount) {
+        alert('Please select Sell All, or specify Units/Amount to sell.');
+        return;
+      }
+
+      try {
+        const result = await sellHolding(
+          activeSellHolding.holding_id,
+          units ? parseFloat(units) : null,
+          amount ? parseFloat(amount) : null,
+          isSellAll
+        );
+
+        if (result && result.status) {
+          alert(`Redemption successful!\nScheme: ${result.scheme_name}\nRedeemed Units: ${result.sell_units}\nPayout Value: ₹${result.redemption_value.toLocaleString()}\nRealized P&L: ₹${result.realized_pnl.toLocaleString()}`);
+          closeSellModal();
+          await loadPortfolio();
+          if (typeof updateInvBIAnalytics === 'function') {
+            await updateInvBIAnalytics();
+          }
+        } else {
+          alert('Failed to redeem. Please check input parameters.');
+        }
+      } catch (err) {
+        alert('Redemption failed: ' + (err.message || err));
       }
     }
 

@@ -169,6 +169,13 @@ async function removeHolding(holdingId) {
   return apiCall(`/portfolio/${holdingId}`, { method: 'DELETE' });
 }
 
+async function sellHolding(holdingId, units = null, amount = null, sellAll = false) {
+  const body = { holding_id: holdingId, sell_all: sellAll };
+  if (units !== null) body.units = parseFloat(units);
+  if (amount !== null) body.amount = parseFloat(amount);
+  return apiCall('/portfolio/sell', { method: 'POST', body: JSON.stringify(body) });
+}
+
 async function fetchPortfolioSummary() {
   return apiCall('/portfolio/summary');
 }
