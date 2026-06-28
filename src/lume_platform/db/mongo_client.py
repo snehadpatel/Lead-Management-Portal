@@ -1,7 +1,7 @@
 """
-Mock MongoDB Client: A local file-based and in-memory mock database
-that loads and stores leads and investor/distributor routing matches,
-enabling the platform to function without a live MongoDB instance.
+MongoDB Client: A production-ready client that supports real MongoDB connections
+with connection pooling, automated index creation, and fallbacks to a local file-based
+database when MONGO_URI is not set or the connection fails.
 """
 
 from __future__ import annotations
@@ -11,6 +11,9 @@ import os
 import pandas as pd
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+import pymongo
+from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
+
 from lume_platform.config import EXPORT_DIR
 
 class MockCollection:
@@ -28,7 +31,6 @@ class MockCollection:
 
     def find(self, query: dict = None) -> List[dict]:
         """Find documents matching the query."""
-        # Simple implementation returning all documents
         if self.name == "leads":
             return list(self.db_client.leads_db.values())
         return []
@@ -45,9 +47,42 @@ class MockMongoClient:
             self.custom_leads_file = Path("/tmp") / "db_custom_leads.json"
             self.users_file = Path("/tmp") / "db_users.json"
             self.portfolios_file = Path("/tmp") / "db_portfolios.json"
-        self._load_initial_data()
-        self._load_users()
-        self._load_portfolios()
+
+        # Check for real MongoDB URI
+        self.mongo_uri = os.environ.get("MONGO_URI")
+        self.use_real_mongo = False
+        self.client = None
+        self.db = None
+
+        if self.mongo_uri:
+            try:
+                # 5-second timeout for server selection check
+                self.client = pymongo.MongoClient(self.mongo_uri, serverSelectionTimeoutMS=5000)
+                # Force a connection test to ping the database
+                self.client.admin.command('ping')
+                self.db = self.client.get_database("lume_db")
+                self.use_real_mongo = True
+                print("✅ Connected to real MongoDB.")
+                self._setup_indices()
+            except Exception as e:
+                print(f"⚠️ Failed to connect to MongoDB ({e}). Falling back to local file-based database.")
+                self.use_real_mongo = False
+
+        if not self.use_real_mongo:
+            self._load_initial_data()
+            self._load_users()
+            self._load_portfolios()
+
+    def _setup_indices(self) -> None:
+        """Create database indices automatically on startup."""
+        try:
+            self.db.users.create_index("email", unique=True)
+            self.db.leads.create_index("lead_id", unique=True)
+            self.db.leads.create_index("conversion_probability")
+            self.db.portfolios.create_index("email", unique=True)
+            print("✅ MongoDB indices verified.")
+        except Exception as e:
+            print(f"⚠️ Error setting up MongoDB indices: {e}")
 
     def _load_initial_data(self) -> None:
         """Seed leads and matches from output_production_final CSV exports."""
@@ -58,8 +93,6 @@ class MockMongoClient:
                 df = pd.read_csv(leads_csv_path)
                 for _, row in df.iterrows():
                     lead_id = str(row.get("Lead Number", f"L-{1000 + _}"))
-                    # Map CSV columns to lead features dict
-                    # Also keep original keys to support aliases
                     self.leads_db[lead_id] = {
                         "lead_id": lead_id,
                         "first_name": str(row.get("First Name", "")),
@@ -93,15 +126,15 @@ class MockMongoClient:
                 with open(self.custom_leads_file, "r") as f:
                     custom_leads = json.load(f)
                     for lead_id, lead_data in custom_leads.items():
-                        # Override/add custom leads
                         self.leads_db[lead_id] = lead_data
                 print(f"✅ Loaded persistent custom leads from {self.custom_leads_file}")
             except Exception as e:
                 print(f"⚠️ Error loading custom leads JSON: {e}")
 
     def _save_custom_leads(self) -> None:
-        """Write custom/updated leads to JSON file for persistence."""
-        # Find leads not from original master CSV (or all of them to be safe)
+        """Write custom/updated leads to JSON file for persistence (mock mode only)."""
+        if self.use_real_mongo:
+            return
         try:
             with open(self.custom_leads_file, "w") as f:
                 json.dump(self.leads_db, f, indent=4)
@@ -109,7 +142,9 @@ class MockMongoClient:
             print(f"⚠️ Error writing custom leads JSON: {e}")
 
     def _load_users(self) -> None:
-        """Load persistent user profiles from JSON file."""
+        """Load persistent user profiles from JSON file (mock mode only)."""
+        if self.use_real_mongo:
+            return
         if self.users_file.is_file():
             try:
                 with open(self.users_file, "r") as f:
@@ -119,7 +154,9 @@ class MockMongoClient:
                 print(f"⚠️ Error loading users JSON: {e}")
 
     def _save_users(self) -> None:
-        """Save persistent user profiles to JSON file."""
+        """Save persistent user profiles to JSON file (mock mode only)."""
+        if self.use_real_mongo:
+            return
         try:
             self.users_file.parent.mkdir(parents=True, exist_ok=True)
             with open(self.users_file, "w") as f:
@@ -129,11 +166,17 @@ class MockMongoClient:
 
     def get_user(self, email: str) -> Optional[dict]:
         """Fetch user by email."""
-        return self.users_db.get(email.lower())
+        email_clean = email.strip().lower()
+        if self.use_real_mongo:
+            user = self.db.users.find_one({"email": email_clean})
+            if user and "_id" in user:
+                user["_id"] = str(user["_id"])
+            return user
+        return self.users_db.get(email_clean)
 
     def create_user(self, email: str, password_hash: str, role: str) -> dict:
         """Create a new user profile."""
-        email_clean = email.lower()
+        email_clean = email.strip().lower()
         user_data = {
             "email": email_clean,
             "password_hash": password_hash,
@@ -141,60 +184,105 @@ class MockMongoClient:
             "persona": "balanced",  # Default persona
             "created_at": str(pd.Timestamp.now())
         }
-        self.users_db[email_clean] = user_data
-        self._save_users()
-        return user_data
+        if self.use_real_mongo:
+            self.db.users.insert_one(user_data.copy())
+            inserted = self.db.users.find_one({"email": email_clean})
+            if inserted and "_id" in inserted:
+                inserted["_id"] = str(inserted["_id"])
+            return inserted
+        else:
+            self.users_db[email_clean] = user_data
+            self._save_users()
+            return user_data
 
     def update_user_profile(self, email: str, profile: dict) -> Optional[dict]:
         """Update user profile fields."""
-        email_clean = email.lower()
-        if email_clean in self.users_db:
-            self.users_db[email_clean].update(profile)
-            self._save_users()
-            return self.users_db[email_clean]
-        return None
-
+        email_clean = email.strip().lower()
+        if self.use_real_mongo:
+            self.db.users.update_one({"email": email_clean}, {"$set": profile})
+            user = self.db.users.find_one({"email": email_clean})
+            if user and "_id" in user:
+                user["_id"] = str(user["_id"])
+            return user
+        else:
+            if email_clean in self.users_db:
+                self.users_db[email_clean].update(profile)
+                self._save_users()
+                return self.users_db[email_clean]
+            return None
 
     def upsert_lead(self, lead_id: str, data: dict) -> None:
         """Upsert lead details."""
         lead_id = str(lead_id)
-        if lead_id in self.leads_db:
-            self.leads_db[lead_id].update(data)
-        else:
-            # Create new lead
-            self.leads_db[lead_id] = {
-                "lead_id": lead_id,
-                "status": "New",
-                "notes": "",
-                "assignee": "",
-                "next_step_at": "",
-                **data
-            }
-            # Make sure 'name' is formatted if first/last name exists
-            if "first_name" in data or "last_name" in data:
-                self.leads_db[lead_id]["name"] = f"{data.get('first_name', '')} {data.get('last_name', '')}".strip()
-            elif "First Name" in data or "Last Name" in data:
-                self.leads_db[lead_id]["name"] = f"{data.get('First Name', '')} {data.get('Last Name', '')}".strip()
-            elif "name" not in self.leads_db[lead_id]:
-                self.leads_db[lead_id]["name"] = f"Lead {lead_id}"
+        
+        # Clean data keys for MongoDB suitability (if any nested keys have '.' or '$')
+        clean_data = {}
+        for k, v in data.items():
+            k_clean = k.replace(".", "_").replace("$", "_")
+            clean_data[k_clean] = v
 
-        self._save_custom_leads()
+        if self.use_real_mongo:
+            existing = self.db.leads.find_one({"lead_id": lead_id})
+            if existing:
+                self.db.leads.update_one({"lead_id": lead_id}, {"$set": clean_data})
+            else:
+                lead_doc = {
+                    "lead_id": lead_id,
+                    "status": "New",
+                    "notes": "",
+                    "assignee": "",
+                    "next_step_at": "",
+                    **clean_data
+                }
+                if "first_name" in clean_data or "last_name" in clean_data:
+                    lead_doc["name"] = f"{clean_data.get('first_name', '')} {clean_data.get('last_name', '')}".strip()
+                elif "First Name" in clean_data or "Last Name" in clean_data:
+                    lead_doc["name"] = f"{clean_data.get('First Name', '')} {clean_data.get('Last Name', '')}".strip()
+                elif "name" not in lead_doc:
+                    lead_doc["name"] = f"Lead {lead_id}"
+                self.db.leads.insert_one(lead_doc)
+        else:
+            if lead_id in self.leads_db:
+                self.leads_db[lead_id].update(clean_data)
+            else:
+                self.leads_db[lead_id] = {
+                    "lead_id": lead_id,
+                    "status": "New",
+                    "notes": "",
+                    "assignee": "",
+                    "next_step_at": "",
+                    **clean_data
+                }
+                if "first_name" in clean_data or "last_name" in clean_data:
+                    self.leads_db[lead_id]["name"] = f"{clean_data.get('first_name', '')} {clean_data.get('last_name', '')}".strip()
+                elif "First Name" in clean_data or "Last Name" in clean_data:
+                    self.leads_db[lead_id]["name"] = f"{clean_data.get('First Name', '')} {clean_data.get('Last Name', '')}".strip()
+                elif "name" not in self.leads_db[lead_id]:
+                    self.leads_db[lead_id]["name"] = f"Lead {lead_id}"
+
+            self._save_custom_leads()
 
     def get_all_leads(self, limit: int = 50) -> List[dict]:
         """Fetch all leads up to a limit."""
-        # Sort leads: hot leads first
-        sorted_leads = sorted(
-            self.leads_db.values(),
-            key=lambda x: x.get("conversion_probability", x.get("Conversion_Probability", 0.0)),
-            reverse=True
-        )
-        return sorted_leads[:limit]
+        if self.use_real_mongo:
+            cursor = self.db.leads.find().sort("conversion_probability", pymongo.DESCENDING).limit(limit)
+            leads = list(cursor)
+            for lead in leads:
+                if "_id" in lead:
+                    lead["_id"] = str(lead["_id"])
+            return leads
+        else:
+            sorted_leads = sorted(
+                self.leads_db.values(),
+                key=lambda x: x.get("conversion_probability", x.get("Conversion_Probability", 0.0)),
+                reverse=True
+            )
+            return sorted_leads[:limit]
 
     def get_distributor_matches(self, investor_id: str, limit: int = 5) -> List[dict]:
         """Get matched distributors for an investor."""
         matches_csv_path = EXPORT_DIR / "investor_routing_matches.csv"
         
-        # Default fallback distributors if file not found or ID not matched
         fallback_distributors = [
             {
                 "distributor_name": "NJ IndiaInvest Pvt Ltd (National Distributor)",
@@ -227,8 +315,6 @@ class MockMongoClient:
 
         try:
             df = pd.read_csv(matches_csv_path)
-            # Find the row matching the investor ID
-            # investor_id could be a string like "demo_investor" or numeric string/int
             matching_row = None
             for _, row in df.iterrows():
                 row_id = str(row.get("Investor_ID", ""))
@@ -241,7 +327,6 @@ class MockMongoClient:
                 rec_fund = str(matching_row.get("Recommended_Fund_Type", "Mutual Funds"))
                 persona = str(matching_row.get("Persona_Cluster", "Balanced Allocator"))
                 
-                # Make the recommended distributor the top match
                 results = [
                     {
                         "distributor_name": rec_dist,
@@ -252,7 +337,6 @@ class MockMongoClient:
                     }
                 ]
                 
-                # Add other fallback distributors to fill limit
                 for dist in fallback_distributors:
                     if dist["distributor_name"] != rec_dist:
                         results.append({
@@ -268,8 +352,10 @@ class MockMongoClient:
             print(f"Error matching distributors: {e}")
             return fallback_distributors[:limit]
 
-    def get_collection(self, name: str) -> MockCollection:
+    def get_collection(self, name: str) -> Any:
         """Get collection interface."""
+        if self.use_real_mongo:
+            return self.db[name]
         return MockCollection(name, self)
 
     # ═══════════════════════════════════════════════════════════════════════════
@@ -277,7 +363,9 @@ class MockMongoClient:
     # ═══════════════════════════════════════════════════════════════════════════
 
     def _load_portfolios(self) -> None:
-        """Load persistent portfolio data from JSON file."""
+        """Load persistent portfolio data from JSON file (mock mode only)."""
+        if self.use_real_mongo:
+            return
         if self.portfolios_file.is_file():
             try:
                 with open(self.portfolios_file, "r") as f:
@@ -287,7 +375,9 @@ class MockMongoClient:
                 print(f"⚠️ Error loading portfolios JSON: {e}")
 
     def _save_portfolios(self) -> None:
-        """Save portfolio data to JSON file."""
+        """Save portfolio data to JSON file (mock mode only)."""
+        if self.use_real_mongo:
+            return
         try:
             self.portfolios_file.parent.mkdir(parents=True, exist_ok=True)
             with open(self.portfolios_file, "w") as f:
@@ -297,45 +387,80 @@ class MockMongoClient:
 
     def get_portfolio(self, email: str) -> List[dict]:
         """Get all holdings for a user."""
-        email_clean = email.lower()
+        email_clean = email.strip().lower()
+        if self.use_real_mongo:
+            doc = self.db.portfolios.find_one({"email": email_clean})
+            return doc.get("holdings", []) if doc else []
         return self.portfolios_db.get(email_clean, [])
 
     def add_holding(self, email: str, holding: dict) -> dict:
         """Add a new investment to user's portfolio."""
         import uuid
-        email_clean = email.lower()
-        if email_clean not in self.portfolios_db:
-            self.portfolios_db[email_clean] = []
-
+        email_clean = email.strip().lower()
         holding["holding_id"] = str(uuid.uuid4())[:8]
         holding["added_at"] = str(pd.Timestamp.now())
-        self.portfolios_db[email_clean].append(holding)
-        self._save_portfolios()
-        return holding
+
+        if self.use_real_mongo:
+            self.db.portfolios.update_one(
+                {"email": email_clean},
+                {"$push": {"holdings": holding}},
+                upsert=True
+            )
+            return holding
+        else:
+            if email_clean not in self.portfolios_db:
+                self.portfolios_db[email_clean] = []
+            self.portfolios_db[email_clean].append(holding)
+            self._save_portfolios()
+            return holding
 
     def update_holding(self, email: str, holding_id: str, updates: dict) -> Optional[dict]:
         """Update units/details for an existing holding."""
-        email_clean = email.lower()
-        holdings = self.portfolios_db.get(email_clean, [])
-        for h in holdings:
-            if h.get("holding_id") == holding_id:
-                h.update(updates)
-                self._save_portfolios()
-                return h
-        return None
+        email_clean = email.strip().lower()
+        if self.use_real_mongo:
+            set_fields = {}
+            for k, v in updates.items():
+                set_fields[f"holdings.$.{k}"] = v
+            
+            result = self.db.portfolios.update_one(
+                {"email": email_clean, "holdings.holding_id": holding_id},
+                {"$set": set_fields}
+            )
+            if result.modified_count > 0 or result.matched_count > 0:
+                doc = self.db.portfolios.find_one({"email": email_clean})
+                if doc:
+                    for h in doc.get("holdings", []):
+                        if h.get("holding_id") == holding_id:
+                            return h
+            return None
+        else:
+            holdings = self.portfolios_db.get(email_clean, [])
+            for h in holdings:
+                if h.get("holding_id") == holding_id:
+                    h.update(updates)
+                    self._save_portfolios()
+                    return h
+            return None
 
     def remove_holding(self, email: str, holding_id: str) -> bool:
         """Remove a holding from user's portfolio."""
-        email_clean = email.lower()
-        holdings = self.portfolios_db.get(email_clean, [])
-        original_len = len(holdings)
-        self.portfolios_db[email_clean] = [
-            h for h in holdings if h.get("holding_id") != holding_id
-        ]
-        if len(self.portfolios_db[email_clean]) < original_len:
-            self._save_portfolios()
-            return True
-        return False
+        email_clean = email.strip().lower()
+        if self.use_real_mongo:
+            result = self.db.portfolios.update_one(
+                {"email": email_clean},
+                {"$pull": {"holdings": {"holding_id": holding_id}}}
+            )
+            return result.modified_count > 0
+        else:
+            holdings = self.portfolios_db.get(email_clean, [])
+            original_len = len(holdings)
+            self.portfolios_db[email_clean] = [
+                h for h in holdings if h.get("holding_id") != holding_id
+            ]
+            if len(self.portfolios_db[email_clean]) < original_len:
+                self._save_portfolios()
+                return True
+            return False
 
     def get_portfolio_summary(self, email: str) -> dict:
         """Get portfolio value summary (before NAV enrichment)."""
@@ -353,7 +478,5 @@ class MockMongoClient:
             "holdings": holdings,
         }
 
-
 # Instantiate singleton client
 db_client = MockMongoClient()
-
