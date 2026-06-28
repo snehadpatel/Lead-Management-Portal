@@ -11,6 +11,11 @@ from jose import JWTError, jwt
 
 ALGORITHM = os.environ.get('JWT_ALGORITHM', 'HS256')
 SECRET_KEY = os.environ.get('JWT_SECRET', os.environ.get('ADMIN_API_KEY', 'dev-secret'))
+if SECRET_KEY == 'dev-secret':
+    if os.environ.get("LUME_ENV", "development").lower() == "production":
+        raise ValueError("CRITICAL SECURITY ERROR: JWT_SECRET or ADMIN_API_KEY must be set in production mode!")
+    else:
+        print("⚠️ WARNING: Running Lume AI with default insecure 'dev-secret'. Please set JWT_SECRET in production.")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ.get('JWT_EXPIRE_MINUTES', '60'))
 
 

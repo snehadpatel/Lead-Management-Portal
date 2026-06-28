@@ -119,24 +119,31 @@ def startup() -> None:
     """Load all models on startup"""
     registry.load()
     print("✅ Model registry loaded")
-    # Start market signals background listener thread
-    def _start_listener():
-        t = threading.Thread(target=market_signals_listener, daemon=True)
-        t.start()
+    
+    # Start market signals background listener thread if enabled
+    if os.environ.get("LUME_START_KAFKA_LISTENER", "true").lower() == "true":
+        def _start_listener():
+            t = threading.Thread(target=market_signals_listener, daemon=True)
+            t.start()
 
-    try:
-        _start_listener()
-        print("🔔 Market signals listener started")
-    except Exception as e:
-        print(f"⚠️ Failed to start market signals listener: {e}")
+        try:
+            _start_listener()
+            print("🔔 Market signals listener started")
+        except Exception as e:
+            print(f"⚠️ Failed to start market signals listener: {e}")
+    else:
+        print("🔔 Market signals listener disabled inside API process")
 
-    # Start drift monitoring thread
-    try:
-        t = threading.Thread(target=drift_monitor_loop, daemon=True)
-        t.start()
-        print("🧭 Drift monitor started")
-    except Exception as e:
-        print(f"⚠️ Failed to start drift monitor: {e}")
+    # Start drift monitoring thread if enabled
+    if os.environ.get("LUME_START_DRIFT_MONITOR", "true").lower() == "true":
+        try:
+            t = threading.Thread(target=drift_monitor_loop, daemon=True)
+            t.start()
+            print("🧭 Drift monitor started")
+        except Exception as e:
+            print(f"⚠️ Failed to start drift monitor: {e}")
+    else:
+        print("🧭 Drift monitor disabled inside API process")
 
 
 def retrain_models_job() -> Dict[str, Any]:
