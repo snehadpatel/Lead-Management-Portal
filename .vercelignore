@@ -2,7 +2,7 @@ venv/
 .git/
 .env
 .env.example
-data/
+/data/
 streaming/
 tableau_exports/
 archive/

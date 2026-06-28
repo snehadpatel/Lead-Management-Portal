@@ -37,7 +37,7 @@ dist/
 .npm/
 
 # Data, Models & Generated Output
-data/
+/data/
 datasets/
 dataset_visualisations/
 visualisations/
