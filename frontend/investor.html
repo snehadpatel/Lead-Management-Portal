@@ -95,7 +95,7 @@
           <label class="text-xs text-muted">Buy Date (optional, defaults to today)</label>
           <input type="date" id="investBuyDate" class="form-input" style="width:100%;">
         </div>
-        <button class="btn btn-primary" onclick="submitInvestment()" style="width:100%;padding:12px;">Invest Now</button>
+        <button id="btnSubmitInvestment" class="btn btn-primary" onclick="submitInvestment()" style="width:100%;padding:12px;">Invest Now</button>
       </div>
     </div>
 
@@ -543,6 +543,12 @@
       if (!amount || amount < 500) { alert('Minimum investment is ₹500'); return; }
       const buyDate = document.getElementById('investBuyDate').value || null;
 
+      const btn = document.getElementById('btnSubmitInvestment');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Investing...';
+      }
+
       try {
         const result = await addToPortfolio(
           selectedInvestFund.scheme_code,
@@ -552,6 +558,7 @@
           buyDate
         );
         if (result?.status === 'added') {
+          alert('Investment logged successfully!');
           closeInvestModal();
           await loadPortfolio(); // Refresh
         } else {
@@ -559,6 +566,11 @@
         }
       } catch (e) {
         alert('Error: ' + (e.message || 'Investment failed'));
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Invest Now';
+        }
       }
     }
 
