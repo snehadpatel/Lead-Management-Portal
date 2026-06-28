@@ -37,12 +37,6 @@ from lume_platform.monitoring import Monitor
 from lume_platform.impact import MarketImpactEngine
 from lume_platform.drift_monitor import DriftMonitor
 from lume_platform.data.nav_fetcher import nav_fetcher
-from lume_platform.risk.live_risk_analyzer import risk_analyzer, get_live_risk_analysis
-from lume_platform.risk.portfolio_analytics import portfolio_analytics
-from lume_platform.news.news_fetcher import news_fetcher
-from lume_platform.ml.transformer_sentiment import get_transformer_sentiment
-from lume_platform.ml.training import train_all
-from lume_platform.ml.bundles import SBERTSentimentBundle
 
 security = HTTPBearer()
 
