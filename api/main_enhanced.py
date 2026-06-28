@@ -1223,24 +1223,61 @@ def add_to_portfolio(request: AddHoldingRequest, user: dict = Depends(get_curren
         email = user["email"]
         buy_date = request.buy_date or datetime.now().strftime("%Y-%m-%d")
 
-        # Get current NAV for the scheme
-        current_nav = nav_fetcher.get_latest_nav(request.scheme_code)
-        if not current_nav or current_nav <= 0:
-            # Fallback: try from catalog
-            fund = next(
-                (f for f in (recommender.fallback_funds or []) if f.get("scheme_code") == request.scheme_code),
-                None
-            )
-            current_nav = float(fund.get("nav", 100)) if fund and fund.get("nav") else 100.0
+        # Determine buy NAV (historical if past date specified, else latest)
+        buy_nav = None
+        
+        if request.buy_date and request.buy_date != datetime.now().strftime("%Y-%m-%d"):
+            # Try to fetch historical NAV for that past date
+            try:
+                dt = datetime.strptime(request.buy_date, "%Y-%m-%d")
+                formatted_target = dt.strftime("%d-%m-%Y")
+                
+                # Fetch up to 10 years of history
+                hist = nav_fetcher.get_historical_nav(request.scheme_code, days=3650)
+                if hist:
+                    # Look for exact match
+                    for entry in hist:
+                        if entry.get("date") == formatted_target:
+                            buy_nav = float(entry["nav"])
+                            break
+                    
+                    # Look for closest date match within 7 days
+                    if not buy_nav:
+                        min_diff = float("inf")
+                        closest_val = None
+                        for entry in hist:
+                            try:
+                                entry_dt = datetime.strptime(entry["date"], "%d-%m-%Y")
+                                diff = abs((entry_dt - dt).days)
+                                if diff < min_diff:
+                                    min_diff = diff
+                                    closest_val = float(entry["nav"])
+                            except Exception:
+                                continue
+                        if min_diff <= 7:
+                            buy_nav = closest_val
+            except Exception as ex:
+                print(f"⚠️ Error parsing historical NAV for date {request.buy_date}: {ex}")
 
-        units = round(request.amount / current_nav, 4)
+        # If not found or not historical, get latest NAV
+        if not buy_nav:
+            buy_nav = nav_fetcher.get_latest_nav(request.scheme_code)
+            if not buy_nav or buy_nav <= 0:
+                # Fallback: try from catalog
+                fund = next(
+                    (f for f in (recommender.fallback_funds or []) if f.get("scheme_code") == request.scheme_code),
+                    None
+                )
+                buy_nav = float(fund.get("nav", 100)) if fund and fund.get("nav") else 100.0
+
+        units = round(request.amount / buy_nav, 4)
 
         holding = {
             "scheme_code": request.scheme_code,
             "scheme_name": request.scheme_name,
             "category": request.category,
             "units": units,
-            "buy_nav": current_nav,
+            "buy_nav": buy_nav,
             "buy_date": buy_date,
             "buy_value": round(request.amount, 2),
         }
