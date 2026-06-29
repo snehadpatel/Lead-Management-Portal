@@ -1,0 +1,5 @@
+{
+  "matrix": [[638, 150], [192, 820]],
+  "labels": ["Not Converted", "Converted"],
+  "total_samples": 1800
+}
