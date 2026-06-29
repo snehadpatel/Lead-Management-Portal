@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ALLOWED_ORIGIN=http://localhost:3000
+      - LUME_PROJECT_ROOT=/app
+      - LUME_ML_ARTIFACTS=/app/ml-artifacts
+    volumes:
+      - ./ml-artifacts:/app/ml-artifacts:ro
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - api
