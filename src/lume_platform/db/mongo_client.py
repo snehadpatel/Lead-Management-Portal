@@ -40,13 +40,11 @@ class MockMongoClient:
         self.leads_db: Dict[str, dict] = {}
         self.users_db: Dict[str, dict] = {}
         self.portfolios_db: Dict[str, list] = {}
-        self.custom_leads_file = EXPORT_DIR / "db_custom_leads.json"
-        self.users_file = EXPORT_DIR / "db_users.json"
-        self.portfolios_file = EXPORT_DIR / "db_portfolios.json"
-        if "VERCEL" in os.environ:
-            self.custom_leads_file = Path("/tmp") / "db_custom_leads.json"
-            self.users_file = Path("/tmp") / "db_users.json"
-            self.portfolios_file = Path("/tmp") / "db_portfolios.json"
+        db_dir = Path(os.environ.get("LUME_DB_DIR", "/tmp/lume_db"))
+        db_dir.mkdir(parents=True, exist_ok=True)
+        self.custom_leads_file = db_dir / "db_custom_leads.json"
+        self.users_file = db_dir / "db_users.json"
+        self.portfolios_file = db_dir / "db_portfolios.json"
 
         # Check for real MongoDB URI
         self.mongo_uri = os.environ.get("MONGO_URI")

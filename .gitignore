@@ -43,7 +43,10 @@ dataset_visualisations/
 visualisations/
 tableau_exports/
 output_production_final/
-model_evaluations/
+model_evaluations/*
+!model_evaluations/lstm_forecaster/
+streaming/
+mongo_data/
 *.csv
 *.tsv
 *.parquet
@@ -54,6 +57,7 @@ model_evaluations/
 # Logs and Scratch Files
 artifacts/
 scratch/
+logs/
 *.log
 CompleteNavReport.txt
 .vercel

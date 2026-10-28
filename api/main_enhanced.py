@@ -409,6 +409,11 @@ class ForecastResponse(BaseModel):
     trend: str
     horizon_days: int
     accuracy_metric: str
+    model_source: str = Field("lstm", description="'lstm' for PyTorch DL model, 'fallback' for deterministic moving-average baseline")
+    lower_bound: Optional[List[float]] = Field(None, description="90% uncertainty interval lower bound")
+    upper_bound: Optional[List[float]] = Field(None, description="90% uncertainty interval upper bound")
+    baseline_trajectory: Optional[List[float]] = Field(None, description="Deterministic naive baseline comparison")
+    disclaimer: str = Field("Educational and analytical tool only. Not investment advice.", description="Regulatory disclaimer")
 
 
 # AI Advisor Models
@@ -2054,52 +2059,29 @@ def get_matched_distributors(investor_id: str = "demo_investor", limit: int = 5)
 
 
 def fallback_forecast_nav(history: List[float]) -> dict:
-    if len(history) < 30:
-        return {"error": "Insufficient history (minimum 30 values)"}
-    last_val = history[-1]
-    # Simple moving average and momentum calculation for simulation
-    recent = history[-5:]
-    momentum = (recent[-1] - recent[0]) / 5.0
-    
-    # Project 5 days ahead
-    trajectory = []
-    current = last_val
-    for i in range(1, 6):
-        # add a small random variation to simulate uncertainty
-        noise = (np.random.randn() * 0.005) * last_val
-        current = current + momentum + noise
-        trajectory.append(round(float(current), 2))
-        
-    volatility = float(np.std(history[-10:]) / np.mean(history[-10:])) if len(history) >= 10 else 0.05
-    precision_score = max(75.0, min(99.0, 99.0 - (volatility * 1000)))
-    trend = "UPWARD" if trajectory[-1] > last_val else "DOWNWARD" if trajectory[-1] < last_val else "STABLE"
-    
-    return {
-        "historical_last": last_val,
-        "forecast_trajectory": trajectory,
-        "confidence_score": round(precision_score, 1),
-        "trend": trend,
-        "horizon_days": 5,
-        "accuracy_metric": "92.4% (Backtested R²)"
-    }
+    """Deterministic baseline fallback forecast when PyTorch LSTM is not loaded."""
+    from lume_platform.ml.forecaster import compute_fallback_forecast
+    return compute_fallback_forecast(history, horizon=5)
 
 
 @app.post("/predict/forecast", response_model=ForecastResponse, tags=["Predictions"])
 def forecast_nav(request: ForecastRequest):
     """
     Predict future trajectory using the PyTorch LSTM model.
+    Falls back to a deterministic moving-average baseline if model is not loaded.
     Requires at least 30 days of historical data.
     """
     try:
-        if registry.forecaster:
-            result = registry.forecaster.forecast(request.history)
+        forecaster = getattr(registry, "get_forecaster", lambda: registry.forecaster)()
+        if forecaster:
+            result = forecaster.forecast(request.history)
             if "error" not in result:
                 return ForecastResponse(
                     timestamp=datetime.utcnow().isoformat(),
                     **result
                 )
         
-        # Fallback to simulated forecast if model not loaded or error occurred
+        # Fallback to deterministic baseline forecast
         result = fallback_forecast_nav(request.history)
         if "error" in result:
              raise HTTPException(status_code=400, detail=result["error"])

@@ -31,6 +31,22 @@ class ModelRegistry:
         self.buddy = None
         self.is_loaded = False
 
+    def get_forecaster(self):
+        """Lazy loader for LUMEForecaster."""
+        if self.forecaster is None and os.getenv("LUME_ENABLE_FORECASTER", "1") == "1":
+            lstm_path = self.models_dir / "lstm_nav_pattern_predictor.pth"
+            scaler_path = (ARTIFACTS_DIR / "ml_scalers") / "mf_nav_global_scaler.pkl"
+            try:
+                from lume_platform.ml.forecaster import LUMEForecaster
+
+                self.forecaster = LUMEForecaster(lstm_path, scaler_path)
+                if lstm_path.is_file() and scaler_path.is_file():
+                    self.forecaster.load()
+            except Exception as e:
+                print(f"⚠️ Failed to lazy-load forecaster: {e}")
+                self.forecaster = None
+        return self.forecaster
+
     def _load_pickle(self, name: str) -> Any:
         primary = self.models_dir / name
         if primary.is_file():
@@ -48,19 +64,20 @@ class ModelRegistry:
         self.investor_bundle = self._load_pickle("investor_cluster_bundle.pkl")
         self.sentiment_bundle = self._load_pickle("sentiment_bundle.pkl")
 
-        if os.getenv("LUME_ENABLE_FORECASTER", "0") == "1":
+        if os.getenv("LUME_ENABLE_FORECASTER", "1") == "1":
             lstm_path = self.models_dir / "lstm_nav_pattern_predictor.pth"
             scaler_path = (ARTIFACTS_DIR / "ml_scalers") / "mf_nav_global_scaler.pkl"
-            if lstm_path.is_file() and scaler_path.is_file():
-                try:
-                    from lume_platform.ml.forecaster import LUMEForecaster
+            try:
+                from lume_platform.ml.forecaster import LUMEForecaster
 
-                    self.forecaster = LUMEForecaster(lstm_path, scaler_path)
+                self.forecaster = LUMEForecaster(lstm_path, scaler_path)
+                if lstm_path.is_file() and scaler_path.is_file():
                     self.forecaster.load()
-                except Exception:
-                    self.forecaster = None
+            except Exception as e:
+                print(f"⚠️ Failed to initialize forecaster: {e}")
+                self.forecaster = None
 
-        if os.getenv("LUME_ENABLE_SEMANTIC_SEARCH", "0") == "1":
+        if os.getenv("LUME_ENABLE_SEMANTIC_SEARCH", "1") == "1":
             sbert_cache = self.models_dir / "fund_embeddings.pkl"
             if sbert_cache.is_file():
                 try:

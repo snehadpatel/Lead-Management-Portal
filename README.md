@@ -97,6 +97,43 @@ PYTHONPATH=src uvicorn api.main_enhanced:app --reload --port 8000
 streamlit run streamlit_app.py
 ```
 
+## Reproducing Results & Deep Learning Pipeline
+
+Lume AI strictly adheres to zero-data-leakage, reproducible Deep Learning standards:
+- **Zero data leakage**: Chronological 70/15/15 splits; scalers fit strictly on train split; temporal separation in sliding windows.
+- **Honest uncertainty quantification**: Monte Carlo Dropout generates 90% confidence bands (`lower_bound`, `upper_bound`).
+- **Baselines to beat**: Every forecast is benchmarked against deterministic Naive (Last-Value) and Moving Average baselines.
+- **Auditable artifacts**: Model checkpoints (`artifacts/models/lstm_nav_pattern_predictor.pth`), scalers (`artifacts/ml_scalers/mf_nav_global_scaler.pkl`), real loss curves (`model_evaluations/lstm_forecaster/lstm_train_val_loss.png`), and metrics (`model_evaluations/lstm_forecaster/real_metrics.json`).
+
+### 1) Train the PyTorch LSTM Forecaster
+```bash
+# Using Makefile
+make train-lstm
+
+# Or using the Lume CLI
+python -m lume_platform.cli train --engine lstm
+
+# Train all engines (Lead Scoring, Investor Clustering, NLP, and Deep Learning LSTM)
+python -m lume_platform.cli train --engine all
+```
+
+### 2) Generate Real In-CLI Forecasts
+```bash
+# Generate 5-day NAV trajectory with uncertainty bounds for AMFI scheme 100119
+python -m lume_platform.cli forecast --scheme 100119
+```
+
+### 3) Run the Verification & Leakage Test Suite
+```bash
+# Run all unit and integration tests
+make test
+
+# Or run specific test modules
+pytest tests/test_data_leakage.py -v       # Strict temporal ordering and train-only scaling
+pytest tests/test_lstm_forecaster.py -v     # PyTorch model architecture, baselines & uncertainty
+pytest tests/test_api_forecast.py -v        # FastAPI /predict/forecast endpoint & schema
+```
+
 ## API overview
 
 Common endpoints (available in base/enhanced variants depending on app):

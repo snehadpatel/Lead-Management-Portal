@@ -416,7 +416,7 @@ def train_sentiment_nlp() -> Path:
     return out
 
 
-def train_all() -> dict[str, str]:
+def train_all(include_lstm: bool = True) -> dict[str, str]:
     import time
     start = time.time()
     paths = {
@@ -424,18 +424,27 @@ def train_all() -> dict[str, str]:
         "investor_cluster": str(train_investor_kmeans_and_dbscan()[0]),
         "sentiment": str(train_sentiment_nlp()),
     }
-    
+
+    if include_lstm:
+        try:
+            from lume_platform.ml.lstm_trainer import train_lstm_forecaster
+            lstm_res = train_lstm_forecaster()
+            paths["forecaster"] = str(lstm_res["model_path"])
+        except Exception as exc:
+            print(f"⚠️ PyTorch LSTM training failed or skipped: {exc}")
+
     # Generate model manifest for the 'Startup' Dashboard / API
     manifest = {
         "timestamp": datetime.utcnow().isoformat(),
         "training_duration_sec": round(time.time() - start, 2),
         "models": {}
     }
-    
+
     # Harvest metrics from JSON files created during training
     for key, folder in [("leads", "random_forest/real_metrics.json"), 
                        ("nlp", "nlp_sentiment/metrics.json"),
-                       ("clustering", "kmeans/kmeans_metrics.json")]:
+                       ("clustering", "kmeans/kmeans_metrics.json"),
+                       ("forecaster", "lstm_forecaster/real_metrics.json")]:
         p = EVAL_DIR / folder
         if p.exists():
             with open(p) as f:
@@ -443,7 +452,7 @@ def train_all() -> dict[str, str]:
 
     with open(MODELS_DIR / "model_manifest.json", "w") as f:
         json.dump(manifest, f, indent=2)
-    
+
     write_master_report(PROJECT_ROOT)
     return paths
 

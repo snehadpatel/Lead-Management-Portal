@@ -1,0 +1,40 @@
+# Lume AI — Deep Learning Time Series Forecasting Configuration
+model:
+  name: "lstm_nav_forecaster"
+  input_dim: 1              # univariate NAV (expandable to multi-feature with NIFTY & Volume in Phase 2)
+  hidden_dim: 64
+  num_layers: 2
+  dropout: 0.2
+  horizon: 5                # 5-day trajectory forecast
+  lookback: 30              # 30-day historical lookback
+
+training:
+  seed: 42
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  epochs: 25
+  early_stopping_patience: 7
+  device: "cpu"             # "cpu" | "mps" | "cuda"
+
+data:
+  cache_dir: "output_production_final/nav_cache"
+  nifty_files:
+    - "NIFTY 50-21-02-2023-to-21-02-2024.csv"
+    - "NIFTY 50-21-02-2024-to-20-02-2025.csv"
+    - "NIFTY 50-21-02-2025-to-21-02-2026.csv"
+  primary_scheme_code: "100119" # Default benchmark fund: Aditya Birla Sun Life Frontline Equity
+  split:
+    train_ratio: 0.70
+    val_ratio: 0.15
+    test_ratio: 0.15
+    method: "chronological" # Strictly chronological, never shuffle time series
+
+baselines:
+  - "naive_last_value"
+  - "moving_average_5d"
+
+uncertainty:
+  method: "mc_dropout"      # Monte Carlo Dropout
+  mc_samples: 20
+  confidence_interval: 0.90
