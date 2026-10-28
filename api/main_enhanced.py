@@ -405,13 +405,18 @@ class ForecastResponse(BaseModel):
     timestamp: str
     historical_last: float
     forecast_trajectory: List[float]
+    p10: Optional[List[float]] = Field(None, description="P10 quantile forecast (lower interval)")
+    p50: Optional[List[float]] = Field(None, description="P50 quantile forecast (median trajectory)")
+    p90: Optional[List[float]] = Field(None, description="P90 quantile forecast (upper interval)")
+    attention_weights: Optional[List[float]] = Field(None, description="Temporal attention weights across 30 lookback days")
     confidence_score: float
     trend: str
     horizon_days: int
     accuracy_metric: str
-    model_source: str = Field("lstm", description="'lstm' for PyTorch DL model, 'fallback' for deterministic moving-average baseline")
-    lower_bound: Optional[List[float]] = Field(None, description="90% uncertainty interval lower bound")
-    upper_bound: Optional[List[float]] = Field(None, description="90% uncertainty interval upper bound")
+    quantile_coverage: Optional[str] = Field(None, description="Empirical test quantile coverage rate")
+    model_source: str = Field("lstm", description="'bilstm_attention' | 'lstm' | 'fallback'")
+    lower_bound: Optional[List[float]] = Field(None, description="Lower uncertainty interval")
+    upper_bound: Optional[List[float]] = Field(None, description="Upper uncertainty interval")
     baseline_trajectory: Optional[List[float]] = Field(None, description="Deterministic naive baseline comparison")
     disclaimer: str = Field("Educational and analytical tool only. Not investment advice.", description="Regulatory disclaimer")
 
@@ -2064,6 +2069,7 @@ def fallback_forecast_nav(history: List[float]) -> dict:
     return compute_fallback_forecast(history, horizon=5)
 
 
+@app.post("/api/forecast", response_model=ForecastResponse, tags=["Predictions"])
 @app.post("/predict/forecast", response_model=ForecastResponse, tags=["Predictions"])
 def forecast_nav(request: ForecastRequest):
     """

@@ -16,6 +16,9 @@ help:
 	@echo "  make dashboard     Start Streamlit dashboard"
 	@echo "  make clean         Clean cache and temp files"
 
+train-bilstm:
+	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m lume_platform.cli train --engine bilstm
+
 train-lstm:
 	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m lume_platform.cli train --engine lstm
 
@@ -24,6 +27,9 @@ train-all:
 
 test:
 	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m pytest tests/ -v
+
+test-phase2:
+	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m pytest tests/test_phase2_bilstm.py -v
 
 leakage-test:
 	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m pytest tests/test_data_leakage.py -v

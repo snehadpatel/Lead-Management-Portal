@@ -1,0 +1,58 @@
+# Lume AI — Phase 2 Multivariate BiLSTM + Temporal Multihead Attention Config
+# Target: 5-Day Multi-Quantile (P10 / P50 / P90) Forecasting with Honest Calibration
+
+model:
+  name: "bilstm_attention_quantile"
+  input_dim: 7
+  hidden_dim: 64
+  num_layers: 2
+  num_heads: 4
+  horizon: 5
+  dropout: 0.2
+  bidirectional: true
+  use_attention: true
+  quantiles: [0.10, 0.50, 0.90]
+
+features:
+  target_col: "nav"
+  feature_cols:
+    - "nav"
+    - "nav_return"
+    - "nifty_close"
+    - "nifty_volatility"
+    - "nifty_volume"
+    - "rsi"
+    - "sma20_dev"
+  include_sentiment: false  # Optional feature flag (Phase 4 wiring)
+
+training:
+  seed: 42
+  batch_size: 32
+  epochs: 60
+  patience: 10
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  loss: "pinball"
+
+data_split:
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  lookback: 30
+  horizon: 5
+
+evaluation:
+  nominal_coverage: 0.80  # Target empirical coverage for [P10, P90]
+  sample_schemes:
+    - "100119"
+    - "119551"
+    - "112117"
+    - "100375"
+
+artifacts:
+  checkpoint_path: "artifacts/models/bilstm_attention_quantile.pth"
+  scaler_path: "artifacts/ml_scalers/multivariate_scaler.pkl"
+  metrics_path: "model_evaluations/phase2_timeseries/real_metrics.json"
+  model_card_path: "model_evaluations/phase2_timeseries/model_card.md"
+  loss_curve_path: "model_evaluations/phase2_timeseries/loss_curves.png"
+  attention_heatmap_path: "model_evaluations/phase2_timeseries/attention_heatmap.png"

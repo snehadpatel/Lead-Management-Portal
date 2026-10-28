@@ -77,17 +77,77 @@ def load_nav_history(scheme_code: str, cache_dir: Optional[Path] = None) -> pd.D
     return df
 
 
+def compute_technical_features(
+    df: pd.DataFrame,
+    nav_col: str = "nav",
+    nifty_close_col: str = "nifty_close",
+    include_sentiment: bool = False,
+) -> pd.DataFrame:
+    """
+    Computes zero-leakage technical indicators and returns strictly using past data.
+
+    Features generated:
+    1. nav_return: (NAV_t - NAV_{t-1}) / NAV_{t-1}
+    2. nifty_return: (NIFTY_t - NIFTY_{t-1}) / NIFTY_{t-1}
+    3. nifty_volatility: 10-day rolling standard deviation of NIFTY daily returns
+    4. rsi: 14-day Relative Strength Index on NAV normalized to [0, 1]
+    5. sma20_dev: (NAV_t - SMA20) / SMA20
+    6. sentiment: Optional financial sentiment score (default 0.0)
+    """
+    out = df.sort_values("date").reset_index(drop=True).copy()
+
+    # 1. NAV Daily Return
+    out["nav_return"] = out[nav_col].pct_change().fillna(0.0)
+
+    # 2. NIFTY50 Return & Volatility
+    if nifty_close_col in out.columns:
+        out["nifty_return"] = out[nifty_close_col].pct_change().fillna(0.0)
+        # 10-day rolling volatility (backward-looking only)
+        out["nifty_volatility"] = (
+            out["nifty_return"].rolling(window=10, min_periods=1).std().fillna(0.0)
+        )
+    else:
+        out["nifty_return"] = 0.0
+        out["nifty_volatility"] = 0.0
+
+    # 3. RSI (14-day Relative Strength Index on NAV)
+    delta = out[nav_col].diff().fillna(0.0)
+    gain = delta.where(delta > 0, 0.0)
+    loss = (-delta).where(delta < 0, 0.0)
+
+    avg_gain = gain.rolling(window=14, min_periods=1).mean()
+    avg_loss = loss.rolling(window=14, min_periods=1).mean()
+
+    rs = avg_gain / (avg_loss + 1e-8)
+    rsi_raw = 100.0 - (100.0 / (1.0 + rs))
+    out["rsi"] = (rsi_raw / 100.0).clip(0.0, 1.0).fillna(0.5)
+
+    # 4. SMA-20 Deviation on NAV
+    sma20 = out[nav_col].rolling(window=20, min_periods=1).mean()
+    out["sma20_dev"] = ((out[nav_col] - sma20) / (sma20 + 1e-8)).fillna(0.0)
+
+    # 5. Sentiment feature flag (wired for Phase 4)
+    if include_sentiment and "sentiment" in out.columns:
+        out["sentiment"] = out["sentiment"].astype(float).fillna(0.0)
+    else:
+        out["sentiment"] = 0.0
+
+    return out
+
+
 def load_merged_market_series(
     scheme_code: str = "100119",
     cache_dir: Optional[Path] = None,
     project_root: Optional[Path] = None,
+    include_sentiment: bool = False,
 ) -> pd.DataFrame:
-    """Merge fund NAV with NIFTY 50 benchmark and trading volume on trading dates."""
+    """Merge fund NAV with NIFTY 50 benchmark and compute technical indicators."""
     nav_df = load_nav_history(scheme_code, cache_dir=cache_dir)
     nifty_df = load_nifty50_benchmark(project_root=project_root)
 
     merged = pd.merge(nav_df, nifty_df, on="date", how="inner")
     merged = merged.sort_values("date").reset_index(drop=True)
+    merged = compute_technical_features(merged, include_sentiment=include_sentiment)
     return merged
 
 

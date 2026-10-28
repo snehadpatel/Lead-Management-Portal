@@ -13,6 +13,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+import numpy as np
 
 
 def main():
@@ -23,7 +24,7 @@ def main():
     train_parser = subparsers.add_parser("train", help="Train AI/DL models")
     train_parser.add_argument(
         "--engine",
-        choices=["all", "lstm", "leads", "clustering", "sentiment"],
+        choices=["all", "bilstm", "lstm", "leads", "clustering", "sentiment"],
         default="all",
         help="Which model engine to train (default: all)",
     )
@@ -59,6 +60,12 @@ def main():
             results = train_all(include_lstm=True)
             print("\nSaved artifacts:")
             print(json.dumps(results, indent=2))
+        elif args.engine == "bilstm":
+            from lume_platform.ml.phase2_trainer import train_phase2_engine
+            print(f"🚀 Training Phase 2 BiLSTM+Attention Forecaster for scheme {args.scheme}...")
+            res = train_phase2_engine(primary_scheme=args.scheme)
+            print("\nFull Model Metrics:")
+            print(json.dumps(res["full_model"], indent=2))
         elif args.engine == "lstm":
             from lume_platform.ml.lstm_trainer import train_lstm_forecaster
             print(f"🚀 Training PyTorch LSTM Forecaster for scheme {args.scheme}...")
@@ -88,10 +95,21 @@ def main():
         result = forecaster.forecast(history)
         print(f"\n🔮 5-Day Forecast for Scheme {args.scheme} (Source: {result.get('model_source')}):")
         print(f"   Last NAV: ₹{result.get('historical_last'):.2f}")
-        print(f"   Predicted Trajectory: {result.get('forecast_trajectory')}")
-        print(f"   90% Confidence Lower: {result.get('lower_bound')}")
-        print(f"   90% Confidence Upper: {result.get('upper_bound')}")
+        if result.get("p10") and result.get("p50") and result.get("p90"):
+            print(f"   P10 (Lower Quantile): {result.get('p10')}")
+            print(f"   P50 (Median Forecast): {result.get('p50')}")
+            print(f"   P90 (Upper Quantile): {result.get('p90')}")
+        else:
+            print(f"   Predicted Trajectory: {result.get('forecast_trajectory')}")
+            print(f"   90% Confidence Lower: {result.get('lower_bound')}")
+            print(f"   90% Confidence Upper: {result.get('upper_bound')}")
         print(f"   Naive Baseline:       {result.get('baseline_trajectory')}")
+        if result.get("attention_weights"):
+            attn = result["attention_weights"]
+            top_step = int(np.argmax(attn))
+            print(f"   Temporal Attention:   Peak weight ({max(attn):.4f}) at step t-{len(attn) - top_step}")
+        if result.get("quantile_coverage"):
+            print(f"   Quantile Calibration: {result.get('quantile_coverage')}")
         print(f"   Trend: {result.get('trend')} | Confidence: {result.get('confidence_score')}%")
         print(f"   Metric: {result.get('accuracy_metric')}")
         print(f"   Disclaimer: {result.get('disclaimer')}")

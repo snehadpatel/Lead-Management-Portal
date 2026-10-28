@@ -32,16 +32,12 @@ class ModelRegistry:
         self.is_loaded = False
 
     def get_forecaster(self):
-        """Lazy loader for LUMEForecaster."""
+        """Lazy loader for LUMEForecaster (prioritizing Phase 2 BiLSTM+Attention model)."""
         if self.forecaster is None and os.getenv("LUME_ENABLE_FORECASTER", "1") == "1":
-            lstm_path = self.models_dir / "lstm_nav_pattern_predictor.pth"
-            scaler_path = (ARTIFACTS_DIR / "ml_scalers") / "mf_nav_global_scaler.pkl"
             try:
                 from lume_platform.ml.forecaster import LUMEForecaster
-
-                self.forecaster = LUMEForecaster(lstm_path, scaler_path)
-                if lstm_path.is_file() and scaler_path.is_file():
-                    self.forecaster.load()
+                self.forecaster = LUMEForecaster()
+                self.forecaster.load()
             except Exception as e:
                 print(f"⚠️ Failed to lazy-load forecaster: {e}")
                 self.forecaster = None
@@ -65,14 +61,11 @@ class ModelRegistry:
         self.sentiment_bundle = self._load_pickle("sentiment_bundle.pkl")
 
         if os.getenv("LUME_ENABLE_FORECASTER", "1") == "1":
-            lstm_path = self.models_dir / "lstm_nav_pattern_predictor.pth"
-            scaler_path = (ARTIFACTS_DIR / "ml_scalers") / "mf_nav_global_scaler.pkl"
             try:
                 from lume_platform.ml.forecaster import LUMEForecaster
 
-                self.forecaster = LUMEForecaster(lstm_path, scaler_path)
-                if lstm_path.is_file() and scaler_path.is_file():
-                    self.forecaster.load()
+                self.forecaster = LUMEForecaster()
+                self.forecaster.load()
             except Exception as e:
                 print(f"⚠️ Failed to initialize forecaster: {e}")
                 self.forecaster = None

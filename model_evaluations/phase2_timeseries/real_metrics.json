@@ -1,0 +1,137 @@
+{
+  "scheme_code": "100119",
+  "model_architecture": "BiLSTM + Temporal Multihead Attention (Quantile Pinball)",
+  "features": [
+    "nav",
+    "nav_return",
+    "nifty_close",
+    "nifty_volatility",
+    "nifty_volume",
+    "rsi",
+    "sma20_dev"
+  ],
+  "data_split": {
+    "total_rows": 735,
+    "train_rows": 514,
+    "val_rows": 110,
+    "test_rows": 111,
+    "train_date_range": [
+      "2023-02-21",
+      "2025-03-27"
+    ],
+    "val_date_range": [
+      "2025-03-28",
+      "2025-09-08"
+    ],
+    "test_date_range": [
+      "2025-09-09",
+      "2026-02-20"
+    ],
+    "target_train_min": 318.103,
+    "target_train_max": 517.116,
+    "X_train_shape": [
+      480,
+      30,
+      7
+    ],
+    "X_val_shape": [
+      76,
+      30,
+      7
+    ],
+    "X_test_shape": [
+      77,
+      30,
+      7
+    ],
+    "features": [
+      "nav",
+      "nav_return",
+      "nifty_close",
+      "nifty_volatility",
+      "nifty_volume",
+      "rsi",
+      "sma20_dev"
+    ],
+    "lookback": 30,
+    "horizon": 5
+  },
+  "full_model": {
+    "rmse": 10.5496,
+    "mae": 9.6783,
+    "mape": 1.82,
+    "directional_accuracy_pct": 46.75,
+    "quantile_coverage_pct": 100.0,
+    "nominal_coverage_pct": 80.0,
+    "mean_interval_width": 42.07
+  },
+  "baselines": {
+    "naive_last_value": {
+      "rmse": 3.7565,
+      "mae": 2.983,
+      "mape": 0.56,
+      "directional_accuracy_pct": 0.0,
+      "quantile_coverage_pct": 91.69,
+      "nominal_coverage_pct": 80.0,
+      "mean_interval_width": 13.08
+    },
+    "arima_3_1_0": {
+      "rmse": 3.8963,
+      "mae": 3.0535,
+      "mape": 0.58,
+      "directional_accuracy_pct": 53.25,
+      "quantile_coverage_pct": 89.35,
+      "nominal_coverage_pct": 80.0,
+      "mean_interval_width": 12.27
+    },
+    "phase1_univariate_lstm": {
+      "rmse": 10.91,
+      "mae": 9.83,
+      "mape": 1.84,
+      "directional_accuracy_pct": 53.33,
+      "quantile_coverage_pct": 74.5,
+      "nominal_coverage_pct": 80.0,
+      "mean_interval_width": 26.4
+    }
+  },
+  "ablations": {
+    "no_attention": {
+      "rmse": 13.221,
+      "mae": 11.8181,
+      "mape": 2.22,
+      "directional_accuracy_pct": 46.75,
+      "quantile_coverage_pct": 99.22,
+      "nominal_coverage_pct": 80.0,
+      "mean_interval_width": 41.18
+    },
+    "unidirectional_lstm": {
+      "rmse": 12.0669,
+      "mae": 11.4012,
+      "mape": 2.14,
+      "directional_accuracy_pct": 46.75,
+      "quantile_coverage_pct": 100.0,
+      "nominal_coverage_pct": 80.0,
+      "mean_interval_width": 44.24
+    },
+    "no_exogenous_univariate": {
+      "rmse": 14.3502,
+      "mae": 12.7523,
+      "mape": 2.39,
+      "directional_accuracy_pct": 46.75,
+      "quantile_coverage_pct": 100.0,
+      "nominal_coverage_pct": 80.0,
+      "mean_interval_width": 70.43
+    }
+  },
+  "cross_category_generalization": {
+    "100119": {
+      "rmse": 10.5496,
+      "mae": 9.6783,
+      "mape": 1.82,
+      "directional_accuracy_pct": 46.75,
+      "quantile_coverage_pct": 100.0,
+      "nominal_coverage_pct": 80.0,
+      "mean_interval_width": 42.07
+    }
+  }
+}

@@ -32,7 +32,7 @@ def test_forecast_api_success(client):
     data = response.json()
 
     assert "model_source" in data
-    assert data["model_source"] in ("lstm", "fallback")
+    assert data["model_source"] in ("bilstm_attention", "lstm", "fallback")
     assert len(data["forecast_trajectory"]) == 5
     assert data["historical_last"] == history[-1]
     assert data["horizon_days"] == 5
