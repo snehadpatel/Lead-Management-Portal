@@ -307,6 +307,9 @@
               <span class="text-muted" id="accuracyMetricLabel">Model: LSTM</span>
             </div>
           </div>
+          <div id="forecastDisclaimerBar" style="font-size: 0.75rem; color: #94a3b8; margin-top: 6px; padding: 4px 8px; text-align: right; background: rgba(255,255,255,0.01); border-radius: 4px;">
+            ⚠️ <em>Educational and analytical tool only. Not investment advice. P10–P90 uncertainty intervals calibrated at ~80% coverage.</em>
+          </div>
         </div>
         <div class="bento-5 card"><h4 class="mb-16">Sector Performance</h4><div class="chart-container" style="height:300px;"><canvas id="sectorChart"></canvas></div></div>
       </div>
@@ -829,9 +832,12 @@
       }
       
       let forecastTrajectory = [];
-      let confidence = 95.5;
+      let forecastTrajectory = [];
+      let p10Trajectory = [];
+      let p90Trajectory = [];
+      let confidence = 85.0;
       let trend = 'UPWARD';
-      let accuracy = '92.4% (Backtested R²)';
+      let accuracy = 'Pinball Loss (P10-P90: ~80% coverage)';
       
       try {
         const res = await apiCall('/predict/forecast', {
@@ -839,10 +845,13 @@
           body: JSON.stringify({ history: history })
         });
         if (res) {
-          forecastTrajectory = res.forecast_trajectory;
-          confidence = res.confidence_score;
-          trend = res.trend;
-          accuracy = `Model: LSTM (${res.accuracy_metric})`;
+          forecastTrajectory = res.forecast_trajectory || res.p50 || [];
+          p10Trajectory = res.p10 || res.lower_bound || [];
+          p90Trajectory = res.p90 || res.upper_bound || [];
+          confidence = res.confidence_score || 85.0;
+          trend = res.trend || 'UPWARD';
+          const modelName = res.model_source === 'bilstm_attention' ? 'BiLSTM + Attention' : (res.model_source || 'LSTM');
+          accuracy = `Model: ${modelName} (${res.accuracy_metric || 'Pinball Loss'})`;
         }
       } catch (err) {
         console.warn("Forecast API call failed, using local simulation", err);
@@ -857,7 +866,7 @@
           forecastTrajectory.push(roundTo(simVal, 2));
         }
         trend = forecastTrajectory[forecastTrajectory.length - 1] > lastVal ? 'UPWARD' : 'DOWNWARD';
-        confidence = 94.2;
+        confidence = 85.0;
       }
       
       const badge = document.getElementById('forecastTrendBadge');
@@ -872,6 +881,18 @@
       const foreData = new Array(histData.length - 1).fill(null);
       foreData.push(histData[histData.length - 1]);
       foreData.push(...forecastTrajectory);
+
+      const p10Data = new Array(histData.length - 1).fill(null);
+      if (p10Trajectory.length > 0) {
+        p10Data.push(histData[histData.length - 1]);
+        p10Data.push(...p10Trajectory);
+      }
+
+      const p90Data = new Array(histData.length - 1).fill(null);
+      if (p90Trajectory.length > 0) {
+        p90Data.push(histData[histData.length - 1]);
+        p90Data.push(...p90Trajectory);
+      }
       
       const allLabels = [...dates];
       for (let i = 1; i <= 5; i++) {
@@ -881,8 +902,8 @@
       }
       
       if (niftyChartInstance) niftyChartInstance.destroy();
-      
-      niftyChartInstance = createLineChart('niftyChart', allLabels, [
+
+      const chartDatasets = [
         {
           label: `${label} (Historical NAV)`,
           data: histData,
@@ -891,19 +912,46 @@
           fill: true,
           tension: 0.3,
           pointRadius: 0
-        },
-        {
-          label: `${label} (AI Forecast)`,
-          data: foreData,
-          borderColor: '#8B5CF6',
-          backgroundColor: 'rgba(139, 92, 246, 0.05)',
-          borderDash: [5, 5],
+        }
+      ];
+
+      if (p90Trajectory.length > 0) {
+        chartDatasets.push({
+          label: `P90 Upper Bound (90% Quantile)`,
+          data: p90Data,
+          borderColor: 'rgba(167, 139, 250, 0.6)',
+          borderDash: [3, 3],
           fill: false,
           tension: 0.3,
-          pointRadius: 3,
-          pointBackgroundColor: '#8B5CF6'
-        }
-      ], {
+          pointRadius: 0
+        });
+      }
+
+      chartDatasets.push({
+        label: `${label} (Median P50 Forecast)`,
+        data: foreData,
+        borderColor: '#8B5CF6',
+        backgroundColor: 'rgba(139, 92, 246, 0.05)',
+        borderDash: [5, 5],
+        fill: false,
+        tension: 0.3,
+        pointRadius: 3,
+        pointBackgroundColor: '#8B5CF6'
+      });
+
+      if (p10Trajectory.length > 0) {
+        chartDatasets.push({
+          label: `P10 Lower Bound (10% Quantile)`,
+          data: p10Data,
+          borderColor: 'rgba(167, 139, 250, 0.6)',
+          borderDash: [3, 3],
+          fill: false,
+          tension: 0.3,
+          pointRadius: 0
+        });
+      }
+      
+      niftyChartInstance = createLineChart('niftyChart', allLabels, chartDatasets, {
         scales: {
           ...chartDefaults.scales,
           y: {

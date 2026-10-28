@@ -4,15 +4,18 @@ PYTHON ?= python3
 PORT ?= 8000
 STREAMLIT_PORT ?= 8501
 
-.PHONY: help train train-lstm train-all test leakage-test api dashboard clean
+.PHONY: help train train-lstm train-all test leakage-test api dashboard run start clean
 
 help:
 	@echo "Available commands:"
-	@echo "  make train-lstm    Train PyTorch LSTM forecaster on real NAV data"
-	@echo "  make train-all     Train all models (Leads, Clustering, NLP, LSTM)"
+	@echo "  make run           Launch both frontend (3000) and backend (8000) together"
+	@echo "  make train-bilstm  Train PyTorch BiLSTM + Attention quantile forecaster"
+	@echo "  make train-lstm    Train legacy PyTorch LSTM forecaster on NAV data"
+	@echo "  make train-all     Train all models (Leads, Clustering, NLP, BiLSTM)"
 	@echo "  make test          Run pytest suite"
+	@echo "  make test-phase2   Run Phase 2 BiLSTM + Attention test suite"
 	@echo "  make leakage-test  Run data leakage unit tests"
-	@echo "  make api           Start FastAPI backend"
+	@echo "  make api           Start FastAPI backend only"
 	@echo "  make dashboard     Start Streamlit dashboard"
 	@echo "  make clean         Clean cache and temp files"
 
@@ -39,6 +42,11 @@ forecast:
 
 api:
 	uvicorn api.main_enhanced:app --host 0.0.0.0 --port $(PORT) --reload
+
+run:
+	$(PYTHON) run.py
+
+start: run
 
 dashboard:
 	PYTHONPATH=src streamlit run streamlit_app.py --server.port $(STREAMLIT_PORT)

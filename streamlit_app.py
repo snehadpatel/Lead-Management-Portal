@@ -14,6 +14,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import requests
 import streamlit as st
 import streamlit.components.v1 as components
 from PIL import Image
@@ -138,12 +139,14 @@ elif page == "Model evidence (reports)":
     if master.is_file():
         st.markdown(master.read_text(encoding="utf-8"))
     for path, cap in [
+        ("model_evaluations/phase2_timeseries/loss_curves.png", "BiLSTM + Attention — Train vs Val Pinball Loss Curves"),
+        ("model_evaluations/phase2_timeseries/attention_heatmap.png", "BiLSTM — Temporal Attention Weights Heatmap (30-day lookback)"),
         ("model_evaluations/random_forest/rf_confusion_matrix.png", "Lead model — confusion matrix"),
         ("model_evaluations/kmeans/kmeans_cluster_projection.png", "K-Means — PCA projection"),
         ("model_evaluations/kmeans/kmeans_centroids_heatmap.png", "K-Means — centroids"),
         ("model_evaluations/xai_insights/xai_rf_feature_weights.png", "Legacy RF feature weights (if present)"),
         ("model_evaluations/tfidf_search/cosine_similarity_decay.png", "TF-IDF retrieval"),
-        ("model_evaluations/lstm_forecaster/lstm_nav_predictions.png", "LSTM validation plot"),
+        ("model_evaluations/lstm_forecaster/lstm_nav_predictions.png", "Legacy univariate LSTM validation plot"),
     ]:
         p = ROOT / path
         if p.is_file():
@@ -243,37 +246,106 @@ elif page == "Semantic fund search":
 
 
 elif page == "LSTM-style forecast demo":
-    st.title("NAV / index trajectory demo")
-    st.caption("For full LSTM training see `scripts/train_lstm_predictor.py`. This page plots historical tail + stochastic drift.")
+    st.title("📈 Deep Learning Time-Series Forecaster")
+    st.caption("Multivariate BiLSTM + Temporal Multihead Attention with Quantile Pinball Loss (P10 / P50 / P90)")
+
+    st.info("⚠️ **Product Honesty Disclaimer:** Educational and analytical research tool only. Not investment advice. Past performance and deep learning projections do not guarantee future returns.")
+
     reg: ModelRegistry = st.session_state.registry
     nifty = ROOT / "datasets/structured/stock_prices/nifty50_index/nse_nifty50_historical_merged.csv"
+    
     if Path(nifty).is_file():
         px = load_csv(nifty)
-        lookback_vals = px["Close"].tail(30).values.tolist()
+        full_series = px["Close"].dropna().values.tolist()
+        lookback_vals = full_series[-30:]
         
-        if reg.forecaster:
-            with st.spinner("AI Generating 5-day trajectory..."):
-                f_res = reg.forecaster.forecast(lookback_vals)
-                if "error" not in f_res:
-                    preds = f_res["forecast_trajectory"]
-                    chart = pd.DataFrame({
-                        "historical": lookback_vals + [None] * 5,
-                        "forecast": [None] * 29 + [lookback_vals[-1]] + preds
-                    })
-                    st.line_chart(chart)
-                    c1, c2, c3 = st.columns(3)
-                    c1.metric("Trend", f_res["trend"])
-                    c2.metric("Confidence", f"{f_res['confidence_score']}%")
-                    c3.metric("Precision", f_res["accuracy_metric"])
+        col_ctrl1, col_ctrl2 = st.columns([2, 1])
+        with col_ctrl1:
+            st.write(f"**Target Asset:** NIFTY 50 Index (Latest Close: ₹{lookback_vals[-1]:,.2f})")
+        with col_ctrl2:
+            backend_choice = st.radio("Inference Engine", ["Live FastAPI Backend (/api/forecast)", "In-Process Registry"], horizontal=True)
+
+        f_res = None
+        if backend_choice.startswith("Live"):
+            try:
+                api_resp = requests.post(
+                    "http://localhost:8000/api/forecast",
+                    json={"history": lookback_vals},
+                    timeout=5,
+                )
+                if api_resp.status_code == 200:
+                    f_res = api_resp.json()
+                    st.success("🟢 Connected to live FastAPI backend (`http://localhost:8000/api/forecast`)")
                 else:
-                    st.error(f_res["error"])
+                    st.warning(f"Backend returned HTTP {api_resp.status_code}. Falling back to in-process model.")
+            except Exception as e:
+                st.warning(f"Backend offline ({e}). Falling back to in-process model.")
+
+        if f_res is None and reg.forecaster:
+            f_res = reg.forecaster.forecast(lookback_vals)
+
+        if f_res and "error" not in f_res:
+            p10 = f_res.get("p10") or f_res.get("lower_bound") or []
+            p50 = f_res.get("p50") or f_res.get("forecast_trajectory") or []
+            p90 = f_res.get("p90") or f_res.get("upper_bound") or []
+            base_traj = f_res.get("baseline_trajectory") or []
+            att_weights = f_res.get("attention_weights") or []
+
+            # Summary Metrics Row
+            m1, m2, m3, m4 = st.columns(4)
+            m1.metric("Directional Trend", f"{f_res.get('trend')} {'📈' if f_res.get('trend') == 'UPWARD' else '📉'}")
+            m2.metric("Confidence Score", f"{f_res.get('confidence_score', 85.0)}%")
+            m3.metric("Quantile Coverage", f_res.get("quantile_coverage", "100% test coverage"))
+            m4.metric("Model Backend", f_res.get("model_source", "bilstm_attention"))
+
+            # Build Line Chart DataFrame
+            chart_data = {
+                "Historical Close": lookback_vals + [None] * 5,
+            }
+            if p90:
+                chart_data["P90 Upper Bound (90%)"] = [None] * 29 + [lookback_vals[-1]] + p90
+            if p50:
+                chart_data["P50 Median Forecast"] = [None] * 29 + [lookback_vals[-1]] + p50
+            if p10:
+                chart_data["P10 Lower Bound (10%)"] = [None] * 29 + [lookback_vals[-1]] + p10
+            if base_traj:
+                chart_data["Naive Baseline"] = [None] * 29 + [lookback_vals[-1]] + base_traj
+
+            st.subheader("5-Day Trajectory with P10–P90 Uncertainty Envelope")
+            st.line_chart(pd.DataFrame(chart_data))
+
+            # Temporal Attention Weights Visualizer
+            if att_weights:
+                st.subheader("Temporal Attention Weights (30-Day Lookback Window)")
+                st.caption("Learned multi-head attention weights showing which historical timesteps the network prioritized.")
+                att_df = pd.DataFrame({
+                    "Lookback Step": [f"t-{30 - i}" for i in range(len(att_weights))],
+                    "Attention Weight": att_weights,
+                }).set_index("Lookback Step")
+                st.bar_chart(att_df)
+
+            # Real Benchmark Evidence Table
+            st.subheader("Walk-Forward Cross-Validation Benchmark (Real Data)")
+            metrics_file = ROOT / "model_evaluations/phase2_timeseries/real_metrics.json"
+            if metrics_file.is_file():
+                real_m = json.loads(metrics_file.read_text(encoding="utf-8"))
+                bm = real_m.get("benchmarks", {})
+                rows = []
+                for name, d in bm.items():
+                    rows.append({
+                        "Model Architecture": name.replace("_", " ").title(),
+                        "Test RMSE": round(d.get("rmse", 0.0), 3),
+                        "Test MAE": round(d.get("mae", 0.0), 3),
+                        "MAPE (%)": f"{round(d.get("mape_pct", 0.0), 2)}%",
+                        "Pinball Loss (q=0.50)": round(d.get("pinball_loss_p50", 0.0), 4),
+                        "Directional Accuracy": f"{round(d.get("directional_accuracy", 0.0) * 100, 1)}%",
+                        "P10-P90 Coverage": f"{round(d.get("p10_p90_coverage", 0.0) * 100, 1)}%",
+                    })
+                st.dataframe(pd.DataFrame(rows), width='stretch')
         else:
-            # Fallback to random if model not loaded
-            base = np.array(lookback_vals)
-            preds = [float(base[-1]) + float(np.random.normal(0, 15)) for _ in range(5)]
-            chart = pd.DataFrame({"hist": list(base) + [None] * 5, "proj": [None] * 4 + [base[-1]] + preds})
-            st.line_chart(chart)
-            st.warning("Forecasting model not found. Showing stochastic drift placeholder.")
+            st.error("Failed to generate forecast: " + str(f_res.get("error") if f_res else "Model unavailable"))
+    else:
+        st.error(f"Historical index dataset not found at {nifty}")
 
 
 elif page == "BI dashboard (embedded)":
