@@ -21,6 +21,9 @@ help:
 	@echo "  make dashboard     Start Streamlit dashboard"
 	@echo "  make clean         Clean cache and temp files"
 
+train-mlp:
+	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) src/lume_platform/ml/mlp_trainer.py
+
 train-vision:
 	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) src/lume_platform/vision/trainer.py
 
@@ -35,6 +38,9 @@ train-all:
 
 test:
 	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m pytest tests/ -v
+
+test-phase4:
+	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m pytest tests/test_phase4_dl_lab.py -v
 
 test-phase3:
 	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m pytest tests/test_phase3_vision.py -v

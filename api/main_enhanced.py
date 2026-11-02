@@ -2169,6 +2169,49 @@ def classify_vision_pattern(request: VisionPatternRequest):
         raise HTTPException(status_code=500, detail=f"Vision classification failed: {str(e)}")
 
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# Phase 4 Deep Learning Lab Endpoints
+# ═══════════════════════════════════════════════════════════════════════════════
+
+_dl_lab_service = None
+
+def get_dl_lab_service():
+    global _dl_lab_service
+    if _dl_lab_service is None:
+        from lume_platform.ml.dl_lab_service import DLLabService
+        _dl_lab_service = DLLabService.get_instance()
+    return _dl_lab_service
+
+
+@app.get("/api/dl-lab/comparison", tags=["Deep Learning Lab"])
+def get_dl_lab_comparison():
+    """Phase 4: Side-by-side real metrics and confusion matrices comparing Random Forest and LeadMLP."""
+    service = get_dl_lab_service()
+    return service.get_comparison_metrics()
+
+
+@app.get("/api/dl-lab/training-history", tags=["Deep Learning Lab"])
+def get_dl_lab_training_history():
+    """Phase 4: Epoch-by-epoch genuine training and validation loss curves for LeadMLP."""
+    service = get_dl_lab_service()
+    return service.get_training_history()
+
+
+@app.post("/api/dl-lab/predict-lead", tags=["Deep Learning Lab"])
+def predict_dl_lab_lead(payload: Dict[str, Any]):
+    """Phase 4: Live dual prediction on Random Forest and LeadMLP with latency measurement and feature explanations."""
+    service = get_dl_lab_service()
+    return service.predict_dual(payload)
+
+
+@app.get("/api/dl-lab/metadata", tags=["Deep Learning Lab"])
+def get_dl_lab_metadata():
+    """Phase 4: Model versions, parameters, dataset provenance, and honest limitations."""
+    service = get_dl_lab_service()
+    return service.get_metadata()
+
+
+
 
 @app.get("/predict/explain/{lead_id}", tags=["Predictions"])
 def explain_lead_scoring(lead_id: str):

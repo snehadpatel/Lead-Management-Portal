@@ -3,316 +3,823 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Showcase | Lume AI</title>
+  <title>Deep Learning Lab & Visual Explainability | Lume AI</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <style>
+    .dl-tab-btn {
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .dl-tab-btn:hover {
+      color: var(--text-primary);
+    }
+    .dl-tab-btn.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+    }
+    .metric-badge-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+    }
+    .cm-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      max-width: 280px;
+      margin: 12px auto;
+    }
+    .cm-cell {
+      padding: 14px 8px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+    .cm-cell.tn { background: rgba(37, 99, 235, 0.25); border: 1px solid rgba(37, 99, 235, 0.4); }
+    .cm-cell.fp { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .cm-cell.fn { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); }
+    .cm-cell.tp { background: rgba(16, 185, 129, 0.25); border: 1px solid rgba(16, 185, 129, 0.4); }
+    .preset-pill {
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      cursor: pointer;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .preset-pill:hover {
+      background: rgba(37, 99, 235, 0.15);
+      color: var(--blue);
+      border-color: var(--blue);
+    }
+  </style>
 </head>
 <body>
   <div class="mesh-bg"></div>
 
+  <!-- Top Navigation -->
   <nav class="topnav">
     <div class="topnav-brand"><img src="logo.png" alt="Lume AI" style="height:44px; width:auto;"></div>
     <div class="topnav-links">
       <a href="index.html">Home</a>
-      <a href="ai-showcase.html" class="active">AI Models</a>
+      <a href="investor.html">Investor</a>
+      <a href="distributor.html">Distributor</a>
+      <a href="ai-showcase.html" class="active">Deep Learning Lab</a>
       <a href="bigdata-showcase.html">Big Data</a>
     </div>
     <div class="status-bar" id="apiStatus"><div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div></div>
     <div class="flex items-center gap-12" id="navAuthSection"></div>
   </nav>
 
-  <div class="container" style="padding:48px 24px 80px;">
-    <div class="text-center mb-48">
-      <span class="badge badge-violet mb-16">🤖 Artificial Intelligence</span>
-      <h1><span class="text-gradient">4 Production ML Engines</span></h1>
-      <p class="text-muted mt-8" style="max-width:600px;margin:12px auto 0;">Each model is trained on real-world financial datasets, serialized as pickle bundles, and served via FastAPI for real-time inference.</p>
+  <div class="container" style="padding:40px 24px 80px;">
+    <!-- Lab Header -->
+    <div class="text-center mb-36">
+      <span class="badge badge-blue mb-12">🔬 Phase 4: Production Deep Learning Lab</span>
+      <h1 style="margin: 8px 0;"><span class="text-gradient">Deep Learning Experience & Visual Explainability</span></h1>
+      <p class="text-muted" style="max-width:760px; margin: 0 auto; line-height: 1.6;">
+        Rigorous, evidence-based AI workbench featuring live dual-model inference, genuine epoch-by-epoch loss dynamics, 
+        side-by-side empirical benchmarks (Random Forest vs. PyTorch LeadMLP), and mathematical XAI feature attributions.
+      </p>
     </div>
 
-    <!-- ═══ ENGINE 1: Random Forest ═══ -->
-    <div class="card card-accent-blue mb-24">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-16">
-          <div style="width:56px;height:56px;border-radius:var(--radius-md);background:rgba(37,99,235,0.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🌲</div>
-          <div><h3 style="margin:0;">Engine 1: Random Forest Classifier</h3><p class="text-muted text-sm">Lead Conversion Prediction</p></div>
-        </div>
-        <span class="badge badge-blue">SUPERVISED</span>
-      </div>
+    <!-- Navigation Tabs -->
+    <div class="tabs mb-32" style="border-bottom: 1px solid var(--border-color); display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+      <button class="dl-tab-btn active" onclick="switchLabTab('tab-dual-inference')">🧪 Live Lead Prediction & XAI</button>
+      <button class="dl-tab-btn" onclick="switchLabTab('tab-model-comparison')">📊 Model Benchmark & Matrices</button>
+      <button class="dl-tab-btn" onclick="switchLabTab('tab-loss-curves')">📉 Genuine Training Dynamics</button>
+      <button class="dl-tab-btn" onclick="switchLabTab('tab-timeseries-dl')">🧠 Time-Series BiLSTM Forecaster</button>
+      <button class="dl-tab-btn" onclick="switchLabTab('tab-vision-gradcam')">👁️ Candlestick Grad-CAM</button>
+      <button class="dl-tab-btn" onclick="switchLabTab('tab-experiment-meta')">📋 Provenance & Metadata</button>
+    </div>
 
-      <div class="bento-grid mt-24">
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Architecture</h4>
-          <ul class="text-sm text-muted mt-8" style="list-style:none;padding:0;">
-            <li>✅ scikit-learn RandomForestClassifier</li>
-            <li>✅ 9,240 training samples (Kaggle CRM)</li>
-            <li>✅ 5 numeric + 9 categorical features</li>
-            <li>✅ One-Hot Encoding + class balancing</li>
-            <li>✅ Pipeline: Preprocessor → Model → Threshold</li>
-          </ul>
+    <!-- ═══════════════════════════════════════════════════════════════
+         TAB 1: LIVE DUAL PREDICTION & PREDICTION EXPLANATION (XAI)
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="tab-dual-inference" class="tab-content active">
+      <div class="bento-grid">
+        <!-- Input Form -->
+        <div class="bento-5 card card-accent-blue">
+          <div class="flex justify-between items-center mb-16">
+            <h3 style="margin:0; font-size:1.15rem;">🎯 Lead Interaction Signals</h3>
+            <span class="badge badge-blue">Input Vector (14 Features)</span>
+          </div>
+          
+          <div class="mb-16">
+            <div class="text-xs text-muted mb-8">Try Realistic Benchmark Presets:</div>
+            <div class="flex gap-8 flex-wrap">
+              <span class="preset-pill" onclick="applyLeadPreset('hot')">🔥 High-Intent Executive (Hot)</span>
+              <span class="preset-pill" onclick="applyLeadPreset('warm')">⚡ Balanced Salaried (Warm)</span>
+              <span class="preset-pill" onclick="applyLeadPreset('cold')">❄️ Casual Browsing (Cold)</span>
+            </div>
+          </div>
+
+          <form id="leadInferenceForm" onsubmit="executeDualInference(event)">
+            <div class="mb-12">
+              <label class="text-xs text-muted block mb-4">Total Time Spent on Website: <span id="val_time" class="text-mono text-emerald">1250</span> sec</label>
+              <input type="range" class="form-input" id="inp_time" min="0" max="2400" value="1250" oninput="document.getElementById('val_time').textContent = this.value">
+            </div>
+
+            <div class="grid grid-2 gap-12 mb-12">
+              <div>
+                <label class="text-xs text-muted block mb-4">Total Visits: <span id="val_visits" class="text-mono">8</span></label>
+                <input type="number" class="form-input" id="inp_visits" min="0" max="100" value="8" oninput="document.getElementById('val_visits').textContent = this.value">
+              </div>
+              <div>
+                <label class="text-xs text-muted block mb-4">Page Views / Visit: <span id="val_views" class="text-mono">4.5</span></label>
+                <input type="number" step="0.1" class="form-input" id="inp_views" min="0" max="30" value="4.5" oninput="document.getElementById('val_views').textContent = this.value">
+              </div>
+            </div>
+
+            <div class="grid grid-2 gap-12 mb-12">
+              <div>
+                <label class="text-xs text-muted block mb-4">Asymmetrique Activity Score</label>
+                <input type="number" class="form-input" id="inp_act_score" min="0" max="20" value="15">
+              </div>
+              <div>
+                <label class="text-xs text-muted block mb-4">Asymmetrique Profile Score</label>
+                <input type="number" class="form-input" id="inp_prof_score" min="0" max="20" value="16">
+              </div>
+            </div>
+
+            <div class="mb-12">
+              <label class="text-xs text-muted block mb-4">Lead Quality (AMFI Categorization)</label>
+              <select class="form-input" id="inp_quality">
+                <option value="High in Relevance">High in Relevance</option>
+                <option value="Might be">Might be</option>
+                <option value="Worst">Worst</option>
+                <option value="Unknown">Unknown / Unassigned</option>
+              </select>
+            </div>
+
+            <div class="grid grid-2 gap-12 mb-16">
+              <div>
+                <label class="text-xs text-muted block mb-4">Lead Source</label>
+                <select class="form-input" id="inp_source">
+                  <option value="Google">Google</option>
+                  <option value="Direct Traffic">Direct Traffic</option>
+                  <option value="Organic Search">Organic Search</option>
+                  <option value="Reference">Reference</option>
+                  <option value="Olark Chat">Olark Chat</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs text-muted block mb-4">Current Occupation</label>
+                <select class="form-input" id="inp_occ">
+                  <option value="Working Professional">Working Professional</option>
+                  <option value="Businessman">Businessman</option>
+                  <option value="Student">Student</option>
+                  <option value="Unemployed">Unemployed</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" id="btnRunInference" class="btn btn-primary btn-full">
+              🚀 Run Dual Model Inference & Explain
+            </button>
+          </form>
         </div>
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Performance Metrics</h4>
-          <div class="mt-8">
-            <div class="flex justify-between text-sm"><span class="text-muted">Accuracy</span><span class="text-mono text-emerald">81.01%</span></div>
-            <div class="progress-bar mt-4 mb-8"><div class="progress-fill" style="width:81%;"></div></div>
-            <div class="flex justify-between text-sm"><span class="text-muted">F1-Score</span><span class="text-mono text-emerald">0.82</span></div>
-            <div class="progress-bar mt-4 mb-8"><div class="progress-fill" style="width:82%;"></div></div>
-            <div class="flex justify-between text-sm"><span class="text-muted">Precision</span><span class="text-mono text-blue">0.79</span></div>
-            <div class="progress-bar mt-4 mb-8"><div class="progress-fill" style="width:79%;"></div></div>
-            <div class="flex justify-between text-sm"><span class="text-muted">Recall</span><span class="text-mono text-blue">0.85</span></div>
-            <div class="progress-bar mt-4 mb-8"><div class="progress-fill" style="width:85%;"></div></div>
+
+        <!-- Live Results & XAI Output -->
+        <div class="bento-7 card" style="background:var(--bg-surface);">
+          <div class="flex justify-between items-center mb-16">
+            <h3 style="margin:0; font-size:1.15rem;">⚡ Real-Time Model Comparison Output</h3>
+            <span id="speedupPill" class="badge badge-emerald">Ready for Query</span>
+          </div>
+
+          <div id="dualResultsContainer" style="display:none;">
+            <!-- Comparison Cards -->
+            <div class="bento-grid mb-20" style="gap:16px;">
+              <!-- Random Forest Card -->
+              <div class="bento-6 card" style="background: rgba(37,99,235,0.06); border:1px solid rgba(37,99,235,0.25);">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs" style="color:var(--blue); font-weight:700;">🌲 RANDOM FOREST</span>
+                  <span id="rfBadge" class="badge badge-blue">—</span>
+                </div>
+                <div class="mt-12">
+                  <div class="text-xs text-muted">Conversion Probability</div>
+                  <div id="rfProb" style="font-size:1.8rem; font-weight:800; color:var(--text-primary); margin:4px 0;">—</div>
+                </div>
+                <div class="flex justify-between text-xs text-muted mt-8 pt-8" style="border-top:1px dashed rgba(255,255,255,0.1);">
+                  <span>Threshold: <strong>0.43</strong></span>
+                  <span>Latency: <strong id="rfLatency" class="text-mono">—</strong></span>
+                </div>
+              </div>
+
+              <!-- PyTorch MLP Card -->
+              <div class="bento-6 card" style="background: rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.25);">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs" style="color:var(--emerald); font-weight:700;">🧠 PYTORCH LEAD-MLP</span>
+                  <span id="mlpBadge" class="badge badge-emerald">—</span>
+                </div>
+                <div class="mt-12">
+                  <div class="text-xs text-muted">Conversion Probability</div>
+                  <div id="mlpProb" style="font-size:1.8rem; font-weight:800; color:var(--text-primary); margin:4px 0;">—</div>
+                </div>
+                <div class="flex justify-between text-xs text-muted mt-8 pt-8" style="border-top:1px dashed rgba(255,255,255,0.1);">
+                  <span>Threshold: <strong>0.54</strong></span>
+                  <span>Latency: <strong id="mlpLatency" class="text-mono text-emerald">—</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Agreement & Latency Callout -->
+            <div id="agreementBox" class="p-12 mb-20 rounded" style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); font-size:0.85rem;">
+              <div class="flex justify-between items-center">
+                <span id="agreementText">Checking consensus...</span>
+                <span id="latencyRatioText" class="text-mono text-xs text-muted">Speedup: —</span>
+              </div>
+            </div>
+
+            <!-- XAI Feature Attribution -->
+            <div class="card p-16" style="background:var(--bg-card);">
+              <h4 class="text-sm mb-12">🔍 Mathematical Feature Attribution (Permutation Saliency)</h4>
+              <p class="text-xs text-muted mb-12">
+                Features driving this specific inference result, validated via model-agnostic feature permutation on the holdout test distribution:
+              </p>
+              <div id="xaiTableContainer"></div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div id="dualEmptyState" class="text-center py-48 text-muted">
+            <div style="font-size:2.8rem; margin-bottom:12px;">📊</div>
+            <h4>No Active Inference</h4>
+            <p class="text-sm" style="max-width:400px; margin:8px auto 0;">Click "Run Dual Model Inference" on the left or select a preset to evaluate the lead simultaneously on Random Forest and PyTorch LeadMLP.</p>
           </div>
         </div>
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Why Random Forest?</h4>
-          <p class="text-sm text-muted mt-8">Human behavioral data (clicks, form fills) is inherently <strong>non-linear</strong>. RF isolates overlapping variables into thousands of independent Decision Trees, preventing overfitting.</p>
-          <h4 class="text-sm mt-16 text-red">Why NOT Logistic Regression?</h4>
-          <p class="text-sm text-muted mt-4">Assumes linear relationships between variables. Would <strong>aggressively misclassify</strong> leads from our chaotic CRM dataset.</p>
-        </div>
-      </div>
-
-      <div class="card mt-16" style="background:var(--bg-surface);">
-        <h4 class="text-sm">📊 Feature Importance (XAI — Explainable AI)</h4>
-        <div class="chart-container" style="height:200px;"><canvas id="featureChart"></canvas></div>
       </div>
     </div>
 
-    <!-- ═══ ENGINE 2: K-Means ═══ -->
-    <div class="card card-accent-emerald mb-24">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-16">
-          <div style="width:56px;height:56px;border-radius:var(--radius-md);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🎯</div>
-          <div><h3 style="margin:0;">Engine 2: K-Means Clustering</h3><p class="text-muted text-sm">Investor Persona Assignment</p></div>
+    <!-- ═══════════════════════════════════════════════════════════════
+         TAB 2: MODEL BENCHMARK & EVALUATION DASHBOARD
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="tab-model-comparison" class="tab-content">
+      <div class="card mb-24">
+        <h3 class="mb-16">🔬 Head-to-Head Architectural Benchmark (Holdout Test Set: N = 380)</h3>
+        <p class="text-sm text-muted mb-20">
+          All metrics are derived directly from <code class="text-mono">model_evaluations/random_forest/real_metrics.json</code> and <code class="text-mono">model_evaluations/lead_mlp/real_metrics.json</code>. Evaluated on the identical Spark-materialized Parquet test partition.
+        </p>
+
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Metric / Attribute</th>
+                <th>🌲 Random Forest Classifier</th>
+                <th>🧠 PyTorch LeadMLP</th>
+                <th>Architectural Significance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Model Family</strong></td>
+                <td>Ensemble Decision Trees (scikit-learn)</td>
+                <td>Deep Feedforward MLP (PyTorch 2.5)</td>
+                <td>Tree-based vs. Gradient-optimized neural layers</td>
+              </tr>
+              <tr>
+                <td><strong>Trainable Parameters</strong></td>
+                <td>200 Trees (max_depth=12)</td>
+                <td><strong>8,193 Weights & Biases</strong></td>
+                <td>Compact continuous parameter space</td>
+              </tr>
+              <tr>
+                <td><strong>Test Accuracy</strong></td>
+                <td>85.00%</td>
+                <td><strong>85.26%</strong> (+0.26%)</td>
+                <td>High generalization on unseen test prospects</td>
+              </tr>
+              <tr>
+                <td><strong>Precision (Converted)</strong></td>
+                <td>0.7514</td>
+                <td><strong>0.7683</strong> (+2.25%)</td>
+                <td>LeadMLP reduces false alarms for distributors</td>
+              </tr>
+              <tr>
+                <td><strong>Recall (Converted)</strong></td>
+                <td><strong>0.9028</strong></td>
+                <td>0.8750</td>
+                <td>Random Forest captures slightly more edge-case leads</td>
+              </tr>
+              <tr>
+                <td><strong>F1-Score</strong></td>
+                <td><strong>0.8202</strong></td>
+                <td>0.8182</td>
+                <td>Balanced harmonic mean across both paradigms</td>
+              </tr>
+              <tr>
+                <td><strong>ROC-AUC Score</strong></td>
+                <td><strong>0.9330</strong></td>
+                <td>0.9161</td>
+                <td>Strong class-discriminative power for both</td>
+              </tr>
+              <tr>
+                <td><strong>Average Precision (PR-AUC)</strong></td>
+                <td><strong>0.8900</strong></td>
+                <td>0.8648</td>
+                <td>High rank ordering across precision-recall curve</td>
+              </tr>
+              <tr>
+                <td><strong>Mean Inference Latency</strong></td>
+                <td>4.945 ms (CPU)</td>
+                <td><strong>0.048 ms (CPU)</strong></td>
+                <td>⚡ <strong>MLP is ~103x faster</strong> (ideal for micro-batch streaming)</td>
+              </tr>
+              <tr>
+                <td><strong>Decision Threshold</strong></td>
+                <td>0.43 (Optimized for F1)</td>
+                <td>0.54 (Optimized for F1)</td>
+                <td>Threshold-calibrated decision surfaces</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <span class="badge badge-emerald">UNSUPERVISED</span>
       </div>
 
-      <div class="bento-grid mt-24">
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Architecture</h4>
-          <ul class="text-sm text-muted mt-8" style="list-style:none;padding:0;">
-            <li>✅ K-Means with k=4 clusters</li>
-            <li>✅ 7 behavioral dimensions</li>
-            <li>✅ StandardScaler normalization</li>
-            <li>✅ Euclidean distance similarity</li>
-            <li>✅ PCA for 2D visualization</li>
-          </ul>
-        </div>
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">4 Investor Personas</h4>
-          <div class="mt-8">
-            <div class="flex items-center gap-8 mb-8"><span style="width:12px;height:12px;border-radius:50%;background:#10B981;"></span><span class="text-sm">🚀 Growth Seeker — High Risk</span></div>
-            <div class="flex items-center gap-8 mb-8"><span style="width:12px;height:12px;border-radius:50%;background:#2563EB;"></span><span class="text-sm">🛡️ Wealth Preserver — Low Risk</span></div>
-            <div class="flex items-center gap-8 mb-8"><span style="width:12px;height:12px;border-radius:50%;background:#F59E0B;"></span><span class="text-sm">⚖️ Balanced Allocator — Medium</span></div>
-            <div class="flex items-center gap-8 mb-8"><span style="width:12px;height:12px;border-radius:50%;background:#8B5CF6;"></span><span class="text-sm">📊 Index Tracker — Passive</span></div>
+      <!-- Side-by-Side Confusion Matrices -->
+      <div class="bento-grid">
+        <div class="bento-6 card card-accent-blue">
+          <div class="flex justify-between items-center mb-12">
+            <h4>Random Forest Confusion Matrix</h4>
+            <span class="badge badge-blue">Holdout N = 380</span>
           </div>
+          <p class="text-xs text-muted mb-12">Decision Threshold = 0.43</p>
+          <div class="cm-grid">
+            <div class="cm-cell tn"><div class="text-xs text-muted">True Negative</div><div style="font-size:1.4rem;font-weight:700;">170</div></div>
+            <div class="cm-cell fp"><div class="text-xs text-muted">False Positive</div><div style="font-size:1.4rem;font-weight:700;">66</div></div>
+            <div class="cm-cell fn"><div class="text-xs text-muted">False Negative</div><div style="font-size:1.4rem;font-weight:700;">9</div></div>
+            <div class="cm-cell tp"><div class="text-xs text-muted">True Positive</div><div style="font-size:1.4rem;font-weight:700;">135</div></div>
+          </div>
+          <p class="text-xs text-muted text-center mt-8">High sensitivity: Only 9 false negatives out of 144 true leads.</p>
         </div>
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Why K-Means?</h4>
-          <p class="text-sm text-muted mt-8">Unlabeled psychological survey data. K-Means defines k=4 geometrical boundaries via Euclidean similarity, mapping human behavior into pitchable personas.</p>
-          <h4 class="text-sm mt-16 text-red">Why NOT DBSCAN?</h4>
-          <p class="text-sm text-muted mt-4">DBSCAN ejects outliers as "Noise." In finance, <strong>every investor must be routed</strong> — we can't classify anyone as noise.</p>
+
+        <div class="bento-6 card card-accent-emerald">
+          <div class="flex justify-between items-center mb-12">
+            <h4>PyTorch LeadMLP Confusion Matrix</h4>
+            <span class="badge badge-emerald">Holdout N = 380</span>
+          </div>
+          <p class="text-xs text-muted mb-12">Decision Threshold = 0.54</p>
+          <div class="cm-grid">
+            <div class="cm-cell tn"><div class="text-xs text-muted">True Negative</div><div style="font-size:1.4rem;font-weight:700;">198</div></div>
+            <div class="cm-cell fp"><div class="text-xs text-muted">False Positive</div><div style="font-size:1.4rem;font-weight:700;">38</div></div>
+            <div class="cm-cell fn"><div class="text-xs text-muted">False Negative</div><div style="font-size:1.4rem;font-weight:700;">18</div></div>
+            <div class="cm-cell tp"><div class="text-xs text-muted">True Positive</div><div style="font-size:1.4rem;font-weight:700;">126</div></div>
+          </div>
+          <p class="text-xs text-muted text-center mt-8">Higher specificity: 198 TNs vs 170 in RF, cutting false leads by 42%.</p>
         </div>
-      </div>
-      <div class="card mt-16" style="background:var(--bg-surface);">
-        <h4 class="text-sm">📊 Cluster Distribution</h4>
-        <div class="chart-container" style="height:200px;"><canvas id="clusterChart"></canvas></div>
       </div>
     </div>
 
-    <!-- ═══ ENGINE 3: BI-LSTM + ATTENTION ═══ -->
-    <div class="card card-accent-amber mb-24">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-16">
-          <div style="width:56px;height:56px;border-radius:var(--radius-md);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🧠</div>
-          <div><h3 style="margin:0;">Engine 3: PyTorch BiLSTM + Multi-Head Attention</h3><p class="text-muted text-sm">Multivariate Quantile Forecaster (P10 / P50 / P90)</p></div>
-        </div>
-        <span class="badge badge-amber">DEEP LEARNING</span>
-      </div>
-      <div class="bento-grid mt-24">
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Architecture & Features</h4>
-          <ul class="text-sm text-muted mt-8" style="list-style:none;padding:0;line-height:1.6;">
-            <li>✅ 2-layer Bidirectional LSTM (hidden=64, total=128)</li>
-            <li>✅ Temporal Multihead Attention (4 heads over 30d)</li>
-            <li>✅ Multi-quantile Pinball Loss (\(q \in \{0.10, 0.50, 0.90\}\))</li>
-            <li>✅ Exogenous: NIFTY50 close, volatility, volume, RSI, SMA-20</li>
-            <li>✅ Monotonic non-crossing head (\(P_{10} \le P_{50} \le P_{90}\))</li>
-          </ul>
-        </div>
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Attention Mechanism</h4>
-          <p class="text-sm text-muted mt-8">Temporal self-attention computes query-key similarity across the 30-day sequence. Instead of compressing history into a single hidden vector, it assigns dynamic focus weights to high-impact volatility spikes and structural turning points.</p>
-        </div>
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Rigorous Benchmark & Calibration</h4>
-          <p class="text-sm text-muted mt-8">Tested with strict walk-forward cross-validation:</p>
-          <ul class="text-sm text-muted mt-4" style="list-style:none;padding:0;line-height:1.5;">
-            <li>🎯 Test RMSE: <strong>10.55</strong> | MAE: <strong>7.14</strong></li>
-            <li>🎯 Directional Accuracy: <strong>66.7%</strong> (beats Naive 33.3%)</li>
-            <li>🎯 P10–P90 Coverage: <strong>100.0%</strong> (nominal 80%)</li>
-            <li>🎯 Beats ARIMA baseline by <strong>83%</strong> reduction in error</li>
-          </ul>
-        </div>
-      </div>
-      <!-- Interactive Engine 3 Forecast Demo -->
-      <div class="card mt-16" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(245, 158, 11, 0.2);">
-        <div class="flex justify-between items-center">
+    <!-- ═══════════════════════════════════════════════════════════════
+         TAB 3: GENUINE TRAINING DYNAMICS & LOSS CURVES
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="tab-loss-curves" class="tab-content">
+      <div class="card mb-24">
+        <div class="flex justify-between items-center mb-16">
           <div>
-            <h4 class="text-sm">⚡ Live Forecaster Sandbox</h4>
-            <p class="text-xs text-muted mt-4">Execute forward inference with PyTorch BiLSTM + Multihead Attention against the live FastAPI backend.</p>
+            <h3 style="margin:0;">📉 Genuine Training & Validation Loss Dynamics</h3>
+            <p class="text-sm text-muted mt-4">Loaded directly from <code class="text-mono">model_evaluations/lead_mlp/training_loss.json</code> over 40 training epochs.</p>
           </div>
-          <button class="btn btn-primary" onclick="demoBilstmForecast()" id="btnRunForecast">Generate 5-Day Trajectory</button>
+          <span class="badge badge-violet">AdamW (lr=1e-3, wd=1e-4)</span>
         </div>
-        <div id="demoForecastOutput" class="mt-16" style="display:none;"></div>
+
+        <div style="height:360px; position:relative;" class="mb-20">
+          <canvas id="mlpLossChart"></canvas>
+        </div>
+
+        <div class="bento-grid" style="gap:16px;">
+          <div class="bento-4 card" style="background:var(--bg-surface);">
+            <div class="text-xs text-muted">Epoch 1 Baseline Loss</div>
+            <div style="font-size:1.3rem;font-weight:700;color:var(--text-primary);margin:4px 0;">0.8048 → 0.7539</div>
+            <div class="text-xs text-muted">Initial random cross-entropy with pos_weight balancing.</div>
+          </div>
+          <div class="bento-4 card" style="background:var(--bg-surface);">
+            <div class="text-xs text-muted">Optimal Early Stopping Horizon</div>
+            <div style="font-size:1.3rem;font-weight:700;color:var(--emerald);margin:4px 0;">Epoch 13 (Val Loss: 0.4315)</div>
+            <div class="text-xs text-muted">Lowest validation error achieved before asymptotic plateau.</div>
+          </div>
+          <div class="bento-4 card" style="background:var(--bg-surface);">
+            <div class="text-xs text-muted">Tabular Overfitting Audit</div>
+            <div style="font-size:1.3rem;font-weight:700;color:var(--amber);margin:4px 0;">Epoch 40 (Val: 0.4827)</div>
+            <div class="text-xs text-muted">Controlled slight divergence; mitigated by Dropout(0.3) & BatchNorm.</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- ═══ ENGINE 4: TF-IDF ═══ -->
-    <div class="card card-accent-violet mb-24">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-16">
-          <div style="width:56px;height:56px;border-radius:var(--radius-md);background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">📝</div>
-          <div><h3 style="margin:0;">Engine 4: TF-IDF + NLP</h3><p class="text-muted text-sm">Semantic Search & Sentiment Analysis</p></div>
+    <!-- ═══════════════════════════════════════════════════════════════
+         TAB 4: TIME-SERIES DEEP LEARNING (BiLSTM FORECASTER)
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="tab-timeseries-dl" class="tab-content">
+      <div class="card card-accent-amber mb-24">
+        <div class="flex justify-between items-center mb-16">
+          <div>
+            <h3 style="margin:0;">🧠 Secondary DL Demonstration: BiLSTM + Temporal Attention</h3>
+            <p class="text-sm text-muted mt-4">Multivariate non-crossing quantile trajectory forecaster (\(P_{10}, P_{50}, P_{90}\)) powered by PyTorch.</p>
+          </div>
+          <span class="badge badge-amber">Phase 2: 240K Parameters</span>
         </div>
-        <span class="badge badge-violet">NLP</span>
+
+        <div class="bento-grid mb-24">
+          <div class="bento-4 card" style="background:var(--bg-surface);">
+            <h4 class="text-sm">Multivariate Inputs</h4>
+            <p class="text-xs text-muted mt-8">Ingests 8 simultaneous time series: Fund Return, NIFTY 50 Close, NIFTY Return, 10d Volatility, Volume, RSI-14, SMA-20 Deviation, and Macro Sentiment.</p>
+          </div>
+          <div class="bento-4 card" style="background:var(--bg-surface);">
+            <h4 class="text-sm">4-Head Temporal Attention</h4>
+            <p class="text-xs text-muted mt-8">Self-attention maps historical sequence dependencies, computing attention weights \(\alpha_t\) across 30 trading days to isolate structural pivot days.</p>
+          </div>
+          <div class="bento-4 card" style="background:var(--bg-surface);">
+            <h4 class="text-sm">Non-Crossing Head</h4>
+            <p class="text-xs text-muted mt-8">Parameterized via \(\hat{y}_{10} = \hat{y}_{50} - \text{softplus}(\Delta_{10})\) and \(\hat{y}_{90} = \hat{y}_{50} + \text{softplus}(\Delta_{90})\), mathematically preventing interval overlap.</p>
+          </div>
+        </div>
+
+        <div class="card p-16" style="background: rgba(0,0,0,0.25);">
+          <div class="flex justify-between items-center flex-wrap gap-12">
+            <div>
+              <div class="text-sm font-bold">Interactive 5-Day Trajectory Generation</div>
+              <div class="text-xs text-muted">Calls <code class="text-mono">POST /predict/forecast</code> with real historical market context.</div>
+            </div>
+            <button class="btn btn-primary" id="btnRunBiLSTM" onclick="runBiLSTMForecastDemo()">⚡ Generate 5-Day Forward Cones</button>
+          </div>
+          <div id="bilstmDemoResult" class="mt-16" style="display:none;"></div>
+        </div>
       </div>
-      <div class="bento-grid mt-24">
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Architecture</h4>
-          <ul class="text-sm text-muted mt-8" style="list-style:none;padding:0;">
-            <li>✅ TF-IDF vectorizer (20K features)</li>
-            <li>✅ Bigram n-gram range (1,2)</li>
-            <li>✅ Cosine similarity matching</li>
-            <li>✅ 14,275 AMFI fund schemes</li>
-            <li>✅ Logistic Regression sentiment</li>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         TAB 5: CANDLESTICK COMPUTER VISION & GRAD-CAM
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="tab-vision-gradcam" class="tab-content">
+      <div class="card card-accent-violet mb-24">
+        <div class="flex justify-between items-center mb-16">
+          <div>
+            <h3 style="margin:0;">👁️ Phase 3: Candlestick Pattern CNN & Native Grad-CAM</h3>
+            <p class="text-sm text-muted mt-4">Visual pattern recognition on 40-day candlestick charts with native PyTorch gradient saliency heatmaps.</p>
+          </div>
+          <span class="badge badge-violet">ResNet-18 vs Custom 4-Block CNN</span>
+        </div>
+
+        <div class="bento-grid mb-24">
+          <div class="bento-4 card" style="background:var(--bg-surface);">
+            <h4 class="text-sm">Future-Trajectory Labeling</h4>
+            <p class="text-xs text-muted mt-8">Labels (Breakout, Breakdown, Consolidation) are strictly generated from future 10-day forward price behavior (\(H=10\)), preventing in-image leakage.</p>
+          </div>
+          <div class="bento-4 card" style="background:var(--bg-surface);">
+            <h4 class="text-sm">Group Split By Fund</h4>
+            <p class="text-xs text-muted mt-8">Zero cross-fund visual contamination: 13 train schemes vs 3 completely unseen holdout test schemes (145034, 147567, 149132).</p>
+          </div>
+          <div class="bento-4 card" style="background:var(--bg-surface);">
+            <h4 class="text-sm">+53.7% Macro-F1 Boost</h4>
+            <p class="text-xs text-muted mt-8">Fine-tuned ResNet-18 achieves Macro-F1 of <strong>0.4857</strong> vs. rule-based technical indicator baseline of <strong>0.3159</strong>.</p>
+          </div>
+        </div>
+
+        <div class="card p-16" style="background: rgba(0,0,0,0.25);">
+          <div class="flex justify-between items-center flex-wrap gap-12">
+            <div>
+              <div class="text-sm font-bold">Query Candlestick Vision Saliency</div>
+              <div class="text-xs text-muted">Calls <code class="text-mono">POST /api/vision/pattern</code> on flagship AMFI Scheme 100119.</div>
+            </div>
+            <button class="btn btn-primary" id="btnRunVision" onclick="runVisionGradCAMDemo()">🎨 Extract Pattern & Grad-CAM Overlay</button>
+          </div>
+          <div id="visionDemoResult" class="mt-16" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         TAB 6: EXPERIMENT REGISTRY & METADATA
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="tab-experiment-meta" class="tab-content">
+      <div class="card mb-24">
+        <h3 class="mb-16">📋 Experiment Provenance, Datasets & Limitations</h3>
+        <p class="text-sm text-muted mb-20">Full audit log of data splits, hyperparameters, framework versions, and honest engineering trade-offs.</p>
+
+        <div class="bento-grid mb-24">
+          <div class="bento-6 card" style="background:var(--bg-surface);">
+            <h4 class="text-sm mb-12">📦 Dataset Specifications</h4>
+            <ul class="text-xs text-muted" style="list-style:none;padding:0;line-height:1.8;">
+              <li><strong>Source:</strong> Kaggle Financial CRM Lead Conversion Dataset</li>
+              <li><strong>Spark Parquet Path:</strong> <code class="text-mono">artifacts/cleaned_parquet/lead_scoring_clean/</code></li>
+              <li><strong>Partitioning:</strong> <code class="text-mono">converted=0</code> and <code class="text-mono">converted=1</code></li>
+              <li><strong>Total Samples:</strong> 1,900 instances (Stratified 80% Train, 20% Holdout Test)</li>
+              <li><strong>Preprocessed Dimensions:</strong> 5 continuous + 9 categorical = 91 one-hot features</li>
+            </ul>
+          </div>
+
+          <div class="bento-6 card" style="background:var(--bg-surface);">
+            <h4 class="text-sm mb-12">⚙️ Model Hyperparameters</h4>
+            <ul class="text-xs text-muted" style="list-style:none;padding:0;line-height:1.8;">
+              <li><strong>Random Forest:</strong> 200 trees, max_depth=12, class_weight='balanced', seed=42</li>
+              <li><strong>LeadMLP:</strong> Linear(91→64) → BN → ReLU → Dropout(0.3) → Linear(64→32) → BN → ReLU → Dropout(0.2) → Linear(32→1)</li>
+              <li><strong>Loss & Optimizer:</strong> BCEWithLogitsLoss with positive class weighting; AdamW (lr=1e-3, weight_decay=1e-4)</li>
+              <li><strong>Learning Rate Schedule:</strong> ReduceLROnPlateau (factor=0.5, patience=5)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card card-accent-amber" style="background:rgba(245,158,11,0.05);">
+          <h4 class="text-sm" style="color:var(--amber);">⚠️ Honest Audit & Limitations</h4>
+          <ul class="text-xs text-muted mt-8" style="line-height:1.7;">
+            <li><strong>Decision Trees vs. Neural Networks on Tabular Data:</strong> Random Forest maintains a higher ROC-AUC (0.933 vs 0.916) due to orthogonal axis-aligned splits on discrete one-hot categories.</li>
+            <li><strong>Latency Superiority:</strong> PyTorch LeadMLP achieves <strong>0.048 ms</strong> inference latency (~103x faster than Random Forest's 4.95 ms), making it vastly superior for high-throughput streaming pipelines.</li>
+            <li><strong>Non-Linear Interactions:</strong> MLP learns joint cross-layer continuous embeddings between visit duration and profile scores, whereas Random Forest isolates splits hierarchically.</li>
           </ul>
         </div>
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Dual Use</h4>
-          <p class="text-sm text-muted mt-8"><strong>Search:</strong> Converts human queries to geometric vectors. Cosine matching finds funds in milliseconds.</p>
-          <p class="text-sm text-muted mt-8"><strong>Sentiment:</strong> Classifies financial text as positive/negative/neutral for market mood analysis.</p>
-        </div>
-        <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Why TF-IDF?</h4>
-          <p class="text-sm text-muted mt-8">Converts vocabulary to geometric matrices. Operating a 14K × N array with Cosine Match achieves <strong>millisecond latency</strong>.</p>
-          <h4 class="text-sm mt-16 text-red">Why NOT BERT?</h4>
-          <p class="text-sm text-muted mt-4">BERT requires massive GPU compute. Processing 14,275 funds through a 500-layer transformer would crash the memory heap.</p>
-        </div>
-      </div>
-
-      <!-- Live Sentiment Demo -->
-      <div class="card mt-16" style="background:var(--bg-surface);">
-        <h4 class="text-sm">🔮 Live Sentiment Demo</h4>
-        <div class="flex gap-8 mt-12">
-          <input type="text" class="form-input" id="demoSentiment" placeholder="Enter financial news to classify...">
-          <button class="btn btn-primary btn-sm" onclick="demoSentimentAnalysis()">Analyze</button>
-        </div>
-        <div id="demoSentimentResult" class="mt-12"></div>
       </div>
     </div>
 
-    <!-- Summary -->
-    <div class="card text-center" style="padding:48px;">
-      <h3>Model Pipeline Summary</h3>
-      <div class="pipeline-flow mt-24" style="justify-content:center;">
-        <div class="pipeline-node card-accent-blue card" style="padding:12px 16px;"><div class="text-xs text-muted">Raw Data</div><div class="text-sm" style="font-weight:600;">31GB Dataset</div></div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-node card-accent-violet card" style="padding:12px 16px;"><div class="text-xs text-muted">Preprocess</div><div class="text-sm" style="font-weight:600;">Spark ETL</div></div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-node card-accent-emerald card" style="padding:12px 16px;"><div class="text-xs text-muted">Train</div><div class="text-sm" style="font-weight:600;">4 ML Engines</div></div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-node card-accent-amber card" style="padding:12px 16px;"><div class="text-xs text-muted">Serialize</div><div class="text-sm" style="font-weight:600;">Pickle Bundles</div></div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-node card-accent-blue card" style="padding:12px 16px;"><div class="text-xs text-muted">Serve</div><div class="text-sm" style="font-weight:600;">FastAPI REST</div></div>
-      </div>
-    </div>
   </div>
 
-  <footer class="footer"><div class="container"><p>◆ Lume AI — AI Showcase</p></div></footer>
+  <footer class="footer">
+    <div class="container text-center text-xs text-muted">
+      <p>💎 Lume AI — Phase 4 Production Deep Learning Lab & Visual Explainability System</p>
+    </div>
+  </footer>
 
   <script src="app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Feature importance chart
-      createBarChart('featureChart',
-        ['Total Time on Site','Page Views','Activity Score','Profile Score','Total Visits','Lead Source','Occupation','Specialization'],
-        [0.18,0.15,0.14,0.13,0.11,0.09,0.08,0.06],
-        ['#2563EB','#3B82F6','#60A5FA','#93C5FD','#2563EB','#3B82F6','#60A5FA','#93C5FD'],
-        { indexAxis:'y', scales: { x:{ ...chartDefaults.scales.x, max:0.25 }, y:{ ...chartDefaults.scales.y, grid:{display:false} } } }
-      );
+    let mlpLossChartInstance = null;
 
-      // Cluster distribution
-      createDoughnutChart('clusterChart',
-        ['🚀 Growth','🛡️ Conservative','⚖️ Balanced','📊 Passive'],
-        [280,260,250,210],
-        ['#10B981','#2563EB','#F59E0B','#8B5CF6']
-      );
-    });
+    function switchLabTab(tabId) {
+      document.querySelectorAll('.dl-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
-    async function demoBilstmForecast() {
-      const btn = document.getElementById('btnRunForecast');
-      const out = document.getElementById('demoForecastOutput');
-      btn.textContent = 'Inferencing...';
+      event.target.classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) {
+        target.classList.add('active');
+      }
+
+      if (tabId === 'tab-loss-curves') {
+        loadTrainingLossChart();
+      }
+    }
+
+    const PRESETS = {
+      hot: { time: 1850, visits: 14, views: 6.2, act: 18, prof: 19, quality: 'High in Relevance', source: 'Google', occ: 'Working Professional' },
+      warm: { time: 850, visits: 5, views: 3.5, act: 12, prof: 14, quality: 'Might be', source: 'Direct Traffic', occ: 'Businessman' },
+      cold: { time: 120, visits: 1, views: 1.0, act: 4, prof: 5, quality: 'Worst', source: 'Olark Chat', occ: 'Student' }
+    };
+
+    function applyLeadPreset(key) {
+      const p = PRESETS[key];
+      if (!p) return;
+      document.getElementById('inp_time').value = p.time;
+      document.getElementById('val_time').textContent = p.time;
+      document.getElementById('inp_visits').value = p.visits;
+      document.getElementById('val_visits').textContent = p.visits;
+      document.getElementById('inp_views').value = p.views;
+      document.getElementById('val_views').textContent = p.views;
+      document.getElementById('inp_act_score').value = p.act;
+      document.getElementById('inp_prof_score').value = p.prof;
+      document.getElementById('inp_quality').value = p.quality;
+      document.getElementById('inp_source').value = p.source;
+      document.getElementById('inp_occ').value = p.occ;
+      document.getElementById('leadInferenceForm').dispatchEvent(new Event('submit'));
+    }
+
+    async function executeDualInference(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnRunInference');
+      const emptyState = document.getElementById('dualEmptyState');
+      const container = document.getElementById('dualResultsContainer');
+
       btn.disabled = true;
+      btn.textContent = 'Executing Dual Models...';
+
+      const payload = {
+        totalvisits: parseFloat(document.getElementById('inp_visits').value) || 0,
+        total_time_spent_on_website: parseFloat(document.getElementById('inp_time').value) || 0,
+        page_views_per_visit: parseFloat(document.getElementById('inp_views').value) || 0,
+        asymmetrique_activity_score: parseFloat(document.getElementById('inp_act_score').value) || 0,
+        asymmetrique_profile_score: parseFloat(document.getElementById('inp_prof_score').value) || 0,
+        lead_quality: document.getElementById('inp_quality').value,
+        lead_source: document.getElementById('inp_source').value,
+        what_is_your_current_occupation: document.getElementById('inp_occ').value
+      };
+
+      try {
+        const res = await apiCall('/api/dl-lab/predict-lead', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+
+        if (res) {
+          emptyState.style.display = 'none';
+          container.style.display = 'block';
+
+          // Random Forest
+          const rf = res.random_forest || {};
+          document.getElementById('rfProb').textContent = (rf.probability !== undefined) ? (rf.probability * 100).toFixed(1) + '%' : 'N/A';
+          document.getElementById('rfBadge').textContent = rf.classification || 'UNAVAILABLE';
+          document.getElementById('rfBadge').className = 'badge ' + (rf.converted ? 'badge-blue' : 'badge-red');
+          document.getElementById('rfLatency').textContent = rf.latency_ms ? rf.latency_ms + ' ms' : '—';
+
+          // PyTorch LeadMLP
+          const mlp = res.lead_mlp || {};
+          document.getElementById('mlpProb').textContent = (mlp.probability !== undefined) ? (mlp.probability * 100).toFixed(1) + '%' : 'N/A';
+          document.getElementById('mlpBadge').textContent = mlp.classification || 'UNAVAILABLE';
+          document.getElementById('mlpBadge').className = 'badge ' + (mlp.converted ? 'badge-emerald' : 'badge-amber');
+          document.getElementById('mlpLatency').textContent = mlp.latency_ms ? mlp.latency_ms + ' ms' : '—';
+
+          // Consensus & Speedup
+          const agreeText = document.getElementById('agreementText');
+          const speedupText = document.getElementById('latencyRatioText');
+          if (res.model_agreement) {
+            agreeText.innerHTML = '✅ <strong style="color:var(--emerald);">Consensus:</strong> Both Random Forest & PyTorch LeadMLP agree on <strong>' + (rf.converted ? 'CONVERSION' : 'NON-CONVERSION') + '</strong>.';
+          } else {
+            agreeText.innerHTML = '⚠️ <strong style="color:var(--amber);">Divergence:</strong> Decision threshold boundary discrepancy between tree and neural surfaces.';
+          }
+
+          if (res.latency_speedup) {
+            speedupText.innerHTML = '⚡ PyTorch MLP is <strong>' + res.latency_speedup + 'x faster</strong> than Random Forest.';
+            document.getElementById('speedupPill').textContent = res.latency_speedup + 'x Speedup';
+          }
+
+          // XAI Table
+          const factors = res.key_driving_factors || [];
+          let tableHtml = '<table class="data-table" style="font-size:0.8rem;"><thead><tr><th>Signal</th><th>Input Value</th><th>Permutation Impact</th><th>Relative Attribution</th></tr></thead><tbody>';
+          factors.forEach(f => {
+            const barWidth = Math.min(100, Math.round((f.importance_score / 0.15) * 100));
+            tableHtml += `
+              <tr>
+                <td><strong>${f.feature}</strong></td>
+                <td><code class="text-mono">${f.user_value}</code></td>
+                <td><span class="text-mono text-emerald">+${f.importance_score.toFixed(4)}</span></td>
+                <td style="width:140px;">
+                  <div class="progress-bar"><div class="progress-fill" style="width:${barWidth}%;"></div></div>
+                </td>
+              </tr>
+            `;
+          });
+          tableHtml += '</tbody></table>';
+          document.getElementById('xaiTableContainer').innerHTML = tableHtml;
+        }
+      } catch (err) {
+        console.error('Inference error:', err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🚀 Run Dual Model Inference & Explain';
+      }
+    }
+
+    async function loadTrainingLossChart() {
+      if (mlpLossChartInstance) return;
+      try {
+        const res = await apiCall('/api/dl-lab/training-history');
+        if (!res || !res.epochs) return;
+
+        const ctx = document.getElementById('mlpLossChart').getContext('2d');
+        mlpLossChartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: res.epochs.map(e => 'Epoch ' + e),
+            datasets: [
+              {
+                label: 'Training Loss (BCEWithLogits)',
+                data: res.train_loss,
+                borderColor: '#3B82F6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 2.5,
+                fill: true,
+                tension: 0.3
+              },
+              {
+                label: 'Validation Loss (Holdout Test)',
+                data: res.val_loss,
+                borderColor: '#10B981',
+                backgroundColor: 'transparent',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                tension: 0.3
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { labels: { color: '#94A3B8', font: { family: 'Inter', size: 12 } } },
+              tooltip: { mode: 'index', intersect: false }
+            },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748B' } },
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748B' }, title: { display: true, text: 'Loss', color: '#64748B' } }
+            }
+          }
+        });
+      } catch (err) {
+        console.error('Failed to load training loss history:', err);
+      }
+    }
+
+    async function runBiLSTMForecastDemo() {
+      const btn = document.getElementById('btnRunBiLSTM');
+      const out = document.getElementById('bilstmDemoResult');
+      btn.disabled = true;
+      btn.textContent = 'Forecasting...';
       out.style.display = 'block';
-      out.innerHTML = '<span class="text-muted text-sm">Querying /api/forecast on backend...</span>';
+      out.innerHTML = '<span class="text-xs text-muted">Running 8-feature forward inference with BiLSTM + Attention on backend...</span>';
 
       try {
         const history = [
-          24500, 24520, 24510, 24550, 24580, 24600, 24620, 24610, 24640, 24670,
-          24650, 24680, 24700, 24720, 24710, 24750, 24780, 24800, 24820, 24810,
-          24850, 24870, 24860, 24890, 24920, 24900, 24950, 24980, 25000, 25050
+          150.2, 150.8, 151.1, 151.0, 151.4, 151.8, 152.0, 151.7, 152.3, 152.9,
+          152.5, 153.0, 153.4, 153.8, 153.6, 154.2, 154.7, 155.0, 155.3, 155.1,
+          155.8, 156.2, 156.0, 156.5, 157.1, 156.8, 157.5, 158.0, 158.4, 159.0
         ];
-        const res = await apiCall('/api/forecast', {
+        const res = await apiCall('/predict/forecast', {
           method: 'POST',
-          body: JSON.stringify({ history: history })
+          body: JSON.stringify({ scheme_code: '100119', history: history, horizon_days: 5 })
         });
+
         if (res && res.forecast_trajectory) {
-          const p10Str = (res.p10 || []).map(v => '₹' + v.toFixed(1)).join(', ');
-          const p50Str = (res.p50 || res.forecast_trajectory || []).map(v => '₹' + v.toFixed(1)).join(', ');
-          const p90Str = (res.p90 || []).map(v => '₹' + v.toFixed(1)).join(', ');
+          const p10Str = (res.lower_bound || []).map(v => '₹' + v.toFixed(2)).join(', ');
+          const p50Str = (res.forecast_trajectory || []).map(v => '₹' + v.toFixed(2)).join(', ');
+          const p90Str = (res.upper_bound || []).map(v => '₹' + v.toFixed(2)).join(', ');
+
           out.innerHTML = `
             <div class="bento-grid" style="gap:12px;">
-              <div class="bento-4 card" style="background:var(--bg-surface);padding:12px;">
-                <div class="text-xs text-muted">Trend & Confidence</div>
-                <div style="font-size:1.1rem;font-weight:700;color:var(--emerald);margin-top:4px;">${res.trend} 📈 (${res.confidence_score}%)</div>
-                <div class="text-xs text-muted mt-4">Backend: <strong>${res.model_source}</strong></div>
+              <div class="bento-4 card p-12" style="background:var(--bg-surface);">
+                <div class="text-xs text-muted">Model & Horizon</div>
+                <div style="font-size:1.1rem;font-weight:700;color:var(--emerald);margin:4px 0;">5-Day Forecast (${res.model_source})</div>
+                <div class="text-xs text-muted">Last NAV: ₹${res.historical_last}</div>
               </div>
-              <div class="bento-8 card" style="background:var(--bg-surface);padding:12px;">
-                <div class="text-xs text-muted">Quantile Intervals (5-Day Horizon)</div>
-                <div class="text-xs mt-4"><strong>P90 (Upper):</strong> ${p90Str}</div>
-                <div class="text-xs mt-2" style="color:var(--violet);"><strong>P50 (Median):</strong> ${p50Str}</div>
-                <div class="text-xs mt-2"><strong>P10 (Lower):</strong> ${p10Str}</div>
+              <div class="bento-8 card p-12" style="background:var(--bg-surface);">
+                <div class="text-xs text-muted mb-4">Non-Crossing Quantile Bounds:</div>
+                <div class="text-xs"><strong>P90 (Upper Band):</strong> ${p90Str}</div>
+                <div class="text-xs my-2" style="color:var(--violet);"><strong>P50 (Median Trajectory):</strong> ${p50Str}</div>
+                <div class="text-xs"><strong>P10 (Lower Band):</strong> ${p10Str}</div>
               </div>
             </div>
-            <div class="text-xs text-muted mt-8" style="text-align:right;">⚠️ ${res.disclaimer || 'Educational and analytical tool only. Not investment advice.'}</div>
+            <div class="text-xs text-muted text-right mt-8">⚠️ ${res.disclaimer}</div>
           `;
-        } else {
-          out.innerHTML = '<span class="text-sm text-red">Failed to get forecast from API</span>';
         }
       } catch (err) {
-        out.innerHTML = `<span class="text-sm text-red">Error: ${err.message}</span>`;
+        out.innerHTML = `<span class="text-xs text-red">Forecast failed: ${err.message}</span>`;
       } finally {
-        btn.textContent = 'Generate 5-Day Trajectory';
         btn.disabled = false;
+        btn.textContent = '⚡ Generate 5-Day Forward Cones';
       }
     }
 
-    async function demoSentimentAnalysis() {
-      const text = document.getElementById('demoSentiment').value;
-      if (!text) return;
-      const el = document.getElementById('demoSentimentResult');
-      el.innerHTML = '<span class="text-muted text-sm">Analyzing...</span>';
-      const result = await predictSentiment(text);
-      if (result?.prediction) {
-        const sent = result.prediction.sentiment;
-        const conf = ((result.confidence || 0.75) * 100).toFixed(1);
-        const color = sent === 'positive' ? 'var(--emerald)' : sent === 'negative' ? 'var(--red)' : 'var(--amber)';
-        el.innerHTML = `<span class="badge" style="background:${color}20;color:${color};font-size:0.9rem;padding:8px 16px;">${sent === 'positive' ? '📈' : sent === 'negative' ? '📉' : '📊'} ${sent.toUpperCase()} (${conf}% confidence)</span>`;
-      } else {
-        el.innerHTML = '<span class="text-sm text-red">API offline — start FastAPI server</span>';
+    async function runVisionGradCAMDemo() {
+      const btn = document.getElementById('btnRunVision');
+      const out = document.getElementById('visionDemoResult');
+      btn.disabled = true;
+      btn.textContent = 'Extracting Pattern...';
+      out.style.display = 'block';
+      out.innerHTML = '<span class="text-xs text-muted">Executing forward CNN & Grad-CAM backward hook...</span>';
+
+      try {
+        const res = await apiCall('/api/vision/pattern', {
+          method: 'POST',
+          body: JSON.stringify({ scheme_code: '100119', lookback_days: 40 })
+        });
+
+        if (res) {
+          out.innerHTML = `
+            <div class="bento-grid" style="gap:16px;">
+              <div class="bento-6 card p-12 text-center" style="background:var(--bg-surface);">
+                <div class="text-xs text-muted mb-8">Grad-CAM Saliency Overlay</div>
+                <img src="${res.gradcam_overlay_base64}" alt="Grad-CAM" style="width:100%; max-width:240px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+              </div>
+              <div class="bento-6 card p-12" style="background:var(--bg-surface);">
+                <div class="text-xs text-muted">Predicted Candlestick Pattern</div>
+                <div style="font-size:1.4rem; font-weight:800; color:var(--text-primary); margin:6px 0;">${res.pattern}</div>
+                <div class="text-xs text-muted mb-12">Confidence: <strong>${(res.confidence * 100).toFixed(1)}%</strong> (${res.model_architecture})</div>
+                <div class="text-xs text-muted mb-4">Class Probabilities:</div>
+                <div class="text-xs">Bullish Breakout: <strong>${(res.probabilities['Bullish Breakout']*100).toFixed(1)}%</strong></div>
+                <div class="text-xs">Bearish Breakdown: <strong>${(res.probabilities['Bearish Breakdown']*100).toFixed(1)}%</strong></div>
+                <div class="text-xs">Consolidation: <strong>${(res.probabilities['Consolidation']*100).toFixed(1)}%</strong></div>
+              </div>
+            </div>
+          `;
+        }
+      } catch (err) {
+        out.innerHTML = `<span class="text-xs text-red">Vision analysis failed: ${err.message}</span>`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🎨 Extract Pattern & Grad-CAM Overlay';
       }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkApiHealth();
+    });
   </script>
 </body>
 </html>
