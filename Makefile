@@ -9,15 +9,20 @@ STREAMLIT_PORT ?= 8501
 help:
 	@echo "Available commands:"
 	@echo "  make run           Launch both frontend (3000) and backend (8000) together"
+	@echo "  make train-vision  Train Candlestick CNN & ResNet-18 vision models + Grad-CAM"
 	@echo "  make train-bilstm  Train PyTorch BiLSTM + Attention quantile forecaster"
 	@echo "  make train-lstm    Train legacy PyTorch LSTM forecaster on NAV data"
 	@echo "  make train-all     Train all models (Leads, Clustering, NLP, BiLSTM)"
 	@echo "  make test          Run pytest suite"
+	@echo "  make test-phase3   Run Phase 3 Vision + Grad-CAM test suite"
 	@echo "  make test-phase2   Run Phase 2 BiLSTM + Attention test suite"
 	@echo "  make leakage-test  Run data leakage unit tests"
 	@echo "  make api           Start FastAPI backend only"
 	@echo "  make dashboard     Start Streamlit dashboard"
 	@echo "  make clean         Clean cache and temp files"
+
+train-vision:
+	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) src/lume_platform/vision/trainer.py
 
 train-bilstm:
 	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m lume_platform.cli train --engine bilstm
@@ -30,6 +35,9 @@ train-all:
 
 test:
 	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m pytest tests/ -v
+
+test-phase3:
+	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m pytest tests/test_phase3_vision.py -v
 
 test-phase2:
 	MPLCONFIGDIR=/tmp/mplconfig PYTHONPATH=src $(PYTHON) -m pytest tests/test_phase2_bilstm.py -v

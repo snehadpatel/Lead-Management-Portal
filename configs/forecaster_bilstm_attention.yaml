@@ -56,3 +56,4 @@ artifacts:
   model_card_path: "model_evaluations/phase2_timeseries/model_card.md"
   loss_curve_path: "model_evaluations/phase2_timeseries/loss_curves.png"
   attention_heatmap_path: "model_evaluations/phase2_timeseries/attention_heatmap.png"
+

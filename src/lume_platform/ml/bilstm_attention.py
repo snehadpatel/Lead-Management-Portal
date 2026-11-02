@@ -159,3 +159,4 @@ class BiLSTMAttentionQuantileForecaster(nn.Module):
         quantiles = torch.stack([p10, p50, p90], dim=-1)
 
         return quantiles, attn_weights
+

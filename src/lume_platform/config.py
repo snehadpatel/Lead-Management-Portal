@@ -5,6 +5,11 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+# Ensure writable matplotlib cache directory to avoid rebuilding font cache
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/mplconfig")
+Path("/tmp/mplconfig").mkdir(parents=True, exist_ok=True)
+
+
 
 def _default_project_root() -> Path:
     # src/lume_platform/config.py -> parents[2] == repo root (BigData)

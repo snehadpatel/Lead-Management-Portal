@@ -154,3 +154,4 @@ def test_api_forecast_phase2_endpoints(api_client):
         # Assert quantile ordering: p10 <= p50 <= p90
         for low, mid, high in zip(data["p10"], data["p50"], data["p90"]):
             assert low <= mid <= high, f"Quantile ordering mismatch: {low} <= {mid} <= {high}"
+

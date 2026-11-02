@@ -421,6 +421,26 @@ class ForecastResponse(BaseModel):
     disclaimer: str = Field("Educational and analytical tool only. Not investment advice.", description="Regulatory disclaimer")
 
 
+# Vision Pattern Recognition Models (Phase 3)
+class VisionPatternRequest(BaseModel):
+    scheme_code: Optional[str] = Field(None, description="Mutual fund scheme code (e.g. '100119')")
+    image_base64: Optional[str] = Field(None, description="Base64 encoded candlestick chart image")
+    target_class: Optional[int] = Field(None, description="Optional target class for Grad-CAM (0: Bullish, 1: Bearish, 2: Consolidation)")
+
+class VisionPatternResponse(BaseModel):
+    timestamp: str
+    pattern: str = Field(..., description="Recognized pattern class name")
+    pattern_class: int = Field(..., description="Class index (0: Bullish Breakout, 1: Bearish Breakdown, 2: Consolidation)")
+    confidence: float = Field(..., description="Softmax probability of predicted class")
+    probabilities: Dict[str, float] = Field(..., description="Class probability distribution")
+    gradcam_overlay_base64: str = Field(..., description="Base64 data URI of Grad-CAM saliency overlay")
+    model_architecture: str = Field("custom_cnn", description="Vision model architecture")
+    scheme_code: Optional[str] = None
+    date_range: Optional[Dict[str, str]] = None
+    latest_nav: Optional[float] = None
+    disclaimer: str = Field("Educational pattern detection only. Not financial advice.", description="Regulatory disclaimer")
+
+
 # AI Advisor Models
 class AdvisorRequest(BaseModel):
     query: str
@@ -2099,6 +2119,54 @@ def forecast_nav(request: ForecastRequest):
         raise he
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# Vision Service Singleton (Phase 3)
+_vision_service = None
+
+def get_vision_service():
+    global _vision_service
+    if _vision_service is None:
+        from lume_platform.vision.service import VisionPatternService
+        _vision_service = VisionPatternService()
+    return _vision_service
+
+
+@app.post("/api/vision/pattern", response_model=VisionPatternResponse, tags=["Vision Engine"])
+@app.post("/market/pattern/classify", response_model=VisionPatternResponse, tags=["Vision Engine"])
+def classify_vision_pattern(request: VisionPatternRequest):
+    """
+    Phase 3 Computer Vision: Candlestick Pattern Recognition with Grad-CAM.
+    Returns predicted pattern class, confidence, and Grad-CAM visual overlay (base64).
+    """
+    from datetime import datetime
+    from lume_platform.vision.gradcam import base64_to_image
+
+    try:
+        service = get_vision_service()
+        if request.scheme_code:
+            result = service.predict_from_scheme(request.scheme_code)
+        elif request.image_base64:
+            img = base64_to_image(request.image_base64)
+            result = service.predict_image(img, target_class=request.target_class)
+        else:
+            # Default to flagship Scheme 100119
+            result = service.predict_from_scheme("100119")
+
+        return VisionPatternResponse(
+            timestamp=datetime.utcnow().isoformat(),
+            pattern=result["pattern"],
+            pattern_class=result["pattern_class"],
+            confidence=result["confidence"],
+            probabilities=result["probabilities"],
+            gradcam_overlay_base64=result["gradcam_overlay_base64"],
+            model_architecture=result.get("model_architecture", "custom_cnn"),
+            scheme_code=result.get("scheme_code"),
+            date_range=result.get("date_range"),
+            latest_nav=result.get("latest_nav"),
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Vision classification failed: {str(e)}")
 
 
 
