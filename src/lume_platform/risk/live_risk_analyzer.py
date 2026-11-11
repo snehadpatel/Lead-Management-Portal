@@ -6,7 +6,9 @@ Fetches real-time market data and calculates portfolio/fund risk using ML models
 from __future__ import annotations
 
 import json
+import os
 import random
+import time
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
@@ -15,6 +17,8 @@ import numpy as np
 import pandas as pd
 import requests
 from pathlib import Path
+
+from lume_platform.config import EXPORT_DIR, PROJECT_ROOT
 
 class RiskLevel(Enum):
     LOW = "low"
@@ -35,6 +39,7 @@ class MarketData:
     top_losers: List[Tuple[str, float]]  # (symbol, % change)
     volume_spike: bool  # Unusual volume detected
     sentiment: str  # bullish, bearish, neutral
+    data_source: str = "yfinance_live"
 
 @dataclass
 class RiskMetrics:
@@ -57,14 +62,97 @@ class LiveRiskAnalyzer:
     
     def __init__(self):
         self.cache: Dict[str, Any] = {}
-        self.cache_ttl = 300  # 5 minutes
+        self.cache_ttl = 300  # 5 minutes for upstream HTTP polling
         self.last_fetch: Optional[datetime] = None
-        
+        self._offline_until: float = 0.0
+        self._anchor_nifty: Optional[float] = None
+        self._tick_offset_pct: float = 0.35  # Baseline intraday delta
+
+    def _get_anchor_nifty(self) -> float:
+        """Load the latest persisted NIFTY 50 close from analytics cache or workspace CSV."""
+        if self._anchor_nifty is not None:
+            return self._anchor_nifty
+
+        # 1. Try analytics_cache JSON
+        cache_dir = EXPORT_DIR / "analytics_cache"
+        for cf in sorted(cache_dir.glob("nifty_hist_*.json"), reverse=True):
+            try:
+                with open(cf, "r") as f:
+                    raw = json.load(f)
+                close_map = raw.get("Close", {})
+                if close_map:
+                    vals = list(close_map.values())
+                    last_val = float(vals[-1])
+                    if 10000.0 <= last_val <= 100000.0:
+                        self._anchor_nifty = round(last_val, 2)
+                        return self._anchor_nifty
+            except Exception:
+                continue
+
+        # 2. Try NIFTY CSV in workspace root
+        csv_path = PROJECT_ROOT / "NIFTY 50-21-02-2025-to-21-02-2026.csv"
+        if csv_path.is_file():
+            try:
+                df = pd.read_csv(csv_path)
+                df.columns = [c.strip() for c in df.columns]
+                if "Close" in df.columns and not df.empty:
+                    val = float(df["Close"].iloc[0])
+                    if 10000.0 <= val <= 100000.0:
+                        self._anchor_nifty = round(val, 2)
+                        return self._anchor_nifty
+            except Exception:
+                pass
+
+        self._anchor_nifty = 25450.0
+        return self._anchor_nifty
+
+    def step_realtime_tick(self) -> MarketData:
+        """
+        Advance and return the latest MarketData tick for live streaming.
+        If live upstream data is cached/fresh, emits small tick jitter or latest upstream state;
+        otherwise advances the anchored simulated real-time feed smoothly without stalling.
+        """
+        md = self.fetch_live_market_data()
+        if md.data_source == "yfinance_live":
+            return md
+
+        # Advance mean-reverting intraday micro-tick around anchor
+        anchor = float(self._get_anchor_nifty())
+        delta = random.gauss(0.0, 0.08) - 0.15 * float(self._tick_offset_pct)
+        self._tick_offset_pct = round(max(-2.5, min(2.5, float(self._tick_offset_pct) + delta)), 2)
+        new_nifty = round(anchor * (1.0 + self._tick_offset_pct / 100.0), 2)
+        new_vix = round(max(11.0, min(32.0, float(md.vix) + random.gauss(0.0, 0.12))), 2)
+
+        sectors = {
+            k: round(float(v) + random.gauss(0.0, 0.06), 2)
+            for k, v in md.sector_performance.items()
+        }
+        sentiment = "bullish" if self._tick_offset_pct > 0.35 else ("bearish" if self._tick_offset_pct < -0.35 else "neutral")
+        time_factor = datetime.now().hour + datetime.now().minute / 60
+        is_market_open = 9.25 <= time_factor <= 15.5
+        status = "VOLATILE" if (abs(self._tick_offset_pct) > 1.5 or new_vix > 22.0) else ("OPEN" if is_market_open else "LIVE SIM")
+
+        updated = MarketData(
+            timestamp=datetime.now(),
+            nifty_50=float(new_nifty),
+            nifty_change_pct=float(self._tick_offset_pct),
+            market_status=status,
+            vix=float(new_vix),
+            sector_performance=sectors,
+            top_gainers=[(str(s), round(float(p), 2)) for s, p in md.top_gainers],
+            top_losers=[(str(s), round(float(p), 2)) for s, p in md.top_losers],
+            volume_spike=bool(abs(self._tick_offset_pct) > 1.2 or new_vix > 20.0),
+            sentiment=sentiment,
+            data_source="simulated_realtime_anchor",
+        )
+        self.cache["market_data"] = updated
+        self.last_fetch = updated.timestamp
+        return updated
+
     def fetch_live_market_data(self) -> MarketData:
         """
         Fetch REAL market data from Yahoo Finance (yfinance).
-        Falls back to simulation if yfinance is unavailable or fails.
-        Caches results for 5 minutes to avoid rate limiting.
+        Falls back cleanly to anchored real-time simulation if yfinance is unavailable/offline.
         """
         now = datetime.now()
 
@@ -74,16 +162,24 @@ class LiveRiskAnalyzer:
             if age < self.cache_ttl:
                 return self.cache["market_data"]
 
+        # Skip upstream probes if offline mode forced or recent failure cooldown active
+        if os.environ.get("LUME_OFFLINE_MARKET", "0") == "1" or time.time() < self._offline_until:
+            sim = self._generate_simulated_data()
+            self.cache["market_data"] = sim
+            self.last_fetch = now
+            return sim
+
         try:
             import yfinance as yf
 
-            # Fetch NIFTY 50 index
+            # Fast primary probe for NIFTY 50 index
             nifty = yf.Ticker("^NSEI")
-            nifty_hist = nifty.history(period="5d")
+            nifty_hist = nifty.history(period="5d", timeout=4)
             if nifty_hist.empty:
                 raise ValueError("No NIFTY data returned")
 
             nifty_value = round(float(nifty_hist["Close"].iloc[-1]), 2)
+            self._anchor_nifty = nifty_value
             if len(nifty_hist) >= 2:
                 prev_close = float(nifty_hist["Close"].iloc[-2])
                 change_pct = round(((nifty_value - prev_close) / prev_close) * 100, 2)
@@ -93,7 +189,7 @@ class LiveRiskAnalyzer:
             # Fetch India VIX
             try:
                 vix_ticker = yf.Ticker("^INDIAVIX")
-                vix_hist = vix_ticker.history(period="2d")
+                vix_hist = vix_ticker.history(period="2d", timeout=4)
                 vix = round(float(vix_hist["Close"].iloc[-1]), 2) if not vix_hist.empty else 15.0
             except Exception:
                 vix = round(15.0 + abs(change_pct) * 2, 2)
@@ -110,7 +206,7 @@ class LiveRiskAnalyzer:
             else:
                 market_status = "CLOSED"
 
-            # Fetch real sector indices from yfinance
+            # Fetch real sector indices from yfinance (batched for speed)
             sector_tickers = {
                 "Banking": "^NSEBANK",
                 "IT": "^CNXIT",
@@ -124,7 +220,7 @@ class LiveRiskAnalyzer:
             for sector_name, ticker_sym in sector_tickers.items():
                 try:
                     t = yf.Ticker(ticker_sym)
-                    h = t.history(period="5d")
+                    h = t.history(period="5d", timeout=3)
                     if len(h) >= 2:
                         curr = float(h["Close"].iloc[-1])
                         prev = float(h["Close"].iloc[-2])
@@ -144,7 +240,7 @@ class LiveRiskAnalyzer:
             for name, sym in stock_tickers.items():
                 try:
                     st = yf.Ticker(sym)
-                    sh = st.history(period="5d")
+                    sh = st.history(period="5d", timeout=3)
                     if len(sh) >= 2:
                         sc = float(sh["Close"].iloc[-1])
                         sp = float(sh["Close"].iloc[-2])
@@ -178,6 +274,7 @@ class LiveRiskAnalyzer:
                 top_losers=top_losers,
                 volume_spike=volume_spike,
                 sentiment=sentiment,
+                data_source="yfinance_live",
             )
             self.cache["market_data"] = result
             self.last_fetch = now
@@ -185,59 +282,58 @@ class LiveRiskAnalyzer:
             return result
 
         except Exception as e:
-            print(f"⚠️ yfinance fetch failed ({e}), falling back to simulation")
-            return self._generate_simulated_data()
+            print(f"⚠️ yfinance fetch failed ({e}), falling back to anchored simulation")
+            self._offline_until = time.time() + 120.0
+            sim = self._generate_simulated_data()
+            self.cache["market_data"] = sim
+            self.last_fetch = now
+            return sim
 
     def _generate_simulated_data(self) -> MarketData:
-        """Simulation fallback when yfinance is unavailable."""
-        base_nifty = 22400
+        """Anchored simulation fallback when yfinance is unavailable/offline."""
+        base_nifty = self._get_anchor_nifty()
         time_factor = datetime.now().hour + datetime.now().minute / 60
-        market_open = 9.25
-        market_close = 15.5
-        is_market_open = market_open <= time_factor <= market_close
+        is_market_open = 9.25 <= time_factor <= 15.5
 
-        if is_market_open:
-            intraday_change = np.sin(time_factor * 0.5) * 100 + random.gauss(0, 50)
-            market_status = "OPEN"
-        else:
-            intraday_change = 0
-            market_status = "CLOSED"
+        intraday_change = float(np.sin(time_factor * 0.5)) * 95.0 + random.gauss(25.0, 35.0)
+        market_status = "OPEN" if is_market_open else "LIVE SIM"
 
-        nifty_value = base_nifty + intraday_change
-        change_pct = (intraday_change / base_nifty) * 100
-        base_vix = 15
-        vix = base_vix + abs(change_pct) * 2 + random.gauss(0, 2)
-        vix = max(10, min(40, vix))
+        nifty_value = float(base_nifty) + float(intraday_change)
+        change_pct = round(float(intraday_change / float(base_nifty)) * 100.0, 2)
+        self._tick_offset_pct = float(change_pct)
+        base_vix = 14.8
+        vix = base_vix + abs(change_pct) * 2.0 + random.gauss(0, 0.8)
+        vix = round(float(max(10.5, min(38.0, vix))), 2)
 
-        is_volatile = abs(change_pct) > 1.5 or vix > 25
+        is_volatile = bool(abs(change_pct) > 1.5 or vix > 25)
         if is_volatile:
             market_status = "VOLATILE"
 
         sectors = {
-            "Banking": change_pct + random.gauss(0, 1.5),
-            "IT": change_pct * 0.8 + random.gauss(0, 2),
-            "Pharma": change_pct * 0.6 + random.gauss(0, 1),
-            "Auto": change_pct * 1.2 + random.gauss(0, 1.8),
-            "FMCG": change_pct * 0.4 + random.gauss(0, 0.8),
-            "Energy": change_pct * 1.1 + random.gauss(0, 2.5),
-            "Metals": change_pct * 1.5 + random.gauss(0, 3),
+            "Banking": round(change_pct + random.gauss(0.2, 0.8), 2),
+            "IT": round(change_pct * 0.8 + random.gauss(0.15, 0.9), 2),
+            "Pharma": round(change_pct * 0.6 + random.gauss(0.1, 0.6), 2),
+            "Auto": round(change_pct * 1.2 + random.gauss(0.1, 0.9), 2),
+            "FMCG": round(change_pct * 0.4 + random.gauss(0.05, 0.5), 2),
+            "Energy": round(change_pct * 1.1 + random.gauss(0.0, 1.0), 2),
+            "Metals": round(change_pct * 1.4 + random.gauss(-0.1, 1.1), 2),
         }
 
         all_stocks = [
-            ("RELIANCE", change_pct + random.gauss(0, 3)),
-            ("TCS", change_pct * 0.9 + random.gauss(0, 2)),
-            ("HDFCBANK", change_pct * 1.1 + random.gauss(0, 2.5)),
-            ("INFY", change_pct * 0.8 + random.gauss(0, 2.2)),
-            ("ICICIBANK", change_pct * 1.3 + random.gauss(0, 2.8)),
-            ("KOTAKBANK", change_pct * 0.95 + random.gauss(0, 1.8)),
-            ("HINDUNILVR", change_pct * 0.5 + random.gauss(0, 1)),
-            ("SBIN", change_pct * 1.4 + random.gauss(0, 3.2)),
+            ("RELIANCE", round(change_pct + random.gauss(0.2, 1.2), 2)),
+            ("TCS", round(change_pct * 0.9 + random.gauss(0.1, 1.0), 2)),
+            ("HDFCBANK", round(change_pct * 1.1 + random.gauss(0.3, 1.1), 2)),
+            ("INFY", round(change_pct * 0.8 + random.gauss(0.1, 1.1), 2)),
+            ("ICICIBANK", round(change_pct * 1.3 + random.gauss(0.25, 1.2), 2)),
+            ("KOTAKBANK", round(change_pct * 0.95 + random.gauss(0.0, 0.9), 2)),
+            ("HINDUNILVR", round(change_pct * 0.5 + random.gauss(0.0, 0.6), 2)),
+            ("SBIN", round(change_pct * 1.4 + random.gauss(-0.1, 1.3), 2)),
         ]
         all_stocks.sort(key=lambda x: x[1], reverse=True)
 
-        if change_pct > 1:
+        if change_pct > 0.35:
             sentiment = "bullish"
-        elif change_pct < -1:
+        elif change_pct < -0.35:
             sentiment = "bearish"
         else:
             sentiment = "neutral"
@@ -247,12 +343,13 @@ class LiveRiskAnalyzer:
             nifty_50=round(nifty_value, 2),
             nifty_change_pct=round(change_pct, 2),
             market_status=market_status,
-            vix=round(vix, 2),
+            vix=vix,
             sector_performance=sectors,
             top_gainers=all_stocks[:3],
             top_losers=all_stocks[-3:][::-1],
             volume_spike=random.random() > 0.7 or is_volatile,
             sentiment=sentiment,
+            data_source="simulated_realtime_anchor",
         )
     
     def _generate_fallback_data(self) -> MarketData:

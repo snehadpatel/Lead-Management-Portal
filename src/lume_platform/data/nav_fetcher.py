@@ -46,19 +46,42 @@ class NAVFetcher:
         except Exception:
             pass
 
+    def _read_latest_from_hist_file(self, code: str) -> Optional[float]:
+        """Fallback lookup for latest NAV from cached historical file if missing in bulk AMFI cache."""
+        cache_file = self._cache_dir / f"hist_{code}.json"
+        if cache_file.is_file():
+            try:
+                with open(cache_file, "r") as f:
+                    data = json.load(f)
+                if data and isinstance(data, list):
+                    val = float(data[0].get("nav", 0))
+                    if val > 0:
+                        self._nav_cache[code] = val
+                        return val
+            except Exception:
+                pass
+        return None
+
     def get_latest_nav(self, scheme_code: str) -> Optional[float]:
         """Get the latest NAV for a scheme. Returns cached value if fresh."""
+        code = str(scheme_code)
         self._ensure_nav_cache()
-        return self._nav_cache.get(str(scheme_code))
+        val = self._nav_cache.get(code)
+        if val is None:
+            val = self._read_latest_from_hist_file(code)
+        return val
 
     def get_latest_navs_bulk(self, scheme_codes: List[str]) -> Dict[str, float]:
         """Get latest NAVs for multiple schemes efficiently."""
         self._ensure_nav_cache()
         result = {}
         for code in scheme_codes:
-            nav = self._nav_cache.get(str(code))
+            c = str(code)
+            nav = self._nav_cache.get(c)
+            if nav is None:
+                nav = self._read_latest_from_hist_file(c)
             if nav is not None:
-                result[str(code)] = nav
+                result[c] = nav
         return result
 
     def get_historical_nav(self, scheme_code: str, days: int = 365) -> List[Dict[str, Any]]:
@@ -75,46 +98,55 @@ class NAVFetcher:
 
         # Check file cache
         cache_file = self._cache_dir / f"hist_{code}.json"
+        stale_data: Optional[List[Dict[str, Any]]] = None
         if cache_file.is_file():
             try:
                 file_age = now - cache_file.stat().st_mtime
-                if file_age < self._hist_cache_ttl:
-                    with open(cache_file, "r") as f:
-                        data = json.load(f)
+                with open(cache_file, "r") as f:
+                    data = json.load(f)
+                stale_data = data
+                if file_age < self._hist_cache_ttl and data:
                     self._hist_cache[code] = data
                     self._hist_cache_ts[code] = now
                     return data[:days]
             except Exception:
                 pass
 
-        # Fetch from MF API
-        try:
-            resp = requests.get(f"{self.MF_API_BASE}/{code}", timeout=10)
-            resp.raise_for_status()
-            raw = resp.json()
-            nav_data = []
-            for entry in raw.get("data", []):
-                try:
-                    nav_val = float(entry.get("nav", 0))
-                    nav_data.append({
-                        "date": entry.get("date", ""),
-                        "nav": nav_val,
-                    })
-                except (ValueError, TypeError):
-                    continue
+        # Fetch from MF API (unless offline mode forced)
+        if os.environ.get("LUME_OFFLINE_MARKET", "0") != "1":
+            try:
+                resp = requests.get(f"{self.MF_API_BASE}/{code}", timeout=5)
+                resp.raise_for_status()
+                raw = resp.json()
+                nav_data = []
+                for entry in raw.get("data", []):
+                    try:
+                        nav_val = float(entry.get("nav", 0))
+                        nav_data.append({
+                            "date": entry.get("date", ""),
+                            "nav": nav_val,
+                        })
+                    except (ValueError, TypeError):
+                        continue
 
-            if nav_data:
-                self._hist_cache[code] = nav_data
-                self._hist_cache_ts[code] = now
-                # Persist to file cache
-                try:
-                    with open(cache_file, "w") as f:
-                        json.dump(nav_data[:1825], f)  # Cache up to 5 years
-                except Exception:
-                    pass
-                return nav_data[:days]
-        except Exception as e:
-            print(f"⚠️ MF API fetch failed for {code}: {e}")
+                if nav_data:
+                    self._hist_cache[code] = nav_data
+                    self._hist_cache_ts[code] = now
+                    # Persist to file cache
+                    try:
+                        with open(cache_file, "w") as f:
+                            json.dump(nav_data[:1825], f)  # Cache up to 5 years
+                    except Exception:
+                        pass
+                    return nav_data[:days]
+            except Exception as e:
+                print(f"⚠️ MF API fetch failed for {code}: {e}")
+
+        # Fallback to stale disk cache if offline / API unavailable
+        if stale_data:
+            self._hist_cache[code] = stale_data
+            self._hist_cache_ts[code] = now - self._hist_cache_ttl + 120  # retry after 2m
+            return stale_data[:days]
 
         return []
 
@@ -135,9 +167,14 @@ class NAVFetcher:
         if not current_nav or current_nav <= 0:
             return {"r1": None, "r3": None, "r5": None}
 
+        try:
+            anchor_date = datetime.strptime(hist[0]["date"], "%d-%m-%Y")
+        except Exception:
+            anchor_date = datetime.now()
+
         def _find_nav_at_days_ago(data: list, target_days: int) -> Optional[float]:
-            """Find the NAV closest to target_days ago."""
-            target_date = datetime.now() - timedelta(days=target_days)
+            """Find the NAV closest to target_days before the latest available NAV date."""
+            target_date = anchor_date - timedelta(days=target_days)
             best_nav = None
             best_diff = float("inf")
             for entry in data:
@@ -200,28 +237,31 @@ class NAVFetcher:
                 pass
 
         # Fetch from AMFI
-        try:
-            resp = requests.get(self.AMFI_NAV_URL, timeout=15)
-            resp.raise_for_status()
-            self._parse_amfi_nav(resp.text)
-            self._nav_cache_ts = now
-            # Persist to file
+        if os.environ.get("LUME_OFFLINE_MARKET", "0") != "1":
             try:
-                with open(file_cache, "w") as f:
-                    json.dump(self._nav_cache, f)
-            except Exception:
-                pass
-            print(f"✅ NAV cache refreshed: {len(self._nav_cache)} schemes")
-        except Exception as e:
-            print(f"⚠️ AMFI NAV fetch failed: {e}")
-            # Fallback: try loading stale file cache
-            if file_cache.is_file():
+                resp = requests.get(self.AMFI_NAV_URL, timeout=6)
+                resp.raise_for_status()
+                self._parse_amfi_nav(resp.text)
+                self._nav_cache_ts = now
+                # Persist to file
                 try:
-                    with open(file_cache, "r") as f:
-                        self._nav_cache = json.load(f)
-                    self._nav_cache_ts = now - self._nav_cache_ttl + 60  # Re-try in 60s
+                    with open(file_cache, "w") as f:
+                        json.dump(self._nav_cache, f)
                 except Exception:
                     pass
+                print(f"✅ NAV cache refreshed: {len(self._nav_cache)} schemes")
+                return
+            except Exception as e:
+                print(f"⚠️ AMFI NAV fetch failed: {e}")
+
+        # Fallback: try loading stale file cache
+        if file_cache.is_file():
+            try:
+                with open(file_cache, "r") as f:
+                    self._nav_cache = json.load(f)
+                self._nav_cache_ts = now - self._nav_cache_ttl + 120  # Re-try in 120s
+            except Exception:
+                pass
 
     def _parse_amfi_nav(self, raw_text: str) -> None:
         """Parse AMFI NAVAll.txt format into scheme_code -> NAV mapping."""

@@ -100,6 +100,7 @@
       <button class="dl-tab-btn" onclick="switchLabTab('tab-loss-curves')">📉 Genuine Training Dynamics</button>
       <button class="dl-tab-btn" onclick="switchLabTab('tab-timeseries-dl')">🧠 Time-Series BiLSTM Forecaster</button>
       <button class="dl-tab-btn" onclick="switchLabTab('tab-vision-gradcam')">👁️ Candlestick Grad-CAM</button>
+      <button class="dl-tab-btn" onclick="switchLabTab('tab-financial-nlp')">📰 Financial NLP & Saliency</button>
       <button class="dl-tab-btn" onclick="switchLabTab('tab-experiment-meta')">📋 Provenance & Metadata</button>
     </div>
 
@@ -261,6 +262,129 @@
       </div>
     </div>
 
+
+
+            <!-- Probability Bars -->
+            <div class="text-xs font-semibold text-muted mb-8">CLASS PROBABILITY DISTRIBUTION</div>
+            <div class="space-y-8" style="display:flex; flex-direction:column; gap:8px;">
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#10b981;">📈 Positive (Bullish)</span>
+                  <span id="nlpPctPos" class="font-bold">88.8%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarPos" style="height:100%; width:88.8%; background:#10b981; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#f59e0b;">📊 Neutral (Consensus)</span>
+                  <span id="nlpPctNeu" class="font-bold">7.9%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeu" style="height:100%; width:7.9%; background:#f59e0b; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#ef4444;">📉 Negative (Bearish)</span>
+                  <span id="nlpPctNeg" class="font-bold">3.3%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeg" style="height:100%; width:3.3%; background:#ef4444; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Saliency Highlighter Box -->
+        <div class="mt-24 p-16" style="background:var(--bg-surface); border-radius:10px; border:1px solid var(--border-color);">
+          <div class="flex justify-between items-center mb-8">
+            <h4 class="text-sm font-semibold flex items-center gap-8">
+              <span>🔍</span> Token Attention Saliency (Explainable AI / XAI)
+            </h4>
+            <span class="text-xs text-muted">Self-Attention Pooling Attribution (α<sub>i</sub>)</span>
+          </div>
+          <p class="text-xs text-muted mb-12">
+            Each word below is highlighted based on its exact attention weight assigned by the Transformer's self-attention pooling mechanism.
+            <span style="color:#10b981; font-weight:600;">Green</span> indicates positive sentiment drivers, 
+            <span style="color:#ef4444; font-weight:600;">Red</span> indicates negative drivers, and 
+            <span style="color:#94a3b8; font-weight:600;">Slate</span> indicates neutral market context.
+          </p>
+
+          <div id="nlpTokenChips" class="p-12" style="background:var(--bg-card); border-radius:8px; border:1px solid var(--border-color); display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:60px;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Benchmark Comparison Table -->
+        <div class="mt-24">
+          <h4 class="text-sm font-semibold mb-12 flex items-center gap-8">
+            <span>📊</span> Verified Benchmark Comparison (5,842 Samples, Test Holdout: 1,169)
+          </h4>
+          <div class="table-container" style="overflow-x:auto;">
+            <table class="table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Model / Architecture</th>
+                  <th>Family</th>
+                  <th>Accuracy</th>
+                  <th>Macro-F1</th>
+                  <th>Inference Latency</th>
+                  <th>Parameters</th>
+                  <th>Explainability</th>
+                </tr>
+              </thead>
+              <tbody id="nlpBenchmarkTableBody">
+                <tr>
+                  <td><strong>TF-IDF + Logistic Regression</strong></td>
+                  <td><span class="badge badge-gray">N-gram Bag-of-Words</span></td>
+                  <td>69.03%</td>
+                  <td>0.6362</td>
+                  <td>0.0003 ms</td>
+                  <td>15,003</td>
+                  <td>Linear Coefficients</td>
+                </tr>
+                <tr>
+                  <td><strong>SBERT (all-MiniLM-L6-v2) + LR</strong></td>
+                  <td><span class="badge badge-blue">Sentence Transformer</span></td>
+                  <td><strong>71.60%</strong></td>
+                  <td><strong>0.6888</strong></td>
+                  <td>28.50 ms</td>
+                  <td>22,713,216</td>
+                  <td>Black-box Embedding</td>
+                </tr>
+                <tr style="background:rgba(99,102,241,0.08); font-weight:bold;">
+                  <td><strong>Financial Transformer (Phase 5)</strong></td>
+                  <td><span class="badge badge-purple">3L MHSA + Attn-Pooling</span></td>
+                  <td>68.61%</td>
+                  <td>0.6425</td>
+                  <td><strong style="color:var(--accent-purple);">1.19 ms</strong> (24x faster than SBERT)</td>
+                  <td>1,635,715</td>
+                  <td><span class="badge badge-green">Token Attention Saliency (α<sub>i</sub>)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Visual Artifacts (Confusion Matrices & Training Loss) -->
+        <div class="bento-grid mt-24" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">COMPARATIVE CONFUSION MATRICES</h5>
+            <img src="/model_evaluations/phase5_nlp/nlp_confusion_matrices.png" alt="NLP Confusion Matrices" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Confusion Matrix plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">FINANCIAL TRANSFORMER TRAINING LOSS DYNAMICS</h5>
+            <img src="/model_evaluations/phase5_nlp/transformer_training_loss.png" alt="Transformer Training Loss" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Training loss plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ═══════════════════════════════════════════════════════════════
          TAB 2: MODEL BENCHMARK & EVALUATION DASHBOARD
          ═══════════════════════════════════════════════════════════════ -->
@@ -381,6 +505,129 @@
       </div>
     </div>
 
+
+
+            <!-- Probability Bars -->
+            <div class="text-xs font-semibold text-muted mb-8">CLASS PROBABILITY DISTRIBUTION</div>
+            <div class="space-y-8" style="display:flex; flex-direction:column; gap:8px;">
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#10b981;">📈 Positive (Bullish)</span>
+                  <span id="nlpPctPos" class="font-bold">88.8%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarPos" style="height:100%; width:88.8%; background:#10b981; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#f59e0b;">📊 Neutral (Consensus)</span>
+                  <span id="nlpPctNeu" class="font-bold">7.9%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeu" style="height:100%; width:7.9%; background:#f59e0b; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#ef4444;">📉 Negative (Bearish)</span>
+                  <span id="nlpPctNeg" class="font-bold">3.3%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeg" style="height:100%; width:3.3%; background:#ef4444; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Saliency Highlighter Box -->
+        <div class="mt-24 p-16" style="background:var(--bg-surface); border-radius:10px; border:1px solid var(--border-color);">
+          <div class="flex justify-between items-center mb-8">
+            <h4 class="text-sm font-semibold flex items-center gap-8">
+              <span>🔍</span> Token Attention Saliency (Explainable AI / XAI)
+            </h4>
+            <span class="text-xs text-muted">Self-Attention Pooling Attribution (α<sub>i</sub>)</span>
+          </div>
+          <p class="text-xs text-muted mb-12">
+            Each word below is highlighted based on its exact attention weight assigned by the Transformer's self-attention pooling mechanism.
+            <span style="color:#10b981; font-weight:600;">Green</span> indicates positive sentiment drivers, 
+            <span style="color:#ef4444; font-weight:600;">Red</span> indicates negative drivers, and 
+            <span style="color:#94a3b8; font-weight:600;">Slate</span> indicates neutral market context.
+          </p>
+
+          <div id="nlpTokenChips" class="p-12" style="background:var(--bg-card); border-radius:8px; border:1px solid var(--border-color); display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:60px;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Benchmark Comparison Table -->
+        <div class="mt-24">
+          <h4 class="text-sm font-semibold mb-12 flex items-center gap-8">
+            <span>📊</span> Verified Benchmark Comparison (5,842 Samples, Test Holdout: 1,169)
+          </h4>
+          <div class="table-container" style="overflow-x:auto;">
+            <table class="table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Model / Architecture</th>
+                  <th>Family</th>
+                  <th>Accuracy</th>
+                  <th>Macro-F1</th>
+                  <th>Inference Latency</th>
+                  <th>Parameters</th>
+                  <th>Explainability</th>
+                </tr>
+              </thead>
+              <tbody id="nlpBenchmarkTableBody">
+                <tr>
+                  <td><strong>TF-IDF + Logistic Regression</strong></td>
+                  <td><span class="badge badge-gray">N-gram Bag-of-Words</span></td>
+                  <td>69.03%</td>
+                  <td>0.6362</td>
+                  <td>0.0003 ms</td>
+                  <td>15,003</td>
+                  <td>Linear Coefficients</td>
+                </tr>
+                <tr>
+                  <td><strong>SBERT (all-MiniLM-L6-v2) + LR</strong></td>
+                  <td><span class="badge badge-blue">Sentence Transformer</span></td>
+                  <td><strong>71.60%</strong></td>
+                  <td><strong>0.6888</strong></td>
+                  <td>28.50 ms</td>
+                  <td>22,713,216</td>
+                  <td>Black-box Embedding</td>
+                </tr>
+                <tr style="background:rgba(99,102,241,0.08); font-weight:bold;">
+                  <td><strong>Financial Transformer (Phase 5)</strong></td>
+                  <td><span class="badge badge-purple">3L MHSA + Attn-Pooling</span></td>
+                  <td>68.61%</td>
+                  <td>0.6425</td>
+                  <td><strong style="color:var(--accent-purple);">1.19 ms</strong> (24x faster than SBERT)</td>
+                  <td>1,635,715</td>
+                  <td><span class="badge badge-green">Token Attention Saliency (α<sub>i</sub>)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Visual Artifacts (Confusion Matrices & Training Loss) -->
+        <div class="bento-grid mt-24" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">COMPARATIVE CONFUSION MATRICES</h5>
+            <img src="/model_evaluations/phase5_nlp/nlp_confusion_matrices.png" alt="NLP Confusion Matrices" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Confusion Matrix plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">FINANCIAL TRANSFORMER TRAINING LOSS DYNAMICS</h5>
+            <img src="/model_evaluations/phase5_nlp/transformer_training_loss.png" alt="Transformer Training Loss" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Training loss plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ═══════════════════════════════════════════════════════════════
          TAB 3: GENUINE TRAINING DYNAMICS & LOSS CURVES
          ═══════════════════════════════════════════════════════════════ -->
@@ -413,6 +660,129 @@
             <div class="text-xs text-muted">Tabular Overfitting Audit</div>
             <div style="font-size:1.3rem;font-weight:700;color:var(--amber);margin:4px 0;">Epoch 40 (Val: 0.4827)</div>
             <div class="text-xs text-muted">Controlled slight divergence; mitigated by Dropout(0.3) & BatchNorm.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+            <!-- Probability Bars -->
+            <div class="text-xs font-semibold text-muted mb-8">CLASS PROBABILITY DISTRIBUTION</div>
+            <div class="space-y-8" style="display:flex; flex-direction:column; gap:8px;">
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#10b981;">📈 Positive (Bullish)</span>
+                  <span id="nlpPctPos" class="font-bold">88.8%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarPos" style="height:100%; width:88.8%; background:#10b981; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#f59e0b;">📊 Neutral (Consensus)</span>
+                  <span id="nlpPctNeu" class="font-bold">7.9%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeu" style="height:100%; width:7.9%; background:#f59e0b; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#ef4444;">📉 Negative (Bearish)</span>
+                  <span id="nlpPctNeg" class="font-bold">3.3%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeg" style="height:100%; width:3.3%; background:#ef4444; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Saliency Highlighter Box -->
+        <div class="mt-24 p-16" style="background:var(--bg-surface); border-radius:10px; border:1px solid var(--border-color);">
+          <div class="flex justify-between items-center mb-8">
+            <h4 class="text-sm font-semibold flex items-center gap-8">
+              <span>🔍</span> Token Attention Saliency (Explainable AI / XAI)
+            </h4>
+            <span class="text-xs text-muted">Self-Attention Pooling Attribution (α<sub>i</sub>)</span>
+          </div>
+          <p class="text-xs text-muted mb-12">
+            Each word below is highlighted based on its exact attention weight assigned by the Transformer's self-attention pooling mechanism.
+            <span style="color:#10b981; font-weight:600;">Green</span> indicates positive sentiment drivers, 
+            <span style="color:#ef4444; font-weight:600;">Red</span> indicates negative drivers, and 
+            <span style="color:#94a3b8; font-weight:600;">Slate</span> indicates neutral market context.
+          </p>
+
+          <div id="nlpTokenChips" class="p-12" style="background:var(--bg-card); border-radius:8px; border:1px solid var(--border-color); display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:60px;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Benchmark Comparison Table -->
+        <div class="mt-24">
+          <h4 class="text-sm font-semibold mb-12 flex items-center gap-8">
+            <span>📊</span> Verified Benchmark Comparison (5,842 Samples, Test Holdout: 1,169)
+          </h4>
+          <div class="table-container" style="overflow-x:auto;">
+            <table class="table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Model / Architecture</th>
+                  <th>Family</th>
+                  <th>Accuracy</th>
+                  <th>Macro-F1</th>
+                  <th>Inference Latency</th>
+                  <th>Parameters</th>
+                  <th>Explainability</th>
+                </tr>
+              </thead>
+              <tbody id="nlpBenchmarkTableBody">
+                <tr>
+                  <td><strong>TF-IDF + Logistic Regression</strong></td>
+                  <td><span class="badge badge-gray">N-gram Bag-of-Words</span></td>
+                  <td>69.03%</td>
+                  <td>0.6362</td>
+                  <td>0.0003 ms</td>
+                  <td>15,003</td>
+                  <td>Linear Coefficients</td>
+                </tr>
+                <tr>
+                  <td><strong>SBERT (all-MiniLM-L6-v2) + LR</strong></td>
+                  <td><span class="badge badge-blue">Sentence Transformer</span></td>
+                  <td><strong>71.60%</strong></td>
+                  <td><strong>0.6888</strong></td>
+                  <td>28.50 ms</td>
+                  <td>22,713,216</td>
+                  <td>Black-box Embedding</td>
+                </tr>
+                <tr style="background:rgba(99,102,241,0.08); font-weight:bold;">
+                  <td><strong>Financial Transformer (Phase 5)</strong></td>
+                  <td><span class="badge badge-purple">3L MHSA + Attn-Pooling</span></td>
+                  <td>68.61%</td>
+                  <td>0.6425</td>
+                  <td><strong style="color:var(--accent-purple);">1.19 ms</strong> (24x faster than SBERT)</td>
+                  <td>1,635,715</td>
+                  <td><span class="badge badge-green">Token Attention Saliency (α<sub>i</sub>)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Visual Artifacts (Confusion Matrices & Training Loss) -->
+        <div class="bento-grid mt-24" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">COMPARATIVE CONFUSION MATRICES</h5>
+            <img src="/model_evaluations/phase5_nlp/nlp_confusion_matrices.png" alt="NLP Confusion Matrices" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Confusion Matrix plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">FINANCIAL TRANSFORMER TRAINING LOSS DYNAMICS</h5>
+            <img src="/model_evaluations/phase5_nlp/transformer_training_loss.png" alt="Transformer Training Loss" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Training loss plot available in model_evaluations/phase5_nlp/</div>'">
           </div>
         </div>
       </div>
@@ -459,6 +829,129 @@
       </div>
     </div>
 
+
+
+            <!-- Probability Bars -->
+            <div class="text-xs font-semibold text-muted mb-8">CLASS PROBABILITY DISTRIBUTION</div>
+            <div class="space-y-8" style="display:flex; flex-direction:column; gap:8px;">
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#10b981;">📈 Positive (Bullish)</span>
+                  <span id="nlpPctPos" class="font-bold">88.8%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarPos" style="height:100%; width:88.8%; background:#10b981; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#f59e0b;">📊 Neutral (Consensus)</span>
+                  <span id="nlpPctNeu" class="font-bold">7.9%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeu" style="height:100%; width:7.9%; background:#f59e0b; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#ef4444;">📉 Negative (Bearish)</span>
+                  <span id="nlpPctNeg" class="font-bold">3.3%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeg" style="height:100%; width:3.3%; background:#ef4444; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Saliency Highlighter Box -->
+        <div class="mt-24 p-16" style="background:var(--bg-surface); border-radius:10px; border:1px solid var(--border-color);">
+          <div class="flex justify-between items-center mb-8">
+            <h4 class="text-sm font-semibold flex items-center gap-8">
+              <span>🔍</span> Token Attention Saliency (Explainable AI / XAI)
+            </h4>
+            <span class="text-xs text-muted">Self-Attention Pooling Attribution (α<sub>i</sub>)</span>
+          </div>
+          <p class="text-xs text-muted mb-12">
+            Each word below is highlighted based on its exact attention weight assigned by the Transformer's self-attention pooling mechanism.
+            <span style="color:#10b981; font-weight:600;">Green</span> indicates positive sentiment drivers, 
+            <span style="color:#ef4444; font-weight:600;">Red</span> indicates negative drivers, and 
+            <span style="color:#94a3b8; font-weight:600;">Slate</span> indicates neutral market context.
+          </p>
+
+          <div id="nlpTokenChips" class="p-12" style="background:var(--bg-card); border-radius:8px; border:1px solid var(--border-color); display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:60px;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Benchmark Comparison Table -->
+        <div class="mt-24">
+          <h4 class="text-sm font-semibold mb-12 flex items-center gap-8">
+            <span>📊</span> Verified Benchmark Comparison (5,842 Samples, Test Holdout: 1,169)
+          </h4>
+          <div class="table-container" style="overflow-x:auto;">
+            <table class="table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Model / Architecture</th>
+                  <th>Family</th>
+                  <th>Accuracy</th>
+                  <th>Macro-F1</th>
+                  <th>Inference Latency</th>
+                  <th>Parameters</th>
+                  <th>Explainability</th>
+                </tr>
+              </thead>
+              <tbody id="nlpBenchmarkTableBody">
+                <tr>
+                  <td><strong>TF-IDF + Logistic Regression</strong></td>
+                  <td><span class="badge badge-gray">N-gram Bag-of-Words</span></td>
+                  <td>69.03%</td>
+                  <td>0.6362</td>
+                  <td>0.0003 ms</td>
+                  <td>15,003</td>
+                  <td>Linear Coefficients</td>
+                </tr>
+                <tr>
+                  <td><strong>SBERT (all-MiniLM-L6-v2) + LR</strong></td>
+                  <td><span class="badge badge-blue">Sentence Transformer</span></td>
+                  <td><strong>71.60%</strong></td>
+                  <td><strong>0.6888</strong></td>
+                  <td>28.50 ms</td>
+                  <td>22,713,216</td>
+                  <td>Black-box Embedding</td>
+                </tr>
+                <tr style="background:rgba(99,102,241,0.08); font-weight:bold;">
+                  <td><strong>Financial Transformer (Phase 5)</strong></td>
+                  <td><span class="badge badge-purple">3L MHSA + Attn-Pooling</span></td>
+                  <td>68.61%</td>
+                  <td>0.6425</td>
+                  <td><strong style="color:var(--accent-purple);">1.19 ms</strong> (24x faster than SBERT)</td>
+                  <td>1,635,715</td>
+                  <td><span class="badge badge-green">Token Attention Saliency (α<sub>i</sub>)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Visual Artifacts (Confusion Matrices & Training Loss) -->
+        <div class="bento-grid mt-24" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">COMPARATIVE CONFUSION MATRICES</h5>
+            <img src="/model_evaluations/phase5_nlp/nlp_confusion_matrices.png" alt="NLP Confusion Matrices" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Confusion Matrix plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">FINANCIAL TRANSFORMER TRAINING LOSS DYNAMICS</h5>
+            <img src="/model_evaluations/phase5_nlp/transformer_training_loss.png" alt="Transformer Training Loss" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Training loss plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ═══════════════════════════════════════════════════════════════
          TAB 5: CANDLESTICK COMPUTER VISION & GRAD-CAM
          ═══════════════════════════════════════════════════════════════ -->
@@ -496,6 +989,129 @@
             <button class="btn btn-primary" id="btnRunVision" onclick="runVisionGradCAMDemo()">🎨 Extract Pattern & Grad-CAM Overlay</button>
           </div>
           <div id="visionDemoResult" class="mt-16" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+
+
+            <!-- Probability Bars -->
+            <div class="text-xs font-semibold text-muted mb-8">CLASS PROBABILITY DISTRIBUTION</div>
+            <div class="space-y-8" style="display:flex; flex-direction:column; gap:8px;">
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#10b981;">📈 Positive (Bullish)</span>
+                  <span id="nlpPctPos" class="font-bold">88.8%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarPos" style="height:100%; width:88.8%; background:#10b981; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#f59e0b;">📊 Neutral (Consensus)</span>
+                  <span id="nlpPctNeu" class="font-bold">7.9%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeu" style="height:100%; width:7.9%; background:#f59e0b; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#ef4444;">📉 Negative (Bearish)</span>
+                  <span id="nlpPctNeg" class="font-bold">3.3%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeg" style="height:100%; width:3.3%; background:#ef4444; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Saliency Highlighter Box -->
+        <div class="mt-24 p-16" style="background:var(--bg-surface); border-radius:10px; border:1px solid var(--border-color);">
+          <div class="flex justify-between items-center mb-8">
+            <h4 class="text-sm font-semibold flex items-center gap-8">
+              <span>🔍</span> Token Attention Saliency (Explainable AI / XAI)
+            </h4>
+            <span class="text-xs text-muted">Self-Attention Pooling Attribution (α<sub>i</sub>)</span>
+          </div>
+          <p class="text-xs text-muted mb-12">
+            Each word below is highlighted based on its exact attention weight assigned by the Transformer's self-attention pooling mechanism.
+            <span style="color:#10b981; font-weight:600;">Green</span> indicates positive sentiment drivers, 
+            <span style="color:#ef4444; font-weight:600;">Red</span> indicates negative drivers, and 
+            <span style="color:#94a3b8; font-weight:600;">Slate</span> indicates neutral market context.
+          </p>
+
+          <div id="nlpTokenChips" class="p-12" style="background:var(--bg-card); border-radius:8px; border:1px solid var(--border-color); display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:60px;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Benchmark Comparison Table -->
+        <div class="mt-24">
+          <h4 class="text-sm font-semibold mb-12 flex items-center gap-8">
+            <span>📊</span> Verified Benchmark Comparison (5,842 Samples, Test Holdout: 1,169)
+          </h4>
+          <div class="table-container" style="overflow-x:auto;">
+            <table class="table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Model / Architecture</th>
+                  <th>Family</th>
+                  <th>Accuracy</th>
+                  <th>Macro-F1</th>
+                  <th>Inference Latency</th>
+                  <th>Parameters</th>
+                  <th>Explainability</th>
+                </tr>
+              </thead>
+              <tbody id="nlpBenchmarkTableBody">
+                <tr>
+                  <td><strong>TF-IDF + Logistic Regression</strong></td>
+                  <td><span class="badge badge-gray">N-gram Bag-of-Words</span></td>
+                  <td>69.03%</td>
+                  <td>0.6362</td>
+                  <td>0.0003 ms</td>
+                  <td>15,003</td>
+                  <td>Linear Coefficients</td>
+                </tr>
+                <tr>
+                  <td><strong>SBERT (all-MiniLM-L6-v2) + LR</strong></td>
+                  <td><span class="badge badge-blue">Sentence Transformer</span></td>
+                  <td><strong>71.60%</strong></td>
+                  <td><strong>0.6888</strong></td>
+                  <td>28.50 ms</td>
+                  <td>22,713,216</td>
+                  <td>Black-box Embedding</td>
+                </tr>
+                <tr style="background:rgba(99,102,241,0.08); font-weight:bold;">
+                  <td><strong>Financial Transformer (Phase 5)</strong></td>
+                  <td><span class="badge badge-purple">3L MHSA + Attn-Pooling</span></td>
+                  <td>68.61%</td>
+                  <td>0.6425</td>
+                  <td><strong style="color:var(--accent-purple);">1.19 ms</strong> (24x faster than SBERT)</td>
+                  <td>1,635,715</td>
+                  <td><span class="badge badge-green">Token Attention Saliency (α<sub>i</sub>)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Visual Artifacts (Confusion Matrices & Training Loss) -->
+        <div class="bento-grid mt-24" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">COMPARATIVE CONFUSION MATRICES</h5>
+            <img src="/model_evaluations/phase5_nlp/nlp_confusion_matrices.png" alt="NLP Confusion Matrices" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Confusion Matrix plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">FINANCIAL TRANSFORMER TRAINING LOSS DYNAMICS</h5>
+            <img src="/model_evaluations/phase5_nlp/transformer_training_loss.png" alt="Transformer Training Loss" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Training loss plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
         </div>
       </div>
     </div>
@@ -538,6 +1154,181 @@
             <li><strong>Latency Superiority:</strong> PyTorch LeadMLP achieves <strong>0.048 ms</strong> inference latency (~103x faster than Random Forest's 4.95 ms), making it vastly superior for high-throughput streaming pipelines.</li>
             <li><strong>Non-Linear Interactions:</strong> MLP learns joint cross-layer continuous embeddings between visit duration and profile scores, whereas Random Forest isolates splits hierarchically.</li>
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         TAB: FINANCIAL NLP & TOKEN SALIENCY (PHASE 5)
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="tab-financial-nlp" class="tab-content">
+      <div class="card mb-24">
+        <div class="card-header flex justify-between items-center">
+          <div>
+            <h3 class="card-title">📰 Phase 5 Advanced Deep Learning: Financial Domain NLP</h3>
+            <p class="text-xs text-muted mt-4">Multi-Head Self-Attention Transformer with explicit Attention-Pooling for token-level sentiment explainability.</p>
+          </div>
+          <span class="badge badge-purple">1,635,715 Parameters (3 Layers / 4 Heads)</span>
+        </div>
+
+        <div class="bento-grid mt-16" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+          <!-- Left: Input & Presets -->
+          <div>
+            <label class="text-xs font-semibold text-muted mb-8" style="display:block;">FINANCIAL NEWS / STATEMENT / HEADLINE</label>
+            <textarea id="nlpInputText" rows="4" style="width:100%; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); padding:12px; font-family:inherit; font-size:13px; line-height:1.5; resize:vertical;" placeholder="Enter financial news, earnings commentary, or market sentiment text...">RBI cuts repo rate by 25 bps, boosting bank liquidity and equity market sentiment.</textarea>
+            
+            <div class="mt-12">
+              <span class="text-xs text-muted" style="font-weight:600;">⚡ Sample Presets:</span>
+              <div class="flex gap-8 mt-8" style="flex-wrap:wrap;">
+                <button type="button" class="btn btn-outline btn-xs" onclick="setNLPPreset('RBI cuts repo rate by 25 bps, boosting bank liquidity and equity market sentiment.')">📈 Rate Cut (Bullish)</button>
+                <button type="button" class="btn btn-outline btn-xs" onclick="setNLPPreset('Tech fund records massive redemption following quarterly loss and margin contraction.')">📉 Fund Loss (Bearish)</button>
+                <button type="button" class="btn btn-outline btn-xs" onclick="setNLPPreset('Company reported steady earnings with neutral market reaction in line with street consensus.')">📊 Steady Earnings (Neutral)</button>
+                <button type="button" class="btn btn-outline btn-xs" onclick="setNLPPreset('HDFC Bank delivers 21% net profit growth driven by robust loan disbursements.')">🚀 Profit Surge (Bullish)</button>
+                <button type="button" class="btn btn-outline btn-xs" onclick="setNLPPreset('VIX spikes 18% as midcap valuations face imminent correction and liquidity deficit.')">⚠️ Volatility Shock (Bearish)</button>
+              </div>
+            </div>
+
+            <button id="btnRunNLP" class="btn btn-primary mt-16 w-full" onclick="executeNLPAnalysis()">
+              <span>⚡ Analyze Sentiment & Extract Saliency</span>
+            </button>
+          </div>
+
+          <!-- Right: Output & Probability Gauge -->
+          <div style="background:var(--bg-surface); padding:16px; border-radius:10px; border:1px solid var(--border-color);">
+            <div class="flex justify-between items-center mb-12">
+              <span class="text-xs text-muted font-semibold">PREDICTED SENTIMENT</span>
+              <span id="nlpModelTag" class="text-xs text-muted">FinancialTransformer (3-Layer MHSA)</span>
+            </div>
+
+            <div class="flex items-center gap-16 mb-16">
+              <span id="nlpBadge" class="badge badge-green" style="font-size:15px; padding:6px 16px; font-weight:700;">POSITIVE</span>
+              <div>
+                <div class="text-xs text-muted">Confidence Score</div>
+                <div id="nlpConfidence" class="text-xl font-bold" style="color:var(--text-main);">88.8%</div>
+              </div>
+              <div style="margin-left:auto;">
+                <div class="text-xs text-muted">Inference Latency</div>
+                <div id="nlpLatency" class="text-sm font-semibold" style="color:var(--accent-purple);">1.25 ms</div>
+              </div>
+            </div>
+
+            <!-- Probability Bars -->
+            <div class="text-xs font-semibold text-muted mb-8">CLASS PROBABILITY DISTRIBUTION</div>
+            <div class="space-y-8" style="display:flex; flex-direction:column; gap:8px;">
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#10b981;">📈 Positive (Bullish)</span>
+                  <span id="nlpPctPos" class="font-bold">88.8%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarPos" style="height:100%; width:88.8%; background:#10b981; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#f59e0b;">📊 Neutral (Consensus)</span>
+                  <span id="nlpPctNeu" class="font-bold">7.9%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeu" style="height:100%; width:7.9%; background:#f59e0b; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-2">
+                  <span style="color:#ef4444;">📉 Negative (Bearish)</span>
+                  <span id="nlpPctNeg" class="font-bold">3.3%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+                  <div id="nlpBarNeg" style="height:100%; width:3.3%; background:#ef4444; border-radius:4px; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Saliency Highlighter Box -->
+        <div class="mt-24 p-16" style="background:var(--bg-surface); border-radius:10px; border:1px solid var(--border-color);">
+          <div class="flex justify-between items-center mb-8">
+            <h4 class="text-sm font-semibold flex items-center gap-8">
+              <span>🔍</span> Token Attention Saliency (Explainable AI / XAI)
+            </h4>
+            <span class="text-xs text-muted">Self-Attention Pooling Attribution (α<sub>i</sub>)</span>
+          </div>
+          <p class="text-xs text-muted mb-12">
+            Each word below is highlighted based on its exact attention weight assigned by the Transformer's self-attention pooling mechanism.
+            <span style="color:#10b981; font-weight:600;">Green</span> indicates positive sentiment drivers, 
+            <span style="color:#ef4444; font-weight:600;">Red</span> indicates negative drivers, and 
+            <span style="color:#94a3b8; font-weight:600;">Slate</span> indicates neutral market context.
+          </p>
+
+          <div id="nlpTokenChips" class="p-12" style="background:var(--bg-card); border-radius:8px; border:1px solid var(--border-color); display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:60px;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Benchmark Comparison Table -->
+        <div class="mt-24">
+          <h4 class="text-sm font-semibold mb-12 flex items-center gap-8">
+            <span>📊</span> Verified Benchmark Comparison (5,842 Samples, Test Holdout: 1,169)
+          </h4>
+          <div class="table-container" style="overflow-x:auto;">
+            <table class="table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Model / Architecture</th>
+                  <th>Family</th>
+                  <th>Accuracy</th>
+                  <th>Macro-F1</th>
+                  <th>Inference Latency</th>
+                  <th>Parameters</th>
+                  <th>Explainability</th>
+                </tr>
+              </thead>
+              <tbody id="nlpBenchmarkTableBody">
+                <tr>
+                  <td><strong>TF-IDF + Logistic Regression</strong></td>
+                  <td><span class="badge badge-gray">N-gram Bag-of-Words</span></td>
+                  <td>69.03%</td>
+                  <td>0.6362</td>
+                  <td>0.0003 ms</td>
+                  <td>15,003</td>
+                  <td>Linear Coefficients</td>
+                </tr>
+                <tr>
+                  <td><strong>SBERT (all-MiniLM-L6-v2) + LR</strong></td>
+                  <td><span class="badge badge-blue">Sentence Transformer</span></td>
+                  <td><strong>71.60%</strong></td>
+                  <td><strong>0.6888</strong></td>
+                  <td>28.50 ms</td>
+                  <td>22,713,216</td>
+                  <td>Black-box Embedding</td>
+                </tr>
+                <tr style="background:rgba(99,102,241,0.08); font-weight:bold;">
+                  <td><strong>Financial Transformer (Phase 5)</strong></td>
+                  <td><span class="badge badge-purple">3L MHSA + Attn-Pooling</span></td>
+                  <td>68.61%</td>
+                  <td>0.6425</td>
+                  <td><strong style="color:var(--accent-purple);">1.19 ms</strong> (24x faster than SBERT)</td>
+                  <td>1,635,715</td>
+                  <td><span class="badge badge-green">Token Attention Saliency (α<sub>i</sub>)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Visual Artifacts (Confusion Matrices & Training Loss) -->
+        <div class="bento-grid mt-24" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">COMPARATIVE CONFUSION MATRICES</h5>
+            <img src="/model_evaluations/phase5_nlp/nlp_confusion_matrices.png" alt="NLP Confusion Matrices" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Confusion Matrix plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
+          <div class="card" style="padding:16px;">
+            <h5 class="text-xs font-semibold text-muted mb-8">FINANCIAL TRANSFORMER TRAINING LOSS DYNAMICS</h5>
+            <img src="/model_evaluations/phase5_nlp/transformer_training_loss.png" alt="Transformer Training Loss" style="width:100%; border-radius:8px; border:1px solid var(--border-color);" onerror="this.parentElement.innerHTML='<div class=\'text-xs text-muted p-12\'>Training loss plot available in model_evaluations/phase5_nlp/</div>'">
+          </div>
         </div>
       </div>
     </div>
@@ -817,8 +1608,105 @@
       }
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    // PHASE 5: FINANCIAL NLP & TOKEN SALIENCY
+    // ═══════════════════════════════════════════════════════════════
+    function setNLPPreset(text) {
+      document.getElementById('nlpInputText').value = text;
+      executeNLPAnalysis();
+    }
+
+    async function executeNLPAnalysis() {
+      const text = document.getElementById('nlpInputText').value.trim();
+      if (!text) return;
+
+      const btn = document.getElementById('btnRunNLP');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Computing Transformer Attention...</span>';
+
+      try {
+        const res = await apiCall('/api/nlp/financial-sentiment', {
+          method: 'POST',
+          body: JSON.stringify({ text })
+        });
+
+        if (res) {
+          const sent = (res.sentiment || 'neutral').toUpperCase();
+          const badge = document.getElementById('nlpBadge');
+          badge.textContent = sent;
+          if (sent === 'POSITIVE') {
+            badge.className = 'badge badge-green';
+          } else if (sent === 'NEGATIVE') {
+            badge.className = 'badge badge-red';
+          } else {
+            badge.className = 'badge badge-amber';
+          }
+
+          document.getElementById('nlpConfidence').textContent = ((res.confidence || 0.8) * 100).toFixed(1) + '%';
+          document.getElementById('nlpLatency').textContent = ((res.latency_ms || 1.2)).toFixed(2) + ' ms';
+          document.getElementById('nlpModelTag').textContent = res.model || 'FinancialTransformer';
+
+          const probs = res.probabilities || { positive: 0.33, neutral: 0.33, negative: 0.33 };
+          const pPos = ((probs.positive || 0) * 100).toFixed(1);
+          const pNeu = ((probs.neutral || 0) * 100).toFixed(1);
+          const pNeg = ((probs.negative || 0) * 100).toFixed(1);
+
+          document.getElementById('nlpPctPos').textContent = pPos + '%';
+          document.getElementById('nlpBarPos').style.width = pPos + '%';
+
+          document.getElementById('nlpPctNeu').textContent = pNeu + '%';
+          document.getElementById('nlpBarNeu').style.width = pNeu + '%';
+
+          document.getElementById('nlpPctNeg').textContent = pNeg + '%';
+          document.getElementById('nlpBarNeg').style.width = pNeg + '%';
+
+          renderTokenChips(res.token_saliency || []);
+        }
+      } catch (err) {
+        console.error('NLP Analysis error:', err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>⚡ Analyze Sentiment & Extract Saliency</span>';
+      }
+    }
+
+    function renderTokenChips(tokens) {
+      const container = document.getElementById('nlpTokenChips');
+      if (!tokens || tokens.length === 0) {
+        container.innerHTML = '<span class="text-xs text-muted">No token attributions available</span>';
+        return;
+      }
+
+      container.innerHTML = tokens.map(t => {
+        let bg = 'rgba(148, 163, 184, 0.15)';
+        let color = '#94a3b8';
+        let border = 'rgba(148, 163, 184, 0.3)';
+
+        const alpha = Math.min(0.85, Math.max(0.18, (t.weight || 0.1) * 2.5));
+
+        if (t.polarity === 'positive') {
+          bg = `rgba(16, 185, 129, ${alpha})`;
+          color = '#10b981';
+          border = 'rgba(16, 185, 129, 0.4)';
+        } else if (t.polarity === 'negative') {
+          bg = `rgba(239, 68, 68, ${alpha})`;
+          color = '#ef4444';
+          border = 'rgba(239, 68, 68, 0.4)';
+        }
+
+        const pct = t.score_pct ? t.score_pct + '%' : (((t.weight || 0) * 100).toFixed(1) + '%');
+        return `
+          <div style="display:inline-flex; align-items:center; gap:6px; background:${bg}; border:1px solid ${border}; padding:4px 10px; border-radius:6px; font-size:12px; font-weight:600; color:${color};" title="Weight: ${pct} (${t.polarity})">
+            <span>${t.token}</span>
+            <span style="font-size:10px; opacity:0.8; font-weight:normal;">${pct}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       checkApiHealth();
+      setTimeout(executeNLPAnalysis, 600);
     });
   </script>
 </body>

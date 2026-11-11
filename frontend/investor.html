@@ -25,6 +25,8 @@
     </div>
     <div class="flex items-center gap-12">
       <div class="status-bar" id="apiStatus"><div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div></div>
+      <span class="badge badge-emerald" id="rtStreamPill" style="font-size:0.7rem;"><span class="pulse pulse-live"></span> Connecting WS...</span>
+      <button class="btn btn-sm btn-primary" onclick="switchDemoRole('distributor')" title="Switch instantly to Demo Distributor">⇄ Demo Distributor</button>
       <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
     </div>
   </nav>
@@ -216,11 +218,22 @@
     <!-- TAB: Fund Explorer -->
     <div class="tab-content" id="tab-explorer" data-tab-content="main">
       <div class="card mb-24">
-        <h4>🔍 AI-Powered Fund Search</h4>
-        <p class="text-muted text-sm mt-8">Semantic search powered by TF-IDF Cosine Similarity across 14,275+ AMFI schemes</p>
+        <div class="flex justify-between items-center flex-wrap gap-12">
+          <div>
+            <h4>🔍 AI-Powered Semantic Fund Search</h4>
+            <p class="text-muted text-sm mt-4">Live semantic + AMFI catalog retrieval across 16,344+ Indian mutual fund schemes</p>
+          </div>
+          <select id="fundPersonaFilter" class="form-select" style="width:auto;padding:6px 12px;font-size:0.8rem;height:auto;" onchange="loadAllFunds()">
+            <option value="">All Personas (Catalog)</option>
+            <option value="balanced">⚖️ Balanced Allocator</option>
+            <option value="growth">🚀 Growth Seeker</option>
+            <option value="conservative">🛡️ Wealth Preserver</option>
+            <option value="passive">📊 Index Tracker</option>
+          </select>
+        </div>
         <div class="flex gap-8 mt-16">
-          <input type="text" class="form-input" id="fundSearch" placeholder="Search funds... e.g. aggressive growth equity">
-          <button class="btn btn-primary" onclick="searchFunds()">Search</button>
+          <input type="text" class="form-input" id="fundSearch" placeholder="Search semantically... e.g. aggressive midcap growth equity or ultra short debt" onkeydown="if(event.key==='Enter') searchFunds()">
+          <button class="btn btn-primary" onclick="searchFunds()">Search AI</button>
         </div>
       </div>
       <div id="searchResults">
@@ -281,37 +294,66 @@
         </div>
       </div>
 
+      <!-- Live WebSocket Transformer Stream Strip -->
+      <div class="card card-accent-violet mb-24" id="rtMarketFeedCard">
+        <div class="flex justify-between items-center flex-wrap gap-8">
+          <div>
+            <h4 style="margin:0;">⚡ Real-Time Transformer Market Wire</h4>
+            <p class="text-xs text-muted mt-4">Live headlines scored via WebSocket using Phase 5 Financial Transformer + Token Attention Saliency</p>
+          </div>
+          <span class="badge badge-violet" id="rtFeedBadge">Streaming...</span>
+        </div>
+        <div id="rtHeadlineFeed" class="mt-12 text-sm text-muted">Waiting for real-time WebSocket tick...</div>
+      </div>
+
       <!-- Live News-Based Alert System -->
       <div class="card card-accent-red mb-24">
         <h4 class="flex items-center gap-8"><span>📰</span> Live News-Based Alert System</h4>
-        <p class="text-muted text-sm mt-8">Real-time impact analysis of market events on your portfolio holdings.</p>
+        <p class="text-muted text-sm mt-8">Personalized holding impact alerts scored live by Financial Transformer + Token Saliency.</p>
         <div class="bento-grid mt-16" id="newsAlertsContainer" style="gap:16px;">
           <!-- Dynamic alert cards will be rendered here -->
         </div>
       </div>
 
-      <div class="bento-grid">
+      <div class="bento-grid mb-24">
         <div class="bento-7 card">
           <div class="flex justify-between items-center mb-16">
-            <h4 id="chartTitle">📈 Fund Trend & AI Forecast</h4>
+            <h4 id="chartTitle">📈 Fund Trend & BiLSTM Quantile Forecast</h4>
             <select id="chartFundSelector" class="form-input" style="width: auto; padding: 6px 12px; font-size: 0.85rem; height: auto; background: var(--bg-surface); border: 1px solid rgba(255, 255, 255, 0.1);" onchange="updateForecastChart()"></select>
           </div>
           <div class="chart-container" style="height:300px;"><canvas id="niftyChart"></canvas></div>
           <div id="forecastSummaryBar" class="flex justify-between items-center mt-12 p-8" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 6px; font-size: 0.85rem;">
             <div class="flex items-center gap-8">
-              <span>🔮 AI Forecast (5d):</span>
+              <span>🔮 BiLSTM + Attention (5d):</span>
               <strong id="forecastTrendBadge" class="badge">UPWARD 📈</strong>
             </div>
             <div class="flex gap-16">
               <span>Confidence: <strong id="forecastConfidence" class="text-emerald">—</strong></span>
-              <span class="text-muted" id="accuracyMetricLabel">Model: LSTM</span>
+              <span class="text-muted" id="accuracyMetricLabel">Model: BiLSTM + Attention</span>
             </div>
           </div>
+          <div id="forecastAttentionBar" class="text-xs text-muted mt-8" style="padding: 6px 8px; background: var(--bg-root); border-radius: 6px;">
+            Temporal Attention Focus: Waiting for scheme forecast...
+          </div>
           <div id="forecastDisclaimerBar" style="font-size: 0.75rem; color: #94a3b8; margin-top: 6px; padding: 4px 8px; text-align: right; background: rgba(255,255,255,0.01); border-radius: 4px;">
-            ⚠️ <em>Educational and analytical tool only. Not investment advice. P10–P90 uncertainty intervals calibrated at ~80% coverage.</em>
+            ⚠️ <em>Educational and analytical tool only. Not investment advice. P10–P90 uncertainty intervals calibrated via pinball loss.</em>
           </div>
         </div>
-        <div class="bento-5 card"><h4 class="mb-16">Sector Performance</h4><div class="chart-container" style="height:300px;"><canvas id="sectorChart"></canvas></div></div>
+        <div class="bento-5 card"><h4 class="mb-16">Sector Performance (Live)</h4><div class="chart-container" style="height:340px;"><canvas id="sectorChart"></canvas></div></div>
+      </div>
+
+      <!-- Phase 3 Candlestick ResNet-18 + Grad-CAM Vision Card -->
+      <div class="card card-accent-blue" id="visionPatternCard">
+        <div class="flex justify-between items-center flex-wrap gap-8 mb-16">
+          <div>
+            <h4 style="margin:0;">👁️ Candlestick Chart AI — ResNet-18 + Grad-CAM XAI</h4>
+            <p class="text-xs text-muted mt-4" id="visionSchemeSubtitle">Live pattern classification & saliency heatmap synced with selected fund</p>
+          </div>
+          <span class="badge badge-blue" id="visionModelBadge">Phase 3 ResNet-18</span>
+        </div>
+        <div id="investorVisionContent" class="bento-grid" style="align-items:center;">
+          <div class="bento-12 text-sm text-muted">Select any mutual fund or click Forecast to extract live candlestick pattern & Grad-CAM overlay...</div>
+        </div>
       </div>
     </div>
 
@@ -344,6 +386,8 @@
   <script>
     let sipChartInstance = null;
     let niftyChartInstance = null;
+    let allocChartInstance = null;
+    let sectorChartInstance = null;
 
     document.addEventListener('DOMContentLoaded', async () => {
       // Verify login session and synchronize profile details
@@ -357,6 +401,14 @@
       setupSIPSliders();
       calcSIP();
       updateInvBIAnalytics();
+
+      // Subscribe to live WebSocket ticks for real-time Market Pulse & Saliency
+      window.addEventListener('lume:realtime-tick', (evt) => {
+        applyRealtimeInvestorTick(evt.detail);
+      });
+      if (state.latestRealtimePacket) {
+        applyRealtimeInvestorTick(state.latestRealtimePacket);
+      }
     });
 
     // ── Portfolio ──
@@ -447,7 +499,8 @@
 
         // Real portfolio with live NAV data
         const colors = ['#2563EB','#10B981','#EF4444','#F59E0B','#8B5CF6','#EC4899','#06B6D4','#84CC16'];
-        createDoughnutChart(
+        if (allocChartInstance) allocChartInstance.destroy();
+        allocChartInstance = createDoughnutChart(
           'allocChart',
           holdings.map(h => (h.scheme_name || 'Fund').split(' ').slice(0, 3).join(' ')),
           holdings.map(h => h.current_value || h.buy_value),
@@ -515,20 +568,39 @@
       selectedInvestFund = null;
     }
 
-    function searchInvestFunds() {
-      const q = document.getElementById('investFundSearch').value.toLowerCase();
+    let _investSearchTimer = null;
+    async function searchInvestFunds() {
+      const q = document.getElementById('investFundSearch').value.trim();
       if (q.length < 2) { document.getElementById('investFundResults').innerHTML = ''; return; }
-      const catalog = state.fundCatalog || [];
-      const matches = catalog.filter(f =>
-        (f.scheme_name || f.name || '').toLowerCase().includes(q) ||
-        (f.category || '').toLowerCase().includes(q)
-      ).slice(0, 8);
-      document.getElementById('investFundResults').innerHTML = matches.map(f => `
-        <div onclick="selectInvestFund('${f.scheme_code || f.id}','${(f.scheme_name || f.name || '').replace(/'/g, "\\'")  }','${(f.category || f.category_group || 'Mutual Fund').replace(/'/g, "\\'")}')" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85rem;" onmouseover="this.style.background='rgba(37,99,235,0.1)'" onmouseout="this.style.background='transparent'">
-          <div style="font-weight:500;">${f.scheme_name || f.name}</div>
-          <div class="text-xs text-muted">${f.category || f.category_group || ''} · Code: ${f.scheme_code || f.id || ''}</div>
-        </div>
-      `).join('') || '<p class="text-xs text-muted" style="padding:8px;">No funds found</p>';
+      clearTimeout(_investSearchTimer);
+      _investSearchTimer = setTimeout(async () => {
+        let matches = [];
+        const [semRes, catRes] = await Promise.all([
+          searchFundsSemantic(q, 8),
+          getFundCatalog(null, 8, q),
+        ]);
+        const seen = new Set();
+        [...(semRes?.results || []), ...(catRes?.funds || [])].forEach(f => {
+          const code = String(f.scheme_code || f.id || '');
+          if (code && !seen.has(code)) {
+            seen.add(code);
+            matches.push(f);
+          }
+        });
+        if (!matches.length) {
+          const ql = q.toLowerCase();
+          matches = (state.fundCatalog || []).filter(f =>
+            (f.scheme_name || f.name || '').toLowerCase().includes(ql) ||
+            (f.category || '').toLowerCase().includes(ql)
+          );
+        }
+        document.getElementById('investFundResults').innerHTML = matches.slice(0, 10).map(f => `
+          <div onclick="selectInvestFund('${f.scheme_code || f.id}','${(f.scheme_name || f.name || '').replace(/'/g, "\\'")  }','${(f.category || f.category_group || 'Mutual Fund').replace(/'/g, "\\'")}')" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85rem;" onmouseover="this.style.background='rgba(37,99,235,0.1)'" onmouseout="this.style.background='transparent'">
+            <div style="font-weight:500;">${f.scheme_name || f.name}</div>
+            <div class="text-xs text-muted">${f.category || f.category_group || ''} · Code: ${f.scheme_code || f.id || ''}</div>
+          </div>
+        `).join('') || '<p class="text-xs text-muted" style="padding:8px;">No funds found</p>';
+      }, 220);
     }
 
     function selectInvestFund(code, name, category) {
@@ -662,7 +734,9 @@
 
     // ── Fund Explorer ──
     async function loadAllFunds() {
-      const response = await getFundCatalog(state.persona || 'balanced', 100);
+      const personaSel = document.getElementById('fundPersonaFilter');
+      const selectedPersona = personaSel ? (personaSel.value || null) : (state.persona || 'balanced');
+      const response = await getFundCatalog(selectedPersona, 60);
       const funds = response?.funds?.length ? response.funds : generateSampleFunds();
       state.fundCatalog = funds;
       renderFundCards('allFundsGrid', funds);
@@ -670,14 +744,47 @@
     }
 
     async function searchFunds() {
-      const q = document.getElementById('fundSearch').value.toLowerCase();
+      const q = document.getElementById('fundSearch').value.trim();
+      const grid = document.getElementById('allFundsGrid');
+      if (!q) {
+        await loadAllFunds();
+        return;
+      }
+      if (grid) {
+        grid.innerHTML = `<div class="bento-12 text-center p-24 text-muted text-sm">Searching semantic embeddings & AMFI catalog for "${q}"...</div>`;
+      }
+      const [semRes, catRes] = await Promise.all([
+        searchFundsSemantic(q, 12),
+        getFundCatalog(null, 15, q),
+      ]);
+      const merged = [];
+      const seen = new Set();
+      (semRes?.results || []).forEach(r => {
+        const code = String(r.scheme_code || '');
+        if (code && !seen.has(code)) {
+          seen.add(code);
+          merged.push({ ...r, semantic_match: true });
+        }
+      });
+      (catRes?.funds || []).forEach(f => {
+        const code = String(f.scheme_code || f.id || '');
+        if (code && !seen.has(code)) {
+          seen.add(code);
+          merged.push(f);
+        }
+      });
+      if (merged.length > 0) {
+        renderFundCards('allFundsGrid', merged);
+        return;
+      }
+      const ql = q.toLowerCase();
       const catalog = state.fundCatalog || generateSampleFunds();
-      const funds = catalog.filter(f =>
-        (f.scheme_name || f.name || '').toLowerCase().includes(q) ||
-        (f.category || f.category_group || '').toLowerCase().includes(q) ||
-        (f.amc || '').toLowerCase().includes(q)
+      const localMatches = catalog.filter(f =>
+        (f.scheme_name || f.name || '').toLowerCase().includes(ql) ||
+        (f.category || f.category_group || '').toLowerCase().includes(ql) ||
+        (f.amc || '').toLowerCase().includes(ql)
       );
-      renderFundCards('allFundsGrid', funds.length ? funds : catalog);
+      renderFundCards('allFundsGrid', localMatches.length ? localMatches : catalog);
     }
 
     function renderFundCards(containerId, funds) {
@@ -731,15 +838,77 @@
     function populateChartFundSelector() {
       const sel = document.getElementById('chartFundSelector');
       if (!sel) return;
-      
-      const funds = state.fundCatalog || generateSampleFunds();
-      let html = `<option value="NIFTY">NIFTY 50 Index</option>`;
-      html += `<optgroup label="Mutual Funds">`;
-      funds.forEach(f => {
-        html += `<option value="${f.scheme_code || f.id}">${f.scheme_name || f.name}</option>`;
+
+      const prev = sel.value;
+      const catalog = state.fundCatalog || [];
+      const held = (state.portfolioHoldings || []).map(h => ({
+        scheme_code: h.scheme_code,
+        scheme_name: h.scheme_name,
+      }));
+      const seen = new Set();
+      const combined = [];
+      [...held, ...catalog].forEach(f => {
+        const code = String(f.scheme_code || f.id || '');
+        if (code && !seen.has(code)) {
+          seen.add(code);
+          combined.push(f);
+        }
       });
-      html += `</optgroup>`;
+
+      let html = `<option value="NIFTY">NIFTY 50 Index</option>`;
+      if (combined.length) {
+        html += `<optgroup label="Holdings & AMFI Funds">`;
+        combined.slice(0, 40).forEach(f => {
+          html += `<option value="${f.scheme_code || f.id}">${f.scheme_name || f.name}</option>`;
+        });
+        html += `</optgroup>`;
+      }
       sel.innerHTML = html;
+      if (prev && [...sel.options].some(o => o.value === prev)) {
+        sel.value = prev;
+      }
+    }
+
+    async function renderInvestorVisionPattern(schemeCode, fundTitle) {
+      const container = document.getElementById('investorVisionContent');
+      const sub = document.getElementById('visionSchemeSubtitle');
+      const badge = document.getElementById('visionModelBadge');
+      if (!container) return;
+
+      const targetCode = (!schemeCode || schemeCode === 'NIFTY') ? '100119' : String(schemeCode);
+      const displayLabel = (!schemeCode || schemeCode === 'NIFTY') ? 'Flagship Benchmark Proxy (Scheme 100119 — HDFC Balanced Advantage)' : `${fundTitle} (Code ${targetCode})`;
+      if (sub) sub.textContent = `Candlestick Pattern + Grad-CAM Saliency Map for ${displayLabel}`;
+      container.innerHTML = `<div class="bento-12 text-xs text-muted">Extracting ResNet-18 candlestick pattern & Grad-CAM heatmap for ${displayLabel}...</div>`;
+
+      const vis = await classifyVisionPattern(targetCode);
+      if (!vis) {
+        container.innerHTML = `<div class="bento-12 text-xs text-muted">Vision ResNet-18 analysis unavailable offline for ${targetCode}.</div>`;
+        return;
+      }
+      if (badge) badge.textContent = `${vis.model_architecture || 'resnet18'} · ${(Number(vis.confidence || 0) * 100).toFixed(1)}% conf`;
+
+      const pColor = vis.pattern_class === 0 ? 'var(--emerald)' : vis.pattern_class === 1 ? 'var(--red)' : 'var(--amber)';
+      const probs = vis.probabilities || {};
+      const probRows = Object.entries(probs).map(([k, v]) => {
+        const pct = (Number(v) * 100).toFixed(1);
+        return `
+          <div style="margin-bottom:8px;">
+            <div class="flex justify-between text-xs mb-4"><span>${k}</span><strong class="text-mono">${pct}%</strong></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div>
+          </div>`;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="bento-5 text-center">
+          <img src="${vis.gradcam_overlay_base64}" alt="Grad-CAM Candlestick Overlay" style="max-width:260px;margin:0 auto;border-radius:10px;border:1px solid var(--border);" />
+          <div class="text-xs text-muted mt-8">Conv-layer Grad-CAM visual attention overlay</div>
+        </div>
+        <div class="bento-7">
+          <div class="badge" style="background:${pColor}20;color:${pColor};font-size:0.85rem;margin-bottom:10px;">${vis.pattern}</div>
+          <p class="text-sm text-muted mb-12">Latest NAV: <strong class="text-mono">₹${vis.latest_nav ?? '—'}</strong>${vis.date_range ? ` · Window: ${vis.date_range.start} → ${vis.date_range.end}` : ''}</p>
+          ${probRows}
+          <p class="text-xs text-muted mt-8">${vis.disclaimer || 'Educational pattern detection only.'}</p>
+        </div>`;
     }
 
     async function updateForecastChart(fundId = null) {
@@ -747,14 +916,20 @@
       if (!sel) return;
       
       if (fundId) {
-        sel.value = fundId;
+        if (![...sel.options].some(o => o.value === String(fundId))) {
+          const opt = document.createElement('option');
+          opt.value = String(fundId);
+          opt.textContent = `Scheme ${fundId}`;
+          sel.appendChild(opt);
+        }
+        sel.value = String(fundId);
       }
       
       const val = sel.value;
       let dates = [];
       let history = [];
       let label = 'NIFTY 50';
-      let baseVal = 22200;
+      let baseVal = 25400;
       let drift = 12;
       let volatilityFactor = 150;
       
@@ -763,16 +938,16 @@
       try {
         let historyData = null;
         if (val === 'NIFTY') {
-          historyData = await fetchBenchmarkHistory(30);
+          historyData = await fetchBenchmarkHistory(60);
           label = 'NIFTY 50';
         } else {
-          historyData = await fetchNavHistory(val, 30);
-          const funds = state.fundCatalog || [];
+          historyData = await fetchNavHistory(val, 60);
+          const funds = [...(state.portfolioHoldings || []), ...(state.fundCatalog || [])];
           const f = funds.find(x => String(x.scheme_code || x.id) === val);
           label = f ? (f.scheme_name || f.name) : `Fund ${val}`;
         }
 
-        if (historyData && historyData.history && historyData.history.length > 0) {
+        if (historyData && historyData.history && historyData.history.length >= 30) {
           const pts = [...historyData.history].reverse();
           pts.forEach(p => {
             const dateStr = p.date || '';
@@ -794,7 +969,7 @@
           fetchedSuccessfully = true;
         }
       } catch (err) {
-        console.warn("Real history fetch failed, using local simulation:", err);
+        console.warn("Real history fetch failed, using local fallback:", err);
       }
 
       if (!fetchedSuccessfully) {
@@ -804,15 +979,15 @@
           if (f) {
             const category = (f.category || f.category_group || '').toLowerCase();
             if (category.includes('liquid') || category.includes('short')) {
-              baseVal = 100 + (Math.random() * 5);
+              baseVal = 100;
               drift = 0.05;
               volatilityFactor = 0.5;
             } else if (category.includes('mid') || category.includes('small') || category.includes('sectoral')) {
-              baseVal = 80 + (Math.random() * 40);
+              baseVal = 120;
               drift = 0.45;
               volatilityFactor = 3.0;
             } else {
-              baseVal = 50 + (Math.random() * 20);
+              baseVal = 80;
               drift = 0.2;
               volatilityFactor = 1.5;
             }
@@ -832,9 +1007,9 @@
       }
       
       let forecastTrajectory = [];
-      let forecastTrajectory = [];
       let p10Trajectory = [];
       let p90Trajectory = [];
+      let attentionWeights = [];
       let confidence = 85.0;
       let trend = 'UPWARD';
       let accuracy = 'Pinball Loss (P10-P90: ~80% coverage)';
@@ -848,13 +1023,31 @@
           forecastTrajectory = res.forecast_trajectory || res.p50 || [];
           p10Trajectory = res.p10 || res.lower_bound || [];
           p90Trajectory = res.p90 || res.upper_bound || [];
+          attentionWeights = res.attention_weights || [];
           confidence = res.confidence_score || 85.0;
           trend = res.trend || 'UPWARD';
           const modelName = res.model_source === 'bilstm_attention' ? 'BiLSTM + Attention' : (res.model_source || 'LSTM');
           accuracy = `Model: ${modelName} (${res.accuracy_metric || 'Pinball Loss'})`;
         }
       } catch (err) {
-        console.warn("Forecast API call failed, using local simulation", err);
+        console.warn("Forecast API call failed, using local fallback", err);
+      }
+
+      // Render Temporal Attention highlights from BiLSTM Phase 2
+      const attnBar = document.getElementById('forecastAttentionBar');
+      if (attnBar) {
+        if (attentionWeights && attentionWeights.length > 0) {
+          const lookbackLabels = dates.slice(-attentionWeights.length);
+          const topIdx = attentionWeights
+            .map((w, idx) => ({ w, idx, day: lookbackLabels[idx] || `t-${attentionWeights.length - idx}` }))
+            .sort((a, b) => b.w - a.w)
+            .slice(0, 4);
+          attnBar.innerHTML = `<strong>Temporal Attention Peak Days:</strong> ` + topIdx.map(x =>
+            `<span class="badge badge-violet" style="font-size:0.65rem;padding:2px 7px;margin-left:4px;">${x.day}: ${(x.w * 100).toFixed(1)}%</span>`
+          ).join('');
+        } else {
+          attnBar.textContent = 'Temporal Attention Focus: 30-day lookback sequence encoded.';
+        }
       }
       
       if (!forecastTrajectory || forecastTrajectory.length === 0) {
@@ -876,6 +1069,9 @@
       
       document.getElementById('forecastConfidence').textContent = `${confidence}%`;
       document.getElementById('accuracyMetricLabel').textContent = accuracy;
+
+      // Sync Phase 3 ResNet-18 + Grad-CAM overlay asynchronously
+      renderInvestorVisionPattern(val, label);
       
       const histData = [...history];
       const foreData = new Array(histData.length - 1).fill(null);
@@ -970,11 +1166,11 @@
     // ── Risk Analysis ──
     async function runRiskAnalysis() {
       const holdings = (state.portfolioHoldings || []).map((h, i) => ({
-        fund_id: h.id || `F00${i+1}`,
-        fund_name: h.name,
-        category: (h.cat || 'mutual_fund').toLowerCase().replace(/ /g,'_'),
-        value: h.invested,
-        returns: h.returns,
+        fund_id: String(h.scheme_code || h.id || `F00${i+1}`),
+        fund_name: h.scheme_name || h.name || 'Mutual Fund',
+        category: (h.category || h.cat || 'mutual_fund').toLowerCase().replace(/ /g,'_'),
+        value: Number(h.current_value || h.buy_value || h.invested || 50000),
+        returns: Number(h.xirr ?? h.pnl_pct ?? h.returns ?? 10.0),
       }));
       const result = await getRiskAnalysis(state.persona || 'balanced', holdings);
 
@@ -1027,20 +1223,24 @@
                 ? "Market signal is bullish. A favorable environment for SIP accumulation. No action needed." 
                 : "Neutral market signal. Maintain your current asset allocation strategy.");
 
-          const confidence = Math.round((Math.abs(a.sentiment_score) || 0.5) * 100);
+          const confidence = Math.round(((a.nlp_confidence != null ? Number(a.nlp_confidence) : Math.abs(a.sentiment_score)) || 0.5) * 100);
+          const saliencyHtml = (a.token_saliency || []).slice(0, 4).map(t =>
+            `<span class="badge" style="font-size:0.65rem;padding:2px 6px;background:${t.polarity === 'positive' ? 'rgba(16,185,129,0.12)' : t.polarity === 'negative' ? 'rgba(239,68,68,0.12)' : 'rgba(148,163,184,0.12)'};color:${t.polarity === 'positive' ? 'var(--emerald)' : t.polarity === 'negative' ? 'var(--red)' : 'var(--text-secondary)'};">${t.token}</span>`
+          ).join(' ');
 
           return `
             <div class="bento-4 card card-left-red" style="border-left-color: ${color}; display: flex; flex-direction: column; justify-content: space-between;">
               <div>
                 <div class="flex justify-between items-center mb-8">
                   <span class="badge" style="background:${color}20; color:${color}; font-weight:700;">${severity} SEVERITY</span>
-                  <span class="text-xs text-muted">AI Conf: ${confidence || 85}%</span>
+                  <span class="text-xs text-muted">${a.nlp_model || 'Transformer'}: ${confidence}%</span>
                 </div>
                 <h5 style="margin:0 0 8px 0; font-size:0.95rem; font-weight:600;">
                   <a href="${a.link || '#'}" target="_blank" style="color: inherit; text-decoration: none; font-weight: 600;">${a.title}</a>
                 </h5>
                 <p class="text-xs text-muted mb-8">Source: ${a.source || 'Google News'} · ${a.published ? a.published.slice(0, 16) : ''}</p>
-                <p class="text-sm" style="margin-bottom:8px;"><strong>Impact:</strong> ${a.sentiment.toUpperCase()} (${a.impact} impact)</p>
+                <p class="text-sm" style="margin-bottom:8px;"><strong>Impact:</strong> ${(a.nlp_sentiment || a.sentiment).toUpperCase()} (${a.impact} impact)</p>
+                ${saliencyHtml ? `<div class="flex gap-4 mb-8" style="flex-wrap:wrap;">${saliencyHtml}</div>` : ''}
                 <p class="text-xs text-muted" style="margin-bottom:12px;"><strong>Affected Holdings:</strong> ${affectedText}</p>
               </div>
               <div class="card" style="margin:0; padding:8px 12px; background:rgba(255,255,255,0.03); font-size:0.8rem; border-left: 2px solid ${color};">
@@ -1056,59 +1256,98 @@
 
     // AI chat operations are handled exclusively by the persistent floating bottom-right popup widget.
 
+    function updateMarketCardsFromData(snapshot) {
+      if (!snapshot) return;
+      document.getElementById('niftyValue').textContent = snapshot.nifty_50 ? Number(snapshot.nifty_50).toLocaleString('en-IN', { maximumFractionDigits: 1 }) : '25,450';
+      const pct = snapshot.nifty_change_pct || 0;
+      const deltaEl = document.getElementById('niftyDelta');
+      deltaEl.className = `metric-delta ${pct >= 0 ? 'positive' : 'negative'}`;
+      deltaEl.textContent = `${pct >= 0 ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%`;
+
+      const vixVal = snapshot.vix || 14.2;
+      const volatilityScore = snapshot.market_volatility_score || Math.round(vixVal * 2.5);
+      document.getElementById('volatilityScoreValue').textContent = volatilityScore;
+      document.getElementById('vixRawLabel').textContent = `VIX Level: ${Number(vixVal).toFixed(1)}`;
+
+      const riskInt = snapshot.risk_intensity_score || 35.0;
+      document.getElementById('riskIntensityValue').textContent = riskInt;
+      const riColor = riskInt > 70 ? 'var(--red)' : riskInt > 40 ? 'var(--amber)' : 'var(--emerald)';
+      document.getElementById('riskIntensityValue').style.color = riColor;
+
+      const sent = snapshot.market_sentiment || 'NEUTRAL';
+      const sentScore = snapshot.sentiment_score || 0.0;
+      const se = document.getElementById('sentimentValue');
+      se.textContent = sent.toUpperCase();
+
+      let sentColor = 'var(--amber)';
+      if (sent.includes('Bullish') || sent.includes('BULLISH') || sent.includes('Positive')) {
+        sentColor = 'var(--emerald)';
+      } else if (sent.includes('Bearish') || sent.includes('BEARISH') || sent.includes('Negative')) {
+        sentColor = 'var(--red)';
+      }
+      se.style.color = sentColor;
+      document.getElementById('sentimentScoreLabel').textContent = `${sentScore >= 0 ? '+' : ''}${sentScore}`;
+
+      const gaugePct = Math.round(((parseFloat(sentScore) + 100) / 200) * 100);
+      const fill = document.getElementById('sentimentGaugeFill');
+      if (fill) {
+        fill.style.width = `${gaugePct}%`;
+        fill.style.background = sentColor;
+      }
+
+      if (snapshot.sector_performance) {
+        const sectors = Object.keys(snapshot.sector_performance);
+        const changes = Object.values(snapshot.sector_performance);
+        const colors = changes.map(c => c >= 0 ? '#10B981' : '#EF4444');
+        if (sectorChartInstance) {
+          sectorChartInstance.data.labels = sectors;
+          sectorChartInstance.data.datasets[0].data = changes;
+          sectorChartInstance.data.datasets[0].backgroundColor = colors;
+          sectorChartInstance.update('none');
+        } else {
+          sectorChartInstance = createBarChart('sectorChart', sectors, changes, colors,
+            { indexAxis: 'y', scales: { x: chartDefaults.scales.x, y: { ...chartDefaults.scales.y, grid: { display: false } } } }
+          );
+        }
+      }
+    }
+
+    function applyRealtimeInvestorTick(packet) {
+      if (!packet) return;
+      if (packet.market) {
+        updateMarketCardsFromData(packet.market);
+      }
+      const sig = packet.latest_signal;
+      const feed = document.getElementById('rtHeadlineFeed');
+      const feedBadge = document.getElementById('rtFeedBadge');
+      if (sig && feed) {
+        const sent = String(sig.sentiment || 'neutral').toUpperCase();
+        const sColor = sent === 'POSITIVE' ? 'var(--emerald)' : sent === 'NEGATIVE' ? 'var(--red)' : 'var(--amber)';
+        const chips = (sig.token_saliency || []).slice(0, 5).map(t =>
+          `<span class="badge" style="font-size:0.68rem;padding:2px 8px;background:${t.polarity === 'positive' ? 'rgba(16,185,129,0.12)' : t.polarity === 'negative' ? 'rgba(239,68,68,0.12)' : 'rgba(148,163,184,0.12)'};color:${t.polarity === 'positive' ? 'var(--emerald)' : t.polarity === 'negative' ? 'var(--red)' : 'var(--text-secondary)'};">${t.token} ${(Number(t.saliency || 0) * 100).toFixed(0)}%</span>`
+        ).join(' ');
+        if (feedBadge) feedBadge.textContent = `Tick #${packet.tick_seq || 1} · ${sig.latency_ms ? sig.latency_ms.toFixed(1) + 'ms' : 'Live'}`;
+        feed.innerHTML = `
+          <div class="flex justify-between items-center flex-wrap gap-8">
+            <div style="flex:1;">
+              <span class="badge" style="background:${sColor}20;color:${sColor};margin-right:8px;">${sent} ${(Number(sig.confidence || 0.5) * 100).toFixed(0)}%</span>
+              <strong style="color:var(--text-primary);">${sig.headline}</strong>
+            </div>
+            <span class="text-xs text-muted">${sig.source || ''} · ${sig.event_id || ''}</span>
+          </div>
+          ${chips ? `<div class="flex gap-6 mt-8" style="flex-wrap:wrap;align-items:center;"><span class="text-xs text-muted">Attention Saliency:</span> ${chips}</div>` : ''}
+        `;
+      }
+    }
+
     // ── Market Data ──
     async function loadMarketData() {
       const snapshot = await getMarketSnapshot();
       if (snapshot) {
-        document.getElementById('niftyValue').textContent = snapshot.nifty_50?.toLocaleString() || '22,550';
-        const pct = snapshot.nifty_change_pct || 0;
-        const deltaEl = document.getElementById('niftyDelta');
-        deltaEl.className = `metric-delta ${pct >= 0 ? 'positive' : 'negative'}`;
-        deltaEl.textContent = `${pct >= 0 ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%`;
-        
-        const vixVal = snapshot.vix || 14.2;
-        const volatilityScore = snapshot.market_volatility_score || Math.round(vixVal * 2.5);
-        document.getElementById('volatilityScoreValue').textContent = volatilityScore;
-        document.getElementById('vixRawLabel').textContent = `VIX Level: ${vixVal.toFixed(1)}`;
-        
-        const riskInt = snapshot.risk_intensity_score || 35.0;
-        document.getElementById('riskIntensityValue').textContent = riskInt;
-        const riColor = riskInt > 70 ? 'var(--red)' : riskInt > 40 ? 'var(--amber)' : 'var(--emerald)';
-        document.getElementById('riskIntensityValue').style.color = riColor;
-        
-        const sent = snapshot.market_sentiment || 'NEUTRAL';
-        const sentScore = snapshot.sentiment_score || 0.0;
-        const se = document.getElementById('sentimentValue');
-        se.textContent = sent.toUpperCase();
-        
-        let sentColor = 'var(--amber)';
-        if (sent.includes('BULLISH') || sent.includes('Positive')) {
-          sentColor = 'var(--emerald)';
-        } else if (sent.includes('BEARISH') || sent.includes('Negative')) {
-          sentColor = 'var(--red)';
-        }
-        se.style.color = sentColor;
-        document.getElementById('sentimentScoreLabel').textContent = `${sentScore >= 0 ? '+' : ''}${sentScore}`;
-        
-        const gaugePct = Math.round(((parseFloat(sentScore) + 100) / 200) * 100);
-        const fill = document.getElementById('sentimentGaugeFill');
-        if (fill) {
-          fill.style.width = `${gaugePct}%`;
-          fill.style.background = sentColor;
-        }
-        
-        if (snapshot.sector_performance) {
-          const sectors = Object.keys(snapshot.sector_performance);
-          const changes = Object.values(snapshot.sector_performance);
-          createBarChart('sectorChart', sectors, changes,
-            changes.map(c => c >= 0 ? '#10B981' : '#EF4444'),
-            { indexAxis: 'y', scales: { x: chartDefaults.scales.x, y: { ...chartDefaults.scales.y, grid: { display: false } } } }
-          );
-        }
-        
-        await renderNewsAlerts(sent);
+        updateMarketCardsFromData(snapshot);
+        await renderNewsAlerts(snapshot.market_sentiment || 'NEUTRAL');
       } else {
-        document.getElementById('niftyValue').textContent = '22,550';
+        document.getElementById('niftyValue').textContent = '25,450';
         document.getElementById('niftyDelta').className = 'metric-delta positive';
         document.getElementById('niftyDelta').textContent = '▲ +0.45%';
         document.getElementById('volatilityScoreValue').textContent = '35';
@@ -1120,7 +1359,7 @@
         document.getElementById('sentimentScoreLabel').textContent = '+5.0';
         document.getElementById('sentimentGaugeFill').style.width = '52%';
         document.getElementById('sentimentGaugeFill').style.background = 'var(--amber)';
-        
+
         await renderNewsAlerts('NEUTRAL');
       }
       // Dynamically load the selected chart/forecast
@@ -1215,7 +1454,12 @@
       if (state.portfolioHoldings && state.portfolioHoldings.length) {
         context += `\nPortfolio Holdings Summary:\n`;
         state.portfolioHoldings.forEach(h => {
-          context += `- ${h.name}: Invested ₹${h.invested.toLocaleString()}, Gains ₹${h.gains.toLocaleString()} (${h.returns.toFixed(1)}% Return, Category: ${h.cat})\n`;
+          const name = h.scheme_name || h.name || 'Fund';
+          const inv = Number(h.buy_value || h.invested || 0);
+          const gains = Number(h.pnl ?? h.gains ?? 0);
+          const retPct = Number(h.xirr ?? h.pnl_pct ?? h.returns ?? 0);
+          const cat = h.category || h.cat || 'Mutual Fund';
+          context += `- ${name}: Invested ₹${inv.toLocaleString('en-IN')}, Gains ₹${gains.toLocaleString('en-IN')} (${retPct.toFixed(1)}% Return, Category: ${cat})\n`;
         });
       }
 

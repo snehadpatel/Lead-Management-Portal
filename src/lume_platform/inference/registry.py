@@ -29,6 +29,9 @@ class ModelRegistry:
         self.forecaster = None
         self.sbert_search = None
         self.buddy = None
+        self.dl_lab = None
+        self.financial_nlp = None
+        self.vision_service = None
         self.is_loaded = False
 
     def get_forecaster(self):
@@ -80,6 +83,31 @@ class ModelRegistry:
                 except Exception:
                     self.sbert_search = None
 
+        # Phase 4 Deep Learning Lab (LeadMLP + RF Dual Scoring)
+        try:
+            from lume_platform.ml.dl_lab_service import DLLabService
+            self.dl_lab = DLLabService.get_instance()
+        except Exception as e:
+            print(f"⚠️ Failed to initialize DLLabService: {e}")
+            self.dl_lab = None
+
+        # Phase 5 Financial Domain Transformer + Token Saliency
+        try:
+            from lume_platform.nlp.financial_nlp_service import FinancialNLPService
+            self.financial_nlp = FinancialNLPService.get_instance()
+        except Exception as e:
+            print(f"⚠️ Failed to initialize FinancialNLPService: {e}")
+            self.financial_nlp = None
+
+        # Phase 3 Vision ResNet-18 + Grad-CAM
+        if os.getenv("LUME_ENABLE_VISION", "1") == "1":
+            try:
+                from lume_platform.vision.service import VisionPatternService
+                self.vision_service = VisionPatternService(model_type="resnet18")
+            except Exception as e:
+                print(f"⚠️ Failed to initialize VisionPatternService: {e}")
+                self.vision_service = None
+
         buddy_path = self.models_dir / "custom_buddy_model.pth"
         if buddy_path.is_file():
             try:
@@ -90,6 +118,37 @@ class ModelRegistry:
                 self.buddy = None
 
         self.is_loaded = True
+
+    def get_models_status(self) -> dict[str, bool]:
+        """Return health booleans across all ML & Deep Learning engines."""
+        forecaster_ok = bool(
+            self.forecaster is not None and getattr(self.forecaster, "is_loaded", False)
+        )
+        lead_mlp_ok = bool(
+            self.dl_lab is not None and getattr(self.dl_lab, "mlp_model", None) is not None
+        )
+        fin_nlp_ok = bool(
+            self.financial_nlp is not None and getattr(self.financial_nlp, "is_loaded", False)
+        )
+        vision_ok = bool(
+            self.vision_service is not None and getattr(self.vision_service, "is_loaded", False)
+        )
+        sbert_ok = bool(
+            self.sbert_search is not None and len(getattr(self.sbert_search, "funds", [])) > 0
+        )
+        return {
+            # Legacy keys preserved for backward compatibility
+            "lead_bundle": self.lead_bundle is not None,
+            "investor_bundle": self.investor_bundle is not None,
+            "sentiment_bundle": self.sentiment_bundle is not None or fin_nlp_ok,
+            "finbert_pipeline": self.finbert_pipeline is not None or fin_nlp_ok,
+            # Complete 7 ML & DL Engine matrix
+            "semantic_search": sbert_ok,
+            "lead_mlp": lead_mlp_ok,
+            "bilstm_forecaster": forecaster_ok,
+            "vision_resnet18": vision_ok,
+            "financial_transformer": fin_nlp_ok,
+        }
 
     def load_sbert_cache(self, cache_path: str | Path | None = None) -> bool:
         """Load or reload SBERT mutual fund embeddings from a cache file.
@@ -125,7 +184,15 @@ class ModelRegistry:
             self.finbert_pipeline = None
 
     def predict_sentiment(self, text: str) -> tuple[str, float]:
-        """Unified sentiment prediction: prefer serialized sentiment bundle, then FinBERT pipeline, then simple fallback heuristic."""
+        """Unified sentiment prediction using Phase 5 FinancialTransformerClassifier, then bundle fallback."""
+        try:
+            from lume_platform.nlp.financial_nlp_service import FinancialNLPService
+            res = FinancialNLPService.get_instance().predict_sentiment_with_saliency(text)
+            if res and "sentiment" in res:
+                return res["sentiment"], float(res.get("confidence", 0.7))
+        except Exception:
+            pass
+
         # 1) Use pickled sentiment bundle if available
         try:
             if self.sentiment_bundle is not None and hasattr(self.sentiment_bundle, 'predict_text'):

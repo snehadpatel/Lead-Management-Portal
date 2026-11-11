@@ -17,15 +17,100 @@
       <a href="ai-showcase.html">AI Models</a>
       <a href="bigdata-showcase.html" class="active">Big Data</a>
     </div>
-    <div class="status-bar" id="apiStatus"><div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div></div>
+    <div class="flex items-center gap-12">
+      <span class="badge badge-emerald" id="rtStreamPill" style="font-size:0.75rem;"><span class="pulse pulse-live"></span> Connecting WS...</span>
+      <div class="status-bar" id="apiStatus"><div class="status-item"><span class="pulse pulse-offline" id="apiPulse"></span> API</div></div>
+    </div>
     <div class="flex items-center gap-12" id="navAuthSection"></div>
   </nav>
 
   <div class="container" style="padding:48px 24px 80px;">
     <div class="text-center mb-48">
-      <span class="badge badge-emerald mb-16">📊 Big Data Engineering</span>
-      <h1><span class="text-gradient">31GB Composite Dataset</span></h1>
-      <p class="text-muted mt-8" style="max-width:650px;margin:12px auto 0;">End-to-end data engineering pipeline — from raw ingestion through distributed processing to real-time streaming and BI visualization.</p>
+      <span class="badge badge-emerald mb-16">📊 Real-Time Lakehouse & Big Data Engineering</span>
+      <h1><span class="text-gradient">Medallion Big Data + 7 Live AI Engines</span></h1>
+      <p class="text-muted mt-8" style="max-width:680px;margin:12px auto 0;">End-to-end Bronze → Silver (Apache Spark / Parquet) → Gold Real-Time WebSocket & BI telemetry pipeline powering 4 PyTorch Deep Learning engines and 3 scikit-learn/Embedding ML models.</p>
+    </div>
+
+    <!-- ═══ LIVE REAL-TIME LAKEHOUSE TELEMETRY ═══ -->
+    <div class="card card-accent-emerald mb-24">
+      <div class="flex justify-between items-center" style="flex-wrap:wrap;gap:12px;">
+        <div>
+          <h3>⚡ Live Lakehouse & Real-Time Stream Telemetry</h3>
+          <p class="text-muted text-sm mt-4">Audited directly from <span class="text-mono text-xs">/api/bigdata/live-stats</span> and live <span class="text-mono text-xs">/ws/realtime</span> ticks</p>
+        </div>
+        <div class="flex items-center gap-8">
+          <span class="badge badge-blue" id="bdDriftBadge">Drift: Checking...</span>
+          <button class="btn btn-sm btn-secondary" onclick="refreshBigDataLive(true)">Step Tick & Refresh ↻</button>
+        </div>
+      </div>
+
+      <div class="bento-grid mt-20">
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;">
+          <div class="metric-value text-blue" id="bdAmfiRows">—</div>
+          <div class="metric-label">Bronze AMFI Schemes</div>
+          <div class="text-xs text-muted mt-4" id="bdLiveNavMeta">Live NAV cache: —</div>
+        </div>
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;">
+          <div class="metric-value text-violet" id="bdSilverFiles">—</div>
+          <div class="metric-label">Silver Parquet Partitions</div>
+          <div class="text-xs text-muted mt-4" id="bdSilverMb">Size: — MB (Snappy)</div>
+        </div>
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;">
+          <div class="metric-value text-emerald" id="bdJsonlEvents">—</div>
+          <div class="metric-label">Real-Time Stream Events</div>
+          <div class="text-xs text-muted mt-4" id="bdStreamMeta">Micro-batches: — · Ticks: —</div>
+        </div>
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;">
+          <div class="metric-value text-amber" id="bdModelsOnline">— / 7</div>
+          <div class="metric-label">ML & DL Engines Online</div>
+          <div class="text-xs text-muted mt-4" id="bdWsClientsMeta">WS Clients: —</div>
+        </div>
+      </div>
+
+      <!-- 7 ML/DL Engines Health Matrix -->
+      <div class="card mt-20" style="background:var(--bg-surface);">
+        <h4 class="text-sm mb-12">🧠 Complete ML & Deep Learning Engines Registry Health Matrix</h4>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Engine</th>
+                <th>Tier / Stack</th>
+                <th>Artifact Path</th>
+                <th>Evaluated Metric</th>
+                <th class="text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="bdModelsMatrixBody">
+              <tr><td colspan="5" class="text-muted text-sm">Loading live model registry...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Real-Time Streaming Event Tail -->
+      <div class="card mt-16" style="background:var(--bg-surface);">
+        <div class="flex justify-between items-center mb-12" style="flex-wrap:wrap;gap:8px;">
+          <h4 class="text-sm">📡 Real-Time AI Stream Event Tail (Phase 5 Transformer + Market Telemetry)</h4>
+          <span class="text-xs text-muted" id="bdLastTickAt">Waiting for WebSocket packet...</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Event ID</th>
+                <th>Headline &amp; Token Saliency</th>
+                <th>Transformer Sentiment</th>
+                <th class="text-right">NIFTY 50</th>
+                <th class="text-right">VIX</th>
+              </tr>
+            </thead>
+            <tbody id="liveStreamTableBody">
+              <tr><td colspan="5" class="text-muted text-sm">Subscribing to real-time stream...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ DATA ECOSYSTEM ═══ -->
@@ -179,8 +264,8 @@
 
       <div class="bento-grid mt-24">
         <div class="bento-4 card" style="background:var(--bg-surface);">
-          <h4 class="text-sm">Export Files</h4>
-          <div class="mt-8">
+          <h4 class="text-sm">Live Export Files <span class="badge badge-amber" id="bdExportsCount" style="font-size:0.65rem;margin-left:6px;">—</span></h4>
+          <div class="mt-8" id="biExportsList" style="max-height:200px;overflow-y:auto;">
             <div class="flex justify-between text-sm mb-8"><span class="text-muted">leads_for_bi.csv</span><span class="text-mono text-xs">9,240 rows</span></div>
             <div class="flex justify-between text-sm mb-8"><span class="text-muted">investor_clusters_for_bi.csv</span><span class="text-mono text-xs">1,000 rows</span></div>
             <div class="flex justify-between text-sm"><span class="text-muted">sentiment_for_bi.csv</span><span class="text-mono text-xs">5,842 rows</span></div>
@@ -201,8 +286,8 @@
       <h3>✅ Data Quality & Audit</h3>
       <div class="bento-grid mt-24">
         <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-emerald">31 GB</div><div class="metric-label">Total Dataset</div></div>
-        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-blue">14,275</div><div class="metric-label">AMFI Schemes</div></div>
-        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-violet">315+</div><div class="metric-label">NAV History Files</div></div>
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-blue" id="bdQualitySchemes">16,344</div><div class="metric-label">AMFI Schemes</div></div>
+        <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-violet" id="bdQualityNavFiles">—</div><div class="metric-label">NAV History Files</div></div>
         <div class="bento-3 card" style="background:var(--bg-surface);text-align:center;"><div class="metric-value text-amber">3</div><div class="metric-label">Data Paradigms</div></div>
       </div>
       <div class="bento-grid mt-16">
@@ -221,10 +306,10 @@
           <table class="data-table mt-8">
             <tr><td class="text-sm text-muted">ETL Engine</td><td class="text-mono text-sm">Apache PySpark</td></tr>
             <tr><td class="text-sm text-muted">Storage</td><td class="text-mono text-sm">Parquet (Snappy)</td></tr>
-            <tr><td class="text-sm text-muted">API Layer</td><td class="text-mono text-sm">FastAPI (async)</td></tr>
+            <tr><td class="text-sm text-muted">API Layer</td><td class="text-mono text-sm">FastAPI + WebSocket</td></tr>
             <tr><td class="text-sm text-muted">Database</td><td class="text-mono text-sm">MongoDB (CRM state)</td></tr>
             <tr><td class="text-sm text-muted">Containerization</td><td class="text-mono text-sm">Docker + Compose</td></tr>
-            <tr><td class="text-sm text-muted">Compute</td><td class="text-mono text-sm">Colab / Local</td></tr>
+            <tr><td class="text-sm text-muted">Compute</td><td class="text-mono text-sm">PyTorch MPS/CPU + Local</td></tr>
           </table>
         </div>
       </div>
@@ -235,6 +320,168 @@
 
   <script src="app.js"></script>
   <script>
+    function escBdHtml(s) {
+      return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    let _bdEvents = [];
+    let _bdJsonlBase = 0;
+
+    function renderBigDataEvents(events) {
+      const tbody = document.getElementById('liveStreamTableBody');
+      if (!tbody) return;
+      if (!events || !events.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-muted text-sm">No streaming events emitted yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = events.slice(0, 10).map(ev => {
+        const sent = String(ev.sentiment || 'neutral').toLowerCase();
+        const badgeCls = sent === 'positive' ? 'badge-emerald' : sent === 'negative' ? 'badge-red' : 'badge-amber';
+        const conf = ev.confidence != null ? `${(Number(ev.confidence) * 100).toFixed(0)}%` : '—';
+        const tokens = (ev.token_saliency || []).slice(0, 4).map(t => {
+          const pol = t.polarity === 'positive' ? 'var(--emerald)' : t.polarity === 'negative' ? 'var(--red)' : 'var(--text-muted)';
+          return `<span class="badge" style="font-size:0.62rem;padding:1px 5px;border:1px solid ${pol}44;color:${pol};">${escBdHtml(t.token)}</span>`;
+        }).join(' ');
+        const nifty = ev.nifty_50 != null ? Number(ev.nifty_50).toLocaleString('en-IN', { maximumFractionDigits: 1 }) : '—';
+        const chg = ev.nifty_change_pct != null ? `${ev.nifty_change_pct >= 0 ? '+' : ''}${Number(ev.nifty_change_pct).toFixed(2)}%` : '';
+        const vix = ev.vix != null ? Number(ev.vix).toFixed(2) : '—';
+        return `
+          <tr>
+            <td class="text-mono text-xs">${escBdHtml(ev.event_id || 'RT')}</td>
+            <td>
+              <div class="text-sm" style="font-weight:600;line-height:1.35;">${escBdHtml(ev.headline || '')}</div>
+              <div class="flex gap-4 mt-4" style="flex-wrap:wrap;">${tokens}</div>
+            </td>
+            <td>
+              <span class="badge ${badgeCls}">${escBdHtml(sent.toUpperCase())} ${conf}</span>
+              <div class="text-xs text-muted mt-4">${escBdHtml(ev.model || 'FinancialTransformer')}${ev.latency_ms ? ' · ' + Number(ev.latency_ms).toFixed(1) + 'ms' : ''}</div>
+            </td>
+            <td class="text-mono text-xs text-right">${nifty} <span class="text-muted">${chg}</span></td>
+            <td class="text-mono text-xs text-right">${vix}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderModelsMatrix(engines) {
+      const tbody = document.getElementById('bdModelsMatrixBody');
+      if (!tbody || !Array.isArray(engines)) return;
+      tbody.innerHTML = engines.map(e => `
+        <tr>
+          <td class="text-sm" style="font-weight:600;">${escBdHtml(e.name)}</td>
+          <td class="text-xs text-muted">${escBdHtml(e.layer)}</td>
+          <td class="text-mono text-xs text-muted">${escBdHtml(e.artifact)}</td>
+          <td class="text-mono text-xs">${escBdHtml(e.metric)}</td>
+          <td class="text-right"><span class="badge ${e.active ? 'badge-emerald' : 'badge-amber'}">${e.active ? 'ONLINE' : 'FALLBACK'}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function updateDriftUI(drift) {
+      const badge = document.getElementById('bdDriftBadge');
+      if (!badge || !drift) return;
+      const detected = !!drift.drift_detected;
+      const training = !!drift.retrain_in_progress;
+      badge.className = `badge ${detected ? 'badge-red' : training ? 'badge-amber' : 'badge-emerald'}`;
+      badge.textContent = `Drift: ${detected ? 'DETECTED' : training ? 'RETRAINING' : 'STABLE'} (${drift.samples_seen || 0} samples)`;
+    }
+
+    async function refreshBigDataLive(advanceTick = false) {
+      if (advanceTick) {
+        await getRealtimePulse(true);
+      }
+      const stats = await getBigDataLiveStats();
+      if (!stats) return;
+
+      const bronze = stats.bronze_amfi || {};
+      const silver = stats.silver_lake || {};
+      const gold = stats.streaming_gold || {};
+      const rtHub = gold.realtime_hub || {};
+
+      const amfiEl = document.getElementById('bdAmfiRows');
+      if (amfiEl) amfiEl.textContent = (bronze.csv_rows || 0).toLocaleString('en-IN');
+      const liveNavMeta = document.getElementById('bdLiveNavMeta');
+      if (liveNavMeta) liveNavMeta.textContent = `Live NAVs: ${(bronze.live_nav_schemes || 0).toLocaleString('en-IN')} · Hist files: ${bronze.cached_history_files || 0}`;
+
+      const qualSchemes = document.getElementById('bdQualitySchemes');
+      if (qualSchemes && bronze.csv_rows) qualSchemes.textContent = Number(bronze.csv_rows).toLocaleString('en-IN');
+      const qualNavs = document.getElementById('bdQualityNavFiles');
+      if (qualNavs) qualNavs.textContent = Number(bronze.cached_history_files || 0).toLocaleString('en-IN');
+
+      const silverFiles = document.getElementById('bdSilverFiles');
+      if (silverFiles) silverFiles.textContent = (silver.file_count || 0).toLocaleString('en-IN');
+      const silverMb = document.getElementById('bdSilverMb');
+      if (silverMb) silverMb.textContent = `Size: ${Number(silver.total_mb || 0).toFixed(2)} MB (Snappy)`;
+
+      _bdJsonlBase = Number(gold.jsonl_stream_events || 0);
+      const jsonlEl = document.getElementById('bdJsonlEvents');
+      if (jsonlEl) jsonlEl.textContent = _bdJsonlBase.toLocaleString('en-IN');
+      const streamMeta = document.getElementById('bdStreamMeta');
+      if (streamMeta) streamMeta.textContent = `Parquet μ-batches: ${gold.total_parquet_microbatches || 0} · Hub Ticks: ${rtHub.live_ticks_emitted || 0}`;
+
+      const modelsEl = document.getElementById('bdModelsOnline');
+      if (modelsEl) modelsEl.textContent = `${stats.models_online ?? 7} / ${stats.models_total ?? 7}`;
+      const wsClientsMeta = document.getElementById('bdWsClientsMeta');
+      if (wsClientsMeta) wsClientsMeta.textContent = `WS Clients: ${rtHub.connected_clients ?? 0}`;
+
+      if (rtHub.last_tick_at) {
+        const lastTickEl = document.getElementById('bdLastTickAt');
+        if (lastTickEl) lastTickEl.textContent = `Last Tick: ${rtHub.last_tick_at.replace('T', ' ').slice(0, 19)} UTC`;
+      }
+
+      renderModelsMatrix(stats.models_matrix || []);
+      updateDriftUI(stats.drift_monitor);
+
+      if (Array.isArray(stats.recent_stream_events) && stats.recent_stream_events.length) {
+        _bdEvents = stats.recent_stream_events.slice(0, 10);
+        renderBigDataEvents(_bdEvents);
+      }
+
+      const exportsData = stats.bi_exports || {};
+      const expCountEl = document.getElementById('bdExportsCount');
+      if (expCountEl) expCountEl.textContent = `${exportsData.file_count || 0} files`;
+      const expListEl = document.getElementById('biExportsList');
+      if (expListEl && Array.isArray(exportsData.files) && exportsData.files.length) {
+        expListEl.innerHTML = exportsData.files.map(f =>
+          `<div class="flex justify-between text-sm mb-8"><span class="text-muted">${escBdHtml(f.folder)}/${escBdHtml(f.name)}</span><span class="text-mono text-xs">${Number(f.size_kb || 0).toFixed(1)} KB</span></div>`
+        ).join('');
+      }
+    }
+
+    window.addEventListener('lume:realtime-tick', (e) => {
+      const pkt = e.detail;
+      if (!pkt) return;
+      if (pkt.latest_signal) {
+        if (!_bdEvents.length || _bdEvents[0].event_id !== pkt.latest_signal.event_id) {
+          _bdEvents = [pkt.latest_signal, ..._bdEvents].slice(0, 10);
+          _bdJsonlBase += 1;
+        }
+        renderBigDataEvents(_bdEvents);
+      }
+      const jsonlEl = document.getElementById('bdJsonlEvents');
+      if (jsonlEl && _bdJsonlBase > 0) jsonlEl.textContent = _bdJsonlBase.toLocaleString('en-IN');
+
+      const sm = pkt.stream_metrics || {};
+      const streamMeta = document.getElementById('bdStreamMeta');
+      if (streamMeta && sm.live_ticks_emitted != null) {
+        const curText = streamMeta.textContent.split('·')[0] || 'Parquet Stream';
+        streamMeta.textContent = `${curText.trim()} · Hub Ticks: ${sm.live_ticks_emitted}`;
+      }
+      const wsClientsMeta = document.getElementById('bdWsClientsMeta');
+      if (wsClientsMeta && sm.connected_clients != null) {
+        wsClientsMeta.textContent = `WS Clients: ${sm.connected_clients}`;
+      }
+      const modelsEl = document.getElementById('bdModelsOnline');
+      if (modelsEl && pkt.models_online != null) {
+        modelsEl.textContent = `${pkt.models_online} / ${pkt.models_total || 7}`;
+      }
+      const lastTickEl = document.getElementById('bdLastTickAt');
+      if (lastTickEl && pkt.timestamp) {
+        lastTickEl.textContent = `Live Tick #${pkt.tick_seq || 1} @ ${String(pkt.timestamp).replace('T', ' ').slice(0, 19)} UTC`;
+      }
+      updateDriftUI(pkt.drift);
+    });
+
     document.addEventListener('DOMContentLoaded', async () => {
       // Dataset composition
       createDoughnutChart('datasetChart',
@@ -246,7 +493,7 @@
       // Sources
       createBarChart('sourcesChart',
         ['Kaggle CRM','AMFI India','NSE India','Social/News','World Bank'],
-        [9240,14275,48000,5842,1000],
+        [9240,16344,48000,5842,1000],
         ['#2563EB','#10B981','#F59E0B','#8B5CF6','#06B6D4'],
         { indexAxis:'y', scales:{ x:{ ...chartDefaults.scales.x }, y:{ ...chartDefaults.scales.y, grid:{display:false} } } }
       );
@@ -271,6 +518,8 @@
         personaCounts,
         ['#10B981','#2563EB','#F59E0B','#8B5CF6']
       );
+
+      await refreshBigDataLive(false);
     });
   </script>
 </body>

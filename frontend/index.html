@@ -48,46 +48,68 @@
   <!-- ═══ HERO ═══ -->
   <section class="hero" id="heroSection">
     <div class="hero-badges fade-in stagger-1">
-      <div class="hero-badge">🤖 4 AI Engines</div>
-      <div class="hero-badge">⚡ Apache Spark</div>
-      <div class="hero-badge">📊 31GB Dataset</div>
-      <div class="hero-badge">🔄 Real-Time Streaming</div>
+      <div class="hero-badge">🤖 7 AI Engines (4 DL + 3 ML)</div>
+      <div class="hero-badge">⚡ PySpark + Parquet Lake</div>
+      <div class="hero-badge">📊 16,344+ AMFI Schemes</div>
+      <div class="hero-badge">🔄 Real-Time WebSocket Stream</div>
     </div>
     <h1 class="hero-title fade-in stagger-2">
       <span class="text-gradient">LUME AI</span>
     </h1>
     <p class="hero-subtitle fade-in stagger-3">
-      Production-grade <strong>Big Data + Artificial Intelligence</strong> platform for mutual fund distribution and
-      investor wealth management.
+      Real-time <strong>Big Data + Deep Learning</strong> platform for mutual fund distribution, candlestick XAI,
+      transformer market intelligence, and investor wealth management.
     </p>
+
+    <!-- Instant 1-Click Demo Banner -->
+    <div class="card fade-in stagger-4 mb-24" style="max-width:760px;margin:0 auto 24px;padding:16px 24px;background:rgba(255,255,255,0.88);">
+      <div class="flex justify-between items-center flex-wrap gap-12">
+        <div style="text-align:left;">
+          <div class="flex items-center gap-8">
+            <span class="badge badge-emerald" id="rtStreamPill"><span class="pulse pulse-live"></span> REAL-TIME DEMO READY</span>
+          </div>
+          <p class="text-xs text-muted mt-4">Jump straight into pre-seeded portfolios, CRM leads, and all 7 live ML/DL models with zero signup.</p>
+        </div>
+        <div class="flex gap-8 flex-wrap">
+          <button class="btn btn-emerald btn-sm" onclick="loginDemo('investor')">💼 Try Demo Investor →</button>
+          <button class="btn btn-primary btn-sm" onclick="loginDemo('distributor')">👔 Try Demo Distributor →</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Role Selection -->
     <div class="role-selector fade-in stagger-4" id="roleSelector">
-      <div class="role-card" onclick="selectRole('distributor')">
+      <div class="role-card" onclick="loginDemo('distributor')">
         <span class="role-icon">👔</span>
-        <h3>Mutual Fund Distributor</h3>
+        <h3>Demo Distributor</h3>
         <p class="text-muted mt-8" style="font-size:0.9rem;">
-          AI-powered lead scoring, investor clustering, fund recommendations, and CRM tools
+          Random Forest + PyTorch LeadMLP scoring, CRM churn analytics, MFD validator, and live AI Executive Briefing
         </p>
         <div class="flex gap-8 justify-between mt-24" style="justify-content:center;flex-wrap:wrap;">
-          <span class="badge badge-blue">Lead Scoring</span>
-          <span class="badge badge-violet">AI Buddy</span>
-          <span class="badge badge-emerald">CRM</span>
+          <span class="badge badge-blue">RF + LeadMLP</span>
+          <span class="badge badge-violet">Financial NLP</span>
+          <span class="badge badge-emerald">CRM Copilot</span>
         </div>
-        <div class="btn btn-primary btn-full mt-24">Enter as Distributor →</div>
+        <div class="flex gap-8 mt-24">
+          <button class="btn btn-primary" style="flex:1;" onclick="event.stopPropagation(); loginDemo('distributor')">Instant Demo →</button>
+          <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); selectRole('distributor')">Sign Up</button>
+        </div>
       </div>
-      <div class="role-card" onclick="selectRole('investor')">
+      <div class="role-card" onclick="loginDemo('investor')">
         <span class="role-icon">💼</span>
-        <h3>Investor</h3>
+        <h3>Demo Investor</h3>
         <p class="text-muted mt-8" style="font-size:0.9rem;">
-          Persona-based fund discovery, portfolio risk analysis, market intelligence, and live streaming
+          Pre-seeded 4-fund live AMFI portfolio, BiLSTM + Attention quantile forecasts, ResNet-18 Grad-CAM, and live WS pulse
         </p>
         <div class="flex gap-8 justify-between mt-24" style="justify-content:center;flex-wrap:wrap;">
-          <span class="badge badge-emerald">Portfolio</span>
-          <span class="badge badge-amber">Risk AI</span>
-          <span class="badge badge-blue">Markets</span>
+          <span class="badge badge-emerald">BiLSTM Quantiles</span>
+          <span class="badge badge-amber">ResNet-18 XAI</span>
+          <span class="badge badge-blue">Live WS Markets</span>
         </div>
-        <div class="btn btn-emerald btn-full mt-24">Enter as Investor →</div>
+        <div class="flex gap-8 mt-24">
+          <button class="btn btn-emerald" style="flex:1;" onclick="event.stopPropagation(); loginDemo('investor')">Instant Demo →</button>
+          <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); selectRole('investor')">Sign Up</button>
+        </div>
       </div>
     </div>
   </section>
@@ -121,46 +143,49 @@
       <div class="pipeline-arrow">→</div>
       <div class="pipeline-node card-accent-amber card" style="padding:14px 18px;">
         <div class="text-xs text-muted">TRAIN</div>
-        <div class="text-sm" style="font-weight:600;">4 ML Models</div>
-        <div class="text-xs text-muted">RF/KMeans/LSTM/NLP</div>
+        <div class="text-sm" style="font-weight:600;">7 ML + DL Models</div>
+        <div class="text-xs text-muted">RF/MLP/BiLSTM/CNN/Transformer</div>
       </div>
       <div class="pipeline-arrow">→</div>
       <div class="pipeline-node card-accent-blue card" style="padding:14px 18px;">
         <div class="text-xs text-muted">SERVE</div>
-        <div class="text-sm" style="font-weight:600;">FastAPI</div>
-        <div class="text-xs text-muted">REST Inference</div>
+        <div class="text-sm" style="font-weight:600;">FastAPI + WS</div>
+        <div class="text-xs text-muted">REST + WebSocket</div>
       </div>
       <div class="pipeline-arrow">→</div>
       <div class="pipeline-node card-accent-emerald card" style="padding:14px 18px;">
         <div class="text-xs text-muted">DISPLAY</div>
-        <div class="text-sm" style="font-weight:600;">Web Frontend</div>
-        <div class="text-xs text-muted">Real-Time UI</div>
+        <div class="text-sm" style="font-weight:600;">Live Web UI</div>
+        <div class="text-xs text-muted">Real-Time Dashboards</div>
       </div>
     </div>
 
     <!-- Tech Cards -->
     <div class="bento-grid">
       <div class="bento-6 card card-accent-blue">
-        <h4>🤖 Artificial Intelligence</h4>
-        <p class="text-muted text-sm mt-8">4 production ML engines powering real-time decisions</p>
+        <h4>🤖 Artificial Intelligence & Deep Learning</h4>
+        <p class="text-muted text-sm mt-8">7 production ML & PyTorch DL engines powering real-time explainable decisions</p>
         <div class="flex gap-8 mt-16" style="flex-wrap:wrap;">
           <span class="badge badge-blue">Random Forest</span>
-          <span class="badge badge-violet">K-Means</span>
-          <span class="badge badge-emerald">LSTM</span>
-          <span class="badge badge-amber">TF-IDF NLP</span>
+          <span class="badge badge-emerald">PyTorch LeadMLP</span>
+          <span class="badge badge-violet">BiLSTM + Attention</span>
+          <span class="badge badge-amber">ResNet-18 Grad-CAM</span>
+          <span class="badge badge-emerald">Financial Transformer</span>
+          <span class="badge badge-blue">K-Means</span>
+          <span class="badge badge-violet">Semantic Search</span>
         </div>
-        <a href="ai-showcase.html" class="btn btn-secondary btn-sm mt-16">Explore AI →</a>
+        <a href="ai-showcase.html" class="btn btn-secondary btn-sm mt-16">Explore Deep Learning Lab →</a>
       </div>
       <div class="bento-6 card card-accent-emerald">
-        <h4>📊 Big Data Engineering</h4>
-        <p class="text-muted text-sm mt-8">31GB composite dataset processed with distributed computing</p>
+        <h4>📊 Big Data & Real-Time Streaming</h4>
+        <p class="text-muted text-sm mt-8">PySpark ETL + Parquet Lakehouse + WebSocket streaming telemetry</p>
         <div class="flex gap-8 mt-16" style="flex-wrap:wrap;">
           <span class="badge badge-emerald">PySpark</span>
           <span class="badge badge-blue">Parquet</span>
-          <span class="badge badge-amber">Streaming</span>
-          <span class="badge badge-violet">14K+ Funds</span>
+          <span class="badge badge-amber">WebSocket Stream</span>
+          <span class="badge badge-violet">16K+ Schemes</span>
         </div>
-        <a href="bigdata-showcase.html" class="btn btn-secondary btn-sm mt-16">Explore Big Data →</a>
+        <a href="bigdata-showcase.html" class="btn btn-secondary btn-sm mt-16">Explore Big Data Live →</a>
       </div>
     </div>
   </section>

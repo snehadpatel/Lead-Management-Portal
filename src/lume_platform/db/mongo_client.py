@@ -71,6 +71,104 @@ class MockMongoClient:
             self._load_users()
             self._load_portfolios()
 
+        self.ensure_demo_accounts()
+
+    def ensure_demo_accounts(self) -> Dict[str, Any]:
+        """
+        Idempotently ensure 1-click Demo Investor and Demo Distributor accounts
+        plus a pre-populated realistic portfolio (with verified cached/AMFI schemes) exist.
+        """
+        from lume_platform.auth import hash_password
+
+        demo_users = [
+            {
+                "email": "demo.investor@lumeai.in",
+                "role": "investor",
+                "persona": "balanced",
+                "full_name": "Aarav Mehta (Demo Investor)",
+                "is_demo": True,
+            },
+            {
+                "email": "demo.distributor@lumeai.in",
+                "role": "distributor",
+                "persona": "balanced",
+                "full_name": "Vikram Desai (Demo MFD)",
+                "is_demo": True,
+            },
+        ]
+
+        default_pw_hash = hash_password("LumeDemo@2026")
+        for cfg in demo_users:
+            existing = self.get_user(cfg["email"])
+            if not existing:
+                created = self.create_user(cfg["email"], default_pw_hash, cfg["role"])
+                self.update_user_profile(
+                    cfg["email"],
+                    {
+                        "persona": cfg["persona"],
+                        "full_name": cfg["full_name"],
+                        "is_demo": True,
+                    },
+                )
+            elif not existing.get("is_demo"):
+                self.update_user_profile(
+                    cfg["email"],
+                    {
+                        "full_name": cfg["full_name"],
+                        "is_demo": True,
+                    },
+                )
+
+        # Ensure realistic pre-seeded portfolio for Demo Investor if empty
+        inv_email = "demo.investor@lumeai.in"
+        if not self.get_portfolio(inv_email):
+            seed_holdings = [
+                {
+                    "scheme_code": "100119",
+                    "scheme_name": "HDFC Balanced Advantage Fund - Growth Plan",
+                    "category": "Hybrid Scheme - Dynamic Asset Allocation",
+                    "buy_nav": 486.51,
+                    "buy_date": "2024-06-13",
+                    "buy_value": 150000.0,
+                    "units": round(150000.0 / 486.51, 4),
+                },
+                {
+                    "scheme_code": "100375",
+                    "scheme_name": "Nippon India Growth Mid Cap Fund - Growth Plan",
+                    "category": "Equity Scheme - Mid Cap Fund",
+                    "buy_nav": 120.1868,
+                    "buy_date": "2024-06-13",
+                    "buy_value": 100000.0,
+                    "units": round(100000.0 / 120.1868, 4),
+                },
+                {
+                    "scheme_code": "112117",
+                    "scheme_name": "Edelweiss Balanced Advantage Fund - Direct Plan - Growth",
+                    "category": "Hybrid Scheme - Dynamic Asset Allocation",
+                    "buy_nav": 48.31,
+                    "buy_date": "2024-06-14",
+                    "buy_value": 80000.0,
+                    "units": round(80000.0 / 48.31, 4),
+                },
+                {
+                    "scheme_code": "145034",
+                    "scheme_name": "HDFC Ultra Short Term Fund - Direct Plan - Growth Option",
+                    "category": "Debt Scheme - Ultra Short Duration Fund",
+                    "buy_nav": 14.2769,
+                    "buy_date": "2024-06-03",
+                    "buy_value": 70000.0,
+                    "units": round(70000.0 / 14.2769, 4),
+                },
+            ]
+            for h in seed_holdings:
+                self.add_holding(inv_email, h)
+
+        return {
+            "investor": inv_email,
+            "distributor": "demo.distributor@lumeai.in",
+            "seeded_holdings": len(self.get_portfolio(inv_email)),
+        }
+
     def _setup_indices(self) -> None:
         """Create database indices automatically on startup."""
         try:

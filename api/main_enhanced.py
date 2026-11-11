@@ -16,14 +16,14 @@ import asyncio
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Query
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Query, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse, RedirectResponse
 from pydantic import BaseModel, ConfigDict, Field, validator
 import pandas as pd
 import numpy as np
 
-from lume_platform.config import DATA_ROOT, EXPORT_DIR, MODELS_DIR, PROJECT_ROOT, TABLEAU_PUBLIC_EMBED_URL
+from lume_platform.config import ARTIFACTS_DIR, DATA_ROOT, EVAL_DIR, EXPORT_DIR, MODELS_DIR, PROJECT_ROOT, TABLEAU_EXPORT_DIR, TABLEAU_PUBLIC_EMBED_URL
 from lume_platform.crm.dashboard_service import build_dashboard_leads, build_dashboard_overview, update_lead_workflow
 from lume_platform.inference.registry import ModelRegistry
 from lume_platform.ml.buddy_engine import BuddyEngine
@@ -37,6 +37,7 @@ from lume_platform.monitoring import Monitor
 from lume_platform.impact import MarketImpactEngine
 from lume_platform.drift_monitor import DriftMonitor
 from lume_platform.data.nav_fetcher import nav_fetcher
+from lume_platform.realtime import stream_hub
 
 security = HTTPBearer()
 
@@ -116,11 +117,21 @@ def fallback_sentiment_predict(text: str) -> tuple[str, float]:
         return "neutral", 0.50
 
 @app.on_event("startup")
-def startup() -> None:
-    """Load all models on startup"""
+async def startup() -> None:
+    """Load all models, seed demo accounts, and start live WebSocket streaming on startup."""
     registry.load()
-    print("✅ Model registry loaded")
-    
+    db_client.ensure_demo_accounts()
+    stream_hub.bind(registry, drift_monitor)
+    stream_hub.emit_tick(persist_jsonl=False)
+    print("✅ Model registry, demo profiles & realtime hub initialized")
+
+    if os.environ.get("LUME_ENABLE_REALTIME_STREAM", "1") == "1":
+        try:
+            stream_hub._task = asyncio.create_task(stream_hub.run_loop())
+            print("⚡ Real-time WebSocket stream loop started")
+        except Exception as e:
+            print(f"⚠️ Failed to start real-time stream loop: {e}")
+
     # Start market signals background listener thread if enabled
     if os.environ.get("LUME_START_KAFKA_LISTENER", "true").lower() == "true":
         def _start_listener():
@@ -145,6 +156,17 @@ def startup() -> None:
             print(f"⚠️ Failed to start drift monitor: {e}")
     else:
         print("🧭 Drift monitor disabled inside API process")
+
+
+@app.on_event("shutdown")
+async def shutdown_event() -> None:
+    """Gracefully stop background streaming tasks."""
+    if stream_hub._task is not None and not stream_hub._task.done():
+        stream_hub._task.cancel()
+        try:
+            await stream_hub._task
+        except asyncio.CancelledError:
+            pass
 
 
 def retrain_models_job() -> Dict[str, Any]:
@@ -494,6 +516,7 @@ class ValidationResponse(BaseModel):
     alternatives: List[str]
     suggested_allocation_pct: float
     outlook: str
+    dl_insights: Optional[Dict[str, Any]] = None
 
 class ClientInsightItem(BaseModel):
     client_id: str
@@ -553,6 +576,10 @@ class UserLoginRequest(BaseModel):
     password: str
 
 
+class DemoLoginRequest(BaseModel):
+    role: str = Field(..., description="investor | distributor")
+
+
 class UserProfileUpdateRequest(BaseModel):
     profile: Dict[str, Any]
 
@@ -569,25 +596,170 @@ def root():
 
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
 def health():
-    """Health check endpoint with manifest info"""
+    """Health check endpoint exposing all 7 ML/DL engines & manifest info."""
     manifest_path = MODELS_DIR / "model_manifest.json"
     manifest = {}
     if manifest_path.is_file():
         with open(manifest_path) as f:
             manifest = json.load(f)
-            
-    return HealthResponse(
-        status="ok",
-        timestamp=datetime.utcnow().isoformat(),
-        models_loaded={
+
+    models_status = (
+        registry.get_models_status()
+        if hasattr(registry, "get_models_status")
+        else {
             "lead_bundle": registry.lead_bundle is not None,
             "investor_bundle": registry.investor_bundle is not None,
             "sentiment_bundle": registry.sentiment_bundle is not None,
             "finbert_pipeline": registry.finbert_pipeline is not None,
-        },
-        api_version="2.0.0",
-        manifest=manifest
+        }
     )
+
+    return HealthResponse(
+        status="ok",
+        timestamp=datetime.utcnow().isoformat(),
+        models_loaded=models_status,
+        api_version="2.0.0",
+        manifest=manifest,
+    )
+
+
+@app.websocket("/ws/realtime")
+async def websocket_realtime(websocket: WebSocket):
+    """Real-time WebSocket stream broadcasting NIFTY ticks, NLP-scored news & drift state."""
+    await websocket.accept()
+    stream_hub.register_client(websocket)
+    try:
+        # Send immediate current snapshot so UI updates with 0ms delay
+        await websocket.send_text(json.dumps(stream_hub.get_snapshot()))
+        while True:
+            msg = await websocket.receive_text()
+            if msg.strip().lower() == "ping":
+                await websocket.send_text(json.dumps({"type": "pong", "timestamp": datetime.utcnow().isoformat()}))
+            elif msg.strip().lower() == "tick":
+                pkt = await asyncio.to_thread(stream_hub.emit_tick, True)
+                await websocket.send_text(json.dumps(pkt))
+    except WebSocketDisconnect:
+        pass
+    except Exception:
+        pass
+    finally:
+        stream_hub.unregister_client(websocket)
+
+
+@app.get("/api/realtime/pulse", tags=["Real-Time"])
+def get_realtime_pulse(advance: bool = False):
+    """Return latest real-time market, Phase 5 Transformer news & drift snapshot (or step a tick)."""
+    if advance:
+        return stream_hub.emit_tick(persist_jsonl=True)
+    return stream_hub.get_snapshot()
+
+
+def _dir_parquet_stats(directory: Path) -> Dict[str, Any]:
+    if not directory.exists():
+        return {"exists": False, "file_count": 0, "total_bytes": 0, "total_mb": 0.0}
+    files = list(directory.rglob("*.parquet"))
+    total_bytes = sum(f.stat().st_size for f in files if f.is_file())
+    return {
+        "exists": True,
+        "file_count": len(files),
+        "total_bytes": total_bytes,
+        "total_mb": round(total_bytes / (1024 * 1024), 3),
+    }
+
+
+@app.get("/api/bigdata/live-stats", tags=["Big Data"])
+def get_bigdata_live_stats():
+    """Live telemetry auditing Parquet Data Lake, Spark Streaming outputs, AMFI Catalog & 7 ML/DL models."""
+    snapshot = stream_hub.get_snapshot()
+
+    # 1. Bronze AMFI Mutual Fund CSV catalog
+    amfi_csv = PROJECT_ROOT / "data" / "Mutual_Fund_Data-main" / "mutual_fund_data.csv"
+    amfi_rows = 0
+    amfi_size_mb = 0.0
+    if amfi_csv.is_file():
+        amfi_size_mb = round(amfi_csv.stat().st_size / (1024 * 1024), 2)
+        try:
+            with open(amfi_csv, "rb") as fh:
+                amfi_rows = max(0, sum(1 for _ in fh) - 1)
+        except Exception:
+            amfi_rows = 0
+
+    # 2. AMFI Live NAV Cache
+    nav_cache_dir = EXPORT_DIR / "nav_cache"
+    latest_navs_file = nav_cache_dir / "latest_navs.json"
+    amfi_live_schemes = 0
+    if latest_navs_file.is_file():
+        try:
+            with open(latest_navs_file, "r") as fh:
+                amfi_live_schemes = len(json.load(fh))
+        except Exception:
+            amfi_live_schemes = 0
+    hist_cache_files = len(list(nav_cache_dir.glob("hist_*.json"))) if nav_cache_dir.is_dir() else 0
+
+    # 3. Silver Parquet Lake & Streaming Parquets
+    silver_stats = _dir_parquet_stats(ARTIFACTS_DIR / "cleaned_parquet")
+    market_stream_stats = _dir_parquet_stats(PROJECT_ROOT / "streaming" / "outputs" / "market_live.parquet")
+    news_stream_stats = _dir_parquet_stats(PROJECT_ROOT / "streaming" / "outputs" / "news_live.parquet")
+
+    jsonl_path = PROJECT_ROOT / "streaming_output" / "market_signals.jsonl"
+    jsonl_events = 0
+    if jsonl_path.is_file():
+        try:
+            with open(jsonl_path, "rb") as fh:
+                jsonl_events = sum(1 for _ in fh)
+        except Exception:
+            jsonl_events = 0
+
+    # 4. Gold BI / Tableau CSV Exports
+    export_csvs = []
+    for folder in (EXPORT_DIR, TABLEAU_EXPORT_DIR):
+        if folder.is_dir():
+            for csvf in sorted(folder.glob("*.csv")):
+                export_csvs.append({
+                    "name": csvf.name,
+                    "folder": folder.name,
+                    "size_kb": round(csvf.stat().st_size / 1024.0, 1),
+                })
+
+    # 5. Complete 7 ML & DL Engine Matrix
+    status_map = snapshot.get("models_status") or (registry.get_models_status() if hasattr(registry, "get_models_status") else {})
+    engines = [
+        {"id": "lead_bundle", "name": "Random Forest Lead Classifier", "layer": "ML (scikit-learn)", "active": bool(status_map.get("lead_bundle")), "artifact": "artifacts/models/lead_classifier_bundle.pkl", "metric": "ROC-AUC 0.933"},
+        {"id": "lead_mlp", "name": "PyTorch LeadMLP Neural Net", "layer": "DL Phase 4 (PyTorch)", "active": bool(status_map.get("lead_mlp")), "artifact": "artifacts/models/lead_mlp_model.pth", "metric": "ROC-AUC 0.916 | 0.048ms"},
+        {"id": "bilstm_forecaster", "name": "BiLSTM + Temporal Attention + Quantiles", "layer": "DL Phase 2 (PyTorch)", "active": bool(status_map.get("bilstm_forecaster")), "artifact": "artifacts/models/bilstm_attention_quantile.pth", "metric": "RMSE ₹10.55 | Cov 100%"},
+        {"id": "vision_resnet18", "name": "Candlestick ResNet-18 + Grad-CAM", "layer": "DL Phase 3 (PyTorch Vision)", "active": bool(status_map.get("vision_resnet18")), "artifact": "artifacts/models/candlestick_resnet18_finetuned.pth", "metric": "3-Class Chart XAI"},
+        {"id": "financial_transformer", "name": "Financial Transformer + Token Saliency", "layer": "DL Phase 5 (PyTorch NLP)", "active": bool(status_map.get("financial_transformer")), "artifact": "artifacts/models/financial_transformer.pth", "metric": "3-Class Financial Sentiment"},
+        {"id": "investor_bundle", "name": "K-Means Investor Persona Profiler", "layer": "ML (scikit-learn)", "active": bool(status_map.get("investor_bundle")), "artifact": "artifacts/models/investor_cluster_bundle.pkl", "metric": "4 Wealth Personas"},
+        {"id": "semantic_search", "name": "Semantic Fund Retrieval Index", "layer": "ML / Embeddings", "active": bool(status_map.get("semantic_search")), "artifact": "artifacts/models/fund_embeddings.pkl", "metric": f"{len(getattr(registry.sbert_search, 'funds', []))} Embedded Schemes"},
+    ]
+
+    return {
+        "timestamp": datetime.utcnow().isoformat(),
+        "bronze_amfi": {
+            "csv_rows": amfi_rows,
+            "csv_size_mb": amfi_size_mb,
+            "live_nav_schemes": amfi_live_schemes,
+            "cached_history_files": hist_cache_files,
+        },
+        "silver_lake": silver_stats,
+        "streaming_gold": {
+            "market_live_parquet": market_stream_stats,
+            "news_live_parquet": news_stream_stats,
+            "total_parquet_microbatches": market_stream_stats["file_count"] + news_stream_stats["file_count"],
+            "jsonl_stream_events": jsonl_events,
+            "realtime_hub": snapshot.get("stream_metrics", {}),
+        },
+        "bi_exports": {
+            "file_count": len(export_csvs),
+            "files": export_csvs[:15],
+        },
+        "drift_monitor": snapshot.get("drift", {}),
+        "models_matrix": engines,
+        "models_online": sum(1 for e in engines if e["active"]),
+        "models_total": len(engines),
+        "recent_stream_events": snapshot.get("recent_signals", []),
+        "market_snapshot": snapshot.get("market", {}),
+    }
 
 
 @app.get("/signals/latest", tags=["Signals"])
@@ -1059,11 +1231,26 @@ def insights():
 
 @app.get("/search/funds", response_model=SearchResponse, tags=["Search"])
 def search_funds(q: str = Query(..., alias="query"), top_k: int = 5):
-    """Semantic fund search using SBERT embeddings loaded in the registry."""
+    """Semantic fund search using SBERT embeddings + AMFI catalog fallback."""
     try:
+        results: List[Dict[str, Any]] = []
         if not registry.sbert_search:
-            raise HTTPException(status_code=503, detail="Semantic search not enabled or embeddings missing")
-        results = registry.sbert_search.query(q, top_k=top_k)
+            registry.load_sbert_cache()
+        if registry.sbert_search:
+            results = registry.sbert_search.query(q, top_k=top_k)
+
+        if not results:
+            cat_matches = recommender.catalog_view(top_k=top_k, query=q)
+            results = [
+                {
+                    "scheme_code": str(f.get("scheme_code", "")),
+                    "scheme_name": f.get("scheme_name", f.get("name", "Unknown Fund")),
+                    "category": f.get("category", "Mutual Fund"),
+                    "match_score": float(f.get("match_score", 0.55)),
+                }
+                for f in cat_matches
+            ]
+
         return SearchResponse(timestamp=datetime.utcnow().isoformat(), query=q, results=results)
     except HTTPException:
         raise
@@ -1139,6 +1326,31 @@ def login(request: UserLoginRequest):
         "token_type": "bearer",
         "email": email_clean,
         "role": user["role"]
+    }
+
+
+@app.post('/auth/demo-login', tags=['Auth'])
+def demo_login(request: DemoLoginRequest):
+    """1-click Demo Investor or Demo Distributor authentication with pre-seeded holdings & CRM."""
+    role = (request.role or "").strip().lower()
+    if role not in ("investor", "distributor"):
+        raise HTTPException(status_code=400, detail="role must be 'investor' or 'distributor'")
+
+    db_client.ensure_demo_accounts()
+    email = "demo.investor@lumeai.in" if role == "investor" else "demo.distributor@lumeai.in"
+    user = db_client.get_user(email)
+    if not user:
+        raise HTTPException(status_code=500, detail="Failed to provision demo account")
+
+    token = create_access_token(email)
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "email": email,
+        "role": user.get("role", role),
+        "persona": user.get("persona", "balanced"),
+        "full_name": user.get("full_name", f"Demo {role.title()}"),
+        "is_demo": True,
     }
 
 
@@ -1530,12 +1742,40 @@ def get_portfolio_analytics(horizon: str = '1y', user: dict = Depends(get_curren
 
 @app.get('/news/live', tags=['News'])
 def get_live_news_endpoint(max_articles: int = 12, user: dict = Depends(get_current_user)):
-    """Get live financial news personalized for user's holdings with sentiment scores."""
+    """Get live financial news personalized for user's holdings with Phase 5 Transformer sentiment + saliency."""
     try:
         from lume_platform.news.news_fetcher import news_fetcher
         email = user["email"]
         holdings = db_client.get_portfolio(email)
-        return news_fetcher.get_personalized_alerts(holdings, max_alerts=max_articles)
+        alerts = news_fetcher.get_personalized_alerts(holdings, max_alerts=max_articles)
+
+        try:
+            nlp_svc = get_financial_nlp_service()
+            enriched = []
+            for item in alerts:
+                title = item.get("title", "")
+                res = nlp_svc.predict_sentiment_with_saliency(title)
+                top_tokens = sorted(
+                    res.get("token_saliency", []),
+                    key=lambda x: x.get("saliency", 0.0),
+                    reverse=True,
+                )[:4]
+                sent_label = res.get("sentiment", item.get("sentiment", "neutral"))
+                mapped_sent = (
+                    "bullish" if sent_label == "positive"
+                    else ("bearish" if sent_label == "negative" else "neutral")
+                )
+                enriched.append({
+                    **item,
+                    "sentiment": mapped_sent,
+                    "nlp_sentiment": sent_label,
+                    "nlp_confidence": res.get("confidence", 0.5),
+                    "nlp_model": res.get("model", "FinancialTransformer"),
+                    "token_saliency": top_tokens,
+                })
+            return enriched
+        except Exception:
+            return alerts
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
@@ -1818,7 +2058,64 @@ def validate_recommendation(request: ValidationRequest, current_user: dict = Dep
             suggested_allocation = 40.0
             
         outlook = "Staggered Systematic Entry Recommended" if market_data.sentiment in ["neutral", "bearish"] else "Lump-sum / Accelerated SIP Permitted"
-        
+
+        # Enrich with real Deep Learning engines (Phase 5 Transformer, Phase 2 BiLSTM, Phase 3 ResNet-18)
+        dl_insights: Dict[str, Any] = {}
+        try:
+            snap = stream_hub.get_snapshot()
+            latest_sig = snap.get("latest_signal", {})
+            nlp_svc = get_financial_nlp_service()
+            eval_text = latest_sig.get("headline") or f"{request.fund_name} {request.category} market outlook VIX {market_data.vix}"
+            nlp_res = nlp_svc.predict_sentiment_with_saliency(eval_text)
+            top_toks = sorted(nlp_res.get("token_saliency", []), key=lambda x: x.get("saliency", 0.0), reverse=True)[:4]
+            dl_insights["financial_transformer"] = {
+                "headline": eval_text,
+                "sentiment": nlp_res.get("sentiment"),
+                "confidence": nlp_res.get("confidence"),
+                "top_tokens": [t.get("token") for t in top_toks],
+            }
+        except Exception:
+            pass
+
+        try:
+            # Find matching scheme history to run BiLSTM + ResNet-18 when available
+            q_lower = (request.fund_name or "").lower()
+            matched_scheme = None
+            for f in (recommender.fallback_funds or []):
+                sname = (f.get("scheme_name") or "").lower()
+                code = str(f.get("scheme_code", ""))
+                hist_file = EXPORT_DIR / "nav_cache" / f"hist_{code}.json"
+                if q_lower and any(tok in sname for tok in q_lower.split()[:2]) and hist_file.is_file():
+                    matched_scheme = code
+                    break
+            if not matched_scheme and (EXPORT_DIR / "nav_cache" / "hist_100119.json").is_file():
+                matched_scheme = "100119"
+
+            if matched_scheme:
+                hist = nav_fetcher.get_historical_nav(matched_scheme, days=60)
+                if len(hist) >= 30:
+                    vals = [float(x["nav"]) for x in reversed(hist[:60])]
+                    fc_svc = getattr(registry, "get_forecaster", lambda: registry.forecaster)()
+                    if fc_svc:
+                        fc = fc_svc.forecast(vals)
+                        dl_insights["bilstm_forecast"] = {
+                            "scheme_code": matched_scheme,
+                            "trend": fc.get("trend"),
+                            "p10_end": fc.get("p10", [None])[-1],
+                            "p50_end": fc.get("p50", fc.get("forecast_trajectory", [None]))[-1],
+                            "p90_end": fc.get("p90", [None])[-1],
+                            "model_source": fc.get("model_source"),
+                        }
+                if len(hist) >= 40:
+                    vis_res = get_vision_service().predict_from_scheme(matched_scheme)
+                    dl_insights["vision_resnet18"] = {
+                        "scheme_code": matched_scheme,
+                        "pattern": vis_res.get("pattern"),
+                        "confidence": round(float(vis_res.get("confidence", 0.0)), 4),
+                    }
+        except Exception:
+            pass
+
         return ValidationResponse(
             timestamp=datetime.utcnow().isoformat(),
             recommended=recommended,
@@ -1830,7 +2127,8 @@ def validate_recommendation(request: ValidationRequest, current_user: dict = Dep
             confidence_score=0.92,
             alternatives=alternatives,
             suggested_allocation_pct=suggested_allocation,
-            outlook=outlook
+            outlook=outlook,
+            dl_insights=dl_insights or None,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -2126,9 +2424,11 @@ _vision_service = None
 
 def get_vision_service():
     global _vision_service
+    if getattr(registry, "vision_service", None) is not None:
+        return registry.vision_service
     if _vision_service is None:
         from lume_platform.vision.service import VisionPatternService
-        _vision_service = VisionPatternService()
+        _vision_service = VisionPatternService(model_type="resnet18")
     return _vision_service
 
 
@@ -2160,13 +2460,51 @@ def classify_vision_pattern(request: VisionPatternRequest):
             confidence=result["confidence"],
             probabilities=result["probabilities"],
             gradcam_overlay_base64=result["gradcam_overlay_base64"],
-            model_architecture=result.get("model_architecture", "custom_cnn"),
+            model_architecture=result.get("model_architecture", "resnet18"),
             scheme_code=result.get("scheme_code"),
             date_range=result.get("date_range"),
             latest_nav=result.get("latest_nav"),
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Vision classification failed: {str(e)}")
+
+
+@app.get("/api/fund/{scheme_code}/full-ai", tags=["AI Lab"])
+def get_fund_full_ai_bundle(scheme_code: str, days: int = 90):
+    """Unified per-scheme endpoint running NAV history + Phase 2 BiLSTM Quantiles + Phase 3 ResNet-18 Grad-CAM."""
+    try:
+        hist = nav_fetcher.get_historical_nav(scheme_code, days=max(days, 90))
+        latest_nav = nav_fetcher.get_latest_nav(scheme_code)
+        returns = nav_fetcher.calculate_returns(scheme_code)
+        chrono = list(reversed(hist))
+
+        forecast_data = None
+        if len(chrono) >= 30:
+            vals = [float(item["nav"]) for item in chrono[-60:]]
+            fc_svc = getattr(registry, "get_forecaster", lambda: registry.forecaster)()
+            if fc_svc:
+                forecast_data = fc_svc.forecast(vals)
+            else:
+                forecast_data = fallback_forecast_nav(vals)
+
+        vision_data = None
+        if len(chrono) >= 40:
+            try:
+                vision_data = get_vision_service().predict_from_scheme(scheme_code)
+            except Exception:
+                vision_data = None
+
+        return {
+            "timestamp": datetime.utcnow().isoformat(),
+            "scheme_code": scheme_code,
+            "latest_nav": latest_nav or (chrono[-1]["nav"] if chrono else None),
+            "returns": returns,
+            "history": hist[:60],
+            "forecast": forecast_data,
+            "vision": vision_data,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Full fund AI inspection failed: {str(e)}") from e
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -2209,6 +2547,32 @@ def get_dl_lab_metadata():
     """Phase 4: Model versions, parameters, dataset provenance, and honest limitations."""
     service = get_dl_lab_service()
     return service.get_metadata()
+
+
+# -------------------------------------------------------------------------
+# Phase 5: Financial NLP & Token Saliency Endpoints
+# -------------------------------------------------------------------------
+class FinancialNLPRequest(BaseModel):
+    text: str = Field(..., description="Financial statement, headline, or market commentary")
+
+
+def get_financial_nlp_service():
+    from lume_platform.nlp.financial_nlp_service import FinancialNLPService
+    return FinancialNLPService.get_instance()
+
+
+@app.post("/api/nlp/financial-sentiment", tags=["Financial NLP"])
+def predict_financial_sentiment_endpoint(payload: FinancialNLPRequest):
+    """Phase 5: Financial Domain Transformer sentiment prediction with token attention saliency."""
+    service = get_financial_nlp_service()
+    return service.predict_sentiment_with_saliency(payload.text)
+
+
+@app.get("/api/nlp/benchmark", tags=["Financial NLP"])
+def get_financial_nlp_benchmark():
+    """Phase 5: Genuine comparative benchmark (TF-IDF vs SBERT vs Financial Transformer)."""
+    service = get_financial_nlp_service()
+    return service.get_benchmark_metrics()
 
 
 
@@ -2266,76 +2630,54 @@ def advisor_query(request: AdvisorRequest):
             dashboard_context=request.dashboard_context,
         )
         
-        # 1. Get Semantic Matches
+        # 1. Get Semantic Matches (embedded corpus -> live catalog recommender fallback)
         funds = []
+        if not registry.sbert_search:
+            registry.load_sbert_cache()
         if registry.sbert_search:
             funds = registry.sbert_search.query(request.query, top_k=3)
         if not funds:
-            strategy_map = {
-                "conservative": [
-                    {"scheme_code": "LIQ001", "scheme_name": "Liquid Fund", "category": "Debt - Liquid", "match_score": 0.88},
-                    {"scheme_code": "SDF001", "scheme_name": "Short Duration Fund", "category": "Debt - Short Duration", "match_score": 0.84},
-                ],
-                "balanced": [
-                    {"scheme_code": "AHF001", "scheme_name": "Aggressive Hybrid Fund", "category": "Hybrid - Aggressive", "match_score": 0.86},
-                    {"scheme_code": "BAF001", "scheme_name": "Balanced Advantage Fund", "category": "Hybrid - Balanced Advantage", "match_score": 0.82},
-                ],
-                "growth": [
-                    {"scheme_code": "LCI001", "scheme_name": "Large Cap Index Fund", "category": "Equity - Large Cap", "match_score": 0.85},
-                    {"scheme_code": "MCF001", "scheme_name": "Mid Cap Fund", "category": "Equity - Mid Cap", "match_score": 0.83},
-                ],
-                "passive": [
-                    {"scheme_code": "N50001", "scheme_name": "Nifty 50 Index Fund", "category": "Index Fund - Large Cap", "match_score": 0.90},
-                    {"scheme_code": "NN5001", "scheme_name": "Nifty Next 50 Index Fund", "category": "Index Fund - Large Mid Cap", "match_score": 0.83},
-                ],
-            }
-            funds = strategy_map.get((request.persona or "balanced").lower(), strategy_map["balanced"])
-        
-        # 2. Get Market Sentiment
-        sentiment = "Neutral"
-        conf = 0.5
-        if registry.sentiment_bundle:
-            from lume_platform.ml.bundles import SBERTSentimentBundle
-            if isinstance(registry.sentiment_bundle, SBERTSentimentBundle):
-                sbert_model = None
-                if registry.sbert_search and hasattr(registry.sbert_search, 'model') and registry.sbert_search.model:
-                    sbert_model = registry.sbert_search.model
-                
-                if sbert_model:
-                    try:
-                        sentiment, conf = registry.sentiment_bundle.predict_text(request.query, sbert_model)
-                    except Exception:
-                        sentiment, conf = fallback_sentiment_predict(request.query)
-                else:
-                    sentiment, conf = fallback_sentiment_predict(request.query)
-            else:
-                try:
-                    sentiment, conf = registry.sentiment_bundle.predict_text(request.query)
-                except Exception:
-                    sentiment, conf = fallback_sentiment_predict(request.query)
-        else:
-            sentiment, conf = fallback_sentiment_predict(request.query)
-            
-        # 3. Synthesize explainable (XAI) advice incorporating live market sentiment and VIX
+            cat_recs = recommender.recommend_for_profile(
+                {"inferred_risk_profile": request.persona or "balanced", "goals": request.query},
+                market_context={"market_sentiment": market_data.sentiment, "vix": market_data.vix},
+                top_k=3,
+            )
+            funds = [
+                {
+                    "scheme_code": str(r.get("scheme_code", "")),
+                    "scheme_name": r.get("scheme_name", "Mutual Fund"),
+                    "category": r.get("category", "Mutual Fund"),
+                    "match_score": float(r.get("match_score", 0.75)),
+                }
+                for r in cat_recs
+            ]
+
+        # 2. Score query intent using Phase 5 Financial Transformer Classifier
+        nlp_res = get_financial_nlp_service().predict_sentiment_with_saliency(request.query)
+        query_sentiment = nlp_res.get("sentiment", "neutral")
+
+        # 3. Synthesize explainable (XAI) advice incorporating live market sentiment, VIX & Financial NLP
         analysis = buddy_reply.response
-        analysis += f" [AI Confidence: {round(buddy_reply.confidence * 100, 1)}%]"
-        
+        analysis += f" [Advisor Confidence: {round(buddy_reply.confidence * 100, 1)}% | Query NLP: {query_sentiment.upper()}]"
+
         if market_data.sentiment == "bearish":
-            analysis += f" Current market is BEARISH (Nifty 50 change: {market_data.nifty_change_pct}%, VIX: {market_data.vix}). Under these conditions, "
-            if request.persona == "conservative":
-                analysis += "we strongly recommend capital preservation. Stick to high-quality short-term debt and liquid funds. Stagger equity entries."
+            analysis += f" Current market is BEARISH (Nifty 50: {market_data.nifty_50:,.1f}, Δ {market_data.nifty_change_pct}%, VIX: {market_data.vix}). Under these conditions, "
+            if (request.persona or "").lower() == "conservative":
+                analysis += "we strongly recommend capital preservation via short-duration debt and liquid funds, staggering any equity exposure."
             else:
-                analysis += "we recommend systematic averaging (SIP) rather than lump-sum investments, focusing on large-cap index tracking or balanced hybrids."
+                analysis += "we recommend systematic SIP averaging rather than lump-sum deployment, focusing on large-cap index or dynamic hybrid allocation."
+        elif market_data.sentiment == "bullish":
+            analysis += f" Current market is BULLISH (Nifty 50: {market_data.nifty_50:,.1f}, Δ +{market_data.nifty_change_pct}%, VIX: {market_data.vix}). Under these conditions, "
+            if (request.persona or "").lower() == "growth":
+                analysis += "broad-market flexi-cap and mid-cap allocations remain favorable for long-term alpha while monitoring valuation risk."
+            else:
+                analysis += "we recommend a disciplined core-satellite allocation balanced between equity index exposure and short-term debt stability."
         else:
-            analysis += f" Current market is BULLISH (Nifty 50 change: {market_data.nifty_change_pct}%, VIX: {market_data.vix}). Under these conditions, "
-            if request.persona == "growth":
-                analysis += "broad-market and mid-cap equity allocations are favored for alpha generation. Stagger SIP to manage intraday dips."
-            else:
-                analysis += "we recommend a balanced allocation with 60% equities and 40% high-yield debt to lock in moderate growth."
+            analysis += f" Current market is NEUTRAL/RANGEBOUND (Nifty 50: {market_data.nifty_50:,.1f}, Δ {market_data.nifty_change_pct}%, VIX: {market_data.vix}). Stagger entries systematically aligned with your {request.persona or 'balanced'} profile."
 
         if buddy_reply.follow_up:
             analysis += f" Next step: {buddy_reply.follow_up}"
-            
+
         return AdvisorResponse(
             timestamp=datetime.utcnow().isoformat(),
             query=request.query,
@@ -2347,33 +2689,72 @@ def advisor_query(request: AdvisorRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.get("/buddy/briefing", response_model=BuddyBriefingResponse, tags=["AI Buddy"])
 def buddy_briefing(distributor_id: str = "demo_distributor"):
     """
-    Generates a personalized daily briefing using the Custom PyTorch Transformer Model.
+    Generates a live daily executive briefing synthesized from CRM leads,
+    streaming NIFTY/VIX metrics, Phase 5 Financial Transformer signals, and Drift Monitor.
     """
     try:
-        # We would normally load the custom PyTorch model from registry.
-        # For MVP, we simulate the output from our trained CustomBuddyModel.
-        # Check if the model exists
-        import torch
-        from lume_platform.config import MODELS_DIR
-        model_path = Path(MODELS_DIR) / "custom_buddy_model.pth"
-        
-        briefing_text = "Good morning! Nifty 50 is up today. "
-        if model_path.exists():
-            # In a full deployment, this is loaded into memory via registry on startup.
-            briefing_text += "Your top lead today is Rahul. He has high intent for debt funds. Pitch HDFC Liquid."
-        else:
-            briefing_text += "Please ensure the CustomBuddyModel is trained."
+        overview = build_dashboard_overview()
+        top_leads = db_client.get_all_leads(limit=10)
+        snap = stream_hub.get_snapshot()
+        market = snap.get("market", {})
+        latest_sig = snap.get("latest_signal", {})
+        drift = snap.get("drift", {})
+
+        total_leads = int(overview.get("total_leads", len(top_leads)))
+        hot_leads = int(overview.get("hot_prospects", 0))
+        avg_prob = float(overview.get("mean_conversion_probability", 0.0))
+
+        top_lead = top_leads[0] if top_leads else {}
+        top_name = top_lead.get("name") or f"{top_lead.get('first_name', 'Top')} {top_lead.get('last_name', 'Lead')}".strip()
+        top_prob = float(top_lead.get("conversion_probability", 0.85))
+        top_persona = top_lead.get("recommended_pitch_persona", "Balanced Allocator")
+        top_city = top_lead.get("city", "Mumbai")
+
+        # Find a nurture/retention candidate
+        nurture_lead = next(
+            (l for l in top_leads if 0.35 <= float(l.get("conversion_probability", 0.5)) <= 0.72),
+            top_leads[1] if len(top_leads) > 1 else {},
+        )
+        nurture_name = nurture_lead.get("name") or f"{nurture_lead.get('first_name', 'Client')} {nurture_lead.get('last_name', '')}".strip() or "Warm Lead"
+        nurture_prob = float(nurture_lead.get("conversion_probability", 0.58))
+
+        nifty_val = market.get("nifty_50", 25450.0)
+        nifty_chg = market.get("nifty_change_pct", 0.0)
+        vix_val = market.get("vix", 15.0)
+        nlp_sent = latest_sig.get("sentiment", "neutral").upper()
+        headline = latest_sig.get("headline", "Indian mutual fund inflows steady")
+
+        briefing_text = (
+            f"Live Desk Briefing ({distributor_id}): NIFTY 50 at {nifty_val:,.1f} ({nifty_chg:+.2f}%, VIX {vix_val:.1f}). "
+            f"Financial Transformer rates latest wire '{headline[:72]}...' as {nlp_sent}. "
+            f"CRM Queue tracks {total_leads} leads ({hot_leads} Hot, mean conversion {avg_prob * 100:.1f}%). "
+            f"Priority Outreach: {top_name} ({top_city}, P={top_prob:.2f}) — pitch {top_persona}. "
+            f"Drift Monitor: {'ALERT' if drift.get('drift_detected') else 'Stable'} ({drift.get('samples_seen', 0)} stream events seen)."
+        )
+
+        actions = [
+            {
+                "action": f"Priority Pitch: {top_name}",
+                "reason": f"Score {top_prob:.2f} | City: {top_city} | Pitch {top_persona}",
+            },
+            {
+                "action": f"Retention Follow-Up: {nurture_name}",
+                "reason": f"Score {nurture_prob:.2f} | VIX {vix_val:.1f} requires disciplined SIP reassurance",
+            },
+            {
+                "action": f"Stream Sentiment Watch ({nlp_sent})",
+                "reason": f"Transformer signal on '{headline[:55]}...' ({round(float(latest_sig.get('confidence', 0.6)) * 100)}% conf)",
+            },
+        ]
 
         return BuddyBriefingResponse(
             timestamp=datetime.utcnow().isoformat(),
             briefing=briefing_text,
-            top_actions=[
-                {"action": "Call Rahul", "reason": "High intent for debt funds (Score: 0.92)"},
-                {"action": "Follow up with Priya", "reason": "Risk alert on current equity holding"}
-            ]
+            top_actions=actions,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -17,7 +17,7 @@ import torch
 import torch.nn.functional as F
 import torchvision.transforms as T
 
-from lume_platform.config import MODELS_DIR, PROJECT_ROOT
+from lume_platform.config import EXPORT_DIR, MODELS_DIR, PROJECT_ROOT
 from lume_platform.vision.candlestick_dataset import (
     LABEL_NAMES,
     render_candlestick_image,
@@ -39,15 +39,18 @@ class VisionPatternService:
 
     def __init__(
         self,
-        model_type: str = "custom_cnn",
+        model_type: str = "resnet18",
         model_path: Optional[Path] = None,
         device: Optional[str] = None,
     ):
         self.device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
-        self.model_type = model_type
 
         default_cnn = MODELS_DIR / "candlestick_cnn_custom.pth"
         default_resnet = MODELS_DIR / "candlestick_resnet18_finetuned.pth"
+
+        if model_type == "custom_cnn" and not default_cnn.is_file() and default_resnet.is_file():
+            model_type = "resnet18"
+        self.model_type = model_type
 
         if model_type == "resnet18":
             self.model_path = model_path or default_resnet
@@ -133,27 +136,38 @@ class VisionPatternService:
         """
         Renders latest chart for mutual fund scheme and classifies pattern.
         """
-        cache_file = PROJECT_ROOT / "output_production_final" / "nav_cache" / f"hist_{scheme_code}.json"
-        if not cache_file.is_file():
-            raise FileNotFoundError(f"Scheme history not found for {scheme_code} at {cache_file}")
+        code = str(scheme_code)
+        cache_file = EXPORT_DIR / "nav_cache" / f"hist_{code}.json"
+        data = None
+        if cache_file.is_file():
+            try:
+                with open(cache_file, "r") as fp:
+                    data = json.load(fp)
+            except Exception:
+                data = None
 
-        with open(cache_file, "r") as fp:
-            data = json.load(fp)
+        if not data:
+            from lume_platform.data.nav_fetcher import nav_fetcher
+            data = nav_fetcher.get_historical_nav(code, days=max(lookback_days * 3, 180))
+
+        if not data:
+            raise FileNotFoundError(f"Scheme history not found for {code} at {cache_file}")
 
         df = pd.DataFrame(data)
         df["date"] = pd.to_datetime(df["date"], format="%d-%m-%Y", errors="coerce")
         df = df.dropna().sort_values("date").reset_index(drop=True)
 
         if len(df) < lookback_days:
-            raise ValueError(f"Insufficient historical days ({len(df)}) for scheme {scheme_code}")
+            raise ValueError(f"Insufficient historical days ({len(df)}) for scheme {code}")
 
         recent = df.tail(lookback_days).copy()
         nav_vals = recent["nav"].values
-        opens, highs, lows, closes = synthesize_ohlc_from_nav(nav_vals, seed=int(scheme_code) % 10000)
+        seed = int(code) % 10000 if code.isdigit() else (abs(hash(code)) % 10000)
+        opens, highs, lows, closes = synthesize_ohlc_from_nav(nav_vals, seed=seed)
 
         chart_img = render_candlestick_image(opens, highs, lows, closes)
         result = self.predict_image(chart_img)
-        result["scheme_code"] = scheme_code
+        result["scheme_code"] = code
         result["date_range"] = {
             "start": str(recent["date"].iloc[0].date()),
             "end": str(recent["date"].iloc[-1].date()),

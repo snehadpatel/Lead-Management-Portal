@@ -16,13 +16,12 @@ import math
 import json
 import numpy as np
 import pandas as pd
-import yfinance as yf
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
 from lume_platform.data.nav_fetcher import nav_fetcher
-from lume_platform.config import EXPORT_DIR
+from lume_platform.config import EXPORT_DIR, PROJECT_ROOT
 
 class PortfolioAnalytics:
     """Calculates advanced portfolio risk/return analytics and backtests."""
@@ -41,40 +40,60 @@ class PortfolioAnalytics:
 
     def get_historical_benchmark(self, days: int = 1825) -> pd.DataFrame:
         """Fetch historical NIFTY 50 (^NSEI) closing prices."""
-        now = datetime.now()
         cache_file = self._cache_dir / f"nifty_hist_{days}.json"
 
         # Check in-memory cache
         if self._nifty_cache is not None and (datetime.now().timestamp() - self._nifty_cache_ts) < self._nifty_cache_ttl:
             return self._nifty_cache
 
-        # Check file cache
+        # Check file cache (exact match or fallback cached benchmark files)
+        stale_df: Optional[pd.DataFrame] = None
         if cache_file.is_file():
             try:
                 age = datetime.now().timestamp() - cache_file.stat().st_mtime
-                if age < self._nifty_cache_ttl:
-                    df = pd.read_json(cache_file)
-                    df.index = pd.to_datetime(df.index)
+                df = pd.read_json(cache_file)
+                df.index = pd.to_datetime(df.index)
+                stale_df = df
+                if age < self._nifty_cache_ttl and not df.empty:
                     self._nifty_cache = df
                     self._nifty_cache_ts = datetime.now().timestamp()
                     return df
             except Exception:
                 pass
 
-        # Fetch from yfinance
-        try:
-            nifty = yf.Ticker("^NSEI")
-            hist = nifty.history(period=f"{math.ceil(days/365)}y")
-            if not hist.empty:
-                df = hist[["Close"]].copy()
-                df.index = df.index.tz_localize(None)
-                # Cache it
-                df.to_json(cache_file)
-                self._nifty_cache = df
-                self._nifty_cache_ts = datetime.now().timestamp()
-                return df
-        except Exception as e:
-            print(f"⚠️ Failed to fetch Nifty history via yfinance: {e}")
+        # Fetch from yfinance unless offline forced
+        if os.environ.get("LUME_OFFLINE_MARKET", "0") != "1":
+            try:
+                import yfinance as yf
+                nifty = yf.Ticker("^NSEI")
+                hist = nifty.history(period=f"{math.ceil(days/365)}y")
+                if not hist.empty:
+                    df = hist[["Close"]].copy()
+                    df.index = df.index.tz_localize(None)
+                    df.to_json(cache_file)
+                    self._nifty_cache = df
+                    self._nifty_cache_ts = datetime.now().timestamp()
+                    return df
+            except Exception as e:
+                print(f"⚠️ Failed to fetch Nifty history via yfinance: {e}")
+
+        # Fallback to stale JSON cache first, then local CSVs
+        if stale_df is not None and not stale_df.empty:
+            self._nifty_cache = stale_df
+            self._nifty_cache_ts = datetime.now().timestamp() - self._nifty_cache_ttl + 120
+            return stale_df
+
+        any_cached = sorted(self._cache_dir.glob("nifty_hist_*.json"), reverse=True)
+        for cf in any_cached:
+            try:
+                df = pd.read_json(cf)
+                df.index = pd.to_datetime(df.index)
+                if not df.empty:
+                    self._nifty_cache = df
+                    self._nifty_cache_ts = datetime.now().timestamp() - self._nifty_cache_ttl + 120
+                    return df
+            except Exception:
+                continue
 
         # Fallback to parsing local Nifty CSV files
         return self._load_nifty_csv_fallback(days)
@@ -88,7 +107,7 @@ class PortfolioAnalytics:
             "NIFTY 50-21-02-2023-to-21-02-2024.csv"
         ]
         
-        workspace_dir = Path("/Users/snehapatel/Library/CloudStorage/GoogleDrive-sneha.dipan.dec2005@gmail.com/My Drive/BigData")
+        workspace_dir = PROJECT_ROOT
         for fn in csv_files:
             fp = workspace_dir / fn
             if fp.is_file():
@@ -106,19 +125,19 @@ class PortfolioAnalytics:
 
         if dfs:
             combined = pd.concat(dfs).sort_index()
-            # De-duplicate
             combined = combined[~combined.index.duplicated(keep="first")]
             self._nifty_cache = combined
             return combined
 
-        # Absolute fallback: Return simulated return series
+        # Absolute fallback: Return deterministic benchmark trajectory
+        rng = np.random.default_rng(42)
         start_val = 22000.0
         dates = [datetime.today() - timedelta(days=i) for i in range(days)]
         dates.reverse()
         prices = []
         curr = start_val
-        for i in range(len(dates)):
-            curr = curr * (1 + np.random.normal(0.0004, 0.009))  # ~10% annual, 14% vol
+        for _ in range(len(dates)):
+            curr = curr * (1 + float(rng.normal(0.0004, 0.009)))
             prices.append(curr)
         df = pd.DataFrame(prices, index=dates, columns=["Close"])
         return df
@@ -175,10 +194,11 @@ class PortfolioAnalytics:
             
         combined = pd.concat(all_dfs, axis=1)
         # Forward fill NAVs to handle holidays / missing points
-        combined = combined.ffill().bfill()
+        combined = combined.sort_index().ffill().bfill()
         
-        # Crop to the requested time horizon
-        start_date = datetime.now() - timedelta(days=horizon_days)
+        # Crop to the requested time horizon relative to latest available NAV/benchmark date
+        end_date = combined.index.max()
+        start_date = end_date - timedelta(days=horizon_days)
         combined = combined[combined.index >= start_date]
         
         if combined.empty or len(combined) < 5:
@@ -221,14 +241,15 @@ class PortfolioAnalytics:
         # Benchmark series normalized to 100
         nifty_normalized = (combined["Nifty"] / combined["Nifty"].iloc[0]) * 100.0
         
-        # Crisil Debt Index approximation (stable 7% annual return with minor noise)
+        # Crisil Debt Index approximation (stable 7% annual return with deterministic minor variance)
         debt_normalized = []
         debt_start = 100.0
         days_in_period = len(combined.index)
         daily_rate = (1.07) ** (1 / 252) - 1
+        debt_rng = np.random.default_rng(42)
         curr = debt_start
-        for i in range(days_in_period):
-            curr = curr * (1 + daily_rate + np.random.normal(0, 0.0002))
+        for _ in range(days_in_period):
+            curr = curr * (1 + daily_rate + float(debt_rng.normal(0, 0.0002)))
             debt_normalized.append(curr)
         debt_series = pd.Series(debt_normalized, index=combined.index)
 

@@ -11,9 +11,12 @@ const state = {
   role: localStorage.getItem('lume_role') || null,
   persona: localStorage.getItem('lume_persona') || null,
   userName: localStorage.getItem('lume_name') || 'Demo User',
+  isDemo: localStorage.getItem('lume_is_demo') === '1',
   surveyStep: 0,
   surveyAnswers: {},
   apiOnline: false,
+  streamConnected: false,
+  latestRealtimePacket: null,
 };
 
 // ── Survey Questions ──
@@ -66,6 +69,9 @@ async function apiCall(endpoint, options = {}) {
 async function checkApiHealth() {
   const data = await apiCall('/health');
   state.apiOnline = !!data;
+  if (data && data.models_loaded) {
+    state.modelsLoaded = data.models_loaded;
+  }
   const pulse = document.getElementById('apiPulse');
   const statusEl = document.getElementById('apiStatus');
   if (pulse) {
@@ -73,9 +79,50 @@ async function checkApiHealth() {
   }
   if (statusEl) {
     const label = statusEl.querySelector('.status-item');
-    if (label) label.innerHTML = `<span class="pulse ${state.apiOnline ? 'pulse-live' : 'pulse-offline'}" id="apiPulse"></span> API ${state.apiOnline ? 'Online' : 'Offline'}`;
+    if (label) {
+      const wsBadge = state.streamConnected
+        ? ` · <span style="color:var(--emerald);font-weight:700;">LIVE STREAM</span>`
+        : '';
+      label.innerHTML = `<span class="pulse ${state.apiOnline ? 'pulse-live' : 'pulse-offline'}" id="apiPulse"></span> API ${state.apiOnline ? 'Online' : 'Offline'}${wsBadge}`;
+    }
   }
   return data;
+}
+
+async function getRealtimePulse(advance = false) {
+  return apiCall(`/api/realtime/pulse?advance=${advance ? 'true' : 'false'}`);
+}
+
+async function getBigDataLiveStats() {
+  return apiCall('/api/bigdata/live-stats');
+}
+
+async function searchFundsSemantic(query, topK = 12) {
+  return apiCall(`/search/funds?query=${encodeURIComponent(query)}&top_k=${topK}`);
+}
+
+async function predictLeadDual(leadData) {
+  return apiCall('/api/dl-lab/predict-lead', { method: 'POST', body: JSON.stringify(leadData) });
+}
+
+async function analyzeFinancialNLP(text) {
+  return apiCall('/api/nlp/financial-sentiment', { method: 'POST', body: JSON.stringify({ text }) });
+}
+
+async function getNLPBenchmark() {
+  return apiCall('/api/nlp/benchmark');
+}
+
+async function classifyVisionPattern(schemeCode = '100119') {
+  return apiCall('/api/vision/pattern', { method: 'POST', body: JSON.stringify({ scheme_code: String(schemeCode) }) });
+}
+
+async function fetchFundFullAI(schemeCode, days = 90) {
+  return apiCall(`/api/fund/${encodeURIComponent(schemeCode)}/full-ai?days=${days}`);
+}
+
+async function fetchBuddyBriefing(distributorId = 'demo_distributor') {
+  return apiCall(`/buddy/briefing?distributor_id=${encodeURIComponent(distributorId)}`);
 }
 
 async function predictLead(leadData) {
@@ -361,7 +408,53 @@ function logout() {
   localStorage.removeItem('lume_persona');
   localStorage.removeItem('lume_name');
   localStorage.removeItem('lume_auth_token');
+  localStorage.removeItem('lume_is_demo');
   window.location.href = 'index.html';
+}
+
+async function loginDemo(role = 'investor', targetRedirect = true) {
+  try {
+    const cleanRole = role === 'distributor' ? 'distributor' : 'investor';
+    const res = await fetch(`${API_BASE}/auth/demo-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role: cleanRole }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Demo login failed');
+
+    localStorage.setItem('lume_auth_token', data.access_token);
+    localStorage.setItem('lume_role', data.role);
+    localStorage.setItem('lume_persona', data.persona || 'balanced');
+    localStorage.setItem('lume_name', data.full_name || (cleanRole === 'distributor' ? 'Demo Distributor' : 'Demo Investor'));
+    localStorage.setItem('lume_is_demo', '1');
+
+    state.role = data.role;
+    state.persona = data.persona || 'balanced';
+    state.userName = localStorage.getItem('lume_name');
+    state.isDemo = true;
+
+    if (targetRedirect) {
+      window.location.href = cleanRole === 'distributor' ? 'distributor.html' : 'investor.html';
+    }
+    return data;
+  } catch (err) {
+    console.error('Demo login failed:', err);
+    const errBox = document.getElementById('errorBox');
+    if (errBox) {
+      errBox.textContent = `Demo login failed: ${err.message}. Is FastAPI running on ${API_BASE}?`;
+      errBox.classList.remove('hidden');
+    } else {
+      alert(`Demo login failed (${err.message}). Make sure FastAPI backend is running.`);
+    }
+    return null;
+  }
+}
+
+async function switchDemoRole(targetRole = null) {
+  const current = state.role || localStorage.getItem('lume_role') || 'investor';
+  const nextRole = targetRole || (current === 'investor' ? 'distributor' : 'investor');
+  await loginDemo(nextRole, true);
 }
 
 // ── Client-Side Authentication Handlers ──
@@ -495,20 +588,21 @@ async function verifyAuthAndSyncProfile() {
     // Update welcome title
     const welcomeTitle = document.getElementById('welcomeTitle');
     if (welcomeTitle) {
-      const displayName = state.userName.charAt(0).toUpperCase() + state.userName.slice(1);
-      welcomeTitle.textContent = `Welcome, ${displayName}`;
+      const displayName = user.full_name || (state.userName.charAt(0).toUpperCase() + state.userName.slice(1));
+      const demoTag = user.is_demo ? ' <span class="badge badge-amber" style="font-size:0.65rem;vertical-align:middle;">DEMO LIVE</span>' : '';
+      welcomeTitle.innerHTML = `Welcome, ${displayName}${demoTag}`;
     }
-    
+
     // Update persona label
     const personaLabel = document.getElementById('personaLabel');
     if (personaLabel) {
       const p = PERSONAS[state.persona || 'balanced'] || PERSONAS.balanced;
       const isDist = pathname.endsWith('distributor.html');
-      personaLabel.innerHTML = isDist 
+      personaLabel.innerHTML = isDist
         ? `Persona: <strong style="color:${p.color}">${p.name}</strong> · Risk: ${p.risk}`
         : `Persona: <strong style="color:${p.color}">${p.name}</strong> · Risk Tolerance: ${p.risk}`;
     }
-    
+
     return user;
   } catch (err) {
     console.warn('Error in verifyAuthAndSyncProfile:', err);
@@ -667,12 +761,154 @@ function calculateSIP(monthly, rate, years) {
   return { futureValue: Math.round(fv), invested: monthly * months, gains: Math.round(fv) - monthly * months };
 }
 
+// ── Real-Time WebSocket Stream Client ──
+let _realtimeWs = null;
+let _realtimePollTimer = null;
+let _wsRetryMs = 2000;
+
+function applyRealtimeTickToSharedWidgets(packet) {
+  if (!packet) return;
+  state.latestRealtimePacket = packet;
+
+  const rtPill = document.getElementById('rtStreamPill');
+  if (rtPill) {
+    const nifty = packet.market?.nifty_50 ? Number(packet.market.nifty_50).toLocaleString('en-IN', { maximumFractionDigits: 1 }) : '—';
+    const vix = packet.market?.vix != null ? Number(packet.market.vix).toFixed(1) : '—';
+    const seq = packet.tick_seq || 1;
+    rtPill.innerHTML = `<span class="pulse pulse-live"></span> LIVE #${seq} · NIFTY ${nifty} · VIX ${vix}`;
+  }
+
+  // Live Drift Status cards across Home / Investor / Distributor
+  const drift = packet.drift;
+  if (drift) {
+    const color = drift.drift_detected ? 'var(--red)' : drift.retrain_in_progress ? 'var(--amber)' : 'var(--emerald)';
+    ['homeDriftStatus', 'distDriftStatus', 'invDriftStatus'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = `
+        <h4 style="margin-bottom:12px;">Retraining Monitor <span class="text-xs text-muted">(Real-Time)</span></h4>
+        <div class="badge" style="background:${color}20;color:${color};">${drift.drift_detected ? 'DRIFT DETECTED' : drift.retrain_in_progress ? 'TRAINING' : 'STABLE'}</div>
+        <p class="text-sm mt-12"><strong>Samples:</strong> ${drift.samples_seen || 0}</p>
+        <p class="text-sm"><strong>Mean Score:</strong> ${Number(drift.mean_score || 0).toFixed(3)}</p>
+        <p class="text-sm"><strong>Negative Ratio:</strong> ${Number(drift.negative_ratio || 0).toFixed(2)}</p>
+        <p class="text-xs text-muted mt-8">${drift.last_message || 'streaming telemetry active'}</p>
+      `;
+    });
+  }
+
+  // Live Signal Alerts preview on Home / Distributor
+  const sig = packet.latest_signal;
+  if (sig) {
+    const sentColor = sig.sentiment === 'positive' ? 'var(--emerald)' : sig.sentiment === 'negative' ? 'var(--red)' : 'var(--amber)';
+    const tokensHtml = (sig.token_saliency || []).slice(0, 4).map(t =>
+      `<span class="badge" style="font-size:0.65rem;padding:2px 6px;background:${t.polarity === 'positive' ? 'rgba(16,185,129,0.12)' : t.polarity === 'negative' ? 'rgba(239,68,68,0.12)' : 'rgba(148,163,184,0.12)'};color:${t.polarity === 'positive' ? 'var(--emerald)' : t.polarity === 'negative' ? 'var(--red)' : 'var(--text-secondary)'};">${t.token}</span>`
+    ).join(' ');
+
+    ['homeLiveAlerts', 'distLiveAlerts'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = `
+        <div class="flex justify-between items-center mb-8">
+          <h4 style="margin:0;">Live Transformer Stream</h4>
+          <span class="badge" style="background:${sentColor}20;color:${sentColor};">${String(sig.sentiment || 'neutral').toUpperCase()} ${(Number(sig.confidence || 0.5) * 100).toFixed(0)}%</span>
+        </div>
+        <p class="text-sm" style="font-weight:600;line-height:1.4;">${sig.headline || ''}</p>
+        <div class="flex gap-4 mt-8" style="flex-wrap:wrap;">${tokensHtml}</div>
+        <p class="text-xs text-muted mt-8">Event ${sig.event_id || ''} · ${sig.latency_ms ? sig.latency_ms.toFixed(1) + ' ms' : ''} · ${sig.source || ''}</p>
+      `;
+    });
+  }
+
+  // Update Market Impact card from real-time market tick if loaded
+  const mkt = packet.market;
+  if (mkt) {
+    const sev = mkt.vix > 22 ? 'high' : mkt.nifty_change_pct > 0.4 ? 'positive' : 'moderate';
+    const sevBadge = sev === 'high' ? 'red' : sev === 'positive' ? 'emerald' : 'amber';
+    const sectors = Object.entries(mkt.sector_performance || {})
+      .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+      .slice(0, 3)
+      .map(([k, v]) => `${k} (${v >= 0 ? '+' : ''}${Number(v).toFixed(2)}%)`);
+    ['homeMarketImpact', 'distMarketImpact'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = `
+        <h4 style="margin-bottom:12px;">Live Market Pulse Impact</h4>
+        <div class="badge badge-${sevBadge}">${String(mkt.market_sentiment || sev).toUpperCase()}</div>
+        <p class="text-sm mt-12"><strong>NIFTY 50:</strong> ${Number(mkt.nifty_50 || 0).toLocaleString('en-IN', { maximumFractionDigits: 1 })} (${mkt.nifty_change_pct >= 0 ? '+' : ''}${Number(mkt.nifty_change_pct || 0).toFixed(2)}%)</p>
+        <p class="text-sm"><strong>India VIX:</strong> ${Number(mkt.vix || 0).toFixed(2)} · <strong>Models:</strong> ${packet.models_online || 7}/${packet.models_total || 7}</p>
+        <p class="text-xs text-muted mt-8"><strong>Key Movers:</strong> ${sectors.join(', ') || 'Broad Market'}</p>
+      `;
+    });
+  }
+
+  window.dispatchEvent(new CustomEvent('lume:realtime-tick', { detail: packet }));
+}
+
+function connectRealtimeStream() {
+  if (_realtimeWs && (_realtimeWs.readyState === WebSocket.OPEN || _realtimeWs.readyState === WebSocket.CONNECTING)) {
+    return;
+  }
+  try {
+    const wsUrl = `${API_BASE.replace(/^http/i, 'ws')}/ws/realtime`;
+    _realtimeWs = new WebSocket(wsUrl);
+
+    _realtimeWs.onopen = () => {
+      state.streamConnected = true;
+      state.apiOnline = true;
+      _wsRetryMs = 2000;
+      if (_realtimePollTimer) {
+        clearInterval(_realtimePollTimer);
+        _realtimePollTimer = null;
+      }
+      checkApiHealth();
+    };
+
+    _realtimeWs.onmessage = (event) => {
+      try {
+        const packet = JSON.parse(event.data);
+        if (packet && packet.type !== 'pong') {
+          applyRealtimeTickToSharedWidgets(packet);
+        }
+      } catch (e) {
+        console.warn('WebSocket parse error:', e);
+      }
+    };
+
+    _realtimeWs.onclose = () => {
+      state.streamConnected = false;
+      checkApiHealth();
+      // Start REST polling fallback while retrying WS
+      if (!_realtimePollTimer) {
+        _realtimePollTimer = setInterval(async () => {
+          const snap = await getRealtimePulse(false);
+          if (snap) applyRealtimeTickToSharedWidgets(snap);
+        }, 6000);
+      }
+      setTimeout(connectRealtimeStream, _wsRetryMs);
+      _wsRetryMs = Math.min(15000, Math.round(_wsRetryMs * 1.5));
+    };
+
+    _realtimeWs.onerror = () => {
+      state.streamConnected = false;
+    };
+  } catch (err) {
+    console.warn('WebSocket setup error, falling back to HTTP pulse:', err);
+    if (!_realtimePollTimer) {
+      _realtimePollTimer = setInterval(async () => {
+        const snap = await getRealtimePulse(false);
+        if (snap) applyRealtimeTickToSharedWidgets(snap);
+      }, 5000);
+    }
+  }
+}
+
 // ── Init ──
 document.addEventListener('DOMContentLoaded', () => {
   checkApiHealth();
   setInterval(checkApiHealth, 30000);
   refreshLiveOpsWidgets();
   setInterval(refreshLiveOpsWidgets, 30000);
+  connectRealtimeStream();
 
   // Pre-fill signup role if present in query parameters
   if (window.location.pathname.endsWith('signup.html')) {
@@ -690,14 +926,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (navAuth) {
     if (token) {
       const dashboardUrl = role === 'distributor' ? 'distributor.html' : 'investor.html';
+      const switchTarget = role === 'distributor' ? 'investor' : 'distributor';
+      const switchLabel = role === 'distributor' ? '⇄ Demo Investor' : '⇄ Demo Distributor';
       navAuth.innerHTML = `
+        <button class="btn btn-sm btn-secondary" onclick="switchDemoRole('${switchTarget}')" title="1-click role switch">${switchLabel}</button>
         <a href="${dashboardUrl}" class="btn btn-sm btn-primary">Dashboard &rarr;</a>
         <button class="btn btn-sm btn-secondary" onclick="logout()">Logout</button>
       `;
     } else {
       navAuth.innerHTML = `
+        <button class="btn btn-sm btn-emerald" onclick="loginDemo('investor')">Demo Investor</button>
+        <button class="btn btn-sm btn-primary" onclick="loginDemo('distributor')">Demo Distributor</button>
         <a href="login.html" class="btn btn-sm btn-secondary">Log In</a>
-        <a href="signup.html" class="btn btn-sm btn-primary">Sign Up</a>
       `;
     }
   }

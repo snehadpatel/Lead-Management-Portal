@@ -56,14 +56,16 @@ class NewsFetcher:
         if self._cache and (now - self._cache_ts) < self._cache_ttl:
             return self._cache[:max_articles]
 
-        # Try file cache
+        # Try file cache (retain stale fallback if offline/RSS fails)
         cache_file = self._cache_dir / "latest_news.json"
+        stale_articles: List[Dict[str, Any]] = []
         if cache_file.is_file():
             try:
                 file_age = now - cache_file.stat().st_mtime
-                if file_age < self._cache_ttl:
-                    with open(cache_file, "r") as f:
-                        self._cache = json.load(f)
+                with open(cache_file, "r") as f:
+                    stale_articles = json.load(f)
+                if file_age < self._cache_ttl and stale_articles:
+                    self._cache = stale_articles
                     self._cache_ts = now
                     return self._cache[:max_articles]
             except Exception:
@@ -72,58 +74,58 @@ class NewsFetcher:
         articles = []
         seen_titles = set()
 
-        for query in self.QUERIES[:3]:  # Limit to 3 queries to be gentle
-            try:
-                url = self.GOOGLE_NEWS_RSS.format(query=query.replace(" ", "+"))
-                resp = requests.get(url, timeout=8, headers={
-                    "User-Agent": "Mozilla/5.0 (compatible; LumeAI/1.0)"
-                })
-                resp.raise_for_status()
-                root = ET.fromstring(resp.text)
-
-                for item in root.findall(".//item")[:5]:
-                    title = item.findtext("title", "").strip()
-                    link = item.findtext("link", "").strip()
-                    pub_date = item.findtext("pubDate", "").strip()
-                    source = item.findtext("source", "").strip()
-
-                    if not title or title in seen_titles:
-                        continue
-                    seen_titles.add(title)
-
-                    # Simple sentiment scoring from title keywords
-                    sentiment = self._score_sentiment(title)
-
-                    articles.append({
-                        "title": title,
-                        "link": link,
-                        "source": source or "Google News",
-                        "published": pub_date,
-                        "sentiment": sentiment["label"],
-                        "sentiment_score": sentiment["score"],
-                        "impact": sentiment["impact"],
-                        "query": query,
+        if os.environ.get("LUME_OFFLINE_MARKET", "0") != "1":
+            for query in self.QUERIES[:3]:  # Limit to 3 queries to be gentle
+                try:
+                    url = self.GOOGLE_NEWS_RSS.format(query=query.replace(" ", "+"))
+                    resp = requests.get(url, timeout=4, headers={
+                        "User-Agent": "Mozilla/5.0 (compatible; LumeAI/1.0)"
                     })
-            except Exception as e:
-                print(f"⚠️ News fetch failed for '{query}': {e}")
-                continue
+                    resp.raise_for_status()
+                    root = ET.fromstring(resp.text)
+
+                    for item in root.findall(".//item")[:5]:
+                        title = item.findtext("title", "").strip()
+                        link = item.findtext("link", "").strip()
+                        pub_date = item.findtext("pubDate", "").strip()
+                        source = item.findtext("source", "").strip()
+
+                        if not title or title in seen_titles:
+                            continue
+                        seen_titles.add(title)
+
+                        sentiment = self._score_sentiment(title)
+
+                        articles.append({
+                            "title": title,
+                            "link": link,
+                            "source": source or "Google News",
+                            "published": pub_date,
+                            "sentiment": sentiment["label"],
+                            "sentiment_score": sentiment["score"],
+                            "impact": sentiment["impact"],
+                            "query": query,
+                        })
+                except Exception as e:
+                    print(f"⚠️ News fetch failed for '{query}': {e}")
+                    continue
 
         if articles:
-            # Sort by sentiment impact (high impact first)
             impact_order = {"high": 0, "medium": 1, "low": 2}
             articles.sort(key=lambda a: impact_order.get(a.get("impact", "low"), 2))
             self._cache = articles
             self._cache_ts = now
 
-            # Persist to file
             try:
                 with open(cache_file, "w") as f:
                     json.dump(articles, f)
             except Exception:
                 pass
             print(f"✅ Fetched {len(articles)} live news articles")
+        elif stale_articles:
+            self._cache = stale_articles
+            self._cache_ts = now - self._cache_ttl + 120
         elif not self._cache:
-            # Use fallback hardcoded news
             self._cache = self._fallback_news()
             self._cache_ts = now
 
